@@ -1,0 +1,121 @@
+{% load i18n %}
+{% load humanize %}
+{% load forum_tags %}
+
+<div class="panel panel-default board-code-{{ instance.permalink }}">
+    <div class="panel-heading">
+
+        <div class="row">
+
+            <h{{ heading_level|default:1 }} class="hover-edit col-sm-9 col-xs-12">
+                {% if heading_level|default:1 == 1 %}
+                {{ instance.title }}
+                {% else %}
+                <a href="{{ instance.get_absolute_url }}">{{ instance.title }}</a>
+                {% endif %}
+
+                {% if instance|can_edit:user %}
+                <span class="menu-action-wrapper -edit">
+                    <a href="{{ instance.get_edit_url }}" class="btn btn-default btn-xs ico-edit">
+                        <span class="glyphicon glyphicon-edit"></span>
+                        {% trans "Edit" %}
+                    </a>
+                </span>
+                {% endif %}
+
+            </h{{ heading_level|default:1 }}>
+
+
+
+            <h{{ heading_level|default:1 }} class="meta-summary col-sm-3">
+                {% if instance.topics.all.exists %}
+                <a class="pull-right" href="{{ instance.get_absolute_url }}">
+                    {{ instance.topics.all.count }} {% trans "topics" %}
+                </a>
+                {% endif %}
+            </h{{ heading_level|default:1 }}>
+
+        </div>
+    </div>
+
+    <div class="panel-body">
+    {% if instance.description %}
+        {% if instance|can_edit:user %}
+        <span>
+            <a href="{% url 'forum_topic_create' instance.pk %}" class="btn btn-default btn-xs ico-edit">
+                <span class="glyphicon glyphicon-plus"></span>
+                {% trans "Add Topic" %}
+            </a>
+        </span>
+        {% endif %}
+        <p>{{ instance.description }}</p>
+    {% endif %}
+    </div>
+
+    <div>
+        {% if instance.topics.all.exists %}
+        <ul class="list-unstyled">
+            {% for topic in instance.topics.all|order_by:instance.children_ordering %}
+            <li>
+                <div class="row">
+                    <div class="col-sm-8 col-xs-12">
+                        <h4 class="hover-edit">
+                            {% if topic.prefix  %}
+                            <span class="forum-topic-prefix">{{ topic.prefix }}</span>
+                            {% endif %}
+                            {% if topic.link %}
+                            <a href="{{ topic.link }}" target="_blank">{{ topic.title }}</a>
+                            {% else %}
+                            <a href="{{ topic.get_absolute_url }}">{{ topic.title }}</a>
+                            {% endif %}
+                            {% if topic|can_edit:user %}
+                            <span class="menu-action-wrapper -edit -list-forum">
+                                <a href="{{ topic.get_edit_url }}" class="btn btn-default btn-xs ico-edit">
+                                    <span class="glyphicon glyphicon-edit"></span>
+                                    {% trans "Edit" %}
+                                </a>
+                            </span>
+                            {% endif %}
+                        </h4>
+                        {% if topic.description %}
+                        <p>{{ topic.description }}</p>
+                        {% endif %}
+                    </div>
+
+                    <div class="col-sm-4">
+                        {% if topic.posts.all.exists %}
+                        {% with topic.posts.latest as latest_post %}
+                        <h4 class="meta-summary pull-right">
+                            <div class="meta-summary-first">
+                                <a href="{{ topic.get_absolute_url }}">{{ topic.get_total_posts }} {% trans "posts" %}</a>
+                                 , {{ topic.get_total_replies }} {% trans "answers" %}
+                                 , {{ topic.total_views }} {% trans "reads" %}
+                            </div>
+                            <div class="meta-summary-second">
+                                {% trans "Latest post at" %} <a href="{{ latest_post.get_absolute_url }}">{{ latest_post.created|naturaltime }}</a>
+                                {% trans "by" %} <a class="meta-summary-created-by" href="{{ latest_post.created_by.get_absolute_url }}">{{ latest_post.created_by }}</a>
+                            </div>
+                        </h4>
+                        {% endwith %}
+                        {% endif %}
+                    </div>
+                </div>
+
+            </li>
+            {% endfor %}
+        </ul>
+        {% elif heading_level|default:1 == 1  %}
+        <ul class="list-unstyled"><li><h4 class="no-results">
+            {% trans 'No topics' %} &nbsp;
+            {% if instance|can_edit:user %}
+            <a href="{% url 'forum_topic_create' instance.pk %}" class="btn btn-default btn-xs ico-edit">
+                <span class="glyphicon glyphicon-plus"></span>
+                {% trans "Add Topic" %}
+            </a>
+            {% endif %}
+        </h4></li></ul>
+        {% endif %}
+
+    </div>
+
+</div>

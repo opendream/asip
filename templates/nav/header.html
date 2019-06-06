@@ -1,0 +1,145 @@
+
+<div class="container header-section">
+
+    <div class="brand hidden-xs pull-right hidden-xs"><a href="/" title="Asian social investment portal">ImpactConnect.asia</a></div>
+
+    <div class="header-wrapper">
+        <ul class="nav nav-pills main-menu top-menu pull-left hidden-xs">
+          <li><a class="active">&nbsp</a></li>
+        </ul>
+
+        <!-- <a class="ico-search" href="#">search</a> -->
+
+        <!-- Block search collapse -->
+
+        <a class="icon-search hidden-xs hide" data-toggle="collapse" href="#block-search">
+        </a>
+
+        <div id="block-search" class="collapse{{ search_class_content }}"
+             ng-class="loading_class()"
+             ng-controller="SearchFormController"
+             ng-init="init({
+                 tab_list_config: [
+                     {% if settings.ENABLE_SOCIAL_ENTERPRISE %}
+                     {
+                         title: 'Social Enterprise',
+                         filters: [ 'topics', 'country', 'type_of_needs'],
+                         api: '/api/v1/organization/search',
+                         default_params: { type_of_organization: '{{ TYPE_SOCIAL_ENTERPRISE }}' }
+                     },
+                     {% endif %}
+                     {% if settings.ENABLE_STARTUP %}
+                     {
+                         title: 'Startup',
+                         filters: [ 'topics', 'country', 'type_of_needs'],
+                         api: '/api/v1/organization/search',
+                         default_params: { type_of_organization: '{{ TYPE_STARTUP }}' }
+                     },
+                     {% endif %}
+                     {
+                         title: 'Supporter',
+                         filters: [ 'topics', 'country', 'type_of_supports'],
+                         api: '/api/v1/organization/search',
+                         default_params: { organization_roles: '{{ TYPE_SUPPORTING_ORGANIZATION }}' }
+                     },
+                     {
+                         title: 'Investor',
+                         filters: [ 'topics', 'country', ['type_of_supports', 'type_of_invests']],
+                         api: '/api/v1/organization/search',
+                         default_params: { organization_roles: '{{ TYPE_INVESTOR }}' }
+                     },
+                     {
+                         title: 'People',
+                         filters: [ 'topics', 'country', 'user_roles'],
+                         api: '/api/v1/user/search'
+                     }
+                 ],
+                 filter_list_config: {
+                     topics: {
+                         title: 'Any Issue',
+                         api: '/api/v1/topic/',
+                         params: { level: 0 }
+                     },
+                     country: {
+                         title: 'Any Country',
+                         api: '/api/v1/country',
+                     },
+                     type_of_needs: {
+                         title: 'Any Need',
+                         api: '/api/v1/type_of_need/'
+                     },
+                     type_of_supports: {
+                         title: 'Any Support',
+                         api: '/api/v1/type_of_support/?priority__lt=4'
+                     },
+                     type_of_invests: {
+                         title: 'Any Invest',
+                         api: '/api/v1/type_of_support/'
+                     },
+                     user_roles: {
+                         title: 'Any Role',
+                         api: '/api/v1/user_role/'
+                     }
+                 }
+             })">
+            <div class="search-wrapper">
+              <div ng-repeat="tab in tab_list" class="party-tab-container" ng-show="tab.is_active">
+                <form role="form" class="form-search" action="{% url 'search' %}" name="search_form">
+                  <div class="role-input-wrapper">
+                    <div class="dropdown role-filter" role="menu" aria-labelledby="search-tab-drop">
+                      <a href="#" id="search-tab-drop" class="btn btn-default dropdown-toggle btn-role">
+                        <span ng-cloak>
+                          {[{ tab.title }]}
+                        </span>
+                        <span class="icon icon-list2"></span>
+                      </a>
+                      <ul class="dropdown-menu select-catagory" role="menu" aria-labelledby="search-tab-drop">
+                       <li ng-repeat="tab in tab_list" ng-class="{active : tab.is_active}">
+                        <a nref="" ng-click="tab.click_active()" ng-cloak>
+                          {[{ tab.title }]}
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                    <span class="icostartup icon-search top-menu-icon-search"></span>
+                    <input class="form-control text-input" name="q" id="search" placeholder="Keywords..." ng-model="q"/>
+                    <input type="hidden" name="api" value="{[{ tab.api }]}" />
+                    <input type="hidden" name="page" value="1" />
+                    <input type="hidden" name="tab_active" ng-value="tab.current_index" />
+                    <input ng-repeat="(key, value) in tab.default_params" type="hidden" name="{[{key}]}" value="{[{value}]}">
+                  </div>
+                  <div class="filter-selector">
+                    <div class="dropdown select-modify" ng-repeat="filter in tab.filters">
+                      <a href="#" id="category-drop" class="btn btn-default dropdown-toggle pull-right">
+                        <span class="text" ng-cloak>
+                          {[{filter.title}]}
+                        </span>
+                        <span class="caret">
+
+                        </span>
+                      </a>
+                      <ul class="dropdown-menu select-catagory" role="menu" aria-labelledby="category-drop">
+                       <li ng-repeat="data in filter.data" ng-click="data.selected_filter()">
+                        <div class="type-of-need-group-filter" ng-show="'grant-donation' ==  data.permalink">Financial</div>
+                        <div class="type-of-need-group-filter" ng-show="'incubation' ==  data.permalink">Incubation</div>
+                        <div ng-show="'strategic-planning' ==  data.permalink && tab.title != 'Investor'" class="type-of-need-group-filter"><stong>Advisory/Consulting</stong></div>
+                        <div ng-show="'strategic-planning' ==  data.permalink && tab.title == 'Investor'" class="type-of-need-group-filter"><stong>Advisory</stong></div>
+                        <div class="type-of-need-group-filter" ng-show="'networking' ==  data.permalink">Networking</div>
+                        <a href="" ng-cloak>
+                          {[{ data.title }]}
+                          </a>
+                        </li>
+                      </ul>
+                      <input type="hidden" name="{[{ filter.name }]}" value="{[{ filter.current_filter_data.permalink }]}" />
+                    </div>
+                    <button type="submit" class="btn btn-default btn-primary btn-pink search-submit col-md-2 col-xs-2">
+                      Search
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+        </div>
+
+    </div>
+</div>

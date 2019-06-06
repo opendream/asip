@@ -1,0 +1,728 @@
+/* --------------------------- *\
+            Home layout
+\* --------------------------- */
+
+.wrapper.-home {
+    padding: 0;
+}
+
+
+
+
+
+/* --------------------------- *\
+            BG Cover
+\* --------------------------- */
+
+.bgcover {
+    background: url(/static/images/bg-discover-startup.jpg) no-repeat center center;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    margin: 0 -15px;
+    .wrapper {
+        background-color: transparent;
+    }
+}
+
+
+
+
+
+/* --------------------------- *\
+  Base Content for Front Block
+\* --------------------------- */
+
+.static-content {
+    p {
+        @extend .kanit-extralight;
+        margin: 0 0 30px;
+        font-size: 20px;
+    }
+    .btn-wrapper .btn { margin: 0 10px 10px 0;}
+}
+
+@media (max-width: $screen-xs-max) {
+    .static-content {
+        .title { font-size: 30px;}
+        p {
+            font-size: 18px;
+            margin: 0 0 20px;
+        }
+    }
+}
+
+.block-front {
+    .title {
+        @extend .kanit-extralight;
+        font-size: 40px;
+        margin: 0 0 30px;
+        @media (max-width: $screen-xs-max) {
+            font-size: 30px;
+            margin-bottom: 20px;
+        }
+    }
+    .title.-event {
+        @extend .kanit-regular;
+        font-size: 20px;
+        margin: 0 0 15px;
+    }
+    &.-wrapper {
+        padding: 60px 0;
+    }
+    &.-happening-news-section h3.title{
+        font-size: 18px;
+        margin-bottom: 20px;
+        @extend .kanit-regular;
+    }
+    &.-happening-news-section h2.title{
+        font-size: 32px;
+    }
+    &.-happening-news-section .news-list {
+        margin-bottom: 30px;
+    }
+    &.-event h2.title{
+        font-size: 32px;
+    }
+
+    @media (max-width: $screen-xs-max) {
+        &.-happening-news-section, &.-jobs, &.-supporter {
+            margin: 0 -15px;
+        }
+    }
+    // Hot Fix for iPad Portable
+    @media (width: 768px) {
+        &.-happening-news-section {
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+    }
+
+
+    // TTSA banner
+    // by Nattapol
+    &.-event.-ttsa {
+        background-color: #FFFFFF;
+        &.-wrapper {
+            padding-bottom: 25px;
+        }
+        > .wrapper {
+            background-color: #FFFFFF;
+            @media (min-width: 992px) {
+                padding: 0 60px;
+            }
+        }
+        img {
+            @media (min-width: 992px) {
+                margin-left: -50px;
+                margin-top: -20px;
+            }
+            @media (max-width: 768px) {
+                max-width: 100%;
+                margin-top: 30px;
+            }
+        }
+        h2 {
+            font-size: 32px;
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+
+        &._form {
+            padding: 40px 0 0 0;
+            p {
+                font-size: 18px;
+                margin-bottom: 0;
+            }
+        }
+    }
+}
+
+
+
+
+
+/* --------------------------- *\
+      Block:  Discover Starup
+\* --------------------------- */
+
+.block-discover-startup {
+    .vertical-middle.-block-lane {
+        height: 423px;
+        @media (max-width: $screen-xs-max) {
+            height: auto;
+            padding: 20px 0;
+            text-align: center;
+            display: block;
+        }
+    }
+
+    @media (max-width: $screen-xs-max) {
+        .-block-lane .btn{
+            width: 200px;
+        }
+    }
+}
+
+.block.-logo-startup {
+    margin: 50px 0 0;
+    .item {
+        margin-bottom: 20px;
+        text-align: center;
+    }
+}
+
+@media (max-width: $screen-xs-max) {
+    .block-discover-startup {
+        text-align: center;
+        padding: 30px 0 0;
+        .item-list {
+            max-width: 500px;
+            display: inline-block;
+        }
+    }
+    .block.-logo-startup {
+        margin: 0;
+    }
+}
+
+@media (max-width: 380px) {
+    .block-discover-startup {
+        .item-list {
+            margin: 0 auto;
+            text-align: center;
+        }
+        .item {
+            width: 50%;
+            display: inline-block;
+        }
+    }
+}
+
+
+
+
+
+/* --------------------------- *\
+Block:  Investor &Supporting ORG
+\* --------------------------- */
+
+.bgcover.-investor-so {
+    background: url(/static/images/bg-investor-so.jpg) no-repeat center center;
+    background-size: cover;
+    // @media (max-width: $screen-sm-max) {
+    //     min-height: initial;
+    //     padding: 0;
+    // }
+    @media (max-width: $screen-xs-max) {
+        background: none;
+        min-height: initial;
+    }
+}
+
+.block-investor-so {
+    .vertical-middle {
+        height: 423px;
+    }
+}
+
+
+@media (max-width: $screen-xs-max) {
+    .block-investor-so {
+        .vertical-middle {
+            height: auto;
+            display: block;
+        }
+        .static-content.-investor {
+            background: url(/static/images/bg-investor.jpg) no-repeat 0 0;
+        }
+        .static-content.-support-org {
+            background: url(/static/images/bg-support-org.jpg) no-repeat 0 0;
+        }
+        .static-content {
+            padding: 30px 10px;
+            // background-size: 100% !important;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+        }
+    }
+}
+
+
+
+
+
+/* --------------------------- *\
+Block:  Join Startup Community
+\* --------------------------- */
+
+.block-front {
+    &.-join-community-section {
+        border-top: 1px solid #e0e0e0;
+        border-bottom: 1px solid #e0e0e0;
+    }
+    @media (max-width: $screen-xs-max) {
+        &.-join-community-section {
+            border: none;
+        }
+    }
+}
+
+.join-community-section {
+    background-color: #f4f4f4;
+}
+
+.block-join-community {
+    .form-control-wrapper.-text {
+        padding: 0;
+        margin-bottom: 10px;
+        .form-control {
+            height: 37px;
+            border-radius: 4px;
+        }
+    }
+    .form-control-wrapper.-btn {
+        padding: 0 5px;
+        text-align: left;
+        @media (max-width: $screen-xs-max) {
+            text-align: center;
+            padding: 0;
+
+            .btn {
+                width: 230px;
+            }
+        }
+    }
+    .form-join, .form-group, .form-control-wrapper {
+        margin-bottom: 0;
+    }
+}
+
+.form-join {
+    margin: 20px 0;
+    > .form-group { display: inline-block;}
+}
+
+
+
+
+
+/* --------------------------- *\
+    Block:  People
+\* --------------------------- */
+
+.block-front.-people-section {
+    .title { font-size: 32px;}
+}
+
+.block-people.-front {
+    .follow-section { display: none;}
+    .item-inner {
+        border: 1px solid #ccc;
+        min-height: 250px;
+        position: relative;
+        @media (min-width: $screen-sm-max) {
+            margin: 0 10px;
+        }
+    }
+    .description-wrapper {padding: 0 10px 10px; }
+    .item {
+        max-width: 270px;
+        margin-bottom: 20px;
+        @media (min-width: 991px) {
+            max-width: 290px;
+        }
+        @media (max-width: 500px) {
+            clear: both;
+            width: auto;
+            float: none;
+            margin: 0 auto 20px;
+        }
+    }
+    .item .thumbnail img {
+        max-width: 239px;
+        max-height: 200px;
+    }
+    .title {
+        @extend .kanit-regular;
+        font-size: 18px;
+        margin: 10px 0 5px;
+    }
+    .country { display: none;}
+}
+
+
+
+
+/* --------------------------- *\
+    Block:  Happening List
+\* --------------------------- */
+
+.block-front {
+    .happen-list {
+        &:before {
+            content: none;
+        }
+        .love-action { border-top: 0;}
+    }
+}
+
+
+
+
+/* --------------------------- *\
+        Block:  Event
+\* --------------------------- */
+
+.block-front.-event {
+    .item-wrapper {
+        background-color: #fff;
+        padding-bottom: 0;
+        margin-bottom: 20px;
+        border: 1px solid #C7C7C7;
+    }
+    .info {
+        padding: 15px;
+    }
+    .tag-list {
+        padding: 10px 15px;
+        border-top: 1px solid #e0e0e0;
+    }
+    .tag-list.-company {
+        background-color: #eee;
+        font-size: 11px;
+    }
+    .topics {
+        font-size: 12px;
+        margin-right: 0px;
+        padding: 0 5px;
+    }
+
+    .list-topic {
+        padding: 7px 5px 2px;
+        border-top: 1px solid #C7C7C7;
+        background-color: #eee;
+    }
+}
+
+@media (max-width: 640px) {
+    .block-front.-event .event-list {
+        > .item {
+            width: 100%;
+            max-width: 380px;
+            margin: 0 auto;
+            float: none;
+        }
+    }
+}
+
+/* --------------------------- *\
+            Block:  Jobs
+\* --------------------------- */
+
+.org-job-wrapper {
+    margin: 70px 0 30px;
+}
+
+@media (max-width: $screen-xs-max) {
+    .org-job-wrapper {
+        margin: 20px 0;
+    }
+}
+
+@media (max-width: $screen-sm-max) {
+    .org-job-wrapper {
+        margin: 30px 0;
+    }
+}
+
+.block-front.-jobs {
+    .item-job {
+        display: inline-block;
+        margin: 0 10px 10px;
+    }
+    .small-logo {
+        max-width: 70px;
+        margin: 0;
+    }
+    .small-logo > span {
+        height: 70px;
+        min-height: 70px;
+        width: 70px;
+        > a > img {
+            max-width: 60px;
+            max-height: 60px;
+        }
+    }
+}
+
+
+
+
+
+
+/* --------------------------- *\
+            Block:  News
+\* --------------------------- */
+
+.news-section {
+    .news-list {
+        margin-left: 0;
+    }
+    .news-list .title {
+        margin: 5px 0 10px;
+    }
+    .news-list > .item {
+        border-bottom: 1px solid #e0e0e0;
+    }
+}
+
+
+
+
+
+/* --------------------------- *\
+        Block:  Top Banner
+\* --------------------------- */
+
+.front-banner {
+    background-color: #f9b94c;
+    // margin-top: -80px;
+    @media (max-width: $screen-sm-max) {
+        margin-top: 0;
+    }
+    .btn-outline {
+        margin: 10px 0;
+    }
+}
+
+.main-content-banner {
+    background: url(/static/images/graphic-banner.png) no-repeat center 0;
+    padding: 100px 0;
+    margin: 0;
+    min-height: 440px;
+    @media (max-width: 400px) {
+        background-size: 1100px 335px;
+        padding: 70px 0;
+        min-height: 335px;
+    }
+}
+
+
+.title.-banner {
+    font-size: 60px;
+    text-transform: uppercase;
+    letter-spacing: 9px;
+    strong {
+        @extend .kanit-bold;
+        font-weight: 100;
+        font-size: 72px;
+    }
+}
+
+@media (max-width: $screen-xs-max) {
+  .title.-banner {
+      font-size: 40px;
+      strong {
+          font-size: 52px;
+      }
+  }
+}
+
+.summary-banner {
+    @extend .kanit-medium;
+    margin: 40px auto 10px;
+    .title {
+        font-size: 30px;
+        margin-bottom: 5px;
+    }
+    .amount {
+        font-size: 18px;
+        strong { font-weight: 100;}
+    }
+    .unit {
+        @extend .kanit-extralight;
+        font-size: 16px;
+    }
+    .link-summary {
+        text-align: left;
+        display: inline-block;
+        &:hover, &:focus, &:active {
+            text-decoration: none;
+        }
+    }
+    .glyphicon-chevron-right {
+        margin-left: 20px;
+        border: 2px solid #333;
+        border-radius: 50%;
+        padding: 5px;
+        font-size: 12px;
+        top: 0;
+    }
+    .summary-wrapper {
+        min-height: 105px;
+    }
+}
+
+.summary-wrapper.-middle {
+    border-left: 1px solid #B87F1C;
+    border-right: 1px solid #B87F1C;
+}
+
+@media (max-width: $screen-xs-max) {
+    .summary-banner {
+        margin: 0 auto 20px;
+    }
+
+    .summary-wrapper.-middle {
+        border-right: 0;
+        border-left: 0;
+    }
+}
+
+
+
+
+
+/* --------------------------- *\
+            News fade
+\* --------------------------- */
+
+.news-fade {
+    background-color: #ffd467;
+    padding: 15px 0 10px;
+    .small-logo {width: auto; height: auto;}
+    .small-logo > span {
+        height: 50px;
+        width: 50px;
+        min-height: 50px;
+    }
+    .news-list {
+        text-align: center;
+        margin: 0;
+    }
+    .news-list .title {
+        font-size: 18px;
+        height: 55px;
+        margin: 0;
+        display: table-cell;
+        vertical-align: middle;
+    }
+    .news-list > .item {
+        padding: 0;
+        border-bottom: 0;
+    }
+    .news-item {
+        display: inline-block;
+        > div { display: inline-block;}
+        * { color: #333;}
+    }
+}
+
+
+
+
+
+/* --------------------------- *\
+        Block : supporter
+\* --------------------------- */
+.block-front.-supporter {
+    .small-logo {
+        width: 70px;
+        height: 70px;
+        max-height: 70px;
+        margin-right: 0;
+    }
+    .small-logo > span {
+        width: 80px;
+        height: 70px;
+        max-height: 70px;
+        img {
+            max-width: 55px;
+            max-height: 55px;
+            display: inline-block;
+        }
+    }
+    .item {
+        display: inline-block;
+        margin: 0 10px 10px;
+    }
+}
+
+.carousel-wrapper.-supporter {
+    position: relative;
+    > ul { padding: 0;}
+    .left, .right {
+        position: absolute;
+        top: 20px;
+        font-size: 23px;
+    }
+    .right {right: 0;}
+}
+
+.block-front.-supporter .pagination {
+    margin: 0;
+    > li {
+        position: absolute;
+        top: 5px;
+        left: 0;
+        @media (max-width: $screen-xs-max) {
+            position: static;
+        }
+
+        &:nth-child(3) { right: 0; left: auto;}
+        &:hover, &:focus, &:active {
+            a {
+                background-color: transparent;
+            }
+        }
+    }
+    > li a {
+        font-size: 30px;
+        &:hover, &:focus, &:active {
+            text-decoration: none;
+            background-color: transparent;
+            color: #333;
+        }
+    }
+}
+
+
+
+
+
+/* --------------------------- *\
+    Block : message on homepage
+\* --------------------------- */
+
+.wrapper.-home {
+    .messages {
+        width: 960px;
+        margin: 0 auto;
+        position: absolute;
+        top: -50px;
+        left: 0;
+        right: 0;
+        @media (max-width: $screen-xs-max) {
+            top: 10px;
+            width: 370px;
+        }
+    }
+}
+
+
+
+
+/* --------------------------- *\
+    Block : circle startup
+\* --------------------------- */
+
+.block-circle-startup {
+    margin: 50px -15px;
+    hr._medium {
+        margin-top: 40px;
+    }
+}

@@ -1,0 +1,18 @@
+{% load files_widget_tags %}
+
+{% for path_to_file in files.splitlines %}{% spaceless %}
+    <div class="preview" data-image-path="{{ path_to_file }}">
+
+        <span class="image-holder">
+            {% if path_to_file|is_image %}
+            <a href="/media/{{ path_to_file }}" target="_blank">
+                <img class="thumbnail" src="{% include 'files_widget/includes/thumbnail.html' with preview_size='64' %}" />
+            </a>
+            {% else %}
+            <a href="/media/{{ path_to_file }}" target="_blank">
+                <span class="thumbnail no-img">{{ path_to_file|first_char|upper }}</span>
+            </a>
+            {% endif %}
+        </span>
+    </div>
+{% endspaceless %}{% endfor %}

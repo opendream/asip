@@ -1,0 +1,65 @@
+{% extends 'base_single.html' %}
+{% load i18n %}
+{% load staticfiles %}
+
+{% block js %}
+{% endblock %}
+
+{% block title %}
+{% if not instance.id %}{% trans "Create" %} {{ instance.get_inst_type_human_readable  }}{% else %}{% trans "Edit" %} {{ instance.name }}{% endif %}
+{% if instance.id %}
+<a href="{{ instance.get_absolute_url }}" class="btn btn-default btn-xs btn-view">
+    <span class="glyphicon glyphicon-eye-open"></span> {% trans "View result" %}
+</a>
+{% endif %}
+{% endblock %}
+
+
+{% block breadcrumb %}
+    <a href="{% url 'account_app' %}" class="link-breadcrumb">
+        My Apps
+    </a>
+{% endblock %}
+
+{% block content_class %} content-normal{% endblock %}
+
+{% block content %}
+
+<form method="post" role="form" enctype="multipart/form-data" class="form-group" ng-non-bindable>
+
+    {% csrf_token %}
+    {% if form.non_field_errors %}
+    <div class="errors alert alert-danger">{{ form.non_field_errors }}</div>
+    {% endif %}
+
+
+    {% for field in form %}
+    {% include 'field.html' %}
+    {% endfor %}
+
+
+    <div class="controls form-group">
+        <div class="form-action">
+            <button class="btn btn-primary btn-orange{% if not instance.id %} btn-submit{% endif %}" type="submit">
+            {% if not instance.id %}
+            {% if submit_text %}
+            {{ submit_text }}
+            {% else %}
+            {% trans "Create new" %}
+            {% endif %}
+            {% else %}
+            {% trans "Save changes" %}
+            {% endif %}
+            </button>
+            <a href="{% if not instance.id %}{% url 'home' %}{% else %}.{% endif %}" class="btn btn-default btn-cancel">{% trans "Cancel" %}</a>
+        </div>
+
+    </div>
+
+
+    <input type="hidden" name="control_permalink" value="1"/>
+    <input type="hidden" name="is_new" value="{% if not instance.id %}1{% else %}0{% endif %}"/>
+
+</form>
+
+{% endblock %}

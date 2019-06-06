@@ -1,0 +1,294 @@
+@import "compass/css3";
+
+/* -------------------------------- *\
+    Table of Search
+
+    Component: search-block
+    Elements: title
+    Elements: field
+    Elements: btn-search
+    Elements: label
+
+    Component: dropdown-field
+    Varients: -full
+        - toggle
+        - caret
+        - list
+\* -------------------------------- */
+
+.search-block {
+    margin-bottom: 60px;
+    padding: 20px;
+    border: 1px solid #D8D8D8;
+
+    > .title {
+        margin: 0 0 25px;
+        font-size: 28px;
+        font-family: $kanit-extra-light;
+    }
+    > .btn-search {
+        display: block;
+        width: 100%;
+        margin: 10px auto 0;
+        padding: 10px 12px;
+        font-size: 18px;
+        border-radius: 6px;
+    }
+    .label {
+        display: block;
+        margin-bottom: 10px;
+        padding: 0;
+        color: #666;
+        font-size: 16px;
+        font-weight: normal;
+        text-align: left;
+    }
+}
+
+@media (max-width: $screen-xs-max) {
+    .search-block {
+        > .title { 
+            margin-bottom: 15px;
+            font-size: 22px;
+        }
+    }
+}
+
+.search-block {
+    .form-group {
+        margin-bottom: 15px;
+    }
+    .form-control {
+        border-color: #999;
+        border-radius: 5px;
+    }
+}
+
+.dropdown-field {
+    margin: 0 0 20px;
+    border: 1px solid #979797;
+    border-radius: 4px;
+
+    .toggle {
+        padding: 10px 12px;
+        font-size: 16px;
+        color: #999;
+    }
+    .caret{
+        border-width: 7px;
+        position: absolute;
+        right: 10px;
+        top: 20px;
+    }
+
+    &.-full {
+        width: 100%;
+
+        > .toggle {
+            width: 100%;
+            text-align: left;
+            float: left;
+        }
+        > .list {
+            width: 100%;
+        }
+    }
+}
+
+
+
+
+
+/* --------------------------- *\
+        Block Search Filter
+\* --------------------------- */
+
+.block-search-filter {
+    .item {
+        margin: 0 0 20px;
+    }
+    .item a.active {
+        font-weight: bold;
+    }
+}
+
+.filter-achieve {
+    overflow: visible;
+    margin: 10px 0;
+    height: 42px;
+    position: relative;
+    .input-wrapper {
+        width: 50%;
+        float: left;
+        position: relative;
+    }
+    .dropdown-toggle {
+        width: 100%;
+        text-align: left;
+        border-radius: 0;
+        border: 1px solid #999;
+        font-size: 15px;
+        padding: 10px;
+    }
+    .dropdown-menu {
+        margin-top: 0;
+        width: 100%;
+        min-width: initial;
+    }
+    .btn[disabled='disabled'] {
+        background-color: #eee;
+        cursor: not-allowed;
+    }
+}
+
+.input-wrapper {
+    &.-year .btn {
+        border-right: 0;
+        border-radius: 5px 0 0 5px;
+    }
+    &.-month .btn {
+        border-radius: 0 5px 5px 0;
+    }
+    .btn .caret {
+        border-width: 7px;
+        position: absolute;
+        right: 10px;
+        top: 20px;
+    }
+}
+
+
+
+
+
+/* --------------------------- *\
+        Search Result
+\* --------------------------- */
+
+.search-result {
+    > .text-label {
+        @extend .kanit-extralight;
+        font-size: 18px;
+    }
+    > .title {
+        font-size: 40px;
+        margin: 0;
+    }
+}
+
+
+
+
+
+/* --------------------------- *\
+     Search Collapse Top bar
+\* --------------------------- */
+
+.block-search.-toggle {
+    clear: both;
+    width: 100%;
+    background-color: #C4AE89;
+}
+
+.form-wrapper.-search {
+    padding: 25px;
+    .form-control { 
+        height: 49px;
+        &:focus { outline: 0;}
+    }
+    .text-input {
+        width: 100%;
+        border: 0;
+        padding: 12px 20px;
+        font-size: 18px;
+    }
+    .btn {
+        width: 100%;
+        height: 49px;
+    }
+    .search-btn-wrapper { padding-left: 0;}
+}
+
+@media (max-width: $screen-xs-max) {
+    .form-wrapper.-search {
+        padding: 10px;
+        > .container {
+            padding: 0;
+        }
+        .form-control, .btn {
+            height: 40px;
+        }
+    }
+}
+
+// .block-search.-toggle.loading {
+//     opacity: 0.5;
+//     .search-wrapper:after {
+//         content: '\00a0';
+//         background: url('/static/images/loading.gif');
+//         width: 16px;
+//         height: 11px;
+//         display: block;
+//         margin: -10px auto 0;
+//     }
+// }
+
+
+
+
+
+/* --------------------------- *\
+Search Result [Search list page]
+\* --------------------------- */
+
+.found-result {
+    .amount {
+        @extend .kanit-regular;
+        font-size: 26px;
+        margin: 20px 0 0;
+    }
+}
+
+.result-list {
+    margin-top: 35px;
+    border-top: 1px solid #d8d8d8;
+    padding-top: 20px;
+    .thumb-nail {
+        img { max-width: 80px;}
+    }
+    .title {
+        font-size: 18px;
+    }
+    .summary {
+        color: $font-desc-color;
+    }
+    .item {
+        padding: 0 0 15px;
+        margin: 0 0 15px;
+        border-bottom: 1px solid #d8d8d8;
+    }
+}
+
+@media (max-width: $screen-xs-max) {
+    .result-list {
+        .summary {
+            margin-top: 5px;
+        }
+    }
+}
+
+
+
+
+
+/* --------------------------- *\
+     Search Filter Sidebar
+\* --------------------------- */
+
+.block-search-filter {
+    margin-top: 50px;
+    @media (max-width: $screen-xs-max) {
+        margin-top: 0;
+    }
+}
+

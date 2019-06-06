@@ -1,0 +1,12 @@
+.DS_Store
+.idea
+*.swp
+*.py[co]
+# Packages
+*.egg
+*.egg-info
+*.pid
+*.pem
+.sass-cache
+tmp
+static/css/stylesheets/styles.css.map

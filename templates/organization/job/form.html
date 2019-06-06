@@ -1,0 +1,305 @@
+{% extends 'base_single.html' %}
+{% load i18n %}
+{% load staticfiles %}
+{% load organization_tags %}
+
+{% block content_class %} content-smart{% endblock %}
+
+{% block js %}
+<script type="text/javascript" src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
+{% endblock %}
+{% block css %}
+
+{% endblock %}
+
+
+{% block title %}
+{% if form.is_new %}{% trans "Create" %}{% else %}{% trans "Edit" %}{% endif %} {% trans form.inst.inst_name %}
+{% if not form.is_new and not request_popup %}
+<a href="{% url 'job_detail' form.inst.id %}" class="btn btn-default btn-xs btn-view">
+    <span class="glyphicon glyphicon-eye-open"></span> {% trans "View result" %}
+</a>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+
+<form method="post" class="form-horizontal" role="form" enctype="multipart/form-data" ng-non-bindable>
+    {% csrf_token %}
+
+    {% if form.non_field_errors %}
+    <div class="errors alert alert-danger">{{ form.non_field_errors }}</div>
+    {% endif %}
+
+    {% if request_popup %}
+        <!-- organization unknow -->
+    {% elif standalone or not organization %}
+    <div class="controls form-group">
+        <label for="id_organization" class="field-container control-label col-sm-3">{% trans "Select organization of your job." %}</label>
+
+        <div class="field-container-no-overflow field-inline-id_organization col-sm-7">
+
+            <div class="inline-reference-container">
+                <div class="inline-reference-wrapper">
+
+                    <span class="help-block">
+                        {% trans "Select organization that your created and administration." %}
+                    </span>
+
+                    {{ form.organization }}
+
+                    {% if form.organization.errors %}
+                    <div class="errors alert alert-danger">{{ form.organization.errors }}</div>
+                    {% endif %}
+
+                    <div class="inline-create-link-wrapper">
+                        {% trans "or" %}
+                        <a href="{% url 'organization_inline_create' %}?_inline=1&no_script=1&_win_name=id_organization&return_get_display_name=1" class="add-another-inline" id="add_id_organization" target="organization_inline">
+                            <span class="glyphicon glyphicon-plus"></span>
+                            {% trans "Create new organization" %}
+                        </a>
+                    </div>
+                </div>
+
+                <div class="add-another-inline-input-list" id="organization_inline">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    {% elif not request_popup %}
+    <div class="controls form-group">
+        <label class="col-sm-3 control-label">{% trans "Organization" %}</label>
+        <div class="col-sm-7 owner-detail-wrapper">
+            <a href="{{ organization.get_absolute_url }}" class="owner-img" title="{{ organization.get_display_name }}">
+                <img src="{{ organization.get_thumbnail_in_primary }}" alt="{{ organization.get_display_name }}"/>
+            </a>
+            <a href="{{ organization.get_absolute_url }}" title="{{ organization.get_display_name }}" class="owner-title">
+                {{ organization.get_display_name }}
+            </a>
+        </div>
+    </div>
+    <br/>
+
+    {% endif %}
+
+    <div class="controls form-group">
+        <label for="id_title" class="col-sm-3 control-label">{% trans "Title" %} *</label>
+        <div class="col-sm-7">
+            <input id="id_title" name="title" type="text" class="form-control" value="{{ form.title.value|default_if_none:"" }}" required>
+            {% if form.title.errors %}
+            <div class="errors alert alert-danger">{{ form.title.errors }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="controls form-group">
+        <label for="id_contact_information" class="col-sm-3 control-label">{% trans "Contact Information" %} *</label>
+        <div class="col-sm-7">
+            {{ form.contact_information }}
+            {% if form.contact_information.errors %}
+            <div class="errors alert alert-danger">{{ form.contact_information.errors }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="controls form-group">
+        <label for="id_description" class="col-sm-3 control-label">{% trans "Description" %}</label>
+        <div class="col-sm-7">
+            {{ form.description }}
+            {% if form.description.errors %}
+            <div class="errors alert alert-danger">{{ form.description.errors }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="controls form-group">
+        <label for="id_role" class="col-sm-3 control-label">{% trans "Role" %} *</label>
+        <div class="col-sm-7">
+            {{ form.role }}
+
+            {% if form.role.errors %}
+            <div class="errors alert alert-danger">{{ form.role.errors }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="controls form-group">
+        <label for="id_position" class="col-sm-3 control-label">{% trans "Working Pattern" %} *</label>
+        <div class="col-sm-7">
+            {{ form.position }}
+
+            {% if form.position.errors %}
+            <div class="errors alert alert-danger">{{ form.position.errors }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="controls form-group range-input-container">
+        <label for="id_salary_min" class="col-sm-3 control-label">{% trans "Salary Range" %}</label>
+        <div class="col-sm-7">
+            <div class="range-input-range-wrapper">
+                <div class="range-input-range">
+                    <div class="range-input-item-left">
+                        <div class="range-input-item-inner">
+                            {{ form.salary_min }}
+                            {% if form.salary_min.errors %}
+                            <div class="errors alert alert-danger">
+                                {{ form.salary_min.errors }}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="range-input-dash"> — </div>
+                    <div class="range-input-item-right">
+                        <div class="range-input-item-inner">
+                            {{ form.salary_max }}
+                            {% if form.salary_max.errors %}
+                            <div class="errors alert alert-danger">
+                                {{ form.salary_max.errors }}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="range-input-unit"> {{ settings.CURRENCY }}</div>
+        </div>
+    </div>
+
+    <div class="controls form-group range-input-container">
+        <label for="id_equity_min" class="col-sm-3 control-label">{% trans "Equity Range" %}</label>
+        <div class="col-sm-7">
+            <div class="range-input-range-wrapper">
+                <div class="range-input-range">
+                    <div class="range-input-item-left">
+                        <div class="range-input-item-inner">
+                            {{ form.equity_min }}
+                            {% if form.equity_min.errors %}
+                            <div class="errors alert alert-danger">
+                                {{ form.equity_min.errors }}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="range-input-dash"> — </div>
+                    <div class="range-input-item-right">
+                        <div class="range-input-item-inner">
+                            {{ form.equity_max }}
+                            {% if form.equity_max.errors %}
+                            <div class="errors alert alert-danger">
+                                {{ form.equity_max.errors }}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="range-input-unit"> %</div>
+
+        </div>
+    </div>
+
+    <div class="controls form-group">
+        <label for="id_remote" class="col-sm-3 control-label">{% trans "Remote OK?" %}</label>
+        <div class="col-sm-7">
+            {% for remote in form.remote %}
+                <span class="choice-item">
+                    {{ remote.tag }}
+                    <label for="id_remote_{{ remote.index }}">{{ remote.choice_label }}</label>
+                </span>
+            {% endfor %}
+
+            {% if form.remote.errors %}
+            <div class="errors alert alert-danger">{{ form.remote.errors }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="controls form-group">
+        <label for="id_years_of_experience" class="col-sm-3 control-label">{% trans "Years of Experience" %}</label>
+        <div class="col-sm-7">
+            <input id="id_years_of_experience" name="years_of_experience" type="number" min="0" class="form-control" value="{{ form.years_of_experience.value }}" />
+            {% if form.years_of_experience.errors %}
+            <div class="errors alert alert-danger">{{ form.years_of_experience.errors }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if HIDE_COUNTRY %}
+    <input type="hidden" name="country" value="{{ settings.DEFAULT_COUNTRY }}"/>
+    {% else %}
+    <div class="controls form-group">
+        <label for="id_country" class="col-sm-3 control-label">{% trans "Country" %} *</label>
+        <div class="col-sm-7">
+            {{ form.country }}
+            {% if form.country.errors %}
+            <div class="errors alert alert-danger">{{ form.country.errors }}</div>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="controls form-group">
+        <label for="id_location" class="col-sm-3 control-label">{% trans "Location Detail" %}</label>
+        <div class="col-sm-7">
+            <input id="id_location" name="location" type="text" class="form-control" value="{{ form.location.value|default_if_none:"" }}" maxlength="255"/>
+            <span class="help-block">
+            {% trans "Ex: Bangkok, Chiang Mai" %}
+            </span>
+            {% if form.location.errors %}
+            <div class="errors alert alert-danger">{{ form.location.errors }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="controls form-group">
+        <label for="id_skills" class="col-sm-3 control-label">{% trans "Skills" %}</label>
+        <div class="col-sm-7">
+
+            {{ form.skills }}
+            <span class="help-block">
+            {% trans "Separate by comma, space, tab or enter" %}
+            </span>
+            {% if form.skills.errors %}
+            <div class="errors alert alert-danger">{{ form.skills.errors }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="controls form-group">
+        <label for="id_status" class="col-sm-3 control-label">{% trans "Status" %}</label>
+        <div class="col-sm-7">
+            {% for status in form.status %}
+                <span class="choice-item">
+                    {{ status.tag }}
+                     <label for="id_status_{{ status.index }}">{{ status.choice_label }}</label>
+                </span>
+            {% endfor %}
+
+            {% if form.status.errors %}
+            <div class="errors alert alert-danger">{{ form.status.errors }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="controls form-group group-action">
+        <div class="col-sm-offset-3 col-sm-7 form-action">
+            <button class="btn btn-primary btn-orange{% if form.is_new %} btn-submit{% endif %}" type="submit">{% if form.is_new %}{% trans "Create new" %}{% else %}{% trans "Save changes" %}{% endif %}</button>
+            {% if not request_popup %}
+            <a href="{% if form.is_new %}{% url 'home' %}{% else %}.{% endif %}" class="btn btn-default btn-cancel">{% trans "Cancel" %}</a>
+            {%  endif %}
+            {% if request_popup %}
+            <a onclick="window.close()" class="btn btn-default btn-cancel">{% trans "Cancel" %}</a>
+            {%  endif %}
+        </div>
+        {% if not form.is_new %}
+        <a class="btn btn-md btn-delete" href="{% url 'presentation_delete' 'organization' 'Job' form.inst.id %}">
+            <span class="glyphicon glyphicon-remove icostartup icon-delete"></span>
+            {% trans "Delete" %}
+        </a>
+        {% endif %}
+    </div>
+
+</form>
+{% endblock %}

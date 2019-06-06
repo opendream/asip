@@ -1,0 +1,71 @@
+{% extends 'base_sidebar_left.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block main_extra %} ng-controller="RequestController"{% endblock %}
+
+{% block title_class %} hidden {% endblock %}
+{% block title %}Requests of {{ logged_in_party.get_display_name }}{% endblock %}
+
+{% block sidebar %}
+<div class="block block-sidebar -bg-white -filters">
+  <form role="form" class="form-job" action="/request" name="request_filter_form">
+      <div
+         ng-class="loading_class()"
+         ng-controller="SearchFormController"
+         ng-init="init({
+             tab_list_config: [
+                 {
+                     title: 'Country',
+                     filters: ['verb'],
+                     api: '/api/v1/request/',
+                 }
+             ],
+             filter_list_config: {
+                 verb: {
+                     title: 'All Action',
+                     api: '/api/v1/verb/',
+                 }
+             }
+         })">
+          <div ng-repeat="tab in tab_list">
+              <div class="">
+                <h2 class="block-title">{% trans 'Filters' %}</h2>
+                  <div class="dropdown select-modify" ng-repeat="filter in tab.filters">
+                      <a href="#" id="category-drop" class="btn btn-default dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+                          <span class="text">{[{ filter.title }]}</span>
+                          <span class="caret"></span>
+                      </a>
+                      <ul class="dropdown-menu select-catagory" role="menu" aria-labelledby="category-drop">
+                          <li ng-repeat="data in filter.data | notMatchArray:filters_choice:'title'" ng-click="data.selected_filter()"><a href="" alt="">{[{ data.title }]}</a></li>
+                      </ul>
+                  <input type="hidden" name="{[{ filter.name }]}" value="{[{ filter.current_filter_data.permalink }]}" />
+                  </div>
+                  <!-- End Country Drowdown -->
+                  <button type="submit" class="btn btn-primary -big -full-width">Filter</button>
+              </div>
+          </div>
+      </div>
+  </form>
+</div>
+{% endblock %}
+	<!-- Block Request list -->
+  {% block content %}
+
+  <h1 class="page-title">Requests of {{ logged_in_party.get_display_name }}</h1>
+    <div class="notification-block block-request" ng-controller="BasicPartyListController" ng-init="init('/api/v1/request/', {limit: 8}, '-id')">
+              <div ng-show="!is_loading && party_list.length == 0">No activities.</div>
+              <ul class="item-list notification-list">
+                  <li class="notification-item item noti-testimonial " ng-class="is_unread_class(relation)" ng-repeat="relation in party_list" ng-include="'request_list.html'">
+                  </li>
+              </ul>
+              <a class="loadmore-wrapper" ng-click="load_more()" ng-class="load_more_class()">
+                  <span ng-hide="is_loading" class="loadmore">Load more</span>
+                  <img ng-show="is_loading" ng-src="/static/images/loading.gif" class="loading-icon" >
+              </a>
+
+      </div>
+
+<!-- 	</div> -->
+
+{% endblock %}

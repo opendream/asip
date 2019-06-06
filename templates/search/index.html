@@ -1,0 +1,34 @@
+{% extends 'base_single.html' %}
+{% block search_class %} in{% endblock %}
+{% block search_toggle_class %}{% endblock %}
+
+{% block title %}Search results{% endblock %}
+
+{% block js %}
+<script type="text/javascript">
+    var query = {{ query|safe }};
+</script>
+{% endblock %}
+
+{% block content %}
+
+    <!-- Block Search result -->
+    <div ng-controller="BasicPartyListController" ng-init="init('', {limit: 20})" class="block search-result">
+
+        <!-- <div ng-show="!is_loading"></div> -->
+        <div ng-bind-html="no_result_text"></div>
+
+        <ul class="item-list result-list">
+            <li class="result-item item {[{ party.inst_type }]}-image" ng-repeat="party in party_list" >
+                <div ng-include="'template_party_item_style_default.html'"></div>
+            </li>
+        </ul>
+
+        <a class="loadmore-wrapper" ng-click="load_more()" ng-class="load_more_class()" ng-class="should_show_list_class()">
+            <span ng-hide="is_loading" class="loadmore">Load more</span>
+            <img ng-show="is_loading" ng-src="/static/images/loading.gif" class="loading-icon" >
+        </a>
+    </div>
+    <!-- End block Happening -->
+
+{% endblock %}

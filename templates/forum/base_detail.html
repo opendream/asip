@@ -1,0 +1,40 @@
+{% extends 'base_single.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}
+{{ instance.title }}
+{% endblock %}
+
+{% block title_class %} hidden{% endblock %}
+{% block search_toggle_class %}{% endblock %}
+{% block search_class %}{% endblock %}
+{% block content_class %}{% endblock %}
+
+{% block breadcrumb %}
+{% if instance.parent %}
+    {% for parent in instance.get_nested_all %}
+    {% if not forloop.last %}
+    <a href="{{ parent.get_absolute_url }}" title="{{ parent.title }}">
+        {{ parent.title }}
+    </a>
+    &nbsp;»&nbsp;
+    {% else %}
+    {{ parent.title }}
+    {% endif %}
+
+    {% endfor %}
+{% endif %}
+{% endblock %}
+
+
+{% block content %}
+<!-- < Block  Meeting -->
+<div>
+    <div class="block block-forum-detail">
+
+        {% block detail %}
+        {% endblock %}
+    </div>
+</div>
+{% endblock %}

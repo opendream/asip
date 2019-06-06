@@ -1,0 +1,73 @@
+{% extends 'base_single.html' %}
+{% load i18n %}
+{% load staticfiles %}
+
+{% block css %}
+
+{% endblock %}
+
+{% block title %}{% trans "Invalid link" %}{% endblock %}
+
+{% block content_class %} content-thin -content-form-small{% endblock %}
+
+{% block breadcrumb %}
+{% endblock %}
+
+{% block content %}
+
+<div class="help-block">
+{% trans "Your confirmation link can only be used once to log in." %}
+{% trans "The link has been used." %}
+{% trans "You can resend registration confirmation link again at the form below." %}
+</div>
+{% if request.GET.next %}
+<a href="{% url 'login_social' 'facebook' %}?{{ request.GET.urlencode }}" class="btn btn-primary btn-lg btn-block btn-facebook" type="button"><span class="icon-facebook"></span>{% trans "Connect with" %} Facebook</a>
+<a href="{% url 'login_social' 'linkedin' %}?{{ request.GET.urlencode }}" class="btn btn-primary btn-lg btn-block btn-linkedin" type="button"><span class="icon-linkedin"></span>{% trans "Connect with" %} LinkedIn</a>
+<form class="form-signin" role="form" method="post" action="{% url 'account_reset_password' %}?{{ request.GET.urlencode }}" ng-non-bindable>
+{% else %}
+<a href="{% url 'login_social' 'facebook' %}?next={{ request.path }}" class="btn btn-primary btn-lg btn-block btn-facebook" type="button"><span class="icon-facebook"></span>{% trans "Connect with" %} Facebook</a>
+<a href="{% url 'login_social' 'linkedin' %}?next={{ request.path }}" class="btn btn-primary btn-lg btn-block btn-linkedin" type="button"><span class="icon-linkedin"></span>{% trans "Connect with" %} LinkedIn</a>
+<form class="form-signin" role="form" method="post" action="{% url 'account_reset_password' %}?next={{ request.path }}" ng-non-bindable>
+{% endif %}
+    {% csrf_token %}
+    {% if form.non_field_errors %}
+    <div class="errors alert alert-danger">{{ form.non_field_errors }}</div>
+    {%  endif %}
+
+    <div class="form-group">
+        <label for="register-id_email">{% trans "Email Address" %}</label>
+        <input id="register-id_email" name="email" type="email" class="form-control" placeholder="{% trans "Enter your email address" %}" value="{{ form.email.value|default_if_none:default_email|default_if_none:"" }}" required autofocus>
+        {% if form.email.errors %}
+        <div class="errors alert alert-danger">{{ form.email.errors }}</div>
+        {% endif %}
+
+    </div>
+
+    <div class="form-action btn-wrapper">
+        {% if display_cancel %}
+        <button class="btn btn-primary btn-lg btn-orange" type="submit">{% trans 'Register' %}</button>
+        <button class="btn btn-default btn-lg btn-cancel" data-dismiss="modal" type="button">{% trans 'Cancel' %}</button>
+        {% else %}
+        <button class="btn btn-primary btn-lg btn-block btn-orange" type="submit">{% trans 'Resend confirmation link' %}</button>
+        {% endif %}
+    </div>
+    <br/>
+    <div class="help-block text-center">
+        {% trans "Your registration confirmation link would be sent" %}
+        {% if True %}
+        {% trans "for filling up your organization information" %}
+        {% endif %}
+        {% trans "via your given email" %}
+    </div>
+
+</form>
+
+<div class="link-footer text-center">
+    {% if display_cancel %}
+    <a onclick="$('#modal-register').modal('hide')" class="link-signup" href="#" data-target="#modal-login" data-toggle="modal">{% trans "Have an account?" %}</a>
+    {% else %}
+    <a class="link-signup" href="{% url 'account_login' %}?{{ request.GET.urlencode }}">{% trans "Have an account?" %}</a>
+    {% endif %}
+</div>
+
+{% endblock %}

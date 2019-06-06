@@ -1,0 +1,24 @@
+{% extends 'base_single.html' %}
+{% load i18n %}
+{% load static %}
+{% load humanize %}
+{% load common_tags %}
+
+{% block title %}Connection Error{% endblock %}
+
+{% block content_class %} content-smart{% endblock %}
+
+{% block content %}
+<div class="alert alert-error">
+    <p>
+        {{ message|safe }}
+        <br/>
+        Please, contact administrator
+        {% if settings.FACEBOOK_PAGE_ID %}
+            via facebook message
+            <a href="https://www.facebook.com/{{ settings.FACEBOOK_PAGE_ID }}">here</a>
+        {% endif %}
+    </p>
+</div>
+</br></br>
+{% endblock %}

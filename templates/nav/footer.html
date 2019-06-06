@@ -1,0 +1,31 @@
+<div class="footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-2 col-xs-3">
+          <h2 class="logo">Impact<wbr />Connect</h2>
+          <div class="block-followus block">
+            <h2 class="block-title">Connect</h2>
+            <span class="icon-facebook icon-social"><a href=""></a></span>
+            <span class="icon-twitter icon-social"><a href=""></a></span>
+          </div>
+        </div>
+        <div class="col-md-6 col-md-offset-1 col-xs-6 block block-country" >
+          <div class="block block-country block-taxonomy" ng-controller="TaxonomyListController" ng-init="init('/api/v1/topic', { level: 0})">
+            <h2 class="block-title">Category</h2>
+            <ul class="country-list">
+              <li ng-repeat="topic in taxonomy_list"><a ng-class="{active: topics == topic.permalink}" href="/search/?q=&api=%2Fapi%2Fv1%2Forganization%2Fsearch&page=1&tab_active=1&type_of_organization=social-enterprise&topics={[{ topic.permalink }]}&country=all&type_of_needs=all">{[{ topic.title }]}</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-2 col-md-offset-1 col-xs-3" >
+          <div class="block block-category" ng-controller="TaxonomyListController" ng-init="init('/api/v1/country', {})">
+            <h2 class="block-title">Country</h2>
+            <ul class="category-list">
+              <li ng-repeat="country in taxonomy_list">{[{ country.title }]}</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      {% include 'nav/footer_menu.html' %}
+    </div>
+</div>

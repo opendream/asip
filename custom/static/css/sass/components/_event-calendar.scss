@@ -1,0 +1,39 @@
+.datepicker-wrapper {
+  > table { width: 100%;}
+  > table thead {
+    background-color: #fff;
+  }
+  > table thead .btn {
+    background-color: transparent;
+    font-size: 20px;
+    &:hover, &:focus, &:active {
+      background-color: transparent;
+    }
+  }
+  > table > thead > tr { font-size: 18px;}
+  > table > tbody .btn { 
+    font-size: 15px;
+    background-color: transparent;
+    display: inline-block;
+    height: 34px;
+    width: 34px !important;
+    padding: 3px;
+  }
+  > table > tbody td { padding: 5px;}
+}
+
+// Active Style 
+.datepicker-wrapper {
+  > table > tbody .btn {
+    &.active {
+      background-color: transparent;
+      border: 3px solid $color-yellow;
+      border-radius: 50%;
+      color: #333;
+    }
+  }
+  .text-info, .btn-info { color: #333;}
+  dt.current {
+    background-color: $color-yellow;
+  }
+}

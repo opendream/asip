@@ -1,0 +1,45 @@
+{% load common_tags %}
+
+{% captureas content %}
+
+<h2>{{ object.name }}</h2>
+<p>{{ object.summary }}</p>
+<p>{{ object.description|safe }}</p>
+<p>{{ object.country }}</p>
+
+<p>{{ object.facebook_url }}</p>
+<p>{{ object.twitter_url }}</p>
+<p>{{ object.linkedin_url }}</p>
+<p>{{ object.homepage_url }}</p>
+
+{% for item in object.type_of_needs.all %}
+<h3>{{ item.title }}</h3>
+<p>{{ item.summary_en }}</p>
+<p>{{ item.summary_th }}</p>
+{% endfor %}
+
+{% for item in object.type_of_supports.all %}
+<h3>{{ item.title }}</h3>
+<p>{{ item.summary_en }}</p>
+<p>{{ item.summary_th }}</p>
+{% endfor %}
+
+{% for item in object.topics.all %}
+<h3>{{ item.title }}</h3>
+<p>{{ item.summary_en }}</p>
+<p>{{ item.summary_th }}</p>
+{% endfor %}
+
+{% for item in object.organization_roles.all %}
+<h3>{{ item.title }}</h3>
+<p>{{ item.summary_en }}</p>
+<p>{{ item.summary_th }}</p>
+{% endfor %}
+
+{% for item in object.jobs.all %}
+{% include 'search/indexes/organization/job_text.txt' with object=item %}
+{% endfor %}
+
+{% endcaptureas %}
+
+{{ content|lower }}

@@ -1,0 +1,117 @@
+.block-filter-msg {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 20px;
+    margin-top: 30px;
+    @media (max-width: $screen-xs-max) {
+        border-bottom: 0;
+    }
+    .item.active > a { font-weight: bold;}
+    .page-title {
+        font-size: 28px;
+    }
+}
+
+.filter-messages {
+    .unread-noti {
+        position: static;
+        font-size: 16px;
+        color: #333;
+        border-radius: 5px;
+        background-color: transparent;
+        padding: 3px 7px;
+        height: auto;
+        width: auto;
+        display: inline-block;
+        border: 2px solid $main-color;
+        font-weight: normal;
+    }
+    .item {
+        margin-bottom: 10px;
+    }
+}
+
+.message-body.-truncate {
+    // @extend .kanit-regular;
+    width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    float: left;
+    margin-right: 5px;
+    font-weight: normal;
+    br { display: none;}
+    .readmore { 
+        font-size: 12px;
+    }
+}
+
+.message-truncate-wrapper {
+    overflow: hidden;
+    .readmore {
+        font-size: 11px;
+        text-decoration: underline;
+    }
+    @media (max-width: $screen-xs-max) {
+        margin: 10px 0;
+    }
+}
+
+.full-message {
+    margin-top: 10px;
+    padding: 20px;
+    background-color: #eee;
+}
+
+.message-list {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #d8d8d8;
+    .item {
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+        border-bottom: 1px solid #d8d8d8;
+    }
+}
+
+// list mail 
+.message-item {
+    .info { color: #999;}
+    .item-wrapper {
+        position: relative;
+    }
+}
+
+.message-info-wrapper {margin-bottom: 10px;}
+
+.message-block {
+    .icon { margin: 0 10px 0 0;}
+    .is-empty {
+        color: #999;
+    }
+}
+
+.message-body-wrapper {
+    @extend .kanit-light;
+    font-size: 15px;
+    .field-label {
+        @extend .kanit-regular;
+        @media (max-width: $screen-xs-max) {
+            display: inline-block !important;
+        }
+    }
+    .date {
+        @media (max-width: $screen-xs-max) {
+            text-align: left;
+        }
+    }
+}
+
+.tab-pane.-message {
+    border: 0;
+    padding: 0;
+    margin-top: 10px;
+    @media (max-width: $screen-xs-max) {
+        margin-top: 0;
+    }
+}

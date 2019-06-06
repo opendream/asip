@@ -1,0 +1,88 @@
+{% load i18n %}
+{% load forum_tags %}
+
+<div class="forum-post-detail">
+    <h{{ heading_level|default:1 }} class="hover-edit">
+        {% if heading_level|default:1 == 1 %}
+        {{ instance.title }}
+        {% else %}
+        <a href="{{ instance.get_absolute_url }}">{{ instance.title }}</a>
+        {% endif %}
+
+        {% if instance|can_edit:user %}
+        <span class="menu-action-wrapper">
+            <a href="{{ instance.get_edit_url }}" class="btn btn-default btn-xs ico-edit">
+                <span class="glyphicon glyphicon-edit"></span>
+                {% trans "Edit" %}
+            </a>
+        </span>
+        {% endif %}
+    </h{{ heading_level|default:1 }}>
+
+    <div class="meta-detail date">
+        {% trans "Post by" %} <a href="{{ instance.created_by.get_absolute_url }}">{{ instance.created_by }}</a> {% trans "at" %} {{ instance.created }}
+    </div>
+
+    {% if instance.description %}
+    <p>{{ instance.description|safe }}</p>
+    {% endif %}
+
+    {% if instance.files %}
+    <br/>
+    <div class="files-widget-render">
+        {% include 'forum/_render_files.html' with files=instance.files %}
+    </div>
+    <br/>
+    {% endif %}
+
+    {% if instance.replies.all.exists %}
+    <h3>{{ instance.get_total_replies }} {% trans "Repiles" %}</h3>
+    <ul class="list-unstyled">
+        {% for reply in instance.replies.all %}
+        <li>
+            <hr/>
+            <div class="hover-edit" id="reply-{{ reply.pk }}">
+                <div class="meta-detail date">
+                    <a href="{{ reply.get_absolute_url }}"><strong>#{{ forloop.counter }}</strong></a>&nbsp;
+                    {% trans "Reply by" %} <a href="{{ reply.created_by.get_absolute_url }}">{{ reply.created_by }}</a> {% trans "at" %} {{ reply.created }}
+                    {% if reply|can_edit:user %}
+                    <span class="menu-action-wrapper">
+                        <a href="{{ reply.get_edit_url }}" class="btn btn-default btn-xs ico-edit">
+                            <span class="glyphicon glyphicon-edit"></span>
+                            {% trans "Edit" %}
+                        </a>
+                    </span>
+                    {% endif %}
+                </div>
+
+                <div>
+                    {{ reply.description|safe }}
+                </div>
+                {% if reply.files %}
+                <br/>
+                <div class="files-widget-render">
+                    {% include 'forum/_render_files.html' with files=reply.files %}
+                </div>
+                <br/>
+                {% endif %}
+
+
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+    <hr/>
+    {% else %}
+    <hr/>
+    <h4>{% trans "Know someone who can answer?" %}</h4>
+    {% endif %}
+
+    {% if user.is_authenticated %}
+    {% include 'forum/_form.html' with form=reply_form instance=reply_instance submit_text='Post Your Reply' %}
+    {% else %}
+
+    Please, <a href="" data-target="#modal-register" data-toggle="modal"><strong>join</strong></a> or <a href="" data-target="#modal-login" data-toggle="modal"><strong>login</strong></a> for your answer.<a href=""></a>
+
+    {% endif %}
+
+</div>

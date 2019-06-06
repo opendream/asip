@@ -1,0 +1,35 @@
+{% load common_tags %}
+
+{% captureas content %}
+
+<h2>{{ object.title }}</h2>
+<p>{{ object.summary }}</p>
+<p>{{ object.description|safe }}</p>
+
+<p>{{ object.facebook_url }}</p>
+<p>{{ object.twitter_url }}</p>
+<p>{{ object.homepage_url }}</p>
+
+{% for item in object.topics.all %}
+<h3>{{ item.title }}</h3>
+<p>{{ item.summary_en }}</p>
+<p>{{ item.summary_th }}</p>
+{% endfor %}
+
+{% for item in object.categories.all %}
+<h3>{{ item.title }}</h3>
+<p>{{ item.summary_en }}</p>
+<p>{{ item.summary_th }}</p>
+{% endfor %}
+
+{% for item in object.cms_has_party_src.all %}
+<h4>{{ item.dst.get_display_name }}</h4>
+{% endfor %}
+
+{% for item in object.tag_set.all %}
+<h3>{{ item.name }}</h3>
+{% endfor %}
+
+{% endcaptureas %}
+
+{{ content|lower }}

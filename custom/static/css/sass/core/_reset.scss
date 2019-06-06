@@ -1,0 +1,32 @@
+/* --------------------------------------- *\
+    Reset Bootstrap menu style
+\* --------------------------------------- */
+
+// Remove responsive border radius in navbar
+@media (min-width: 768px) {
+    .navbar {
+        border-radius: 0;
+    }
+}
+
+// Keep user-menu display in 1 line
+@media (max-width: 767px) {
+    .navbar-nav > li {
+        float: left;
+    }
+}
+
+.navbar {
+  border: none;
+  margin-bottom: 0;
+}
+
+.pagination {
+  width: 100%;
+}
+.pagination li {
+  display: inline-block;
+}
+.pagination > li > a {
+  padding: 5px 3px;
+}

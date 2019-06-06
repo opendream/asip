@@ -1,0 +1,53 @@
+{% load i18n %}
+{% load forum_tags %}
+
+
+<div class="forum-code-{{ instance.permalink }}">
+    <h{{ heading_level|default:1 }} class="hover-edit {{ title_class }}">
+        {% if heading_level|default:1 == 1 %}
+        {{ instance.title }}
+        {% else %}
+        <a href="{{ instance.get_absolute_url }}">{{ instance.title }}</a>
+        {% endif %}
+
+        {% if instance|can_edit:user %}
+        <span class="menu-action-wrapper -edit">
+            <a href="{{ instance.get_edit_url }}" class="btn btn-default btn-xs ico-edit">
+                <span class="glyphicon glyphicon-edit"></span>
+                {% trans "Edit" %}
+            </a>
+            <a href="{% url 'forum_board_create' instance.pk %}" class="btn btn-default btn-xs ico-edit">
+                <span class="glyphicon glyphicon-plus"></span>
+                {% trans "Add Board" %}
+            </a>
+        </span>
+        {% endif %}
+    </h{{ heading_level|default:1 }}>
+
+    {% if heading_level|default:1 != 1 %}
+    <br/>
+    {% endif %}
+
+
+    {% if instance.boards.all.exists %}
+    <ul class="list-unstyled">
+        {% for board in instance.boards.all %}
+        <li>
+            <div>
+                {% include 'forum/_forum_board_detail.html' with instance=board heading_level=3 %}
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+    {% elif heading_level|default:1 == 1  %}
+    <ul class="list-unstyled"><li><div class="no-results">
+        {% trans 'No results' %} &nbsp;
+        {% if instance|can_edit:user %}
+        <a href="{% url 'forum_board_create' instance.pk %}" class="btn btn-default btn-xs ico-edit">
+            <span class="glyphicon glyphicon-plus"></span>
+            {% trans "Add Board" %}
+        </a>
+        {% endif %}
+    </div></li></ul>
+    {% endif %}
+</div>

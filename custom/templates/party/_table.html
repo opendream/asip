@@ -1,0 +1,85 @@
+{% load i18n %}
+
+<table class="table-list" ng-class="{'loading': isLoading}">
+    <tr class="table-heading">
+        <th>{{ params.HEAD_TITLE }}</th>
+        {%  for column in params.COLUMNS %}
+        <th class="text-center">{{ column.label }}</th>
+        {% endfor %}
+    </tr>
+
+    <tr ng-repeat="item in result.objects" class="party-item" ng-cloak>
+        <td class="_hidelabel" data-th="{% trans 'Company' %}">
+            <div class="table-content -company">
+                <div class="media">
+                    <div class="media-left media-middle">
+                        <div class="thumbnail f-small-logo -table-list -org">
+                            <a ng-href="{[{ item.absolute_url }]}" title="{[{ item.get_display_name }]}">
+                                <img class="media-oblect" ng-src="{[{ item.get_thumbnail_in_primary }]}" alt="{[{ item.get_display_name }]}" width="100" height="100"/>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="media-body media-middle">
+                        <h4><a ng-href="{[{ item.absolute_url }]}">{[{ item.get_display_name }]}</a></h4>
+                        <span>{[{ item.get_summary }]}</span>
+                    </div>
+                </div>
+            </div>
+        </td>
+
+        {%  for column in params.COLUMNS %}
+        <td data-th="{{ column.label }}" {% if not column.label %} class="no-label" {% endif %}>
+            <div class="table-content-wrapper">
+                <div class="table-content -column">
+                    {% if column.is_m2m %}
+                    <div ng-class="{'field-expand-able': !item.column.expland && item.{{ column.field_name }}Height >35, 'invisible': !item.{{ column.field_name }}OrderFilters }" class="col-taxanomy text-left" report-my-height height="item.{{ column.field_name }}Height">
+                        <span ng-repeat="value in item.{{ column.field_name }}" class="topics {{ column.field_name }} m2m-tag">
+                            <a ng-click="successFilter('{{ column.field_name }}__permalink', true)" ng-href="#?{{ column.field_name }}__permalink={[{ value.permalink }]}">{[{ value.title }]}</a>
+                        </span>
+                    </div>
+                    <div ng-hide="item.{{ column.field_name }}.length">
+                        -
+                    </div>
+                    {% elif column.field_name == 'action' %}
+                    <div class="table-action text-right">
+                        <div class="action-panel -oneline" ng-if="logged_in_party.id != item.pk">
+                            <div class="action action-love">
+                                <div love-button party="item" template="love_button.html"></div>
+                                <!-- <span>{[{ item.total_love | number:0 }]}</span> -->
+                            </div>
+                            <div class="action action-follow">
+                                <div follow-button party="item" template="follow_button.html"></div>
+                                <!-- <span>{[{ item.total_follower | number:0 }]}</span> -->
+                            </div>
+                        </div>
+                        <div class="action-panel -oneline" ng-if="logged_in_party.id == item.pk">
+                            <div class="action action-love is_you">
+                                ({% trans "is you" %})
+                            </div>
+                        </div>
+                    </div>
+                    {% else %}
+                    <span>{[{ item.{{ column.field_name }}.title||item.{{ column.field_name }}||'-' }]}</span>
+                    {% endif %}
+                    {% if column.is_m2m %}
+                    <a class="field-expand-link" ng-href="{[{ item.absolute_url }]}" ng-if="!item.column.expland && item.{{ column.field_name }}Height>35">{% trans "More" %} ›</a>
+                    {% endif %}
+                </div>
+            </div>
+        </td>
+        {% endfor %}
+    </tr>
+
+    <tr ng-show="!isLoading && result.meta.total_count == 0" ng-cloak>
+        <td colspan="{{ params.COLUMNS|length|add:1 }}" class="no-label">
+            {% trans "No results" %}
+        </td>
+    </tr>
+
+    <tr ng-show="isLoading">
+        <td colspan="{{ params.COLUMNS|length|add:1 }}">
+            <img ng-src="/static/images/loading.gif" class="loading-icon" />
+        </td>
+    </tr>
+
+</table>

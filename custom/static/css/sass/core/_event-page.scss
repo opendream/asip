@@ -1,0 +1,239 @@
+.for-rocket {
+  background-color: #F5D56F;
+  &.-no-landingpage { margin-top: -80px;}
+  ._event-title .page-title {
+    margin: 0 0 15px;
+  }
+  .-event-content ._event-hilight {
+    font-family: $kanit-regular;
+    font-size: 27px;
+  }
+  @media (max-width: 625px) {
+    .rocket {
+      max-width: 90%;
+    }
+  }
+}
+.event-page {
+  .main-content {
+    margin-bottom: 0;
+  }
+  .wrapper {
+  }
+  .wrapper > .container {
+    width: 100%;
+  }
+}
+
+@media (max-width: $screen-xs-max) {
+  .container {
+    padding: 0 1em;   
+  }
+}
+
+.sky {
+  background-color: #F5D56F;
+  overflow: hidden;
+  position: relative;
+  > .cloud-left {
+    display: block;
+    width: 421px;
+    height: 340px;
+    position: absolute;
+    z-index: 1;
+    bottom: -107px;
+    left: -66px;
+    background: url(/static/images/soft-opening/cloud-left.png) transparent no-repeat top left;
+  }
+  > .cloud-right {
+    display: block;
+    width: 421px;
+    height: 340px;
+    position: absolute;
+    z-index: 1;
+    bottom: -107px;
+    right: -66px;
+    background: url(/static/images/soft-opening/cloud-right.png) transparent no-repeat top left;
+  }
+}
+
+._event-title {
+  > .page-title {
+    font-family: $kanit-regular;
+    font-size: 43px;
+    margin: 60px 0 25px;
+  }
+  > .page-title._sub {
+    font-family: $kanit-medium;
+    font-size: 48px;
+  }
+}
+
+._event-title.-primary {
+  margin: 50px 0 30px;
+}
+
+._event-hilight {
+  font-family: $kanit-regular;
+  font-size: 27px;
+}
+.block-browse-party {
+  ._event-hilight {
+    font-size: 36px;
+  }
+}
+
+._event-text {
+  font-family: $kanit-light;
+  font-size: 20px;
+}
+
+._event-name {
+  font-family: $kanit-medium;
+  font-size: 20px;
+  margin-bottom: 0;
+}
+
+._event-position {
+  font-family: $kanit-extra-light;
+  font-size: 18px;
+}
+
+._event-invite {
+  font-family: $kanit-medium;
+  font-size: 40px;
+  margin-top: 0;
+}
+
+._event-button {
+  font-family: $kanit-regular;
+  font-size: 24px;
+  padding: 10px 20px;
+  margin: 25px 10px;
+  background-color: $main-color;
+  &:hover { background-color: darken($main-color, 15%); }
+  @media (max-width: 414px) {
+    font-size: 20px;
+    margin: 10px 15px;
+    max-width: 290px;
+  }
+  @media (max-width: 625px) {
+    margin: 10px auto;
+    width: 100%;
+    max-width: 320px;
+  }
+}
+
+.-event-content {
+  position: relative;
+  max-width: 730px;
+  margin: 0 auto;
+  padding: 80px 15px;
+  z-index: 2;
+  > h2,
+  > p,
+  > img {
+    margin-bottom: 40px;
+  }
+  > p._event-hilight {
+    margin-bottom: 0;
+  }
+
+  &._padtop {
+    padding-top: 25px;
+  }
+  &._padbottom {
+    padding-bottom: 0;
+  }
+  @media (max-width: 360px) {
+    padding: 40px 15px;
+  }
+  .block-organization h2 {
+    font-size: 28px;
+    text-align: center;
+    margin-bottom: 25px;
+  }
+}
+
+.event-sponsors {
+  .-event-content {
+    max-width: 1200px;
+    padding: 0;
+  }
+}
+.-sponsor-list {
+  overflow: hidden;
+  margin-bottom: 20px;
+  li {
+    margin: 10px 5px;
+    display: inline-block;
+  }
+  a {
+    display: block;
+  }
+  &._square li {
+    border: 1px solid #D7D7D7;
+  }
+  &._square a { 
+    display: block;
+    width: 90px;
+    height: 90px;
+    padding: 5px;
+  }
+  &._square img {
+    max-width: 100%;
+
+  }
+  li {
+    @media (max-width: 414px) {
+      width: 30%;
+      margin: 5px;
+    }
+  }
+  li img {
+    @media (max-width: 414px) {
+      max-width: 70%;
+    }
+  }
+  div.clearfix {
+    @media (max-width: 925px) {
+      display: none;
+    }
+  }
+}
+
+.centered:before {
+  content: '';
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+}
+.centered img {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.share-button-group {
+  text-align: center;
+  .share-button {
+    display: inline-block;
+    margin-right: 1em;
+    height: 20px;
+    line-height: 20px;
+    > * { vertical-align: bottom !important; }
+  }
+}
+  .party-item .body-overflow-auto {
+    height: 95px;
+  }
+@media (min-width: 769px) {
+  .party-item .body-overflow-auto {
+    height: 80px;
+  }
+}
+
+.event-org {
+  .-event-content {
+    max-width: 980px;
+  }
+}

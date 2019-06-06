@@ -1,0 +1,38 @@
+<!-- Backup Script
+// <script type='text/ng-template' id="template_party_item_custom.html">
+//     <div class="item-inner height-neighborhood">
+//         <div class="grid-view-thumbnail">
+//             <div class="thumbnail">
+//                 <a ng-href="{[{ party.absolute_url }]}">
+//                     <img ng-src="{[{ party.get_thumbnail }]}">
+//                 </a>
+//             </div>
+//         </div>
+//         <div class="description-wrapper">
+//             <div class="body-overflow-auto">
+//                 <h3 class="title">
+//                     <a ng-if="party.get_status == notification_status.active" ng-href="{[{ party.absolute_url }]}">{[{ party.get_display_name}]} [Custom]</a>
+//                     <span ng-if="party.get_status != notification_status.active">{[{ party.get_display_name}]}</span>
+//                 </h3>
+//                 <div class="country">{[{ party.country.title }]}</div>
+//                 <div class="description" ng-bind-html="party.get_summary"></div>
+//             </div>
+//             <div class="follow-section">
+//                 <div love-button party="party"></div>
+//                 <div follow-button party="party"></div>
+//             </div>
+//         </div>
+//         <div ng-class="{'required-approval':party.REQUIRED_APPROVAL, 'approval':party.status == notification_status.active}" ng-if="party.REQUIRED_APPROVAL && party.status == notification_status.active">
+//             Approved
+//         </div>
+//     </div>
+// </script>
+-->
+
+<script type='text/ng-template' id="template_party_item_custom.html">
+    <div class="small-logo thumbnail">
+        <span>
+           <a ng-href="{[{party.absolute_url}]}"><img ng-src="{[{party.get_thumbnail}]}"></a>
+        </span>
+    </div>
+</script>

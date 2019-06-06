@@ -1,0 +1,17 @@
+/* -------------------------------------- *\
+    Edit Link display
+\* -------------------------------------- */
+
+.link-unstyled {
+  &:hover,
+  &:focus,
+  &:active {
+    text-decoration: none;
+  }
+}
+
+.list-inline {
+  > li {
+    display: inline-block;
+  }
+}

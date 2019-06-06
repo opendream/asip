@@ -1,0 +1,120 @@
+{% load i18n %}
+{% load static %}
+
+<div class="filter-wrapper" ng-controller="FilterController" ng-init="init({url: '{{ params.API_URL }}', successFilterCount: {{ params.FILTERS|length }}, extraParams: {{ params.EXTRA_PARAMS|safe }}})">
+    <p class="filter-label">
+        {% trans "Filter by" %}:
+    </p>
+    <div class="filter-group btn-group btn-group-justified text-left" role="group">
+        <!--
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                {% trans "Created" %}
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a ng-init="initFilter('created', {title: '{% trans "This year" %}', permalink: 'this_year'})" ng-click="addFilter('created', 'this_year')">{% trans "This year" %}</a></li>
+                <li><a ng-init="initFilter('created', {title: '{% trans "This month" %}', permalink: 'this_month'})" ng-click="addFilter('created', 'this_month')">{% trans "This month" %}</a></li>
+                <li><a ng-init="initFilter('created', {title: '{% trans "This week" %}', permalink: 'this_week'})" ng-click="addFilter('created', 'this_week')">{% trans "This week" %}</a></li>
+            </ul>
+        </div>
+        -->
+        {%  for filter in params.FILTERS %}
+        <div class="btn-group" role="group" ng-controller="BasicPartyListController" ng-init="init('{{ filter.api_url }}', {limit: 100})">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                {{ filter.label }}
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li ng-repeat="party in party_list">
+                    <a ng-init="initFilter('{{ filter.field_name }}__permalink', party)" ng-click="addFilter('{{ filter.field_name }}__permalink', party.permalink)">{[{ party.title }]}</a>
+                </li>
+            </ul>
+        </div>
+        {% endfor %}
+    </div>
+
+    <h2>{% blocktrans with title=params.RESULT_TITLE %}{[{ result.meta.total_count }]} {{ title }} found{% endblocktrans %}</h2>
+
+    <div class="filter-selected">
+
+        <div class="filter-label pull-left">
+            {% trans "Selected Filters" %}:
+        </div>
+        <ul class="selected-filter-list list-inline list-unstyled">
+            <li class="selected-filter-item" ng-repeat="filter in filters">
+                {[{ filter.title }]}
+                <a ng-click="removeFilter(filter)">x</a>
+            </li>
+        </ul>
+
+    </div>
+
+    <table class="table-list" ng-class="{'loading': isLoading}">
+        <tr class="table-heading">
+            <th>{{ params.HEAD_TITLE }}</th>
+            {%  for column in params.COLUMNS %}
+            <th class="text-center">{{ column.label }}</th>
+            {% endfor %}
+        </tr>
+
+        <tr ng-repeat="item in result.objects" class="party-item">
+            <td class="_hidelabel" data-th="{% trans 'Company' %}">
+                <div class="table-content -company">
+                    <div class="media">
+                        <div class="media-left media-middle">
+                            <div class="thumb-nail -small -table-list">
+                                <a ng-href="{[{ item.absolute_url }]}">
+                                    <img class="media-oblect" ng-src="{[{ item.get_thumbnail_in_primary }]}" alt="{[{ item.get_display_name }]}" width="100" height="100" />
+                                </a>
+                            </div>
+                        </div>
+                        <div class="media-body media-middle">
+                            <h4><a ng-href="{[{ item.absolute_url }]}">{[{ item.get_display_name }]}</a></h4>
+                            <span>{[{ item.get_summary }]}</span>
+                        </div>
+                    </div>
+                </div>
+            </td>
+
+            {%  for column in params.COLUMNS %}
+            <td data-th="{{ column.label }}">
+                <div class="table-content -column">
+                    {% if column.is_m2m %}
+                    <span ng-repeat="value in item.{{ column.field_name }}" class="{{ column.field_name }}">{[{ value.title }]}</span>
+                    {% else %}
+                    <span>{[{ item.{{ column.field_name }}.title }]}</span>
+                    {% endif %}
+                </div>
+            </td>
+            {% endfor %}
+        </tr>
+
+        <tr ng-show="!isLoading && result.meta.total_count == 0">
+            <td colspan="{{ params.COLUMNS|length|add:1 }}">
+                {% trans "No results" %}
+            </td>
+        </tr>
+
+        <tr ng-show="isLoading">
+            <td colspan="{{ params.COLUMNS|length|add:1 }}">
+                <img ng-src="/static/images/loading.gif" class="loading-icon" />
+            </td>
+        </tr>
+
+    </table>
+
+    <pagination ng-if="result.meta.has_next"
+            total-items="result.meta.total_count"
+            ng-model="current.page"
+            max-size="maxSize"
+            class="pagination-sm text-center"
+            boundary-links="true"
+            rotate="false"
+            first-text="'«'"
+            previous-text="'‹'"
+            next-text="'›'"
+            last-text="'»'">
+    </pagination>
+
+</div>

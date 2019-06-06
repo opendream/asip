@@ -1,0 +1,67 @@
+{% extends 'base_single.html' %}
+{% block content_class %} bg-white bg-white-wrapper{% endblock %}
+{% block content %}
+
+{% block title %}Jobs{% endblock %}
+
+
+	<h1 class="page-title">Jobs</h1>
+
+	<form role="form" class="form-job" action="{% url 'job_list' %}" name="job_filter_form">
+		<div class="row"
+				 ng-class="loading_class()"
+	       ng-controller="SearchFormController"
+	       ng-init="init({
+	           tab_list_config: [
+	               {
+	                   title: 'Country',
+	                   filters: ['jobs__country__permalink', 'jobs__role'],
+	                   api: '/api/v1/organization/search',
+	               }
+	           ],
+	           filter_list_config: {
+	               jobs__country__permalink: {
+	                   title: 'Any Country',
+	                   api: '/api/v1/country/',
+	               },
+	               jobs__role: {
+	                   title: 'Any Role',
+	                   api: '/api/v1/job/schema/',
+	                   route: 'fields.role.choices',
+	               }
+	           }
+	       })">
+			<div class="col-md-3 col-xs-3 job-filter left-sidebar-filter" ng-repeat="tab in tab_list">
+				<div class="block block-job block-job-filter">
+					<div class="dropdown select-modify" ng-repeat="filter in tab.filters">
+						<a href="#" id="category-drop" class="btn btn-default dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+							<span class="text">{[{filter.title}]}</span>
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu select-catagory" role="menu" aria-labelledby="category-drop">
+							<li ng-repeat="data in filter.data" ng-click="data.selected_filter()"><a href="" alt="">{[{data.title}]}</a></li>
+						</ul>
+            <input type="hidden" name="{[{ filter.name }]}" value="{[{ filter.current_filter_data.permalink }]}" />
+					</div>
+					<!-- End Country Drowdown -->
+					<button type="submit" class="btn btn-default btn-primary btn-pink">Search</button>
+				</div>
+			</div>
+			<div class="col-md-9 col-xs-9 job-list list-sidebar-filter" ng-controller="BasicPartyListController" ng-init="init('/api/v1/organization_jobs/', {limit: 10, offset: 0})">
+				<div class="block block-job block-jobs-list">
+    			    <img ng-show="is_loading && party_list.length == 0" ng-src="/static/images/loading.gif" class="loading-icon" >
+					<div ng-show="!is_loading && party_list.length == 0">No job avaliable.</div>
+					<ul class="item-list">
+						<li class="item item-job" ng-include="'party_job_list.html'" ng-repeat="party in party_list">
+						</li>
+					</ul>
+					<a class="loadmore-wrapper" ng-click="load_more()" ng-class="load_more_class()" ng-show="party_list.length > 0">
+						<span ng-hide="is_loading" class="loadmore">Load more</span>
+						<img ng-show="is_loading" ng-src="/static/images/loading.gif" class="loading-icon" >
+					</a>
+				</div>
+			</div>
+		</div>
+	</form>
+
+{% endblock %}

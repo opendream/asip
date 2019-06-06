@@ -1,0 +1,54 @@
+{% extends 'base_single.html' %}
+{% load i18n %}
+{% load static %}
+{% load humanize %}
+{% load common_tags %}
+
+{% block title %}My Apps{% endblock %}
+
+{% block image %}{% endblock %}
+
+{% block content_class %} content-normal{% endblock %}
+
+{% block content %}
+
+{% if apps.exists %}
+<ul class="list-unstyled">
+    {% for app in apps %}
+    <li>
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-md-4">
+                <div class="row">
+
+                        <a class="col-xs-12 app-item-link" href="{% url 'account_app_detail' app.app_id %}">
+                            <div class="app-item">
+                                <div class="col-xs-4">
+                                    <div style="width: 100%; padding-top: 100%; background-image: url('{{ app.image.url }}'); background-size: cover; background-position: center;">
+                                    </div>
+
+                                </div>
+                                <div class="col-xs-8">
+                                    <div><strong>{{ app.name }}</strong></div>
+                                    <div>App ID: {{ app.app_id }}</div>
+                                </div>
+                            </div>
+                        </a>
+
+                </div>
+            </div>
+        </div>
+
+    </li>
+    {% endfor %}
+</ul>
+{% else  %}
+<ul class="list-unstyled"><li><h4 class="no-results">
+    {% trans 'No apps' %} &nbsp;
+    <a href="{% url 'account_app_create' %}" class="btn btn-default btn-xs ico-edit">
+        <span class="glyphicon glyphicon-plus"></span>
+        {% trans "Create your app" %}
+    </a>
+</h4></li></ul>
+{% endif %}
+
+{% endblock %}

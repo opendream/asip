@@ -1,0 +1,54 @@
+{% load i18n %}
+
+<form method="post" class="form-contact" role="form" enctype="multipart/form-data" action="{% url 'party_invite_testify_party_create' party_id %}" ng-non-bindable>
+    <input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token_value }}'/>
+    <div class="controls form-group">
+
+        <label for="id_receivers" class="field-container control-label">{% trans "Invite your friends to write testimonial" %} *</label>
+        <div class="field-container-no-overflow field-inline-id_receivers">
+
+            <div class="inline-reference-container">
+                <div class="inline-reference-wrapper">
+
+                    {{ form.receivers }}
+
+                    <span class="help-block">
+                        {% trans "Type to search for your friends. This person will be receive invite notification." %}
+                    </span>
+                    {% if form.receivers.errors %}
+                    <div class="errors alert alert-danger">{{ form.receivers.errors }}</div>
+                    {% endif %}
+
+                    <div class="inline-create-link-wrapper">
+                        {% trans "or" %}
+                        <span class="glyphicon glyphicon-plus icostartup icon-plus"></span>
+                        <a href="{% url 'account_inline_invite' %}?_inline=1&field_id=id_receivers" class="add-another-inline" id="add_id_receivers" target="receivers_inline">
+                            {% trans " Invite by Email" %}
+                        </a>
+                    </div>
+                </div>
+
+                <div class="add-another-inline-input-list" id="receivers_inline">
+
+                </div>
+            </div>
+
+            {% if form.receivers.errors %}
+            <div class="errors alert alert-danger">{{ form.receivers.errors }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="controls form-group">
+        <label for="id_message">Message</label>
+        {{ form.message }}
+
+    </div>
+
+    <div class="controls form-group">
+        <div class="form-action">
+            <button type="submit" class="btn btn-primary btn-post btn-pink">Send</button>
+        </div>
+    </div>
+
+</form>

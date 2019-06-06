@@ -1,0 +1,187 @@
+{% extends 'base_sidebar.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}{{ instance.get_display_name }}{% if instance.organization_jobs.count %}{{ instance.organization_jobs.0.get_display_name }}{% endif %}{% endblock %}
+{% block description %}{{ instance.description|striptags }}{% endblock %}
+{% block image %}{{ instance.image.url }}{% endblock %}
+
+{% block title_class %} hidden{% endblock %}
+
+{% block content_class %} bg-white bg-white-wrapper{% endblock %}
+
+{% block breadcrumb %}
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript">
+	var job_id = {{ job_id }};
+</script>
+{% endblock %}
+{% block main_extra %} ng-clock ng-controller="JobDetailController"{% endblock %}
+{% block primary %}
+
+<div class="row block-primary">
+
+    {% if user.is_authenticated %}
+    <a ng-if="job.can_edit" href="/job/{[{ job_id }]}/edit/" class="btn btn-default btn-xs pull-right ico-edit">
+        <span class="glyphicon glyphicon-edit"></span> Edit
+    </a>
+    {% endif %}
+    <div class="col-md-12 primary-party job-primary">
+        <div class="row">
+            <div class="col-md-7 col-xs-8 block-org info-wrapper">
+                <div class="primary-info">
+                    <div class="small-logo pull-left thumbnail">
+                        <span>
+                            <a ng-if="organization.get_status == notification_status.active" ng-href="{[{organization.absolute_url}]}" title="{[{organization.get_display_name}]}">
+                                <img ng-src="{[{organization.get_thumbnail}]}" />
+                            </a>
+                            <img ng-if="organization.get_status != notification_status.active" ng-src="{[{organization.get_thumbnail}]}" />
+                        </span>
+                    </div>
+                    <div class="group-info">
+                        <h2 class="title" ng-clock>
+                            {[{job.title}]}
+                        </h2>
+
+                        <div class="org-name" ng-clock>
+                            <a ng-if="organization.get_status == notification_status.active" ng-href="{[{organization.absolute_url}]}" title="{[{organization.get_display_name}]}">{[{organization.get_display_name}]}</a>
+                            <span ng-if="organization.get_status != notification_status.active">{[{organization.get_display_name}]}</span>
+                             <ul class="country-list item-list item-list-inline" ng-if="organization.country">
+                                <li class="country-item item">
+                                    <span class="country">{[{organization.country.title}]}</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="post-time" ng-cloak>
+                            Posted {[{ job.created | timeago }]}
+                        </div>
+                   </div>
+                </div>
+
+            </div>
+            <div class="col-md-4 col-md-offset-1 col-xs-4 block-apply">
+            	<a class="btn btn-default btn-pink" href="" data-target="#modal-apply" data-toggle="modal">Apply now</a>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- End Block Primary -->
+
+{% endblock %}
+
+{% block content %}
+		<div class="block about-job" ng-if="job.description">
+			<h2 class="block-title">About this job</h2>
+			<div class="block-content" ng-bind-html="job.description | sanitize">
+			</div>
+		</div>
+		<div class="block job-detail">
+			<h2 class="block-title">Details</h2>
+			<div class="block-content">
+
+				<!-- Location -->
+				<div class="detail-wrapper" ng-if="job.role">
+					<div class="title-detail">Role</div>
+					<div class="detail">
+                        {[{job.role}]}
+					</div>
+				</div>
+
+				<!-- Skill -->
+				<div class="detail-wrapper" ng-if="job.skills.length > 0">
+					<div class="title-detail">Skills</div>
+					<div class="detail">
+						<ul class="item-list item-list-inline">
+							<li ng-repeat="skill in skills">
+                                {[{skill}]}
+                            </li>
+						</ul>
+					</div>
+				</div>
+
+				<!-- Location -->
+				<div class="detail-wrapper" ng-if="job.location">
+					<div class="title-detail">Location</div>
+					<div class="detail">
+						{[{job.location}]}
+					</div>
+				</div>
+
+				<!-- Compensation -->
+				<div class="detail-wrapper" ng-if="job.position || job.equity_min || job.equity_max || job.equity_min || job.equity_max">
+					<div class="title-detail">Compensation</div>
+					<div class="detail">
+						<ul class="item-list">
+							<li ng-if="job.position">
+                                {[{job.position}]}
+                            </li>
+							<li ng-if="job.salary_min || job.salary_max">
+                                {[{job.salary_min | currency}]} <span ng-if="job.salary_min && job.salary_max">-</span> {[{job.salary_max | currency}]} Salary
+                            </li>
+							<li ng-if="job.equity_min || job.equity_max">
+                                {[{job.equity_min | addText:"%"}]} <span ng-if="job.equity_min && job.equity_max">-</span> {[{job.equity_max | addText:"%"}]} Equity
+                            </li>
+						</ul>
+					</div>
+				</div>
+
+				<!-- Remote -->
+				<div class="detail-wrapper">
+					<div class="title-detail">Remote</div>
+					<div class="detail" ng-cloak>
+						{[{job.remote ? "YES" : "NO"}]}
+					</div>
+				</div>
+
+				<!-- Years of Experience -->
+				<div class="detail-wrapper" ng-if="job.years_of_experience != null">
+					<div class="title-detail">Years of Experience</div>
+					<div class="detail" ng-if="job.years_of_experience > 0">
+                        {[{job.years_of_experience}]} Year{[{job.years_of_experience > 1 ? "s" : ""}]}
+					</div>
+          <div class="detail" ng-if="job.years_of_experience <= 0">
+                        Experience not required.
+          </div>
+				</div>
+
+				<!-- Country -->
+				<div class="detail-wrapper" ng-if="job.country">
+					<div class="title-detail">Country</div>
+					<div class="detail">
+						{[{job.country.title}]}
+					</div>
+				</div>
+
+			</div>
+
+		</div>
+{% endblock %}
+
+{% block sidebar %}
+	<div class="block about-job block-sidebar" ng-if="organization.get_summary">
+		<h2 class="block-title">About <br />{[{organization.get_display_name}]}</h2>
+		<div class="block-content" ng-bind-html="organization.get_summary | sanitize">
+		</div>
+	</div>
+
+	<!-- More jobs at org -->
+    <div ng-controller="BasicPartyListController" ng-init="init('/api/v1/job/', {limit: 1, offset: 0, organization_jobs: organization.id})">
+        <div class="block block-sidebar block-job job-detail-sidebar no-border" ng-if="(party_list | notMatch:job_id:'id').length">
+            <h2 class="block-title">More jobs at <br/>{[{organization.get_display_name}]}</h2>
+            <div class="block-content">
+                <ul class="item-list ">
+                    <li class="item item-job" ng-include="'job_list.html'" ng-repeat="job in party_list | notMatch:job_id:'id'"></li>
+                </ul>
+                <a class="loadmore-wrapper" ng-click="load_more()" ng-class="load_more_class()">
+                    <span ng-hide="is_loading" class="loadmore">Load more</span>
+                    <img ng-show="is_loading" ng-src="/static/images/loading.gif" class="loading-icon" >
+                </a>
+            </div>
+        </div>
+	</div><!-- End Block Job -->
+{% endblock %}

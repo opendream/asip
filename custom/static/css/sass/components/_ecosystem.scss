@@ -1,0 +1,40 @@
+/* -------------------------------- *\
+            Ecosystem SVG
+\* -------------------------------- */
+
+$path-blue-hover: #afccd3;
+$path-orange-hover: #EE9421;
+
+#teachMedia {
+    cursor: pointer;
+    &:hover, &:focus, &:active {
+        #part-blue-techmedia {
+            fill: $path-blue-hover;
+        }
+    }
+}
+
+
+#association, #coworkingSpace,
+#incubator, #academy, 
+#government, #organization,
+#other {
+    cursor: pointer;
+    &:hover, &:focus, &:active {
+         #part-blue-association, #part-blue-coworking, 
+         #part-blue-incubator, #part-blue-organization, 
+         #part-blue-government, #part-blue-academy,
+         #part-blue-other {
+            fill: $path-blue-hover;
+        }
+    }
+}
+
+#crowdfunding, #ventureCapital, #angelGroup {
+    cursor: pointer;
+    &:hover, &:focus, &:active {
+        #part-orange-angel, #part-orange-crowdfunding, #part-orange-venture {
+            fill: $path-orange-hover;
+        }
+    }
+}

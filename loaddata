@@ -1,0 +1,9 @@
+#!/bin/sh
+
+python manage.py loaddata json_data/taxonomy_all_export.json
+python manage.py loaddata json_data/party_portfolio_export.json
+python manage.py loaddata json_data/party_party_export.json
+python manage.py loaddata json_data/user_export.json
+python manage.py loaddata json_data/organization_export.json
+python manage.py loaddata json_data/relation_all_export.json
+python manage.py loaddata json_data/cms_all_export.json

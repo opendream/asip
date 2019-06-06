@@ -1,0 +1,68 @@
+@import "compass/css3";
+
+/* -------------------------------- *\
+    Table of News list
+
+    Component: news-list
+    Elements: item
+    Elements: title
+    Elements: date
+    Varients: -half (use on knowledge-tools page)
+        - toggle
+        - caret
+\* -------------------------------- */
+
+.news-list {
+    padding: 0;
+    // margin-left: 40px;
+    list-style: none;
+
+    @media (max-width: $screen-xs-max) {
+        margin-left: 0;
+    }
+
+    > .item {
+        padding: 30px 0 15px;
+        border-bottom: 2px solid #ccc;
+    }
+    > .item:first-child{
+        padding-top: 0;
+    }
+    .title {
+        font-size: 22px;
+        line-height: 1.35em;
+        margin: 15px 0 35px 0;
+    }
+    .date {
+        color: #595959;
+        font-size: 13px;
+    }
+
+    &.-half .item {
+        display: -moz-inline-stack;
+        display: inline-block;
+        width: 45%;
+        min-height: 250px;
+        margin: 0 7% 40px 0;
+        padding: 0;
+        border-bottom: none;
+        vertical-align: top;
+        zoom: 1;
+        *display: inline;
+        _height: 250px;
+
+        @media (max-width: $screen-xs-max) {
+            width: 100%;
+            min-height: 0;
+            _height: auto;
+            margin-bottom: 25px;
+        }
+    }
+    &.-half .item:nth-child(2n) {
+        margin-right: 0;
+    }
+    &.-half .title {
+        margin-top: 0;
+        margin-bottom: 20px;
+    }
+}

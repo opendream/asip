@@ -1,0 +1,43 @@
+# Remove sample content
+
+from organization.models import *
+from party.models import *
+from account.models import *
+from relation.models import *
+
+
+for organization in Organization.objects.filter(permalink__icontains='example'):
+    organization.remove()
+
+for organization in Organization.objects.filter(is_deleted=True):
+    organization.remove()
+
+for user in User.objects.filter(email__icontains='example'):
+    user.remove()
+
+for user in User.objects.filter(is_deleted=True):
+    user.remove()
+
+for portfolio in Portfolio.objects.filter(url__startswith='http://portfolio'):
+    portfolio.remove()
+
+for portfolio in Portfolio.objects.filter(is_deleted=True):
+    portfolio.remove()
+
+for testify in PartyTestifyParty.objects.all():
+    testify.delete()
+
+
+
+# migrate translations
+python manage.py migrate taxonomy 0001 --fake --noinput
+python manage.py migrate account --fake --noinput
+python manage.py migrate cms --fake --noinput
+python manage.py migrate notification --fake --noinput
+python manage.py migrate taxonomy --noinput
+python manage.py update_translation_fields
+
+from cms.models import *
+for cms in CommonCms.objects.all():
+    cms.party_created_by = cms.created_by.party_ptr
+    cms.save()

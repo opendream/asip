@@ -1,0 +1,138 @@
+{% extends 'base_sidebar_left.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}
+Event
+{% endblock %}
+
+{% block title_class %} hidden{% endblock %}
+{% block search_toggle_class %}{% endblock %}
+{% block search_class %}{% endblock %}
+{% block wrapper_class %} -list{% endblock %}
+
+
+{% block js %}
+
+{% endblock %}
+
+{% block breadcrumb %}
+{% endblock %}
+
+{% block main_extra %} ng-controller="FilterController" ng-init="init({url: '/api/v1/event/', live: false, successFilterCount: {% if show_year_filter %}3{% else %}2{% endif %}, single: true, extraParams: {end_date__gte: current_date_format, limit: limit, order_by: 'start_date'{% if not show_year_filter %}, end_date__year: '{{ year_list.0.permalink }}'{% endif %}}})"{% endblock %}
+{% block primary %}
+{% endblock %}
+
+{% block sidebar %}
+<div class="block block-sidebar -bg-white -filters">
+    <h2 class="block-title">{% trans 'Filters' %}</h2>
+    {% if show_year_filter %}
+    <div class="btn-group" role="group">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span ng-bind="(filtersMap.end_date__year && filtersMap.end_date__year.title) || '{% trans "Year" %}'"></span>
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <li>
+                <a ng-click="removeFilter({permalink: 'end_date__year', title: '{% trans "All" %}'})">{% trans "All" %}</a>
+            </li>
+            {% for year in year_list %}
+            <li>
+                <a ng-init="initFilter('end_date__year', {title: '{{ year.title }}', permalink: '{{ year.permalink }}'})" ng-click="addFilter('end_date__year', {{ year.permalink }})">{{ year.title }}</a>
+            </li>
+            {%  endfor %}
+        </ul>
+    </div>
+    {% endif %}
+    <div class="btn-group" role="group" ng-controller="BasicPartyListController" ng-init="init('/api/v1/topic/?level=0', {limit: 100})">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span ng-bind="(filtersMap.end_date__month && filtersMap.end_date__month.title) || '{% trans "Month" %}'"></span>
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <li>
+                <a ng-click="removeFilter({permalink: 'end_date__month', title: '{% trans "All" %}'})">{% trans "All" %}</a>
+            </li>
+            {% for month in month_list %}
+            <li>
+                <a ng-init="initFilter('end_date__month', {title: '{{ month.title }}', permalink: '{{ month.permalink }}'})" ng-click="addFilter('end_date__month', {{ month.permalink }})">{{ month.title }}</a>
+            </li>
+            {%  endfor %}
+        </ul>
+    </div>
+
+    <div class="btn-group" role="group" ng-controller="BasicPartyListController" ng-init="init('/api/v1/topic/?level=0', {limit: 100})">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span ng-bind="(filtersMap.topics__permalink && filtersMap.topics__permalink.title) || '{% trans "Topic" %}'"></span>
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <li>
+                <a ng-click="removeFilter({permalink: 'topics__permalink', title: '{% trans "All" %}'})">{% trans "All" %}</a>
+            </li>
+            <li ng-repeat="party in party_list">
+                <a ng-init="initFilter('topics__permalink', party)" ng-click="addFilter('topics__permalink', party.permalink)">{[{ party.title }]}</a>
+            </li>
+        </ul>
+    </div>
+    <button ng-click="submit()" class="btn btn-primary -big -full-width">{% trans "Search" %}</button>
+</div>
+
+<div class="block block-sidebar  -bg-white -add-event">
+  <h2 class="block-title">{% trans 'Add event' %}</h2>
+  <a href="{% url 'event_create' %}" title="{% trans "Add my event" %}" class="btn btn-primary -big -full-width">{% trans "Add my event" %}</a>
+</div>
+
+
+<div ng-controller="BasicPartyListController" ng-init="init('/api/v1/event', { limit: 3, end_date__lt: current_date_format, need_ordering: false }, '-end_date')" class="block -bg-white block-pastevent" id="pass_event">
+  <div ng-if="current_page_party_list.length" >
+    <h2 class="block-title">{% trans "Past Events" %}</h2>
+    <img ng-show="is_loading" ng-src="/static/images/loading.gif" class="loading-icon" >
+    <ul class="item-list event-list">
+      <li ng-repeat="party in current_page_party_list" class="event-item feature-item item" ng-clock>
+        <div ng-include="'template_party_sidebar_event.html'"></div>
+      </li>
+    </ul>
+    <div class="text-center">
+      <a href="{% url 'event_past_list' %}" class="btn-outline">{% trans "See past events" %} »</a>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block content %}
+
+<div class="event-wrapper">
+  <!-- Block News -->
+    <div class="block block-event ">
+        <h2 class="block-title">{% trans "Active and Upcoming Events" %}</h2>
+        <div ng-show="!isLoading && result.objects.length == 0">{% trans "No result" %}</div>
+        <img ng-show="isLoading" ng-src="/static/images/loading.gif" class="loading-icon" />
+
+        <!-- <img ng-show="is_loading && party_list.length == 0" ng-src="/static/images/loading.gif" class="loading-icon" > -->
+        <ul class="item-list event-list">
+          <li ng-repeat="party in result.objects" class="event-item item" ng-clock>
+            <div ng-include="'template_party_event.html'"></div>
+          </li>
+        </ul>
+
+        <pagination ng-if="result.meta.total_count > limit"
+            total-items="result.meta.total_count"
+            ng-model="current.page"
+            max-size="maxSize"
+            items-per-page="limit"
+            class="pagination-sm text-center"
+            boundary-links="true"
+            rotate="false"
+            first-text="'«'"
+            previous-text="'‹'"
+            next-text="'›'"
+            last-text="'»'">
+        </pagination>
+    </div>
+  <!-- End Block News -->
+
+</div>
+
+{% endblock %}

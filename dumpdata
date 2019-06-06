@@ -1,0 +1,11 @@
+#g!/bin/sh
+
+python manage.py dumpdata taxonomy > json_data/taxonomy_all_export.json
+python manage.py dumpdata party.party > json_data/party_party_export.json
+python manage.py dumpdata account.User > json_data/user_export.json
+python manage.py dumpdata organization.Organization > json_data/organization_export.json
+python manage.py dumpdata relation >  json_data/relation_all_export.json
+python manage.py dumpdata party.Portfolio > json_data/party_portfolio_export.json
+python manage.py dumpdata cms > json_data/cms_all_export.json
+
+

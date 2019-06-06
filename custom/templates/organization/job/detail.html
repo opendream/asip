@@ -1,0 +1,236 @@
+{% extends 'base_sidebar_left.html' %}
+{% load i18n %}
+{% load static %}
+
+{% load thumbnail files_widget_tags %}
+
+{% block title %}{{ instance.get_display_name }}{% endblock %}
+{% block description %}{{ instance.description|striptags }}{% endblock %}
+{% block image %}{% spaceless %}
+    {% if instance.image.url %}
+        {% thumbnail instance.image|unquote '260x260' upscale=True padding=20 format=instance.image|thumbnail_format as thumb %}
+            {{ thumb.url }}
+        {% endthumbnail %}
+    {% endif %}
+{% endspaceless %}{% endblock %}
+
+{% block title_class %} hidden{% endblock %}
+
+{% block breadcrumb %}
+    <a href="{% url 'job_list' %}" class="link-breadcrumb hidden-xs">Job</a>
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript">
+        var job_id = {{ job_id }};
+</script>
+{% endblock %}
+{% block main_extra %} ng-clock ng-controller="JobDetailController"{% endblock %}
+
+
+{% block sidebar %}
+    <div class="block block-job-detail hidden-xs">
+        <div class="media">
+            <div class="media-left">
+                <div class="thumbnail small-logo -sqr90">
+                    <span>
+                            <a ng-if="organization.get_status == notification_status.active" ng-href="{[{organization.absolute_url}]}" title="{[{organization.get_display_name}]}">
+                                    <img ng-src="{[{organization.get_thumbnail}]}" />
+                            </a>
+                            <img ng-if="organization.get_status != notification_status.active" ng-src="{[{organization.get_thumbnail}]}" />
+                    </span>
+                </div>
+            </div>
+            <div class="media-body">
+                    <h4 class="title">
+                        <a ng-if="organization.get_status == notification_status.active" ng-href="{[{organization.absolute_url}]}" title="{[{organization.get_display_name}]}">{[{organization.get_display_name}]}</a>
+                        <strong class="pending" ng-if="organization.get_status != notification_status.active">{[{organization.get_display_name}]} (pending)</strong>
+                    </h4>
+                    <div class="description" ng-bind-html="organization.get_summary | sanitize"></div>
+            </div>
+        </div>
+        <div class="block-social">
+            <div class="outlink">
+                <ul class="social">
+                    <li ng-if="organization.facebook_url"><a href="{[{ organization.facebook_url }]}" class="icon-social icon-facebook" target="_blank"></a></li>
+                    <li ng-if="!organization.facebook_url"><span class="icon-social icon-facebook no-link"></span></li>
+                    <li ng-if="organization.twitter_url"><a href="{[{ organization.twitter_url }]}" class="icon-social icon-twitter" target="_blank"></a></li>
+                    <li ng-if="!organization.twitter_url"><span class="icon-social icon-twitter no-link"></span></li>
+                    <li ng-if="organization.linkedin_url"><a href="{[{ organization.linkedin_url }]}" class="icon-social icon-linkedin" target="_blank"></a></li>
+                    <li ng-if="!organization.linkedin_url"><span class="icon-social icon-linkedin no-link"></span></li>
+                </ul>
+                <div class="website" ng-if="organization.homepage_url">
+                    <a href="{[{ organization.homepage_url }]}" class="homepage" target="_blank" ng-cloak>{[{ organization.homepage_url }]}</a>
+                </div>
+            </div>
+        </div>
+        <div class="block block-share clear">
+            <h2 class="block-title">{% trans 'Share this' %}:</h2>
+            <a class="share-btn share-fb" href="#" facebook-share name="{[{ news.title }]}" picture="{[{ news.get_thumbnail }]}" description="{[{ news.get_summary }]}" ><span class="icon icon-facebook"></span>Facebook</a>
+            <a class="share-btn share-tw" twitter-share href="http://twitter.com/share" ><span class="icon icon-twitter"></span>Twitter</a>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block content %}
+    <a href="{% url 'job_list' %}" class="link-breadcrumb hidden-sm hidden-md hidden-lg">Job</a>
+
+    <div class="block block-job-detail hidden-sm hidden-md hidden-lg">
+        <div class="media">
+            <div class="media-left">
+                <div class="thumbnail small-logo -sqr90">
+                    <span>
+                            <a ng-if="organization.get_status == notification_status.active" ng-href="{[{organization.absolute_url}]}" title="{[{organization.get_display_name}]}">
+                                    <img ng-src="{[{organization.get_thumbnail}]}" />
+                            </a>
+                            <img ng-if="organization.get_status != notification_status.active" ng-src="{[{organization.get_thumbnail}]}" />
+                    </span>
+                </div>
+            </div>
+            <div class="media-body">
+                    <h4 class="title">
+                        <a ng-if="organization.get_status == notification_status.active" ng-href="{[{organization.absolute_url}]}" title="{[{organization.get_display_name}]}">{[{organization.get_display_name}]}</a>
+                        <span ng-if="organization.get_status != notification_status.active">{[{organization.get_display_name}]} (pending)</span>
+                    </h4>
+                    <div class="description" ng-bind-html="organization.get_summary | sanitize"></div>
+            </div>
+        </div>
+        <div class="block-social">
+            <div class="outlink">
+                <ul class="social">
+                    <li ng-if="organization.facebook_url"><a href="{[{ organization.facebook_url }]}" class="icon-social icon-facebook" target="_blank"></a></li>
+                    <li ng-if="!organization.facebook_url"><span class="icon-social icon-facebook no-link"></span></li>
+                    <li ng-if="organization.twitter_url"><a href="{[{ organization.twitter_url }]}" class="icon-social icon-twitter" target="_blank"></a></li>
+                    <li ng-if="!organization.twitter_url"><span class="icon-social icon-twitter no-link"></span></li>
+                    <li ng-if="organization.linkedin_url"><a href="{[{ organization.linkedin_url }]}" class="icon-social icon-linkedin" target="_blank"></a></li>
+                    <li ng-if="!organization.linkedin_url"><span class="icon-social icon-linkedin no-link"></span></li>
+                </ul>
+                <div class="website" ng-if="organization.homepage_url">
+                    <a href="{[{ organization.homepage_url }]}" class="homepage" target="_blank" ng-cloak>{[{ organization.homepage_url }]}</a>
+                </div>
+            </div>
+        </div>
+        <div class="block block-share clear">
+            <h2 class="block-title">{% trans 'Share this' %}:</h2>
+            <a class="share-btn share-fb" href="#" facebook-share name="{[{ news.title }]}" picture="{[{ news.get_thumbnail }]}" description="{[{ news.get_summary }]}" ><span class="icon icon-facebook"></span>Facebook</a>
+            <a class="share-btn share-tw" twitter-share href="http://twitter.com/share" ><span class="icon icon-twitter"></span>Twitter</a>
+        </div>
+    </div>
+
+    <div class="article-wrapper">
+        <div class="text-right btn-edit-wrapper">
+            {% if user.is_authenticated %}
+            <a ng-if="job.can_edit" href="/job/{[{ job_id }]}/edit/" class="btn btn-default btn-xs ico-edit">
+                <span class="glyphicon glyphicon-edit"></span> Edit
+            </a>
+            {% endif %}
+        </div>
+        <div class="block about-job">
+            <div class="row">
+                <div class="col-sm-8">
+                    <h2 class="title" ng-clock>
+                        {[{job.title}]}
+                    </h2>
+                    <div class="description -job clear">
+                        <span class="job-type job-list-detail">{[{job.get_position_display}]}</span>
+                        <span class="job-role job-list-detail">{[{job.get_role_display}]}</span>   
+                        <span ng-if="job.salary_min || job.salary_max" class="job-salary_min_max job-list-detail">
+                            {[{job.salary_min | currency:"{{ settings.CURRENCY_SHORT }}"}]} <span ng-if="job.salary_max">-</span> {[{job.salary_max | currency:"{{ settings.CURRENCY_SHORT }}" }]}
+                        </span>
+                    </div>
+                </div>
+                <div class="col-sm-4 text-right btn-apply-wrapper">
+                    <a class="btn btn-primary" href="" data-target="#modal-apply" data-toggle="modal">Apply now</a>
+                </div>
+            </div>
+            <!-- <span class="job-location job-list-detail">at&nbsp; {[{job.country.title}]}</span> -->
+
+        </div>
+        <div class="block job-detail">
+            <hr />
+            <div class="block-content job-summary" ng-bind-html="job.description | sanitize">
+            </div>
+            <div class="block-content">
+
+                <!-- Location -->
+                <div class="detail-wrapper" ng-if="job.role">
+                    <div class="title-detail">Role</div>
+                    <div class="detail">
+                                                {[{job.role}]}
+                    </div>
+                </div>
+
+                <!-- Skill -->
+                <div class="detail-wrapper" ng-if="job.skills.length > 0">
+                    <div class="title-detail">Skills</div>
+                    <div class="detail">
+                        <ul class="item-list item-list-inline">
+                            <li ng-repeat="skill in skills">
+                                {[{skill}]}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Location -->
+                <div class="detail-wrapper" ng-if="job.location">
+                    <div class="title-detail">Location</div>
+                    <div class="detail">
+                        {[{job.location}]}
+                    </div>
+                </div>
+
+                <!-- Compensation -->
+                <div class="detail-wrapper" ng-if="job.position || job.equity_min || job.equity_max || job.equity_min || job.equity_max">
+                    <div class="title-detail">Compensation</div>
+                    <div class="detail">
+                        <ul class="item-list">
+                            <li ng-if="job.position">
+                                {[{job.get_position_display}]}
+                            </li>
+                            <li ng-if="job.salary_min || job.salary_max">
+                                {[{job.salary_min | currency:"{{ settings.CURRENCY_SHORT }}"}]} <span ng-if="job.salary_min && job.salary_max">-</span> {[{job.salary_max | currency:"{{ settings.CURRENCY_SHORT }}"}]} Salary
+                            </li>
+                            <li ng-if="job.equity_min || job.equity_max">
+                                {[{job.equity_min | addText:"%"}]} <span ng-if="job.equity_min && job.equity_max">-</span> {[{job.equity_max | addText:"%"}]} Equity
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Remote -->
+                <div class="detail-wrapper">
+                    <div class="title-detail">Remote</div>
+                    <div class="detail" ng-cloak>
+                        {[{job.remote ? "YES" : "NO"}]}
+                    </div>
+                </div>
+
+                <!-- Years of Experience -->
+                <div class="detail-wrapper" ng-if="job.years_of_experience != null">
+                    <div class="title-detail">Years of Experience</div>
+                    <div class="detail" ng-if="job.years_of_experience > 0">
+                        {[{job.years_of_experience}]} Year{[{job.years_of_experience > 1 ? "s" : ""}]}
+                    </div>
+                    <div class="detail" ng-if="job.years_of_experience <= 0">
+                        Experience not required.
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="post-time text-right" ng-cloak>
+            Posted {[{ job.created | timeago }]}
+        </div>
+
+        <div class="block block-share clear">
+            <h2 class="block-title">{% trans 'Share this' %}:</h2>
+            <a class="share-btn share-fb" href="#" facebook-share name="{[{ news.title }]}" picture="{[{ news.get_thumbnail }]}" description="{[{ news.get_summary }]}" ><span class="icon icon-facebook"></span>Facebook</a>
+            <a class="share-btn share-tw" twitter-share href="http://twitter.com/share" ><span class="icon icon-twitter"></span>Twitter</a>
+        </div>
+    </div>
+
+
+{% endblock %}
+

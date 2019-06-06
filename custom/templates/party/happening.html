@@ -1,0 +1,42 @@
+{% extends 'base_single.html' %}
+{% load i18n %}
+{% load static %}
+{% load common_tags %}
+
+{% block title %}
+{{ settings.FILTER|keyvalue:role_permalink|keyvalue:'TITLE' }}
+{% endblock %}
+
+{% block title_class %} hidden{% endblock %}
+{% block search_toggle_class %}{% endblock %}
+{% block search_class %}{% endblock %}
+{% block content_class %}{% endblock %}
+{% block wrapper_class %} wrapper--list{% endblock %}
+
+{% block breadcrumb %}
+{% endblock %}
+
+{% block leader %}
+{% include 'party/_leader.html' %}
+{%  endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-sm-6 col-sm-offset-3">
+        <div ng-controller="BasicPartyListController" ng-init="init('/api/v1/happening/', {{ settings.FILTER|keyvalue:role_permalink|keyvalue:'HAPPENING_EXTRA_PARAMS'|safe }})" class="block block-happening">
+            <ul class="item-list happen-list -happeningpage">
+                <li class="row item" ng-repeat="party in party_list" ng-init="prev_party=party_list[$index-1]; party.days_ago=Math.round((new_Day()-new_Day(party.created))/(1000*3600*24));" ng-include="'happening_list_full.html'">
+                </li>
+            </ul>
+            <div class="row">
+                <a class="loadmore-wrapper col-xs-12" ng-click="load_more()" ng-class="load_more_class()">
+                    <span ng-hide="is_loading" class="loadmore">{% trans "Load more" %}</span>
+                    <img  ng-show="is_loading" ng-src="/static/images/loading.gif" class="loading-icon" />
+                </a>
+            </div>
+        </div><!-- End block Happening -->
+    </div>
+</div>
+
+{% endblock %}
+

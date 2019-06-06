@@ -1,0 +1,71 @@
+.notification-item-inner {
+    padding: 0 180px 0 60px;
+    display: block;
+    @extend .kanit-regular;
+    strong { font-weight: 100;}
+}
+.notification-item:last-child {
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.notification-item {
+    position: relative;
+    overflow: hidden;
+    border-top: 1px solid #e5e5e5;
+    padding: 20px 0;
+    .icon {
+        position: absolute;
+        padding-top: 25px;
+        top: -8px;
+        left: 20px;
+        font-size: 21px;
+    }
+    .date {
+        font-size: 12px;
+        display: inline;
+    }
+    .date:before {
+        content: '\2014\00a0';
+    }
+    &.unread { 
+        background-color: #f8f8f8;
+    }
+}
+
+@media (max-width: $screen-xs-max) {
+    .notification-item {
+        padding: 10px 0;
+        .icon  {
+            top: -17px;
+            left: 10px;
+        }
+    }
+}
+
+.block-request {
+    clear: both;
+    .notification-item-inner { padding-left: 0;}
+    .required-approval { position: static; display: inline-block;}
+    .btn-approve-wrapper { margin: 0;}
+}
+
+.btn-approve-wrapper {
+    position: absolute;
+    right: 20px;
+    top: 18px;
+    .btn { font-size: 12px;}
+}
+
+@media (max-width: $screen-xs-max) {
+    .notification-item .date {
+        display: block;
+        &:before { content: none;}
+    }
+    .btn-approve-wrapper {
+        position: static;
+        margin: 10px 0 10px 60px;
+    }
+    .notification-item-inner {
+        padding: 0 0 0px 45px;
+    }
+}

@@ -1,0 +1,370 @@
+/*
+** BEGIN AGAIN WITH MENU
+*/
+
+
+
+
+
+/* ----------------------------------- *\
+  Hack ASIP menu
+\* ----------------------------------- */
+.asip-title-brand {
+    display: none !important;
+}
+
+.navbar-default > .container {
+    width: 100%;
+    padding: 0;
+}
+
+.navbar-nav.navbar-right {
+    margin-right: 15px;
+}
+
+
+
+
+
+/* ----------------------------------- *\
+    Menu right
+\* ----------------------------------- */
+
+.menu-small .nav > li > a {
+    
+    margin: 0 8px;
+    padding: 0;
+    line-height: 60px;
+    color: white;
+    font-family: $font-extra-light;
+
+    @media (max-width: 340px) {
+        margin: 0 2px;
+    }
+    &.icon-search {
+        font-family: 'icomoon';
+    }
+
+    &.user-img-toggle {
+        > img {
+            max-width: 28px;
+            width: auto;
+            background-color: #fff;
+            padding: 1px;
+        }
+        // margin-right: 0;
+    }
+
+    &:hover, &:focus, &:active {
+        color: $main-color;
+    }
+}
+
+
+
+
+
+/* ----------------------------------- *\
+   Startup menu: top-menu-wrapper
+\* ----------------------------------- */
+
+.top-menu-wrapper {
+    @extend .nav;
+    @extend .navbar-default;
+    @extend .xs-navbar;
+
+    background-color: $bg-color;
+    margin-top: -60px;
+
+    @media (max-width: 420px) {
+        margin-top: -62px;
+    }
+}
+
+
+
+
+
+/* ----------------------------------- *\
+  Menu
+\* ----------------------------------- */
+
+// .kanit-medium {
+//     font-family: $kanit-medium;
+// }
+// .kanit-extra-light-18px {
+//     font-family: $font-extra-light;
+//     font-size: 18px;
+// }
+
+.menu {
+    max-width: 1170px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.top-menu-wrapper {
+    .brand-logo {
+        float: left;
+        width: 110px;
+        height: 60px;
+        margin: 0 7px 0 0;
+        border-right: 1px solid #666666;
+        overflow: hidden;
+        text-indent: -999em;
+        background: url('../../images/logo-demo.png') no-repeat 10px center;
+
+        @include image-2x("../../images/logo-demo@2x.png", 84px, 30px);
+    }
+}
+
+.menu__level-0 {
+    margin-bottom: 0;
+
+    > .menu__item {
+        display: inline-block;
+    }
+
+    > .menu__item a {
+        padding: 0 20px;
+        display: block;
+        height: 60px;
+        line-height: 60px;
+        @media (max-width: $screen-md-max) {
+            padding: 0 10px;
+        }
+    }
+}
+
+.menu__level-0 a {
+    font-family: $font-extra-light;
+    font-size: 18px;
+    color: $main-color;
+
+    &:hover,
+    &.active,
+    &:focus {
+        background-color: $main-color;
+        color: black;
+        text-decoration: none;
+    } 
+}
+
+
+
+
+
+/* ----------------------------------- *\
+   Startup menu: Hamburger
+\* ----------------------------------- */
+
+.menu__hamburger.navbar-header {
+    height: 60px;
+
+    .icon-bar {
+        background-color: $main-color;
+    }
+}
+
+.menu__toggle.navbar-toggle {
+    display: inline-block;
+    height: 100%;
+    margin: 0 10px 0 0;
+    padding: 9px 15px;
+    border-radius: 0;
+    border: none !important;
+    float: left;
+    @media (max-width: 420px) {
+        padding: 9px 5px;
+    }
+    &:hover,
+    &:focus {
+        background-color: $main-color;
+    }
+
+    &:hover .icon-bar,
+    &:focus .icon-bar {
+        background-color: black;
+    }
+}
+
+
+
+
+
+/* ----------------------------------- *\
+  Menu collapse
+\* ----------------------------------- */
+
+.top-menu-wrapper > .menu__collapse {
+    background-color: #222222;
+    float: left;
+    width: 100%;
+
+    > div {
+        max-width: 1170px;
+        width: 100%;
+        margin: 0 auto;
+        padding: 0 15px;
+    }
+
+    a {
+        display: inline-block;
+        padding-bottom: 7px;
+        font-family: $font-extra-light;
+        font-size: 16px;
+    }
+
+    a:hover,
+    a.active {
+        color: $main-color;
+        text-decoration: none;
+    }
+
+    h2,
+    li,
+    a {
+        color: white;
+    }
+
+    .block-followus {
+        padding: 25px 15px;
+        box-sizing: border-box;
+        text-align: left;
+        @media (max-width: $screen-xs-max) {
+            margin-top: 0;
+            padding: 15px;
+        }
+    }
+}
+
+.navbar-main-menu {
+    padding: 27px 0;
+    border-left: 1px solid #2E2E2E;
+}
+
+// screen width >= iPad portrait
+@media (min-width: $screen-xs-max) {
+
+    .menu-group {
+        > .menu-group__list {
+            margin-left: 15px;
+        }
+    }
+
+    .menu-group {
+        float: left;
+    }
+}
+
+@media (max-width: $screen-xs-max) {
+    .navbar-main-menu {
+        padding: 15px 0;
+        width: 100%;
+        border-left: none;
+        border-bottom: 1px solid #2E2E2E;
+    }
+    .menu-group__list a {
+        padding-left: 0;
+    }
+}
+
+.block-followus {
+    &.__left {
+        float: left;
+    }
+}
+
+
+
+
+
+/* ----------------------------------- *\
+    Notification
+\* ----------------------------------- */
+
+.notification-topbar, 
+.message-topbar {
+    position: relative;
+    .icostartup {
+        font-size: 16px;
+    }
+}
+.unread-noti {
+    position: absolute;
+    top: 7px;
+    right: 5px;
+    background-color: #CB4437;
+    color: #fff;
+    font-size: 10px;
+    border: 1px solid #fff;
+    width: 20px;
+    height: 20px;
+    box-sizing: border-box;
+    border-radius: 50px;
+    text-align: center;
+    letter-spacing: 0;
+    line-height: 17px;
+}
+
+.notification-topbar .icostartup { font-size: 18px;}
+
+.message-topbar .unread-noti { right: -5px;}
+
+.menu-small {
+    font-size: 18px;
+    .glyphicon-star { left: 0;}
+    .unread-noti { top: 11px; right: -7px;}
+    .navbar-nav > li > a.notification-topbar { padding: 0;}
+    .message-topbar .unread-noti { right: -8px;}
+}
+
+
+
+
+
+/* ----------------------------------- *\
+  Menu Profile
+  - Login, Register
+  - Dropdown profile menu
+\* ----------------------------------- */
+
+.navbar-default .navbar-nav {
+    width: 100%;
+    max-width: 1170px;
+    margin: 0 auto;
+    float: none !important;
+    text-align: right;
+
+    > li {
+        float: none;
+        display: inline-block;
+    }
+
+    > .user-img-toggle {
+        position: relative;
+        padding: 0;
+        line-height: 60px;
+    }
+
+    > .nav-search-item {
+        margin-top: -3px;
+    }
+
+    .caret {
+        border-top-color: white;
+    }
+}
+
+.navbar-default .navbar-nav > .open {
+
+    > .user-img-toggle,
+    > .user-img-toggle:focus,
+    > .user-img-toggle:hover {
+        background-color: transparent;
+    }
+
+    > .user-img-toggle:focus {
+        outline: 0;
+    }
+}

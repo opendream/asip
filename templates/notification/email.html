@@ -1,0 +1,14 @@
+{% load i18n %}{% autoescape off %}
+{% blocktrans %}Notification from {{ site_name }}.{% endblocktrans %}
+
+{{ body }}
+
+{% if settings_url %}
+You can settings email notification on link below.
+{{ settings_url }}
+{% trans "This link can only be used once to log in and will lead you to a page where you can set your password." %}
+{% endif %}
+
+{% blocktrans %}The {{ site_name }} team{% endblocktrans %}
+
+{% endautoescape %}

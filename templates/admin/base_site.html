@@ -1,0 +1,10 @@
+{% extends "admin/base.html" %}
+
+
+{% block title %}{{ title }} | {{ site_title }}{% endblock %}
+
+{% block branding %}
+<h1 id="site-name"><a href="{% url 'admin:index' %}">ImpactConnect administration</a></h1>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}

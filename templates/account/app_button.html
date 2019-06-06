@@ -1,0 +1,42 @@
+<a class="new-connect-button" href="{{ BASE_URL }}{% url 'account_connect' %}?new_app_id={{ instance.app_id }}&redirect_uri=http://{{ instance.site_uri }}/[your-receive-new-token-path]">
+    <span class="new-connect-logo new-connect-elm">{{ SITE_NAME }}</span>
+    <span class="new-connect-text new-connect-elm">Connect</span>
+</a>
+<style type="text/css">
+    /* You can custom your own style */
+    .new-connect-button {
+        display: inline-block;
+        overflow: hidden;
+        background-color: #2B2B2B;
+        border-top: solid 1px #777777;
+        border-left: solid 1px #777777;
+        border-bottom: solid 1px #000000;
+        border-right: solid 1px #000000;
+        color: #F9B94C;
+        font-size: 20px;
+    }
+    .new-connect-button:hover,
+    .new-connect-button:active,
+    .new-connect-button:focus {
+        background-color: #3B3B3B;
+        color: #ffbf4c;
+    }
+
+    .new-connect-button .new-connect-logo {
+        width: 100px;
+        text-indent: -999px;
+        overflow: hidden;
+        background: url('{{ BASE_URL }}{{ settings.SITE_LOGO_BUTTON_URL }}') center no-repeat;
+        background-size: 80%;
+        border-right: solid 1px #222222;
+    }
+    .new-connect-button .new-connect-text {
+        border-left: solid 1px #444444;
+        text-transform: uppercase;
+    }
+    .new-connect-elm {
+        display: block;
+        float: left;
+        padding: 3px 10px;
+    }
+</style>

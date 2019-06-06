@@ -1,0 +1,26 @@
+{% extends 'base_single.html' %}
+{% load i18n %}
+{% load staticfiles %}
+
+{% block js %}
+{% endblock %}
+{% block css %}
+
+{% endblock %}
+
+{% block title %}{% trans "Invite Staff" %}{% endblock %}
+
+{% block content_class %} content-thin -content-form-small {% endblock %}
+
+{% block breadcrumb %}
+{% endblock %}
+
+{% block content %}
+
+<form class="form-normal" role="form" method="post" ng-non-bindable>
+
+    {%  include 'account/inline_invite_form.html' with no_inline=True %}
+
+</form>
+
+{% endblock %}

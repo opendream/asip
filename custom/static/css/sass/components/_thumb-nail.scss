@@ -1,0 +1,164 @@
+/* -------------------------------- *\
+    Thumbnail
+
+    extend form bootstrap's thumbnail
+
+    Component: thumb-nail
+    Elements:
+    Variant: 
+    * -small
+    * -table-list
+\* -------------------------------- */
+
+.thumb-nail {
+    @extend .thumbnail;
+
+    &.-big {
+        width: 90px;
+        height: 90px;
+    }
+
+    &.-small {
+        width: 45px;
+        height: 45px;
+    }
+
+    &.-small.-table-list {
+        @media (max-width: 639px) {
+            width: 70px;
+            height: auto;
+        }
+    }
+
+}
+
+.small-logo.-sqr90 {
+    max-width: 90px;
+    margin-right: 15px;
+    width: 90px;
+    > span {
+        height: 90px;
+        min-height: initial;
+        width: 90px;
+    }
+}
+
+
+
+
+
+
+/* ----------------------------------- *\
+            Small thumbnail
+\* ----------------------------------- */
+// .block-front.-supporter {
+//     .small-logo {
+//         a > img {
+//             max-height: 68px;
+//             width: auto;
+//             display: inline-block;
+//         }
+//     }
+// }
+
+
+
+/* ----------------------------------- *\
+            thumbnail event
+\* ----------------------------------- */
+
+.block-front.-event .event-thumbnail-wrapper {
+    height: 190px;
+    border-bottom: 1px solid #c7c7c7;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    display: -webkit-flex;
+    -webkit-flex-direction: column;
+    -webkit-justify-content: center;
+    background-color: #000;
+    .thumbnail { background-color: #000;}
+    .thumbnail a > img {
+        width: auto;
+        max-height: 192px;
+    }
+}
+
+@media (min-width: $screen-xs-max) and (max-width: $screen-md-max) {
+    .block-front.-event .event-thumbnail-wrapper {
+        height: 160px;
+        .thumbnail a > img {
+            max-height: 160px;
+        }
+    }
+}
+
+
+
+
+/* ----------------------------------- *\
+            Base thumbnail org
+\* ----------------------------------- */
+
+.thumbnail.-org {
+    a > img {
+        max-width: 90px;
+        max-height: 80px;
+        width: auto;
+    }
+    > span {
+        padding: 5px;
+    }
+    
+}
+
+
+
+
+
+
+
+/* ------------------------------ *\
+// logo thumbnail invested by
+\* ------------------------------ */
+
+.f-small-logo {
+    max-width: 60px;
+    margin-right: 20px;
+    width: 60px;
+    text-align: center;
+    background-color: #fff;
+    span {
+        height: 60px;
+        min-height: 60px;
+        width: 60px;
+        display: table-cell;
+        vertical-align: middle;
+        border: 1px solid #ccc;
+    }
+    + .group-info {
+        margin-left: 80px;
+        @media (max-width: 640px) {
+            margin-left: 70px;
+        }
+        .title {
+            margin-top: 0;
+            margin-bottom: 3px;
+        }
+    }
+}
+
+.f-small-logo.-org {
+    a img {
+        max-width: 50px;
+        max-height: 50px;
+    }
+}
+
+@media (max-width: 640px) {
+    .f-small-logo { 
+        margin-right: 20px;
+    }
+}
+

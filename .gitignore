@@ -1,0 +1,46 @@
+.DS_Store
+.idea
+sftp-config.json
+media
+# custom
+# json_data
+test_media
+settings_local.py
+*.swp
+celerybeat-schedule
+
+*.py[co]
+
+# Packages
+*.egg
+*.egg-info
+dist
+build
+eggs
+parts
+bin
+var
+sdist
+develop-eggs
+.installed.cfg
+
+# Installer logs
+pip-log.txt
+
+# Unit test / coverage reports
+.coverage
+.tox
+
+#Mr Developer
+.mr.developer.cfg
+
+supervisord.log
+*.pid
+
+*.pem
+
+sitestatic
+.sass-cache
+
+tmp
+initial_data.json

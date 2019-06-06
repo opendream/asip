@@ -1,0 +1,87 @@
+{% extends 'base_single.html' %}
+{% load i18n %}
+{% load staticfiles %}
+
+{% block content_class %} content-smart bg-white{% endblock %}
+
+{% block js %}
+<script type="text/javascript" src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
+{% endblock %}
+{% block css %}
+
+{% endblock %}
+
+
+{% block title %}
+{% if form.is_new %}{% trans "Create" %}{% else %}{% trans "Edit" %}{% endif %} {% trans form.inst.inst_name %}
+{% endblock %}
+
+{% block content %}
+{% if not form.is_new and not request_popup %}
+<a href="{% url 'portfolio_detail' form.inst.id %}" class="btn btn-default btn-xs btn-view">
+    <span class="glyphicon glyphicon-eye-open"></span> {% trans "View result" %}
+</a>
+{% endif %}
+<form method="post" class="form-horizontal" role="form" enctype="multipart/form-data" ng-non-bindable>
+    {% csrf_token %}
+
+    {% if form.non_field_errors %}
+    <div class="errors alert alert-danger">{{ form.non_field_errors }}</div>
+    {% endif %}
+
+    <div class="controls form-group">
+        <label for="id_title" class="col-sm-3 control-label">{% trans "Title" %} *</label>
+        <div class="col-sm-7">
+            <input id="id_title" name="title" type="text" class="form-control" value="{{ form.title.value|default_if_none:"" }}" required>
+            {% if form.username.errors %}
+            <div class="errors alert alert-danger">{{ form.title.errors }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="controls form-group">
+        <label for="id_images" class="col-sm-3 control-label">{% trans "Images" %} *</label>
+        <div class="col-sm-7">
+            {{ form.images }}
+            {% if form.images.errors %}
+            <div class="errors alert alert-danger">{{ form.images.errors }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="controls form-group">
+        <label for="id_description" class="col-sm-3 control-label">{% trans "Description" %}</label>
+        <div class="col-sm-7">
+            {{ form.description }}
+            {% if form.description.errors %}
+            <div class="errors alert alert-danger">{{ form.description.errors }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="controls form-group">
+        <label for="id_url" class="col-sm-3 control-label">{% trans "Portfolio URL" %}</label>
+        <div class="col-sm-7">
+            <input id="id_url" name="url" type="text" class="form-control" value="{{ form.url.value|default_if_none:"" }}">
+            {% if form.url.errors %}
+            <div class="errors alert alert-danger">{{ form.url.errors }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+
+    <div class="controls form-group">
+        <div class="col-sm-offset-3 col-sm-7 form-action">
+            <button class="btn btn-primary btn-orange{% if form.is_new %} btn-submit{% endif %}" type="submit">{% if form.is_new %}{% trans "Create new" %}{% else %}{% trans "Save changes" %}{% endif %}</button>
+            {% if not request_popup %}
+            <a href="{% if form.is_new %}{% url 'home' %}{% else %}.{% endif %}" class="btn btn-default btn-cancel">{% trans "Cancel" %}</a>
+            {%  endif %}
+            {% if request_popup %}
+            <a onclick="window.close()" class="btn btn-default btn-cancel">{% trans "Cancel" %}</a>
+            {%  endif %}
+        </div>
+
+    </div>
+
+</form>
+{% endblock %}

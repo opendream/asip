@@ -1,0 +1,80 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+    <meta content="width=device-width" name="viewport">
+    <title>
+      {% block title %}{% endblock %}
+    </title>
+    <link href='https://fonts.googleapis.com/css?family=Kanit' rel='stylesheet' type='text/css'>
+  </head>
+
+  <body>
+    <table cellpadding="0" cellspacing="0" align="center" style=" width: 100%;">
+      <!-- Start Logo row -->
+      <tr>
+        <td align="center" valign="middle" style="border-top: 10px solid #333; padding:25px 50px 40px; background-color: #F7B852;">
+			<h2 style="margin: 0; color: #000;font-family: 'Kanit', sans-serif; font-size: 60px; font-weight: 500; letter-spacing: 10px;">NEW</h2>
+			<h3 style="margin: 0; color: #000;font-family: 'Kanit', sans-serif; font-size: 18px; font-weight: 500;">New Economic Warrior</h3>
+			<p style="margin: 0; padding: 10px 0; color: #000; font-family: 'Kanit', sans-serif; font-size: 14px;"><a href="http://new.set.or.th" style="color: #333; text-decoration: none;">
+				http://new.set.or.th
+			</a></p>
+        </td> 
+      </tr>
+      <!-- End Logo row -->
+      <tr>
+        <td align="center" style="background-color: #fff; padding: 15px; text-align: center;">
+			<h2 style="color: #333; font-family: 'Kanit', sans-serif; font-size: 33px; font-weight: 100;">
+			ขอขอบคุณ Startup และองค์กรสนับสนุน</h2>
+
+				<p style="font-size: 20px;line-height: 30px; font-family: Thonburi, sans-serif; color: #333; text-align: center; margin: 0; padding: 10px 0;">
+					<span style="max-width: 500px; display: inline-block;">
+						สำหรับการกรอกข้อมูลร่วมเป็นส่วนหนึ่งของวงการ Startup ในช่วงเวลาที่ผ่านมา
+						<br />
+					</span>
+				</p>
+
+				<p style="font-size: 20px;line-height: 30px; font-family: Thonburi, sans-serif; color: #333; text-align: center; margin: 0; padding: 10px 0;">
+					<span style="max-width: 500px; display: inline-block;">
+						ขณะนี้ทีมงานได้ปรับปรุงระบบจัดเก็บข้อมูล และกำลังกลั่นกรองการนำเสนอข้อมูลให้ดียิ่งขึ้น
+					</span>
+				</p>
+
+				<p style="font-size: 20px;line-height: 30px; font-family: Thonburi, sans-serif; color: #333; text-align: center; margin: 0; padding: 10px 0;">
+					<span style="max-width: 500px; display: inline-block;">
+						จึงขอเชิญ Startup และองค์กรสนับสนุนทุกท่านร่วมตรวจสอบ แก้ไข หรือเพิ่มเติมข้อมูลต่างๆ ของท่านอีกครั้ง เพื่อให้พร้อมที่จะเปิดตัวในงาน Startup Thailand ระหว่างวันที่ 28 เม.ย. - 1 พ.ค. 2559 ณ ศูนย์ประชุมแห่งชาติสิริกิติ์
+						<br />
+					</span>
+				</p>
+
+				<br />
+
+
+				{% for organization in organization_list %}
+				<p style="margin: 0; padding: 10px 0;">
+					<a href="{{ site_url }}{% url 'account_reset_password_confirm' uidb64=uid token=token %}?redirect={% url 'organization_edit' organization.id %}" style="display: inline-block; font-family: 'Kanit', sans-serif; font-size: 18px; border-radius: 3px; text-align: center; width: 250px; background-color: #F9B94C; color: #333; padding: 10px 25px; text-decoration: none;">
+					    ปรับปรุงข้อมูล {{ organization.get_display_name }} »
+					</a>
+				</p>
+				{% endfor %}
+                <p style="margin: 0; padding: 10px 0;">
+					<a href="http://goo.gl/forms/umm39sPX7p" style="display: inline-block; font-family: 'Kanit', sans-serif; font-size: 14px; text-align: center; width: 250px; color: #888; padding: 10px 25px; text-decoration: none;">
+                        ข้อเสนอแนะ »
+					</a>
+				</p>
+
+<!-- 				<p style="padding: 10px 0; margin: 0;">
+					<a href="" style="display: inline-block; font-family: 'Kanit', sans-serif; font-size: 18px; border-radius: 3px; text-align: center; width: 250px; background-color: #F9B94C; color: #333; padding: 10px 25px; text-decoration: none;">แก้ไขข้อมูล Opendream »</a>
+				</p>
+				<p>
+					<a href="" style="display: inline-block; font-family: 'Kanit', sans-serif; font-size: 18px; border-radius: 3px; text-align: center; width: 250px; background-color: #F9B94C; color: #333; padding: 10px 25px; text-decoration: none;">แก้ไขข้อมูล ปันใจ »</a>
+				</p> -->
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
+
+
+

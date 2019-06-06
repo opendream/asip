@@ -1,0 +1,79 @@
+{% extends 'base_sidebar.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}
+{% endblock %}
+
+{% block title_class %} hidden{% endblock %}
+{% block search_toggle_class %}{% endblock %}
+{% block search_class %} in{% endblock %}
+{% block content_class %} bg-white bg-white-wrapper {% endblock %}
+
+{% block js %}
+
+{% endblock %}
+
+{% block breadcrumb %}
+{% endblock %}
+
+{% block main_extra %} ng-controller="EventController"{% endblock %}
+{% block primary %}
+{% endblock %}
+{% block content %}
+
+
+<!-- Block News -->
+<div ng-controller="BasicPartyListController" ng-init="init('/api/v1/event', { limit: 2, end_date__gte: current_date_format }, 'start_date')" class="block block-event block-feature block-col-2">
+	<h2 class="block-title">Active and upcoming Events</h2>
+	<div ng-show="!is_loading && party_list.length == 0">Coming soon.</div>
+	<!-- <img ng-show="is_loading && party_list.length == 0" ng-src="/static/images/loading.gif" class="loading-icon" > -->
+	<ul class="row item-list event-list">
+		<li ng-repeat="party in party_list" class="col-md-6 col-xs-6 event-item feature-item item" ng-clock>
+			<div ng-include="'template_party_event.html'"></div>
+		</li>
+	</ul>
+  <a class="loadmore-wrapper" ng-click="load_more()" ng-class="load_more_class()">
+      <span ng-hide="is_loading" class="loadmore">Load more</span>
+      <img  ng-show="is_loading" ng-src="/static/images/loading.gif" class="loading-icon" >
+  </a>
+
+</div><!-- End Block News -->
+
+<!-- Block event -->
+<div ng-controller="BasicPartyListController" ng-init="init('/api/v1/event', { limit: 6, end_date__lt: current_date_format, need_ordering: false }, '-end_date')" class="block block-event block-feature block-col-2" id="pass_event">
+	<h2 class="block-title">Past Events</h2>
+	<div ng-show="!is_loading && party_list.length == 0">Coming soon.</div>
+	<img ng-show="is_loading" ng-src="/static/images/loading.gif" class="loading-icon" >
+	<ul class="row item-list event-list">
+		<li ng-repeat="party in current_page_party_list" class="col-md-6 col-xs-6 event-item feature-item item" ng-clock>
+			<div ng-include="'template_party_event.html'"></div>
+		</li>
+	</ul>
+
+	<pagination ng-show="total_count > 6" boundary-links="true" total-items="total_count" ng-model="current_page" class="pagination-sm" previous-text="previous_text" next-text="next_text" first-text="first_text" last-text="last_text" max-size="5" items-per-page="params.limit" ng-change="load_page(current_page, 'pass_event')"></pagination>
+
+</div><!-- End Block event -->
+
+<!-- End Block Event -->
+<!-- End News Mockup -->
+
+{% endblock %}
+
+<!-- Sidebar right-->
+{% block sidebar %}
+
+<!-- Block News side bar -->
+<div ng-controller="BasicPartyListController" ng-init="init('/api/v1/news', { limit: 3, article_category: 'news' })" class="block block-sidebar block-news-other no-border" ng-show="current_page_party_list.length > 0">
+	<h2 class="block-title">News</h2>
+  <img ng-show="is_loading" ng-src="/static/images/loading.gif" class="loading-icon" >
+	<div ng-show="!is_loading && party_list.length == 0">Coming soon.</div>
+	<ul class="item-list">
+		<li ng-repeat="party in current_page_party_list" class="item" ng-clock>
+			<div ng-include="'template_party_news_sidebar.html'"></div>
+		</li>
+	</ul>
+	<a class="findmore" href="{% url 'news_list' %}" ng-class="should_show_list_class()">View more</a>
+</div><!-- Block News side bar -->
+
+{% endblock %}

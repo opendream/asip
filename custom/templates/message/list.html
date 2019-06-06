@@ -1,0 +1,71 @@
+{% extends 'base_sidebar_left.html' %}
+{% block title_class %} hidden{% endblock %}
+{% block title %}Messages of {{ logged_in_party.get_display_name }}{% endblock %}
+
+{% block js %}
+{% endblock %}
+
+{% block sidebar %}
+<div class="row">
+    <div class="col-sm-10 col-sm-offset-2 block-filter-msg">
+        <h1 class="page-title">Messages</h1>
+        <ul class="no-bullet filter-messages" role="tablist">
+            <li class="item active" role="presentation">
+                <a href="#unread-message" aria-controls="unread-message" role="tab" data-toggle="tab">
+                    <div class="row">
+                        <div class="col-sm-8 col-xs-9">
+                            Unread Messages <!--<span class="unread-noti">{[{ party_contact_party_new_count }]}</span> -->
+                        </div>
+                    </div>
+                </a>
+            </li>
+            <li class="item">
+                <a href="#read-message" aria-controls="read-message" role="tab" data-toggle="tab">
+                    <div class="row">
+                        <div class="col-sm-8">
+                            Read Messages
+                        </div>
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+    
+{% endblock%}
+
+{% block content %}
+
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane -message active" id="unread-message">
+            <div ng-controller="BasicPartyListController" ng-init="init('/api/v1/party_contact_party/', { dst: {{ logged_in_party.id }}, status: 0, limit: 6}, '-id')" class="block message-block unread-box" >
+                <h2 class="block-title"><span class="icon icon-markunread"></span>Unread Messages</h2>
+                <div class="is-empty" ng-hide="party_list.length">- Empty unread message -</div>
+                <ul class="item-list message-list">
+                    <li ng-repeat="party in party_list"  class="message-item item">
+                        <div ng-include="'message_unread.html'"></div>
+                    </li>
+                </ul>
+                <a class="loadmore-wrapper" ng-click="load_more()" ng-class="load_more_class()">
+                    <span ng-hide="is_loading" class="loadmore">Load more</span>
+                    <img ng-show="is_loading" ng-src="/static/images/loading.gif" class="loading-icon" >
+                </a>
+            </div>
+        </div>
+
+        <div role="tabpanel" class="tab-pane -message" id="read-message">
+            <div ng-controller="BasicPartyListController" class="block message-block read-box" ng-init="init('/api/v1/party_contact_party/', { dst: {{ logged_in_party.id }}, status: 1, limit: 6}, '-id')" >
+                <h2 class="block-title"><span class="icon icon-drafts"></span>Read Messages</h2>
+                <div class="is-empty" ng-hide="party_list.length">- Empty read message -</div>
+                <ul class="item-list message-list">
+                    <li ng-repeat="party in party_list" class="message-item item">
+                        <div ng-include="'message_read.html'"></div>
+                    </li>
+                </ul>
+
+                <pagination ng-show="total_count > 6" boundary-links="true" total-items="total_count" ng-model="current_page" class="pagination-sm" previous-text="previous_text" next-text="next_text" first-text="first_text" last-text="last_text" max-size="5" items-per-page="params.limit" ng-change="load_page(current_page)"></pagination>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,128 @@
+{% extends 'base_sidebar_left.html' %}
+
+{% load common_tags %}
+{% load i18n %}
+{% load static %}
+{% load relation_tags %}
+{% load thumbnail files_widget_tags %}
+
+{% block title %}{{ instance.get_display_name }}{% endblock %}
+{% block description %}{{ instance.summary|striptags }} {{ instance.description|striptags }}{% endblock %}
+{% block image %}{{ instance.get_thumbnail }}{% endblock %}
+
+{% block search_index_text %}{{ instance|get_search_text|safe }}{% endblock %}
+
+{% block title_class %} hidden{% endblock %}
+
+{% block breadcrumb %}
+    {% if article_category.permalink == 'news' %}
+    <a href="{% url 'news_list' %}" class="link-breadcrumb hidden-xs">{{ article_category_name }}</a>
+    {% else %}
+    <a ng-href="/article/{[{ news.categories[0].permalink }]}/" class="link-breadcrumb hidden-xs">{[{ news.categories[0].title }]}</a>
+    {% endif %}
+{% endblock %}
+
+{% block js %}
+
+<script type="text/javascript">
+        var news_id = {{ news_id }};
+        var article_category = '{{ article_category }}';
+</script>
+{% endblock %}
+{% block main_extra %} ng-controller="NewsDetailController"{% endblock %}
+
+
+{% block sidebar %}
+<div class="block article-info hidden-xs">
+    <h1 class="page-title" ng-clock ng-bind-html="(news.title || '')"></h1>
+    <div class="date" ng-clock>{[{ news.created | dateFormText:'MMMM d, yyyy' }]}</div>
+    <ul class="tag-list item-list list-inline">
+        <li class="topics -medium" ng-repeat="topic in news.topics">
+            <a ng-click="clearFilters(['tag_set__name']);successFilter('topics__permalink', true)" ng-href="{% url 'news_list' %}#?topics__permalink={[{ topic.permalink }]}">{[{topic.title}]}</a>
+        </li>
+        <li class="topics -medium" ng-repeat="tag in news.tag_set">
+            <a ng-click="clearFilters(['topics__permalink', 'created__year__lte', 'created__month__lte']);addFilter('tag_set__name', tag.name)" ng-href="{% url 'news_list' %}#?tag_set__name={[{ tag.name }]}">{[{ tag.name }]}</a>
+        </li>
+    </ul>
+   <!--  <ul class="tag-list item-list list-inline">
+        <li class="item" ng-repeat="topic in news.topics">
+            <span href="" ng-clock>
+                <span class="topics">{[{topic.title}]}</span>
+            </span>
+        </li>
+    </ul> -->
+
+    <ul class="tag-list tag-party-list item-list list-inline has-comma" ng-if="news.cms_has_party_src.length">
+        <li class="item" ng-repeat="item in news.cms_has_party_src">
+            <a ng-href="{[{ item.dst.absolute_url }]}" ng-clock>
+                <span class="tag-wrapper">{[{item.dst.get_display_name}]}</span>
+            </a>
+        </li>
+    </ul>
+</div>
+
+<div class="block block-share">
+    <h2 class="block-title">{% trans 'Share this' %}:</h2>
+    <a class="share-btn share-fb" href="#" facebook-share name="{[{ news.title }]}" picture="{[{ news.get_thumbnail }]}" description="{[{ news.get_summary }]}" ><span class="icon icon-facebook"></span>Facebook</a>
+    <a class="share-btn share-tw" twitter-share href="http://twitter.com/share" ><span class="icon icon-twitter"></span>Twitter</a>
+</div>
+
+<!--         <div  ng-controller="BasicPartyListController" ng-init="init('/api/v1/news', { limit: 4, article_category: article_category })" class="block block-sidebar block-news-other no-border" ng-show="current_page_party_list.length > 0">
+    <h2 class="block-title">More {{ article_category_name }}</h2>
+    <img ng-show="is_loading" ng-src="/static/images/loading.gif" class="loading-icon" >
+
+    <div ng-show="!is_loading" ng-if="(current_page_party_list | filter: { id : '!'+news_id}) == 0">No {{ article_category_name }}.</div>
+
+    <ul class="item-list">
+        <li ng-repeat="party in current_page_party_list | notMatch:news_id:'id'" class="item" ng-clock>
+            <div ng-include="'template_party_news_sidebar.html'"></div>
+        </li>
+    </ul>
+    <a ng-if="article_category != 'news' " class="findmore" href="/article/{[{ article_category }]}" ng-class="should_show_list_class()" ng-show="(current_page_party_list | filter: { id : '!'+news_id}).length > 0">View more</a>
+    <a ng-if="article_category == 'news' " class="findmore" href="{% url 'news_list' %}" ng-class="should_show_list_class()" ng-show="(current_page_party_list | filter: { id : '!'+news_id}).length > 0">View more</a>
+</div> -->
+
+{% endblock %}
+
+{% block content %}
+
+<a href="{% url 'news_list' %}" class="link-breadcrumb hidden-sm hidden-md hidden-lg">{{ article_category_name }}</a>
+
+<div class="block article-info hidden-sm hidden-md hidden-lg">
+    <h1 class="page-title" ng-clock ng-bind-html="(news.title || '')"></h1>
+    <div class="date" ng-clock>{[{ news.created | dateFormText:'MMMM d, yyyy' }]}</div>
+    <ul class="tag-list item-list list-inline">
+        <li class="item" ng-repeat="topic in news.topics">
+            <span href="" ng-clock>
+                <span class="topics">{[{topic.title}]}</span>
+            </span>
+        </li>
+    </ul>
+
+    <ul class="tag-list tag-party-list item-list list-inline has-comma" ng-if="news.cms_has_party_src.length">
+        <li class="item" ng-repeat="item in news.cms_has_party_src">
+            <a ng-href="{[{ item.dst.absolute_url }]}" ng-clock>
+                <span class="tag-wrapper">{[{item.dst.get_display_name}]}</span>
+            </a>
+        </li>
+    </ul>
+</div>
+
+<div class="article-wrapper">
+    {% if user.is_authenticated %}
+    <a ng-if="news.can_edit" ng-href="/article/{[{ news_id }]}/edit/" class="btn btn-default btn-xs pull-right ico-edit">
+      <span class="glyphicon glyphicon-edit"></span> Edit
+    </a>
+    {% endif %}
+    <div class="content">
+        <div class="feature-image"><img ng-src="{[{ news.get_thumbnail }]}" /></div>
+        <div class="description" ng-bind-html="(news.description || '') | sanitize">
+        </div>
+    </div>
+    <hr class="_short" />
+    <div class="source-url" ng-show="news.homepage_url">
+        {% trans 'Source' %} : <a ng-href="{[{ news.homepage_url }]}" target="_blank">{[{ news.homepage_url }]}</a>
+    </div>
+</div>
+
+{% endblock %}

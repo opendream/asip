@@ -1,0 +1,246 @@
+@import "compass/css3";
+
+/* -------------------------------- *\
+    Table organization list
+    Component: table-list
+    Elements:
+
+    Component: table-heading
+    Elements:
+
+    Component: table-content
+    Elements:
+    Varients:
+        - company
+        - column
+\* -------------------------------- */
+
+$breakpoint-alpha: 767px; // adjust to your needs
+
+// More practical CSS...
+// using mobile first method (IE8,7 requires respond.js polyfill https://github.com/scottjehl/Respond)
+
+.table-list {
+    width: 100%;
+    float: left;
+    margin-bottom: 10px;
+    border: 1px solid #D8D8D8;
+
+    > tbody > tr > th {
+        font-family: $font-regular;
+        font-size: 15px;
+    }
+    tr {
+        border-top: 1px solid #ddd;
+        border-bottom: 1px solid #ddd;
+    }
+    th {
+        display: none; // for accessibility, use a visually hidden method here instead! Thanks, reddit!   
+    }
+    td {
+        display: block;
+        @media (min-width: $breakpoint-alpha) {
+            min-width: 150px;
+        }
+    }
+    tbody > tr > td:first-child { 
+        width: 50%;
+        @media (max-width: 767px) {
+            width: 100%;
+        }
+    }
+
+    td:first-child {
+        @media (min-width: $breakpoint-alpha) {
+            width: 50%;
+        }
+    }
+    td:not(.no-label):before {
+        content: attr(data-th)": "; // who knew you could do this? The internet, that's who.
+        font-weight: bold;
+
+        margin-bottom: 15px;
+  
+        @media (min-width: $breakpoint-alpha) {
+            display: none;
+        }
+    }
+    td._hidelabel:before {
+        display: none;
+    }
+    td:not(.no-label) {
+        
+    }
+  
+    th, td {
+        padding: 15px 15px 0 15px;
+
+        @media (min-width: $breakpoint-alpha) {
+            display: table-cell;
+            padding: 15px;
+        }
+    }
+    td:last-child {
+        padding: 15px;
+    }
+}
+
+.table-list .media-left { padding-right: 20px;} 
+
+.table-heading {
+    background-color: #EEEEEE;
+}
+
+.table-content.-column {
+    position: relative;
+    @media (min-width: $breakpoint-alpha) {
+        text-align: center;
+    }
+}
+
+.table-content.-company {
+    display: block;
+
+    .media-body {
+        text-align: left;
+        @media (max-width: 767px) {
+            vertical-align: top;
+        }
+    }
+
+    .media-body > h4 {
+        margin-top: 0;
+        margin-bottom: 5px;
+    }
+
+    .media-body > span {
+        color: #777;
+        font-size: 12px;
+    }
+}
+
+.field-expand-able {
+    max-height: 23px;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.field-expand-link {
+    text-align: left;
+    font-size: 11px;
+    color: #777;
+    display: block;
+    margin-top: -20px;
+}
+
+.col-taxanomy {
+    margin-top: 5px;
+    .topics { 
+        font-size: 12px;
+        margin-bottom: 2px;
+    }
+    .topics a {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 110px;
+        @media (max-width: $screen-xs-max) {
+            max-width: initial;
+        }
+     }
+}
+
+div[report-my-height] {
+    max-width: 300px;
+}
+
+/* ----------------------------------- *\
+            Job List 
+\* ----------------------------------- */
+
+.table-list.-job {
+    border-radius: 5px;
+    .title {
+        @extend .kanit-light;
+    }
+    > .item-list > .item {
+        padding: 20px;
+        border-top: 1px solid #D8D8D8;
+        &:first-child { border-top: 0;}
+        .title { margin: 0;}
+        .place { 
+            color: $font-desc-color--secondary;
+            font-size: 13px;
+        }
+    }
+    .post-time.visible-xs { 
+        margin-top: 10px;
+    }
+    .item-job {
+        .title, .description {
+            display: inline-block;
+        }
+        .view-detail {
+            display: inline-block;
+            margin-left: 20px;
+            text-decoration: underline;
+            font-size: 13px;
+        }
+        .description { font-size: 13px;}
+    }
+    .block-list-orgjob {
+        margin-top: 10px;
+    }
+    .text-empty {
+        text-align: center;
+    }
+    @media (max-width: $screen-sm-max) {
+        .media-left {
+            display: block;
+            margin-bottom: 5px;
+        }
+    }
+    @media (max-width: $screen-xs-max) {
+        .media-left {        
+            margin-bottom: 10px;
+        }
+    }
+}
+
+/* ----------------------------------- *\
+            List of Job
+\* ----------------------------------- */
+.block-list-orgjob {
+    @media (max-width: $screen-sm-max) {
+        .item-job {
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+
+            &:last-child {
+                border-bottom: none;
+            }
+        }
+    }
+}
+
+
+
+
+@media (max-width: 767px) {
+    .table-action.text-right {
+        text-align: left;
+    }
+}
+
+.table-content-wrapper {
+    .action.is_you {
+        float: right;
+        color: #999;
+        @media (max-width: 767px) {
+            float: left;
+        }
+    }
+    @media (max-width: 767px) {
+        .action-panel { margin: 0; padding: 0;}
+    }
+}

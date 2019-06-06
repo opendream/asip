@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block base_content %}
+{% if messages %}
+    <div class="messages block-messages">
+        <div class="container">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    <button type="button" class="close" data-dismiss="alert">×</button>
+                    {{ message|safe }}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endif %}
+
+<div class="wrapper">
+    <div class="container main-content bg-white form-sidebar-container">
+
+        <div class="content-class{% block content_class %}{% endblock %}">
+
+            <div class="row{% block title_class %}{% endblock %}">
+                <h1 class="col-sm-12 col-xs-12 page-title">{% block title %}{% endblock %}</h1>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    {% block primary %}{% endblock %}
+                </div>
+            </div>
+            <div class="row">
+
+                <form method="post" role="form" enctype="multipart/form-data" ng-non-bindable novalidate="true" class="{% block form_class %}{% endblock %}">
+                    <div class="col-md-3 col-sm-3 col-xs-3 tab-form sidebar-left{% block sidebar_class %}{% endblock %}">
+                        <div class="sidebar-left-content">
+                            {% block sidebar %}{% endblock %}
+                        </div>
+                    </div>
+
+                    <div class="col-md-9 col-sm-9 col-xs-9 content-focus">
+                        {% block content %}{% endblock %}
+                    </div>
+
+                </form>
+
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+
+{% if THANK_AFTER_CREATE %}
+{% include 'organization/thankyou-modal.html' %}
+{% endif %}
+
+{% endblock %}

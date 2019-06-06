@@ -1,0 +1,20 @@
+{% extends 'base_single.html' %}
+{% load i18n %}
+{% load staticfiles %}
+
+
+{% block title %}{% trans "Login error" %}{% endblock %}
+
+{% block content_class %} content-thin -content-form-small {% endblock %}
+
+{% block breadcrumb %}
+{% endblock %}
+
+{% block content %}
+
+<div class="registration-error">
+    <div class="title">Logging you into ASIP website has failed</div>
+    <p>Please try login again and if the problem persists, please contact our support.</p>
+</div>
+
+{% endblock %}

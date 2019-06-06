@@ -1,0 +1,114 @@
+{% load i18n %}
+{% load static %}
+{% load common_tags %}
+
+<div class="filter-wrapper" ng-controller="FilterController" ng-init="init({url: '{{ params.API_URL }}', successFilterCount: {{ params.FILTERS|exclude_key:'query'|length }}, extraParams: {{ params.EXTRA_PARAMS|safe }}, orderByFiltersFields: {{ params.ORDER_BY_FIELDS|safe }}})">
+    <p class="filter-label">
+        {% trans "Filter by" %}:
+    </p>
+    <div class="filter-group btn-group btn-group-justified text-left" role="group">
+        <!--
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                {% trans "Created" %}
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a ng-init="initFilter('created', {title: '{% trans "This year" %}', permalink: 'this_year'})" ng-click="addFilter('created', 'this_year')">{% trans "This year" %}</a></li>
+                <li><a ng-init="initFilter('created', {title: '{% trans "This month" %}', permalink: 'this_month'})" ng-click="addFilter('created', 'this_month')">{% trans "This month" %}</a></li>
+                <li><a ng-init="initFilter('created', {title: '{% trans "This week" %}', permalink: 'this_week'})" ng-click="addFilter('created', 'this_week')">{% trans "This week" %}</a></li>
+            </ul>
+        </div>
+        -->
+        {%  for filter in params.FILTERS %}
+        {% if filter.query %}
+        <div class="btn-group" role="group" ng-class="{'live-loading': liveLoading}">
+            <input type="text" placeholder="{% trans "Keyword" %}" ng-model="params.q" ng-change="addFilter('q', params.q, true)" ng-init="addFilterDelay('q', 'params.q', true)" class="form-control"/>
+        </div>
+        {% elif filter.autocomplete %}
+        <div class="btn-group autocomplete" role="group">
+            <input
+                    type="text"
+                    placeholder="{% trans "Enter a" %} {{ filter.label }}"
+                    class="form-control"
+                    ng-model="{{ filter.field_name }}Value"
+                    ng-change="updateAutocompleteList('{{ filter.field_name }}')"
+                    focus-me="{{ filter.field_name }}FocusMe"
+                    ng-focus="showAutocompleteList('{{ filter.field_name }}')"
+                    ng-blur="hideAutocompleteList('{{ filter.field_name }}'); {{ filter.field_name }}FocusMe=false;"
+                    ng-keydown="controlAutocompleteList('{{ filter.field_name }}', $event)"
+            />
+
+            <div class="autocomplete-dropdown-menu" ng-show="isShowAutocompleteList('{{ filter.field_name }}') && {{ filter.field_name }}Value" ng-focus="showAutocompleteList('{{ filter.field_name }}')" ng-blur="hideAutocompleteList('{{ filter.field_name }}')">
+                <ul class="dropdown-menu" ng-controller="BasicPartyListController" ng-init="init('{{ filter.api_url }}', {limit: 8, name__in: '{[{ $location.search().{{ filter.field_name }} }]}'}, null, null, null, null, '{{ filter.field_name }}')">
+                    <li ng-hide="isUpdateAutocompleteListLoading.{{ filter.field_name }}" ng-repeat="party in party_list" ng-cloak>
+                        <a ng-class="{active: $index == {{ filter.field_name }}Index}" ng-init="initFilter('{{ filter.field_name }}', party)" ng-click="addFilter('{{ filter.field_name }}', party.permalink||party.name);">{[{ party.title||party.name }]}</a>
+                    </li>
+                    <li ng-show="isUpdateAutocompleteListLoading.{{ filter.field_name }}" ng-cloak>
+                        <a>{% trans "Loading ..." %}</a>
+                    </li>
+                    <li ng-hide="party_list.length || isUpdateAutocompleteListLoading.{{ filter.field_name }}" ng-cloak>
+                        <a>{% blocktrans with label=filter.label %}No a {{ label }} match{% endblocktrans %}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        {% else %}
+        <div class="btn-group" role="group" ng-controller="BasicPartyListController" ng-init="init('{{ filter.api_url }}', {limit: 100})">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                {{ filter.label }}
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li ng-repeat="party in party_list">
+                    <a ng-init="initFilter('{{ filter.field_name }}', party)" ng-click="addFilter('{{ filter.field_name }}', party.permalink||party.name)">{[{ party.title||party.name }]}</a>
+                </li>
+            </ul>
+        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+
+    <h2>{% blocktrans with title=params.RESULT_TITLE %}{[{ result.meta.total_count }]} {{ title }} found{% endblocktrans %}</h2>
+
+    <div class="filter-selected">
+
+        <div class="filter-label pull-left">
+            {% trans "Selected Filters" %}:
+        </div>
+        <ul class="selected-filter-list list-inline list-unstyled">
+            <li class="selected-filter-item" ng-repeat="filter in filters" ng-cloak>
+                <span ng-bind="filter.title"></span>
+                <a ng-click="removeFilter(filter)">x</a>
+            </li>
+        </ul>
+
+    </div>
+
+    <div class="filter-banner-list">
+
+        <ul class="list-unstyled">
+            <li ng-repeat="filter in filters" ng-if="filter.summary" class="taxonomy-summary" ng-cloak>
+                {[{ filter.summary }]} <a ng-href="{[{ filter.absolute_url }]}">click here ›</a>
+            </li>
+        </ul>
+
+    </div>
+
+    {% include params.LIST_TEMPLATE %}
+
+    <pagination ng-if="result.meta.has_next || (result.meta.total_count > {{ params.EXTRA_PARAMS.limit }})"
+            total-items="result.meta.total_count"
+            ng-model="current.page"
+            max-size="maxSize"
+            items-per-page="{{ params.EXTRA_PARAMS.limit }}"
+            class="pagination-sm text-center"
+            boundary-links="true"
+            rotate="false"
+            first-text="'«'"
+            previous-text="'‹'"
+            next-text="'›'"
+            last-text="'»'">
+    </pagination>
+
+</div>

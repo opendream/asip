@@ -1,0 +1,38 @@
+{% extends 'base_sidebar.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}
+{% endblock %}
+
+{% block title_class %} hidden{% endblock %}
+{% block search_toggle_class %}{% endblock %}
+{% block search_class %} in{% endblock %}
+{% block content_class %} bg-white bg-white-wrapper {% endblock %}
+
+{% block js %}
+<script type="text/javascript">
+    var article_category = '{{ article_category }}';
+</script>
+{% endblock %}
+
+{% block main_extra %} ng-controller="NewsController"{% endblock %}
+{% block primary %}
+{% endblock %}
+{% block content %}
+
+<!-- Block News -->
+<div ng-controller="BasicPartyListController" ng-init="init('/api/v1/news', { limit: 6, categories__permalink: '{{ article_category.permalink }}' })" class="block block-news block-list-{{ article_category.permalink }}">
+	<h2 class="block-title">{{ article_category_name }}</h2>
+	<img ng-show="is_loading" ng-src="/static/images/loading.gif" class="loading-icon">
+	<div ng-show="!is_loading" ng-if="current_page_party_list.length == 0">Coming soon.</div>
+	<ul class="item-list news-list">
+		<li ng-repeat="party in current_page_party_list" class="item news-item" ng-clock>
+			<div ng-include="'template_party_news.html'"></div>
+		</li>
+	</ul>
+
+	<pagination ng-show="total_count > 6" boundary-links="true" total-items="total_count" ng-model="current_page" class="pagination-sm" previous-text="previous_text" next-text="next_text" first-text="first_text" last-text="last_text" max-size="5" items-per-page="params.limit" ng-change="load_page(current_page)"></pagination>
+
+</div><!-- End Block News -->
+{% endblock %}

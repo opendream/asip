@@ -1,0 +1,137 @@
+/* -------------------------------- *\
+    Table of Alert list
+
+    Component: Alert
+\* -------------------------------- */
+
+$bg-success: #45AD78;
+$bg-error: #F05667;
+$bg-info: #ECAD41;
+
+.alert-error {
+    background-color: #f2dede;
+    border-color: #ebccd1;
+    color: #a94442;
+}
+
+.tab-form {
+    li.errors, li.active.errors {
+        > a { 
+            background-color: $bg-error !important;
+            border: 0;
+            color: #fff !important;
+            border-radius: 0;
+        }
+    }  
+} 
+
+// Alert
+.alert {
+    padding: 20px 20px 20px 70px;
+    border-radius: 5px;
+    margin-top: 15px;
+    position: relative;
+    font-size: 15px;
+    max-width: 1170px;
+    margin: 15px auto;
+    @media (max-width: $screen-md-min) {
+        max-width: 800px;
+    }
+    @media (max-width: $screen-xs-max) {
+        padding: 10px 10px 10px 60px;
+    }
+    a { 
+        color: #fff !important;
+        text-decoration: underline;
+    }
+    &:before {
+        font-family: 'Glyphicons Halflings';
+        position: absolute;
+        font-size: 35px;
+        left: 19px;
+        top: 6px;
+    }
+}
+
+.alert .close {
+    top: 5px;
+    font-size: 20px;
+    right: 5px;
+    color: #fff;
+    opacity: 1;
+    background-color: transparent;
+    text-shadow: none;
+    &:hover, &:focus {
+        color: #444;
+    }
+}
+
+.messages .alert {
+    margin-bottom: 15px;
+}
+
+// Success Alert
+.alert-success {
+    background-color: $bg-success;
+    border-color: $bg-success;
+    color: #fff;
+    &:before {
+        content: "\e084";
+    }
+}
+
+.alert-error {
+    background-color: $bg-error;
+    border-color: $bg-error;
+    color: #fff;
+    padding-left: 140px;
+    @media (max-width: $screen-xs-max) {
+        padding: 10px;
+    }
+    &:before {
+        // content: "\e083";
+        content: 'OOPS!!';
+        font-family: kanitregular;
+        letter-spacing: 2px;
+        font-size: 30px;
+        top: 10px;
+        @media (max-width: $screen-xs-max) {
+            position: static;
+            display: block;
+        }
+    }
+}
+
+.alert-danger {
+    padding: 10px 5px;
+}
+
+.alert-danger:before {
+    content: none;
+}
+
+.alert-info, .alert-warning {
+    background-color: $bg-info;
+    border-color: $bg-info;
+    color: #fff;
+    &:before {
+        content: "\e085";
+    }
+}
+
+ul.errorlist { padding-left: 20px;}
+
+.block-messages .alert-error {
+    > .errorlist {
+        list-style: inside;
+        padding: 0;
+        margin: 10px 0 0;
+        .errorlist {
+            display: inline-block;
+            padding: 0;
+            > li:before {
+                content: '\2013\00a0';
+            }
+        }
+    }
+}

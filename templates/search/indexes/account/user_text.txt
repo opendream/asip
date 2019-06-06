@@ -1,0 +1,27 @@
+{% load common_tags %}
+
+{% captureas content %}
+
+<h2>{{ object.username }}</h2>
+<h2>{{ object.email }}</h2>
+<p>{{ object.occupation }}</p>
+<p>{{ object.summary }}</p>
+<p>{{ object.description|safe }}</p>
+<p>{{ object.country }}</p>
+
+<p>{{ object.facebook_url }}</p>
+<p>{{ object.twitter_url }}</p>
+<p>{{ object.linkedin_url }}</p>
+<p>{{ object.homepage_url }}</p>
+
+{% for item in object.interests.all %}
+<h3>{{ item.title }}</h3>
+{% endfor %}
+
+{% for item in object.user_roles.all %}
+<h3>{{ item.title }}</h3>
+{% endfor %}
+
+{% endcaptureas %}
+
+{{ content|lower }}

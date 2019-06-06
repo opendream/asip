@@ -1,0 +1,71 @@
+/* -------------------------------- *\
+          Contact Modal
+\* -------------------------------- */
+
+.base-action-modal {
+    .modal-title {
+        @extend .kanit-extralight;
+        font-size: 30px;
+    }
+    .modal-header { 
+        padding: 35px 30px 15px;
+    }
+    .modal-body { 
+        padding: 15px 30px;
+        min-height: 250px;
+    }   
+    .listview-item { margin: 0 0 30px;}
+    .modal-content {
+      border-radius: 0;
+    }
+}
+
+.close {
+  float: right;
+  font-size: 21px;
+  font-weight: bold;
+  line-height: 1;
+  color: #444;
+  text-shadow: 0 1px 0 #fff;
+  opacity: 1;
+  filter: alpha(opacity=100);
+}
+
+.item-list.-contact {
+  > .item {
+    @extend .kanit-regular;
+    font-size: 18px;
+    margin-bottom: 15px;
+    padding-left: 20px;
+    border-left: 3px solid #F9B94C;
+  }
+  .item .field-label {
+    @extend .font-default;
+    font-size: 14px;
+    color: #888;
+  }
+}
+
+.link-sendmsg {
+  @extend .kanit-regular;
+  display: inline-block;
+  margin-bottom: 10px;
+  text-decoration: underline;
+}
+
+.form-contact {
+  margin-bottom: 10px;
+  label { margin-bottom: 10px;}
+  .btn {
+    margin-top: 10px;
+  }
+}
+
+.contact-popup .form-contact {
+  margin-bottom: 10px;
+}
+
+.content-editor {
+  padding-left: 20px;
+  border-left: 3px solid #F9B94C;
+}

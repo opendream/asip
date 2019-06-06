@@ -1,0 +1,123 @@
+{% load i18n %}
+{% load humanize %}
+{% load forum_tags %}
+<div class="panel panel-default topic-code-{{ instance.permalink }}">
+    <div class="panel-heading">
+
+        <div class="row">
+
+            <h{{ heading_level|default:1 }} class="col-sm-9 col-xs-12">
+                {% if heading_level|default:1 == 1 %}
+                {{ instance.title }}
+                {% else %}
+                <a href="{{ instance.get_absolute_url }}">
+                    {{ instance.title }}
+                </a>
+                {% endif %}
+
+
+            </h{{ heading_level|default:1 }}>
+
+            <h{{ heading_level|default:1 }} class="meta-summary col-sm-3">
+                {% if instance.posts.all.exists %}
+                <span class="pull-right">
+                    {{ instance.posts.all.count }} {% trans "posts" %}
+                </span>
+                {% endif %}
+            </h{{ heading_level|default:1 }}>
+
+
+        </div>
+    </div>
+
+    <div class="panel-body">
+        <div class="menu-action-wrapper">
+            {% if instance|can_edit:user %}
+            <div class="menu-action-wrapper">
+                <a href="{{ instance.get_edit_url }}" class="btn btn-default btn-xs ico-edit">
+                    <span class="glyphicon glyphicon-edit"></span>
+                    {% trans "Edit" %}
+                </a>
+            </div>
+            {% endif %}
+
+            <a href="{% url 'forum_post_create' instance.pk %}" class="btn btn-default btn-xs ico-edit">
+                <span class="glyphicon glyphicon-plus"></span>
+                {% trans "Add Post" %}
+            </a>
+        </div>
+        {% if instance.description %}
+            <p>{{ instance.description }}</p>
+        {% endif %}
+        
+    </div>
+
+    {% if instance.posts.all.exists %}
+    <ul class="list-unstyled">
+        {% for post in instance.posts.all %}
+        <li>
+            <div class="row">
+                <div class="col-sm-8 col-xs-12">
+                    <h4 class="hover-edit">
+                        <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+                        {% if post.files %}
+                        &nbsp;
+                        <span class="glyphicon glyphicon-paperclip small-icon"></span>
+                        {% endif %}
+
+                        {% if post|can_edit:user %}
+                        <span class="menu-action-wrapper -edit -detail-forum">
+                            <a href="{{ post.get_edit_url }}" class="btn btn-default btn-xs ico-edit">
+                                <span class="glyphicon glyphicon-edit"></span>
+                                {% trans "Edit" %}
+                            </a>
+                        </span>
+                        {% endif %}
+                    </h4>
+                    {% if post.description %}
+                    <p>{{ post.description|safe|striptags|truncatechars:180 }}</p>
+                    {% endif %}
+                </div>
+
+                <div class="col-sm-4">
+                    <h4 class="meta-summary pull-right">
+                        <div class="meta-summary-first">
+                            <a href="{{ post.get_absolute_url }}">{{ post.get_total_replies }} {% trans "answers" %}</a>
+                             , {{ post.total_views }} {% trans "reads" %}
+                        </div>
+                        <div class="meta-summary-second">
+                            {% if post.replies.all.exists %}
+                            {% with post.replies.latest as latest_reply %}
+
+                            {% trans "Latest answer at" %} <a href="{{ latest_reply.get_absolute_url }}">{{ latest_reply.created|naturaltime }}</a>
+                            {% trans "by" %} <a class="meta-summary-created-by" href="{{ latest_reply.created_by.get_absolute_url }}">{{ latest_reply.created_by }}</a>
+
+                            {% endwith %}
+                            {% else %}
+
+                            {% trans "Post at" %} <a href="{{ post.get_absolute_url }}">{{ post.created|naturaltime }}</a>
+                            {% trans "by" %} <a class="meta-summary-created-by" href="{{ post.created_by.get_absolute_url }}">{{ post.created_by }}</a>
+
+                            {% endif %}
+
+
+                        </div>
+                    </h4>
+                </div>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+    {% elif heading_level|default:1 == 1  %}
+    <ul class="list-unstyled"><li><div class="no-results">
+        {% trans 'No posts' %} &nbsp;
+        {% if instance|can_edit:user %}
+        <a href="{% url 'forum_post_create' instance.pk %}" class="btn btn-default btn-xs ico-edit">
+            <span class="glyphicon glyphicon-plus"></span>
+            {% trans "Add Post" %}
+        </a>
+        {% endif %}
+    </div></li></ul>
+    {% endif %}
+
+</div>

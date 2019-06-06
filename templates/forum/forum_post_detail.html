@@ -1,0 +1,11 @@
+{% extends 'forum/base_detail.html' %}
+{% load static %}
+
+
+{% block js %}
+<script type="text/javascript" src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
+{% endblock %}
+
+{% block detail %}
+{% include 'forum/_forum_post_detail.html' %}
+{% endblock %}

@@ -1,0 +1,77 @@
+{% load i18n %}
+{% load staticfiles %}
+
+<form method="post" role="form" enctype="multipart/form-data" class="form-group" ng-non-bindable>
+
+    {% csrf_token %}
+    {% if form.non_field_errors %}
+    <div class="errors alert alert-danger">{{ form.non_field_errors }}</div>
+    {% endif %}
+
+    {% for field in form %}
+
+    {% if field.name == 'title' %}
+    <div class="controls form-group">
+        <label for="id_title" class="field-container control-label">
+            {% trans "Title" %} *
+        </label>
+        <div class="field-container">
+            <span id="generate-permalink">
+                {{ form.title }}
+            </span>
+
+            {% if form.title.errors %}
+            <div class="errors alert alert-danger">{{ form.title.errors }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+    {% elif field.name == 'permalink' %}
+    <div class="controls form-group permalink-inline">
+        <div class="field-container control-label">
+            <label for="id_permalink" class="control-label">{% trans "Permalink" %} <span class="label-required-ico">*</span></label>
+        </div>
+        <div class="field-container">
+
+            <span id="id_permalink_readonly" class="form-control">{{ form.permalink.value|default_if_none:'' }}</span>
+            <a id="edit-permalink" href="#id_permalink">{% trans "edit" %}</a>
+
+            <input id="id_permalink" name="permalink" type="text" class="form-control" value="{{ form.permalink.value|default_if_none:'' }}">
+            <span class="help-block">
+                {% blocktrans with inst_type=instance.inst_name.lower %}This field represent your {{ inst_type }} url in this website.{% endblocktrans %}<br />
+                {{ form.permalink.help_text }}
+            </span>
+            {% if form.permalink.errors %}
+            <div class="errors alert alert-danger">{{ form.permalink.errors }}</div>
+            {% endif %}
+        </div>
+    </div>
+    {% else %}
+    {% include 'field.html' %}
+    {% endif %}
+
+    {% endfor %}
+
+    <div class="controls form-group">
+        <div class="form-action">
+            <button class="btn btn-primary btn-orange{% if not instance.id %} btn-submit{% endif %}" type="submit">
+            {% if not instance.id %}
+            {% if submit_text %}
+            {{ submit_text }}
+            {% else %}
+            {% trans "Create new" %}
+            {% endif %}
+            {% else %}
+            {% trans "Save changes" %}
+            {% endif %}
+            </button>
+            <a href="{% if not instance.id %}{% url 'home' %}{% else %}.{% endif %}" class="btn btn-default btn-cancel">{% trans "Cancel" %}</a>
+        </div>
+
+    </div>
+
+
+    <input type="hidden" name="control_permalink" value="1"/>
+    <input type="hidden" name="is_new" value="{% if not instance.id %}1{% else %}0{% endif %}"/>
+
+</form>

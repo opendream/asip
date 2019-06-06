@@ -1,0 +1,76 @@
+/* -------------------------------------- *\
+**  Organize Detail
+**  Contents
+**  
+**  1. Font base
+**  2. Font heading
+**  3. Font size
+**  4. Default link
+**  5. Label
+**  6. Table
+\* -------------------------------------- */
+
+body {
+    font-family: $font-family-base;
+    position: relative;
+}
+
+h1, h2, h3, h4, h5 {
+    font-family: $kanit-regular;
+}
+@media (max-width: $screen-xs-max) {
+    h1 { font-size: 32px; }
+    h2 { font-size: 28px; }
+}
+
+h1 { font-size: 30px; }
+h2 { font-size: 26px; }
+h3 { font-size: 22px; }
+h4 { font-size: 16px; }
+h5 { font-size: 15px; }
+
+a {
+    color: $font-link-color;
+    cursor: pointer;
+    &:hover, 
+    &:focus, 
+    &:active, 
+    &.active { 
+        color: $font-link-color;
+    }
+}
+a.link-disabled {
+    text-shadow: 1px 1px 1px #fff;
+    color: #999999;
+    cursor: not-allowed;
+    &:hover,
+    &:focus,
+    &:active,
+    &.active {
+        text-decoration: none !important;
+    }
+}
+
+label {
+    font-family: $kanit-medium;
+    font-weight: normal;
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+dt {
+    color: #666666;
+    font-weight: normal;
+}
+
+dd, dt {
+    font-family: $kanit-regular;
+}
+
+table thead { 
+    background-color: #EFEFEF;
+}
+
+hr {
+    border-top-color: #D7D7D7;
+}

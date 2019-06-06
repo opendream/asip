@@ -1,0 +1,49 @@
+{% extends 'base_single.html' %}
+{% load i18n %}
+{% load static %}
+{% load common_tags %}
+
+{% block title %}
+{{ settings.FILTER|keyvalue:'job'|keyvalue:'TITLE' }}
+{% endblock %}
+
+{% block title_class %}{% endblock %}
+{% block search_toggle_class %}{% endblock %}
+{% block search_class %}{% endblock %}
+{% block content_class %}{% endblock %}
+{% block wrapper_class %} wrapper--list{% endblock %}
+
+
+{% block breadcrumb %}
+
+{% endblock %}
+
+{% block leader %}
+<div class="party-role-header-wrapper">
+  <div class="party-role-header -join">
+        <div class="party-role-header-text">
+            <div class="row">
+                <div class="col-sm-3 text">
+                    <h3 class="title">Start recruiting</h3>
+                </div>
+                <div class="col-sm-6 text party-content">
+                    <p class="text-left">
+                        Promote your job listing to the right candidates.
+                    </p>
+                </div>
+                <div class="col-2 text">
+                    <a class="btn btn-primary" href="{% url 'job_create_standalone' %}">
+                        {% trans "Post a Job" %}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+
+{% include 'party/_filter.html' with params=settings.FILTER|keyvalue:'job' %}
+
+{% endblock %}

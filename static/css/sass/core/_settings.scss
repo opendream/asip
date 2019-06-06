@@ -1,0 +1,21 @@
+//== Typography
+//## Font, line-height, and color for body text, headings, and more.
+$font-family-clearsans-bold	: "clear_sansbold",Helvetica Neue, Helvetica, Arial, sans-serif;
+$font-family-clearsans-reg	: "clear_sansregular",Helvetica Neue, Helvetica, Arial, sans-serif;
+$font-family-clearsans-light: "clear_sanslight",Helvetica Neue, Helvetica, Arial, sans-serif;
+$font-family-base			: $font-family-clearsans-light;
+	
+$screen-xs-max: 768px;
+$screen-md-min: 992px;
+$screen-md-max: 1200px;
+$screen-sm-min: 768px;
+$screen-sm-max: 992px;
+$screen-smartph-max: 480px;
+
+$icons-spacing : 150px;
+$icons-layout: vertical;
+$icons-sprite-dimensions: true;
+
+@import "icons/*.png";
+@include all-icons-sprites;
+$icons: sprite-map("icons/*.png"); 

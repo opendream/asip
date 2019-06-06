@@ -1,0 +1,273 @@
+// fix grid the same height
+@media (max-width: $screen-xs-max) {
+    .party-item .body-overflow-auto {
+        height: 180px;
+        overflow-y: auto;
+    }
+    .user-image .body-overflow-auto {
+        height: 120px;
+    }
+}
+
+
+
+.follow-action {
+    position: relative;
+    padding-left: 25px;
+    display: inline-block;
+    float: right;
+    text-align: right;
+    .icon-heart { font-size: 15px;}
+    .ico-follow { 
+        position: absolute; 
+        left: 0;
+        top: 3px;
+    }
+    .icon-plus {
+        font-size: 11px !important;
+        top: -11px;
+        margin-left: -8px;
+    }
+}
+
+.follow-section {
+    .text-action {
+        &:hover, &:active, &:focus, &.active { 
+            color: #333; 
+            text-decoration: underline;
+        }
+    }
+}
+
+.ico-follow.following {
+    .icon-users-follow { color: $main-color;}
+}
+
+// Take Action Module: Action Panel
+// .take-action-wrapper {
+//     .ico-follow-wrapper { height: auto;}
+// }
+
+
+// Notification list
+.notification-item .icon {
+    font-family: 'icostartup';
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    speak: none;
+    display: inline-block;
+    text-decoration: inherit;
+    width: 1em;
+    margin-right: .2em;
+    text-align: center;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1em;
+    margin-left: .2em;
+
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.notification-item {
+    .icon.your-following:before {
+        content: '\e91a';
+        font-size: 17px;
+    }
+    .icon-noti-party-testify-party:before {
+        content: "\e60c";
+    }
+
+    .icon-noti-party-follow-party:before {
+        content: "\e916";
+        font-size: 18px;
+    }
+
+    .icon-noti-party-love:before {
+        content: "\e912";
+        font-size: 13px;
+        position: relative;
+        left: -1px;
+        top: -2px;
+    }
+
+    .icon-noti-party-contact-party:before {
+        content: "\e914";
+        font-size: 11px;
+        position: relative;
+        top: -1px;
+    }
+
+    .icon-noti-organization-has-people:before {
+        content: "\e913";
+        font-size: 17px;
+        position: relative;
+        top: -2px;
+    }
+
+    .icon-noti-user-experience-organization:before {
+        content: "\e915";
+    }
+
+    .icon-noti-party-support-party:before, .icon-noti-party-received-funding-party:before {
+        content: "\e61b";
+        font-size: 20px;
+    }
+
+    .icon-noti-party-partner-party.icon:before {
+        content: "\e62d";
+        font-size: 20px;
+    }
+    .icon-noti-organization-user-relationship { margin-left: -2px;}
+    .icon-noti-organization-user-relationship:before {
+        content: "\e919";
+        font-size: 14px;
+        position: relative;
+        left: 8px;
+        top: -4px;
+    }
+    .icon-noti-organization { padding-top: 22px;}
+    .icon-noti-organization:before {
+        content: "\e614";
+        font-size: 21px;
+    }
+    .icon-noti-party-invite-testify-party {
+        top: -2px;
+    }
+    .icon-noti-party-invite-testify-party:before {
+        content: "\e60c";
+    }
+    .icon-noti-party-invite-testify-party:after {
+        font-family: 'Glyphicons Halflings';
+        content: "\2b";
+        font-size: 9px;
+        top: -8px;
+        position: relative;
+        left: 3px;
+    } 
+    .icon-noti-party-received-investing-party:before, .icon-noti-party-invest-party:before {
+        content: "\e90f";
+        font-size: 18px;
+    }
+
+    .icon-noti-cms-has-party:before {
+        content: "\e900";
+        font-size: 15px;
+    }
+}
+
+.noti-other .icon:before {
+    content: "\e62c";
+}
+
+.item-list .item { position: relative;}
+.required-approval {
+    font-size: 10px;
+    position: absolute;
+    right: 0px;
+    top: 0;
+    border: 1px solid #83b869;
+    padding: 0px 4px;
+    min-width: 55px;
+    text-align: center;
+    background: #83B869;
+    color: #fff;
+    border-color: #57A233;
+    &.draft {
+        color: #ccc;
+        border-color: #ccc;
+        background-color: transparent;
+    }
+    &.pending {
+        color: #E5BB00;
+        border-color: #E5BB00;
+        background-color: transparent;
+    }
+    &.reject {
+        color: #ff0000;
+        border-color: #ff0000;
+        background-color: transparent;
+    }
+}
+
+
+
+.people-item .required-approval {
+    right: 15px;
+    top: 0;
+    font-size: 9px;
+    background: #83B869;
+    color: #fff;
+    border-color: #57A233;
+}
+
+.happening-header .required-approval {
+    top: 25px;
+}
+
+.support-item {
+    .title { padding-right: 60px;}
+    .required-approval { top: 4px;}
+}
+
+.popover { border-radius: 0;}
+.btn.confirm-dialog-btn-confirm, .btn.confirm-dialog-btn-abord {
+    padding: 4px 12px;
+    text-transform: uppercase;
+    font-size: 12px;
+}
+
+.autocomplete-light-widget.yourlabs-autocomplete {
+    padding: 0;
+    border-radius: 0;
+    > span {
+        padding: 5px 10px;
+        min-width: 200px;
+    }
+    .reference-span { width: 30px;}
+    .hilight {
+        background: #f5f5f5;
+        color: #333 !important;
+    }
+}
+
+.tagit-autocomplete.ui-autocomplete { 
+    z-index: 999;
+    border-radius: 0px;
+    font-size: 13px;
+}
+
+.tagit-autocomplete.ui-autocomplete  .ui-state-focus{
+    background: #f5f5f5;
+    border-radius: 0;
+    border: 0;
+    color: #333;
+}
+
+.tagit-label { font-size: 12px;}
+
+ul.tagit input[type="text"] {
+    font-family: $kanit-light;
+}
+
+
+.orderable {
+    font-weight: normal;
+}
+
+.manage-table {
+    .table > tbody > tr > td { vertical-align: middle;}
+    .small-logo {
+        max-width: inherit;
+        width: 50px;
+        height: 50px;
+        margin: 0;
+    }
+    .small-logo span {
+        width: 50px;
+        height: 50px;
+    }
+    td.status, td.created, td.created_by, td.is_active, td.date_joined { font-size: 12px;}
+}

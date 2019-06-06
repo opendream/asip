@@ -1,0 +1,20 @@
+.tooltip {
+	.tooltip-inner {
+		background-color: #fff;
+		color: #333;
+		padding: 0px 4px;
+		box-shadow: 1px 2px 5px #ccc;
+		border: 1px solid #eee;
+		border-radius: 0;
+	}
+	.tooltip-table thead tr {
+		background-color: #333;
+		color: #F9B94C;
+	}
+	.tooltip-table { font-size: 12px;}
+}
+
+	
+.tooltip.bottom .tooltip-arrow {
+	border-bottom-color: #ccc;
+}

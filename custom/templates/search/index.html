@@ -1,0 +1,154 @@
+{% extends 'base_sidebar_left.html' %}
+{% load i18n %}
+
+
+{% block search_class %} in{% endblock %}
+{% block search_toggle_class %}{% endblock %}
+{% block wrapper_class %} -list{% endblock %}
+
+
+{% block title_class %} hidden {% endblock %}
+{% block title %}Search results{% endblock %}
+
+{% block breadcrumb %}
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript">
+    var query = {{ query|safe }};
+</script>
+{% endblock %}
+
+{% block main_extra %} ng-controller="FilterController" ng-init="init({url: '/api/v1/search/', live: true, successFilterCount: 0, single: true, extraParams: {limit: 12, none_to_all: 1, has_relation: 1}})"{% endblock %}
+
+
+{% block sidebar %}
+    <div class="row">
+        <div class="col-sm-10 col-sm-offset-2">
+            <div class="block-sidebar block-search-filter">
+                <ul class="list-item no-bullet -search">
+                    <li class="item">
+                        <a ng-class="{active: !filtersMap.content_type && !filtersMap.organization_roles}" ng-click="clearFilters(['content_type', 'organization_roles']); submit();">{% trans "All Results" %}</a>
+                    </li>
+                    <li class="item">
+                        <a ng-class="{active: filtersMap.organization_roles.permalink == 'organization_roles=startup'}"
+                           ng-init="initFilter('organization_roles', {permalink: 'startup', title: '{% trans "Startup" %}'})"
+                           ng-click="clearFilters(['content_type']); addFilter('organization_roles', 'startup');"
+                        >
+                            {% trans "Startup" %}
+                        </a>
+                    </li>
+                    <li class="item">
+                        <a ng-class="{active: filtersMap.organization_roles.permalink == 'organization_roles=investor'}"
+                           ng-init="initFilter('organization_roles', {permalink: 'investor', title: '{% trans "Investor" %}'})"
+                           ng-click="clearFilters(['content_type']); addFilter('organization_roles', 'investor');"
+                        >
+                            {% trans "Investor" %}
+                        </a>
+                    </li>
+                    <li class="item">
+                        <a ng-class="{active: filtersMap.organization_roles.permalink == 'organization_roles=supporter'}"
+                           ng-init="initFilter('organization_roles', {permalink: 'supporter', title: '{% trans "Supporting Organization" %}'})"
+                           ng-click="clearFilters(['content_type']); addFilter('organization_roles', 'supporter');"
+                        >
+                            {% trans "Supporting Organization" %}
+                        </a>
+                    </li>
+                    <li class="item">
+                        <a ng-class="{active: filtersMap.content_type.permalink == 'content_type=User'}"
+                           ng-init="initFilter('content_type', {permalink: 'User', title: '{% trans "People" %}'})"
+                           ng-click="clearFilters(['organization_roles']); addFilter('content_type', 'User');"
+                        >
+                            {% trans "People" %}
+                        </a>
+                    </li>
+                    <li class="item">
+                        <a ng-class="{active: filtersMap.content_type.permalink == 'content_type=News'}"
+                           ng-init="initFilter('content_type', {permalink: 'News', title: '{% trans "News" %}'})"
+                           ng-click="clearFilters(['organization_roles']); addFilter('content_type', 'News');"
+                        >
+                            {% trans "News" %}
+                        </a>
+                    </li>
+                    <li class="item">
+                        <a ng-class="{active: filtersMap.content_type.permalink == 'content_type=Job'}"
+                           ng-init="initFilter('content_type', {permalink: 'Job', title: '{% trans "Job" %}'})"
+                           ng-click="clearFilters(['organization_roles']); addFilter('content_type', 'Job');"
+                        >
+                            {% trans "Job" %}
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <!-- Block Search result -->
+    <div class="block search-result">
+        <!-- <div ng-show="!is_loading"></div> -->
+        <div class="text-label">{% trans "Search results" %}</div>
+        <h1 class="title" ng-show="preventQ">"{[{ preventQ }]}"</h1>
+        <!-- <div ng-bind-html="no_result_text"></div> -->
+        <div class="found-result">
+            <h2 class="amount" ng-bind="result.meta.total_count + ' {% trans "results" %}'"></h2>
+        </div>
+
+        <ul class="item-list result-list">
+            <!-- item1 mockup -->
+            <li class="item" ng-repeat="party in result.objects">
+                <div class="media">
+                    <div class="media-left">
+                        <div class="thumb-nail -big">
+                            <a ng-href="{[{ party.absolute_url }]}">
+                                <img class="media-oblect" ng-src="{[{ party.get_thumbnail_in_primary }]}" alt="" width="80" height="80" />
+                            </a>
+                        </div>
+                    </div>
+                    <div class="media-body">
+                        <h4 class="title"><a ng-href="{[{ party.absolute_url }]}">{[{ party.get_display_name }]}</a></h4>
+                        <div class="row">
+                            <div class="col-sm-9">
+                                <div class="summary">
+                                    {[{ party.get_summary }]}
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="startup-type">
+                                    {[{ party.get_class_display }]}
+                                </div>
+                            </div>
+                        </div>
+                    </div> 
+                </div>
+            </li>
+
+        </ul>
+
+        <div ng-show="!isLoading && result.meta.total_count == 0" class="text-empty">
+            {% trans "No results" %}
+        </div>
+        <div ng-show="isLoading" class="text-center">
+            <img ng-src="/static/images/loading.gif" class="loading-icon" />
+        </div>
+
+        <pagination ng-if="result.meta.total_count > 12"
+            total-items="result.meta.total_count"
+            ng-model="current.page"
+            max-size="maxSize"
+            items-per-page="params.limit"
+            class="pagination-sm text-center"
+            boundary-links="true"
+            rotate="false"
+            first-text="'«'"
+            previous-text="'‹'"
+            next-text="'›'"
+            last-text="'»'">
+        </pagination>
+
+    </div>
+    <!-- End block Happening -->
+
+{% endblock %}

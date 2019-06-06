@@ -1,0 +1,162 @@
+{% extends 'base_sidebar_left.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}{{ article_category.title }}{% endblock %}
+
+{% block title_class %} hidden {% endblock %}
+{% block search_toggle_class %}{% endblock %}
+{% block search_class %}{% endblock %}
+{% block content_class %} bg-white bg-white-wrapper {% endblock %}
+{% block wrapper_class %} -white -list {% endblock %}
+
+{% block js %}
+{% endblock %}
+
+{% block breadcrumb %}
+{% endblock %}
+
+{% block main_extra %} ng-controller="FilterController" ng-init="init({url: '/api/v1/news/search/', live: false, successFilterCount: 3, single: true, extraParams: {limit: 10, none_to_all: 1, categories__permalink:'{{ article_category.permalink }}'}})"{% endblock %}
+
+
+<!-- Sidebar right-->
+{% block sidebar %}
+<h1 class="page-title hidden-xs">
+    {{ article_category.title }}
+</h1>
+<div class="search-block">
+    <h3 class="title">{% trans "Filters" %}</h3>
+
+    <div class="form-group" role="group">
+        <input type="text" placeholder="{% trans "Keyword" %}" ng-model="params.q" ng-change="addFilter('q', params.q, true)" ng-init="addFilterDelay('q', 'params.q', true)" ng-keydown="controlQ($event, ['tag_set__name'])" class="form-control"/>
+    </div>
+
+    <div class="btn-group dropdown-field -full" role="group" ng-controller="BasicPartyListController" ng-init="init('/api/v1/topic/?level=0', {limit: 100})">
+        <button type="button" class="btn btn-default dropdown-toggle toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span ng-bind="(filtersMap.topics__permalink && filtersMap.topics__permalink.title) || '{% trans "Topic" %}'"></span>
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu list">
+            <li>
+                <a ng-click="removeFilter({permalink: 'topics__permalink', title: '{% trans "All" %}'})">{% trans "All" %}</a>
+            </li>
+            <li ng-repeat="party in party_list">
+                <a ng-init="initFilter('topics__permalink', party)" ng-click="addFilter('topics__permalink', party.permalink);">{[{ party.title }]}</a>
+            </li>
+        </ul>
+    </div>
+
+    <h4 class="title-achieve">
+    {% trans "Older than" %}
+    </h4>
+
+    <div class="filter-achieve">
+        <div class="input-wrapper -year" role="group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span ng-bind="(filtersMap.created__year__lte && filtersMap.created__year__lte.title) || '{% trans "Year" %}'"></span>
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li>
+                    <a ng-click="removeFilter({permalink: 'created__year__lte', title: '{% trans "All" %}'});removeFilter({permalink: 'created__month__lte', title: '{% trans "All" %}'});">{% trans "All" %}</a>
+                </li>
+                {% for year in year_list %}
+                <li>
+                    <a ng-init="initFilter('created__year__lte', {title: '{{ year.title }}', permalink: '{{ year.permalink }}'})" ng-click="addFilter('created__year__lte', {{ year.permalink }});">{{ year.title }}</a>
+                </li>
+                {%  endfor %}
+            </ul>
+        </div>
+
+        <div class="input-wrapper -month" role="group" ng-controller="BasicPartyListController" ng-init="init('/api/v1/topic/?level=0', {limit: 100})">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ng-disabled="!filtersMap.created__year__lte">
+                <span ng-bind="(filtersMap.created__month__lte && filtersMap.created__month__lte.title) || '{% trans "Month" %}'"></span>
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li>
+                    <a ng-click="removeFilter({permalink: 'created__month__lte', title: '{% trans "All" %}'})">{% trans "All" %}</a>
+                </li>
+                {% for month in month_list %}
+                <li>
+                    <a ng-init="initFilter('created__month__lte', {title: '{{ month.title }}', permalink: '{{ month.permalink }}'})" ng-click="addFilter('created__month__lte', {{ month.permalink }})">{{ month.title }}</a>
+                </li>
+                {%  endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <button ng-click="clearFilters(['tag_set__name']);submit();" class="btn btn-primary btn-search">{% trans "Search" %}</button>
+</div>
+
+
+<div ng-show="party_list.length" ng-controller="BasicPartyListController" ng-init="init('/api/v1/news_tag/', { limit: 50, offset: 0, categories: '{{ article_category.permalink }}'})" class="block block-sidebar no-border">
+	<h2 class="block-title">{% trans "Tags" %}</h2>
+
+	<ul class="item-list">
+        <li ng-repeat="party in party_list" class="item m2m-tag topics">
+            <a ng-click="clearFilters(['topics__permalink', 'created__year__lte', 'created__month__lte', 'q']);addFilter('tag_set__name', party.name); submit();" ng-init="initFilter('tag_set__name', {permalink: party.name, title: party.name})" ng-href="#?tag_set__name={[{ party.name }]}">{[{ party.name }]}</a>
+        </li>
+	</ul>
+
+    <a class="loadmore-wrapper" ng-click="load_more()" ng-class="load_more_class()" ng-show="total_count > params.limit">
+        <span ng-hide="is_loading" class="loadmore">{% trans "Load more" %}</span>
+        <img ng-show="is_loading" ng-src="/static/images/loading.gif" class="loading-icon" >
+    </a>
+</div>
+
+{% endblock %}
+
+
+{% block content %}
+
+
+<div class="block block-news">
+
+    <h1 class="page-title hidden-sm hidden-md hidden-lg">{{ article_category.title }}</h1>
+
+    <div class="filter-selected" ng-show="submitFilters.length">
+
+        <div class="filter-label pull-left">
+            {% trans "Selected Filters" %}:
+        </div>
+        <ul class="selected-filter-list list-inline list-unstyled">
+            <li class="selected-filter-item" ng-repeat="filter in submitFilters">
+                {[{ filter.title }]}
+                <a ng-click="removeFilter(filter); submit();">x</a>
+            </li>
+        </ul>
+
+    </div>
+
+    <ul class="news-list{{ list_class }}">
+      <li ng-repeat="party in result.objects" class="item" ng-clock>
+        {{ item_template|safe }}
+      </li>
+    </ul>
+
+    <div class="block-loading">
+        <div ng-show="!isLoading && result.objects.length == 0" class="text-empty">{% trans "No result" %}</div>
+        <div class="loading-wrapper" ng-show="isLoading">
+            <img  ng-src="/static/images/loading.gif" class="loading-icon" />
+        </div>
+    </div>
+
+
+    <pagination ng-if="result.meta.total_count > limit"
+        total-items="result.meta.total_count"
+        ng-model="current.page"
+        max-size="maxSize"
+        items-per-page="limit"
+        class="pagination-sm text-center"
+        boundary-links="true"
+        rotate="false"
+        first-text="'«'"
+        previous-text="'‹'"
+        next-text="'›'"
+        last-text="'»'">
+    </pagination>
+
+</div>
+
+{% endblock %}

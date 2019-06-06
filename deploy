@@ -1,0 +1,3 @@
+#!/bin/sh
+./pull
+./restart

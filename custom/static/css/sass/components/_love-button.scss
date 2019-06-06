@@ -1,0 +1,214 @@
+/* -------------------------------- *\
+    Love Button
+
+    Component: love-action
+    Elements:
+    * love
+    * text-action (lovecount)
+    variants
+    * -fullwidth
+
+    Component: table-heading
+    Elements:
+
+    Component: table-content
+    Elements:
+    - 
+\* -------------------------------- */
+
+/* -------------------------------------- *\
+         Hover panel (love-action)
+\* -------------------------------------- */
+
+.love-action .love {
+  &:hover, 
+  &:focus, 
+  &.active {
+    text-decoration: none;
+    color: $color-loved;
+  }
+}
+
+.love-action {
+  width: 47%;
+  display: inline-block;
+  .icon-heart {font-size: 17px;}
+}
+
+.love-action {
+  &.-fullwidth {
+    width: 100%;
+    padding: 10px 15px;
+    border-top: 1px solid #E7E7E7;
+  }
+}
+
+
+
+
+
+/* -------------------------------------- *\
+         Hover panel (follow-action)
+\* -------------------------------------- */
+
+.follow-action .ico-follow {
+    &:hover, 
+    &:focus, 
+    &.active {
+      text-decoration: none;
+      color: $main-color;
+    }
+    .icon-users-follow {
+        font-size: 18px;
+    }
+}
+
+
+
+
+/* -------------------------------------- *\
+     Activities Button (Love, Follow)
+\* -------------------------------------- */
+
+.btn-activity {
+    width: auto;
+    height: auto;
+    display: inline-block;
+    background-color: transparent;
+    color: #979797;
+    &:hover, &:hover .ico-action, &:focus {
+        color: $main-color;
+        text-decoration: none;
+        width: auto;
+        height: auto;
+    }
+    .icostartup {
+        height: 33px;
+    }
+}
+
+.ico-action {
+    display: block;
+    font-size: 30px;
+    color: #555;
+    margin: 0 auto;
+    height: 30px;
+    @include box-sizing(border-box);
+}
+
+@media (max-width: $screen-xs-max) {
+    .ico-follow-wrapper .icon-user2 { margin-left: 0;}
+}
+
+.ico-follow { text-align: center;}
+.following {
+    color: $main-color;
+    .ico-action { color: $main-color;}
+}
+
+.hover-action {
+    .ico-follow-wrapper {
+        height: auto;
+        .ico-action { font-size: 14px;}
+    }
+}
+
+
+
+
+/* -------------------------------------- *\
+     Activities Button (Love)
+\* -------------------------------------- */
+
+.ico-love {
+    width: 42px;
+    text-align: center;
+    &:hover, &:active, &:focus {
+        color: $color-loved;
+    }
+    .text-action {
+        display: inline-block;
+        width: 42px;
+    }
+}
+
+.loved {
+    color: $main-color;
+    .icon-heart, .text-action { color: $color-loved;}
+    .icon-heart:before {
+        content: '\e90d';
+    }
+}
+
+.action-panel {
+    .icostartup {
+        display: block;
+        text-align: center;
+        font-size: 30px;
+        margin: 0 auto;
+    }
+}
+
+
+
+
+
+/* -------------------------------------- *\
+     Activities Button (Follow)
+\* -------------------------------------- */
+
+.icon-users-follow:before {
+    content: '\e901';
+}
+
+
+
+
+
+
+/* -------------------------------------- *\
+     Activities Button (Contact)
+\* -------------------------------------- */
+
+.btn-activity {
+    .icon-contact {
+        font-size: 23px;
+        width: 40px;
+    }
+    .icon-contact:before {
+        position: relative;
+        top: 6px;
+    }
+}
+
+
+
+
+
+/* -------------------------------------- *\
+     Activities Button on table
+\* -------------------------------------- */
+
+.table-content {
+    .action-panel {
+
+    }
+}
+
+.action-panel.-oneline {
+    .love-action  {
+        position: relative;
+        padding-left: 25px;
+        display: inline-block;
+        float: right;
+        text-align: right;
+    }
+    .love-action .love {
+        position: absolute;
+        left: 0;
+        top: 2px;
+    }
+    .love-action .icostartup {
+        font-size: 17px;
+    }
+}

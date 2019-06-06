@@ -1,0 +1,13 @@
+#!/bin/sh
+
+#dropdb asip
+#createdb asip
+python manage.py syncdb
+python manage.py migrate organization 0001 --fake
+python manage.py migrate organization
+#./loaddata
+python manage.py makesample
+python manage.py thumbnail clear
+rm -r media/cache
+python manage.py rebuild_index
+#rsync -avz asip:/web/asip/source/asip/media/ media

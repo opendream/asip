@@ -1,0 +1,10 @@
+{% load thumbnail files_widget_tags %}{% load common_tags %}{% spaceless %}
+{% captureas url %}{% thumbnail path_to_file|unquote preview_size|add:'x'|add:preview_size upscale=False format=path_to_file|thumbnail_format as thumb %}{{ thumb.url }}{% endthumbnail %}{% endcaptureas %}
+{% if url %}
+    {{ url }}
+{% else %}
+{% thumbnail path_to_file|unquote preview_size|add:'x'|add:preview_size upscale=False format='JPEG' as thumb %}
+    {{ thumb.url }}
+{% endthumbnail %}
+{% endif %}
+{% endspaceless %}

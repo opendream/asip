@@ -1,0 +1,91 @@
+{% extends 'base_sidebar.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}
+{% endblock %}
+
+{% block title_class %} hidden{% endblock %}
+
+{% block content_class %} bg-white bg-white-wrapper{% endblock %}
+
+{% block breadcrumb %}
+{% endblock %}
+
+{% block js %}
+
+<script type="text/javascript">
+		var news_id = {{ news_id }};
+		var article_category = '{{ article_category }}';
+</script>
+{% endblock %}
+{% block main_extra %} ng-controller="NewsDetailController"{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<a ng-if="news.can_edit" ng-href="/article/{[{ news_id }]}/edit/" class="btn btn-default btn-xs pull-right ico-edit">
+	<span class="glyphicon glyphicon-edit"></span> Edit
+</a>
+{% endif %}
+
+<div class="article-wrapper block-detail-{{ article_category }}">
+	<div class="content-type">{{ article_category_name }}</div>
+	<h1 class="page-title" ng-clock ng-bind-html="(news.title || '')"></h1>
+	<div class="date" ng-clock><span>Create date : </span>{[{ news.created | dateFormText:'MMMM d, yyyy' }]}</div>
+	<div class="content">
+		<div class="feature-image"><img ng-src="{[{ news.get_thumbnail }]}" /></div>
+		<p ng-bind-html="(news.description || '') | sanitize">
+		</p>
+	</div>
+
+    <div ng-if="news.get_files.length" class="file-attachment">
+        <strong>File attachment:</strong>
+        <ul class="file-list item-list">
+            <li class="file-item" ng-repeat="file in news.get_files">
+                <a class="glyphicon glyphicon-download-alt" ng-href="{[{ file }]}" target="_blank" ng-bind="file.split('/').pop()">
+                </a>
+            </li>
+        </ul>
+    </div>
+
+
+	<div class="tag-group">
+	    <ul class="tag-list item-list">
+	        <li class="tag" ng-repeat="topic in news.topics">
+	        	<span class="tag-item">
+	        		<span class="tag-wrapper">{[{ topic.title }]}</span>
+	        	</span>
+	        </li>
+	    </ul>
+	</div>
+	<div class="block block-share">
+		<h2 class="block-title">Share this:</h2>
+		<a class="share-btn share-fb" href="#" facebook-share name="{[{ news.title }]}" picture="{[{ news.get_thumbnail }]}" description="{[{ news.get_summary }]}" ><span class="icon icon-facebook"></span>Facebook</a>
+    <a class="share-btn share-tw" twitter-share href="http://twitter.com/share" ><span class="icon icon-twitter"></span>Twitter</a>
+	</div>
+</div>
+<!-- End block Happening -->
+
+{% endblock %}
+
+<!-- Sidebar right-->
+{% block sidebar %}
+
+<!-- Block News side bar -->
+<!-- Block News side bar -->
+<div  ng-controller="BasicPartyListController" ng-init="init('/api/v1/news', { limit: 4, article_category: article_category })" class="block block-sidebar block-news-other no-border" ng-show="current_page_party_list.length > 0">
+    <h2 class="block-title">More {{ article_category_name }}</h2>
+    <img ng-show="is_loading" ng-src="/static/images/loading.gif" class="loading-icon" >
+
+    <div ng-show="!is_loading" ng-if="(current_page_party_list | filter: { id : '!'+news_id}) == 0">No {{ article_category_name }}.</div>
+
+    <ul class="item-list">
+        <li ng-repeat="party in current_page_party_list | notMatch:news_id:'id'" class="item" ng-clock>
+            <div ng-include="'template_party_news_sidebar.html'"></div>
+        </li>
+    </ul>
+    <a ng-if="article_category != 'news' " class="findmore" href="/article/{[{ article_category }]}" ng-class="should_show_list_class()" ng-show="(current_page_party_list | filter: { id : '!'+news_id}).length > 0">View more</a>
+    <a ng-if="article_category == 'news' " class="findmore" href="{% url 'news_list' %}" ng-class="should_show_list_class()" ng-show="(current_page_party_list | filter: { id : '!'+news_id}).length > 0">View more</a>
+</div><!-- Block News side bar -->
+
+{% endblock %}

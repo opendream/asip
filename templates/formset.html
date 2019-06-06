@@ -1,0 +1,46 @@
+{% load i18n %}
+<div class="controls form-group">
+    {% if field_formset_title %}
+    <label for="id_{{ field_formset_id }}" class="field-container control-label">{{ field_formset_title }}</label>
+    {% endif %}
+    <div class="field-container">
+        {{ field_formset.management_form }}
+        {{ field_formset.id_for_label }}
+        <ol id="id_{{ field_formset_id }}">
+            {% for field_form in field_formset %}
+            <li class="form-group">
+                <div class="input-text">
+                    {% for field in field_form %}
+
+
+                    {% if field.name == 'DELETE' %}
+                    {% if 'hidden' != field.field.widget.attrs.class %}
+                    <div class="input-delete">
+                        {{ field }}<label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    </div>
+                    {% endif %}
+
+
+                    {% else %}
+
+                    <div class="input-wrapper">
+                        <label class="sr-only" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.errors %}
+                        <div class="errors alert alert-danger">{{ field.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    {% endif %}
+
+                    {% endfor %}
+                </div>
+            </li>
+            {% endfor %}
+        </ol>
+        {% if not fixed %}
+        <span class="glyphicon glyphicon-plus icostartup icon-plus"></span><input type="button" value="{% trans "Add more" %}" id="id_{{ field_formset_id }}_add_more" class="add_more btn" />
+        {% endif %}
+
+    </div>
+</div>

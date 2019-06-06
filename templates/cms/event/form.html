@@ -1,0 +1,337 @@
+{% extends 'base_single.html' %}
+{% load i18n %}
+{% load staticfiles %}
+
+{% block title %}
+{% if form.is_new %}{% trans "Create" %} {%  trans "Event" %}{% else %}{% trans "Edit" %} {{ form.inst.title }}{% endif %}
+{% if not form.is_new and not request_popup%}
+<a href="{{ form.inst.get_absolute_url }}" class="btn btn-default btn-xs btn-view">
+    <span class="glyphicon glyphicon-eye-open"></span> {% trans "View result" %}
+</a>
+{% endif %}
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript" src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
+{% endblock %}
+{% block css %}
+
+{% endblock %}
+
+{% block content_class %} content-smart{% endblock %}
+
+
+{% block breadcrumb %}
+<li class="active">{% trans "Add Event" %}</li>
+{% endblock %}
+
+
+{% block content %}
+
+<form method="post" class="form-horizontal" role="form" enctype="multipart/form-data" ng-non-bindable>
+    {% csrf_token %}
+
+    {% if form.non_field_errors %}
+    <div class="errors alert alert-danger">{{ form.non_field_errors }}</div>
+    {% endif %}
+
+
+    <div class="controls form-group">
+        <label for="id_title" class="field-container control-label col-sm-3">{% trans "Title" %} *</label>
+        <div class="field-container col-sm-7">
+            <span id="generate-permalink">
+                {{ form.title}}
+            </span>
+{#            <span class="help-block">#}
+{#            {{ form.title.help_text }}#}
+{#            </span>#}
+            {% if form.title.errors %}
+            <div class="errors alert alert-danger">{{ form.title.errors }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="controls form-group permalink-inline">
+        <div class="field-container control-label col-sm-3">
+            <label for="id_permalink" class="control-label">{% trans "Permalink" %} <span class="label-required-ico">*</span></label>
+        </div>
+        <div class="field-container col-sm-7">
+
+            <span id="id_permalink_readonly" class="form-control">{{ form.permalink.value|default_if_none:'' }}</span>
+            <a id="edit-permalink" href="#id_permalink">{% trans "edit" %}</a>
+
+            <input id="id_permalink" name="permalink" type="text" class="form-control" value="{{ form.permalink.value|default_if_none:'' }}">
+            <span class="help-block">
+                {% blocktrans with inst_type='event' %}This field represent your {{ inst_type }} url in this website.{% endblocktrans %}<br />
+                {{ form.permalink.help_text }}
+            </span>
+            {% if form.permalink.errors %}
+            <div class="errors alert alert-danger">{{ form.permalink.errors }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+
+    <div class="controls form-group">
+        <label for="id_image" class="field-container control-label col-sm-3">{% trans "Image" %}</label>
+        <div class="field-container col-sm-7">
+            {{ form.image }}
+            <span class="help-block">
+            {{ form.image.help_text }}
+            </span>
+            {% if form.image.errors %}
+            <div class="errors alert alert-danger">{{ form.image.errors }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="controls form-group">
+        <label for="id_location" class="field-container control-label col-sm-3">{% trans "Location" %} </label>
+        <div class="field-container col-sm-7">
+            {{ form.location }}
+                <span class="help-block">
+                    {{ form.location.help_text }}
+                </span>
+            {% if form.location.errors %}
+            <div class="errors alert alert-danger">{{ form.location.errors }}</div>
+            {% endif %}
+        </div>
+    </div>
+    <div class="controls form-group">
+        <label for="id_start_date" class="field-container control-label col-sm-3">{% trans "Start date" %} *</label>
+        <div class="field-container col-sm-7">
+            {{ form.start_date }}
+            <span class="help-block">
+            {{ form.start_date.help_text }}
+            </span>
+            {% if form.start_date.errors %}
+            <div class="errors alert alert-danger">{{ form.start_date.errors }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="controls form-group">
+        <label for="id_end_date" class="field-container control-label col-sm-3">{% trans "End date" %} </label>
+        <div class="field-container col-sm-7">
+            {{ form.end_date }}
+            <span class="help-block">
+            {{ form.end_date.help_text }}
+            </span>
+            {% if form.end_date.errors %}
+            <br />
+            <div class="errors alert alert-danger">{{ form.end_date.errors }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="controls form-group">
+        <label for="id_time" class="field-container control-label col-sm-3">{% trans "Time" %} </label>
+        <div class="field-container col-sm-7">
+            {{ form.time}}
+            <span class="help-block">
+            {{ form.time.help_text }}
+            </span>
+            {% if form.time.errors %}
+            <div class="errors alert alert-danger">{{ form.time.errors }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!--  Todo relation later
+        <div class="controls form-group">
+            <label for="id_organization" class="field-container control-label">{% trans "Organization" %}</label>
+            {{ form.organization }}
+            {% if form.organization.errors %}
+            <div class="errors alert alert-danger">{{ form.organization.errors }}</div>
+            {% endif %}
+        </div>
+    -->
+
+    <div class="controls form-group">
+        <label for="id_summary" class="field-container control-label col-sm-3">{% trans "Summary" %} </label>
+        <div class="field-container col-sm-7">
+            {{ form.summary }}
+            <span class="help-block">
+                {% blocktrans with maxlength=form.summary.field.widget.attrs.maxlength %}Short detail in {{ maxlength }} characters{% endblocktrans %}
+            </span>
+            {% if form.summary.errors %}
+            <div class="errors alert alert-danger">{{ form.summary.errors }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="controls form-group">
+        <label for="id_description" class="field-container control-label col-sm-3">{% trans "Content" %} </label>
+        <div class="field-container col-sm-7">
+            {{ form.description }}
+            <span class="help-block">
+            {{ form.description.help_text }}
+            </span>
+            {% if form.description.errors %}
+            <div class="errors alert alert-danger">{{ form.description.errors }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="controls form-group">
+        <label for="id_topics" class="field-container control-label col-sm-3">{% trans "Topic" %} *</label>
+        <div class="checkbox col-sm-7">
+            <ul>
+                {% for topic in form.topics %}
+                <li>
+                    <span class="choice-item">
+                        {{ topic.tag }}
+                        <label for="id_topics_{{ topic.index }}">{{ topic.choice_label }}</label>
+                    </span>
+                </li>
+                {% endfor %}
+            </ul>
+
+            {% if form.topics.errors %}
+            <div class="errors alert alert-danger">{{ form.topics.errors }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="controls form-group">
+        <label for="id_tags" class="col-sm-3 control-label">{% trans "Tags" %}</label>
+        <div class="col-sm-7">
+            {{ form.tags }}
+            <span class="help-block">
+            {{ form.tags.help_text }}
+            </span>
+            {% if form.tags.errors %}
+            <div class="errors alert alert-danger">{{ form.tags.errors }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="controls form-group">
+
+        <label for="id_in_the_news" class="col-sm-3 control-label">{% trans "Add organizations/people in the event" %}</label>
+        <div class="col-sm-7">
+            {{ form.in_the_news }}
+            <span class="help-block">
+                {% trans "Enter organizations/people name to display on your event." %}
+            </span>
+
+            {% if form.in_the_news.errors %}
+            <div class="errors alert alert-danger">{{ form.in_the_news.errors }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="controls form-group">
+        <br /><br />
+        <h3 class="col-sm-3 control-label">{% trans "Contact of Event’s Organizer" %}</h3>
+        <hr class="col-sm-7 hidden-xs" />
+        <br /><br class="hidden-xs"/>
+    </div>
+
+    <div class="controls form-group">
+        <label for="id_phone" class="field-container control-label col-sm-3">{% trans "Phone number" %} </label>
+        <div class="field-container col-sm-7">
+            {{ form.phone}}
+            <span class="help-block">
+            {{ form.phone.help_text }}
+            </span>
+            {% if form.phone.errors %}
+            <div class="errors alert alert-danger">{{ form.phone.errors }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="controls form-group">
+        <label for="id_email" class="col-sm-3 control-label">{% trans "Email" %} </label>
+        <div class="col-sm-7">
+            <input id="id_email" name="email" type="email" class="form-control" value="{{ form.email.value|default_if_none:'' }}" >
+            <span class="help-block">
+            {{ form.email.help_text }}
+            </span>
+            {% if form.email.errors %}
+            <div class="errors alert alert-danger">{{ form.email.errors }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+
+    <div class="controls form-group">
+        <label for="id_facebook_url" class="col-sm-3 control-label">{% trans "Facebook URL" %}</label>
+        <div class="col-sm-7">
+            <input id="id_facebook_url" name="facebook_url" type="text" class="form-control" value="{{ form.facebook_url.value|default_if_none:'' }}">
+            <span class="help-block">
+            {{ form.facebook_url.help_text }}
+            </span>
+            {% if form.facebook_url.errors %}
+            <div class="errors alert alert-danger">{{ form.facebook_url.errors }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="controls form-group">
+        <label for="id_twitter_url" class="col-sm-3 control-label">{% trans "Twitter URL" %}</label>
+        <div class="col-sm-7">
+            <input id="id_twitter_url" name="twitter_url" type="text" class="form-control" value="{{ form.twitter_url.value|default_if_none:'' }}">
+            <span class="help-block">
+            {{ form.twitter_url.help_text }}
+            </span>
+            {% if form.twitter_url.errors %}
+            <div class="errors alert alert-danger">{{ form.twitter_url.errors }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="controls form-group">
+        <label for="id_homepage_url" class="col-sm-3 control-label">{% trans "Homepage URL" %}</label>
+        <div class="col-sm-7">
+            <input id="id_homepage_url" name="homepage_url" type="text" class="form-control" value="{{ form.homepage_url.value|default_if_none:'' }}">
+            <span class="help-block">
+            {{ form.homepage_url.help_text }}
+            </span>
+            {% if form.homepage_url.errors %}
+            <div class="errors alert alert-danger">{{ form.homepage_url.errors }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if is_staff or form.inst.is_promoted %}
+    <div class="controls form-group">
+
+        <label class="col-sm-3 control-label">{% trans "Promote?" %}</label>
+        <div class="col-sm-7">
+            <span class="choice-item">
+                {{ form.is_promoted }}
+                <label for="id_is_promoted">{% trans "Promote to Front Page" %}</label>
+            </span>
+            {% if form.is_promoted.errors %}
+            <div class="errors alert alert-danger">{{ form.is_promoted.errors }}</div>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+
+
+    <div class="controls form-group group-action">
+
+        <div class="col-sm-offset-3 col-sm-7 form-action">
+            <button class="btn btn-primary btn-orange{% if form.is_new %} btn-submit{% endif %}" type="submit">{% if form.is_new %}{% trans "Create" %}{% else %}{% trans "Save changes" %}{% endif %}</button>
+            <a href="." target="_self" class="btn btn-default btn-cancel">{% trans "Cancel" %}</a>
+        </div>
+
+        {% if not form.is_new and logged_in_party.id == user.id %}
+        <a class="btn btn-md btn-delete" href="{% url 'presentation_delete' 'cms' 'News' form.inst.id %}">
+            <span class="glyphicon glyphicon-remove icostartup icon-delete"></span>
+            {% trans "Delete" %}
+        </a>
+        {% endif %}
+
+    </div>
+
+</form>
+
+<input type="hidden" name="control_permalink" value="1"/>
+<input type="hidden" name="prevent_scroll_reload" value="1"/>
+<input type="hidden" name="is_new" value="{% if form.is_new %}1{% else %}0{% endif %}"/>
+
+
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends 'base_single.html' %}
+{% load i18n %}
+{% load staticfiles %}
+
+{% block css %}
+
+{% endblock %}
+
+{% block title %}{% trans "Please log in" %}{% endblock %}
+
+{% block content_class %} content-thin -content-form-small {% endblock %}
+
+{% block breadcrumb %}
+{% endblock %}
+
+{% block content %}
+{% include 'account/login_inline.html' %}
+{% endblock %}

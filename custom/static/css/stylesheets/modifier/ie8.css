@@ -1,0 +1,38 @@
+/* line 1, ../../sass/modifier/ie8.scss */
+body {
+  background-color: #f5f5f5;
+}
+
+/* line 3, ../../sass/modifier/ie8.scss */
+.xs-navbar {
+  display: none;
+}
+
+/* line 4, ../../sass/modifier/ie8.scss */
+.visible-xs-* {
+  display: none;
+}
+
+/* line 5, ../../sass/modifier/ie8.scss */
+.hidden-ie8 {
+  display: none;
+}
+
+/* line 7, ../../sass/modifier/ie8.scss */
+.container {
+  width: 960px;
+  margin: 0 auto;
+}
+
+/* line 12, ../../sass/modifier/ie8.scss */
+.nav > li {
+  display: inline-block;
+}
+
+/* line 16, ../../sass/modifier/ie8.scss */
+.footer .country-list li {
+  width: 120px;
+  float: left;
+}
+
+/*# sourceMappingURL=ie8.css.map */

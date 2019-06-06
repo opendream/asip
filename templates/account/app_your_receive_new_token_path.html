@@ -1,0 +1,40 @@
+{% extends 'base_single.html' %}
+{% load i18n %}
+{% load static %}
+{% load humanize %}
+{% load common_tags %}
+
+{% block title %}How to Handle Your Token{% endblock %}
+
+{% block image %}{% endblock %}
+
+{% block content_class %} content-normal{% endblock %}
+
+{% block breadcrumb %}
+    <a href="{% url 'account_app' %}" class="link-breadcrumb">
+        My Apps
+    </a>
+{% endblock %}
+
+
+{% block content %}
+
+<h3>Your Token</h3>
+<pre>
+{{ token }}
+</pre>
+
+<h3>Example Handle with Javascript (Client Side)</h3>
+
+{% captureas connect_handle_js %}{% include 'account/app_handle_js.html' %}{% endcaptureas %}
+{{ connect_handle_js }}
+<pre>
+{{ connect_handle_js|html_decode }}
+</pre>
+
+<h3>Example Handle with PHP (Server Side)</h3>
+<pre>
+// Coming soon
+</pre>
+
+{% endblock %}

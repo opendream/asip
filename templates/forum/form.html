@@ -1,0 +1,32 @@
+{% extends 'base_single.html' %}
+{% load i18n %}
+{% load staticfiles %}
+
+{% block js %}
+<script type="text/javascript" src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
+{% endblock %}
+
+{% block title %}
+{% if not instance.id %}{% trans "Create" %} {{ instance.get_inst_type_human_readable  }}{% else %}{% trans "Edit" %} {{ instance.name }}{% endif %}
+{% endblock %}
+
+
+{% block breadcrumb %}
+{% if parent %}
+    {% for parent in parent.get_nested_all %}
+    <a href="{{ parent.get_absolute_url }}" title="{{ parent.title }}">
+        {{ parent.title }}
+    </a>
+
+    {% if not forloop.last %}
+    &nbsp; » &nbsp;
+    {% endif %}
+
+    {% endfor %}
+{% endif %}
+{% endblock %}
+
+
+{% block content %}
+{% include 'forum/_form.html' %}
+{% endblock %}

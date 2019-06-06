@@ -1,0 +1,35 @@
+{% extends 'base_single.html' %}
+{% load i18n %}
+{% load static %}
+{% load humanize %}
+{% load common_tags %}
+
+{% block title %}
+App: {{ instance.name }}
+<a href="{% url 'account_app_edit' instance.app_id %}" class="btn btn-default btn-xs pull-right ico-edit">
+    <span class="glyphicon glyphicon-edit"></span> Edit
+</a>
+{% endblock %}
+
+{% block image %}{% endblock %}
+
+
+{% block breadcrumb %}
+    <a href="{% url 'account_app' %}" class="link-breadcrumb">
+        My Apps
+    </a>
+{% endblock %}
+
+{% block content_class %} content-normal{% endblock %}
+
+{% block content %}
+
+{% captureas connect_button %}{% include 'account/app_button.html' %}{% endcaptureas %}
+
+{{ connect_button }}
+<br /><br />
+<pre>
+{{ connect_button|html_decode }}
+</pre>
+
+{% endblock %}

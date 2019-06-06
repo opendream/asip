@@ -1,0 +1,21 @@
+<div class="controls form-group field-name-{{ field.name }}{% if 'data' in field.name %} field-type-date{% endif %}">
+
+    <label class="field-container control-label" for="id_{{ field.name }}">
+        {{ field.label }}
+    </label>
+    <div class="field-container">
+
+        {{ field }}
+
+        {% if field.help  %}
+        <span class="help-block">{{ field.help }}</span>
+        {% endif %}
+
+        {% if field.errors %}
+        <div class="errors alert alert-danger">
+        {{ field.errors }}
+        </div>
+        {% endif %}
+
+    </div>
+</div>

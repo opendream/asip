@@ -1,0 +1,235 @@
+.files-widget {
+	display: block;
+}
+
+.files-widget-dropbox {
+	width: 100%;
+	margin: 0;
+	border: 1px dashed #cccccc;
+}
+
+.files-widget-dropbox.dragging-files {
+	background: rgba(0, 0, 0, .05);
+	border: 1px dashed rgba(0, 0, 0, .2);
+}
+
+.files-widget-dropbox.dragging-files.dragover {
+	background: rgba(0, 0, 0, .1);
+	border: 1px dashed rgba(0, 0, 0, .4);
+}
+
+.files-widget-dropbox .message {
+	display: block;
+	color: #a0a2a4;
+	margin: 30px;
+	text-align: center;
+	font-weight: bold;
+}
+
+.files-widget-dropbox .preview, .files-widget-dropbox .sortable-placeholder {
+	padding: 5px;
+	display: inline-block;
+	vertical-align: middle;
+	position: relative;
+	text-align: center;
+}
+
+.files-widget-dropbox .sortable-placeholder {
+	background: rgba(0, 0, 0, .1);
+}
+
+.files-widget .image-holder {
+	display: inline-block;
+	position: relative;
+	border: 3px solid white;
+	box-shadow: 0 1px 4px rgba(0, 0, 0, .8);
+	border-radius: 3px;
+	background: white;
+	text-align: center;
+}
+
+.files-widget-dropbox .image-holder {
+	min-height: 50px;
+	min-width: 50px;
+	line-height: 50px;
+}
+
+.files-widget-dropbox .preview .thumbnail {
+	vertical-align: middle;
+    background: url(/static/files_widget/img/transparent-bg.gif) left top;
+}
+
+.files-widget-dropbox .preview.new .thumbnail {
+	opacity: .5;
+}
+
+.files-widget-dropbox .buttons {
+	position: absolute;
+	top: -10px;
+	right: -10px;
+	opacity: 0;
+	white-space: nowrap;
+	display: block;
+}
+
+.files-widget-dropbox .buttons img {
+	vertical-align: top;
+}
+
+.files-widget-dropbox .preview:hover .buttons {
+	opacity: 1;
+}
+
+.files-widget-dropbox .preview.ui-sortable-helper .buttons,
+		.files-widget-dropbox .preview.new .buttons {
+	display: none;
+}
+
+.files-widget-dropbox .preview:hover .buttons a {
+	margin: -2px;
+}
+
+.files-widget-dropbox .uploaded {
+	position: absolute;
+	top:0;
+	left:0;
+	height:100%;
+	width:100%;
+	background: url('../img/done.png') no-repeat center center rgba(255,255,255,0.5);
+	display: none;
+}
+
+.files-widget-dropbox .preview.done .uploaded {
+	display: block;
+}
+
+.files-widget-dropbox .filename {
+	display: block;
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 20px;
+	overflow: hidden;
+}
+
+.files-widget-dropbox .progress-holder {
+	position: absolute;
+	background-color: #252f38;
+	height: 10px;
+	right: 8px;
+	left: 8px;
+	bottom: 8px;
+	box-shadow: 0 0 2px #000;
+}
+
+.files-widget-dropbox .progress {
+	background-color: #2586d0;
+	position: absolute;
+	height: 100%;
+	left: 0;
+	width: 0;
+	box-shadow: 0 0 1px rgba(255, 255, 255, 0.4) inset;
+	-moz-transition: 0.25s;
+	-webkit-transition: 0.25s;
+	-o-transition: 0.25s;
+	transition: 0.25s;
+}
+
+.files-widget-dropbox .preview.done .progress {
+	width:100% !important;
+}
+
+.files-widget .controls {
+	padding: 8px 0 0;
+	text-align: left;
+}
+
+.files-widget .controls .fake-files-input {
+	margin-left: 2px;
+	position: relative;
+	display: inline;
+	overflow: hidden;
+}
+
+.files-widget .controls .files-input {
+	padding: 4px;
+	opacity: .0001;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	cursor: pointer;
+}
+
+.files-widget .controls input[type=text].add-by-url {
+	width: 300px;
+}
+
+.files-widget .controls .upload-progress-stats {
+	float: right;
+	display: block;
+	padding-top: 5px;
+	color: #888;
+}
+
+.files-widget-deleted {
+	
+}
+
+.files-widget-deleted p {
+	color: #bf3030;
+	border-bottom: 1px solid #e0e0e0;
+	padding: 0 1px !important;
+	margin-top: 10px;
+	margin-left: 0 !important;
+}
+
+.files-widget-deleted .deleted-list {
+	border-top: 1px solid white;
+	padding-top: 5px;
+}
+
+.files-widget-deleted .deleted-file {
+	height: 38px;
+	line-height: 38px;
+	margin-bottom: 5px;
+}
+
+.files-widget-deleted .deleted-file > span {
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.files-widget-deleted .deleted-file .image-holder {
+	min-height: 32px;
+	min-width: 32px;
+	line-height: 32px;
+	margin: 0 5px 0 3px;
+}
+
+.files-widget-deleted .deleted-file .icon {
+	max-height: 32px;
+	max-width: 32px;
+	vertical-align: middle;
+}
+
+.files-widget-deleted .deleted-file .name {
+	white-space: nowrap;
+	text-decoration: line-through;
+	margin: 0 10px;
+}
+
+.files-widget-deleted .deleted-file .undo {
+	font-weight: bold;
+}
+
+.files-widget .thumbnail.no-img {
+	width: 48px;
+	height: 48px;
+	background: none;
+	background-color: #eee !important;
+	display: table-cell;
+	font-weight: bold;
+	font-size: 40px;
+
+}

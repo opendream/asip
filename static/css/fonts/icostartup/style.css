@@ -1,0 +1,105 @@
+@font-face {
+    font-family: 'icostartup';
+    src:    url('fonts/icostartup.eot?oeutx');
+    src:    url('fonts/icostartup.eot?oeutx#iefix') format('embedded-opentype'),
+        url('fonts/icostartup.ttf?oeutx') format('truetype'),
+        url('fonts/icostartup.woff?oeutx') format('woff'),
+        url('fonts/icostartup.svg?oeutx#icostartup') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.icofont {
+    /* use !important to prevent issues with browser extensions that change fonts */
+    font-family: 'icostartup' !important;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-plus:before {
+    content: "\e114";
+}
+.icon-invest:before {
+    content: "\e90f";
+}
+.icon-bell:before {
+    content: "\e90e";
+}
+.icon-feed:before {
+    content: "\e91a";
+}
+.icon-admin:before {
+    content: "\e919";
+}
+.icon-news:before {
+    content: "\e900";
+}
+.icon-sm-following:before {
+    content: "\e901";
+}
+.icon-right:before {
+    content: "\e902";
+}
+.icon-left:before {
+    content: "\e903";
+}
+.icon-upload:before {
+    content: "\e904";
+}
+.icon-search:before {
+    content: "\e905";
+}
+.icon-x:before {
+    content: "\e906";
+}
+.icon-sm-love-fill:before {
+    content: "\e907";
+}
+.icon-reply:before {
+    content: "\e908";
+}
+.icon-close:before {
+    content: "\e909";
+}
+.icon-info:before {
+    content: "\e90a";
+}
+.icon-think:before {
+    content: "\e90b";
+}
+.icon-delete:before {
+    content: "\e90c";
+}
+.icon-love-fill:before {
+    content: "\e90d";
+}
+.icon-sm-love:before {
+    content: "\e912";
+}
+.icon-following:before {
+    content: "\e913";
+}
+.icon-message:before {
+    content: "\e914";
+}
+.icon-job:before {
+    content: "\e915";
+}
+.icon-follow:before {
+    content: "\e916";
+}
+.icon-love:before {
+    content: "\e917";
+}
+.icon-contact:before {
+    content: "\e918";
+}
+

@@ -1,0 +1,13 @@
+<script type="text/javascript" src="{{ BASE_URL }}{% url 'account_connect_js' %}"></script>
+<script type="text/javascript">
+
+    var params = query2json(window.location.search)
+    NewConnect({
+        token: params.new_token,
+        onconnect: function (data) {
+            // Your implementation
+            // Please, see result in javascript console
+            console.log('User Data', data);
+        }
+    });
+</script>

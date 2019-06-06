@@ -1,0 +1,202 @@
+/* Take Action Module */
+.ico-follow-wrapper .ico-action.icon-users-follow {
+    font-size: 18px;
+    line-height: 14px;
+}
+
+.follow-section {
+    padding: 10px 0;
+    overflow: hidden;
+    margin-top: 10px;
+    border-top: 1px solid #ccc;
+    .text-action { font-size: 13px; line-height: 27px;}
+}
+
+.feature-item {
+    .follow-section {
+        padding: 20px 25px;
+    }
+    .follow-section .text-action { font-size: 15px;}
+}
+@media (max-width: 480px) {
+    .follow-section { padding: 10px 25px;}
+}
+
+.hover-action .item {
+    .title {
+        font-weight: 100;
+        margin-top: 10px;
+    }
+}
+
+// Hover takeaction
+@media (min-width: 769px) {
+    .action-panel.is-me {height: 0;}
+    .hover-action .party-item {
+        &:hover, &:focus, &.active, &:active {
+            .body-overflow-auto {
+                border-color: #ccc;
+            }
+        }   
+    }
+    .party-item .body-overflow-auto {
+        height: auto;
+        overflow-y: auto;
+    }
+    .hover-action .item-list .party-item {
+        margin-bottom: 10px;
+        padding-bottom: 0;
+    }
+    .hover-action {
+        .follow-section {
+            opacity: 0;
+            visibility: none;
+            @include transition(opacity 0.7s ease);
+            left: 10px;
+            right: 10px;
+            z-index: 2;
+            overflow: hidden;
+
+        }
+        .love { float: left;}
+        .follow { float: right;}
+    }
+    .block-col-3.hover-action {
+        .love, .follow { float: none;}
+    }
+    .hover-action .party-item { 
+        position: relative;
+        max-width: 190px;
+        @include transition(opacity 0.5s ease);
+    }
+    .hover-action .party-item:before {
+        @include transition(all 0.7s ease);
+        content: '\00a0';
+        display: block;
+        height: 100%;
+        background-color: #fff;
+        position: absolute;
+        top: -15px;
+        left: 0;
+        width: 99%;
+        z-index: -1;
+        left: 0;
+        padding-bottom: 15px;
+        border: 1px solid #e5e5e5;
+        border-radius:7px;
+        box-shadow: 1px 1px 1px 2px #eee;
+        @include box-sizing(content-box);
+        opacity: 0;
+    }
+
+    .hover-action .party-item:hover {
+        z-index: 1;
+        .follow-section {
+            opacity: 1;
+            height: auto;
+            visibility: visible;
+        }
+        &:before, &:after {
+            opacity: 1;
+        }
+    }
+}
+
+.block-col-3.hover-action {
+    .item { max-width: 180px;}
+    .grid-view-thumbnail { min-width: initial;}
+    .item .thumbnail { min-height: initial;}
+    .user-image img {
+        width: 100%;
+        max-height: initial;
+        max-width: initial;
+    }
+}
+
+.description-wrapper {
+    .body-overflow-auto { 
+        overflow-y: auto;
+        height: auto !important;
+    }
+}
+
+@media (max-width: 769px) {
+    .hover-action .party-item:before {
+        opacity: 1;
+    }
+    .hover-action .party-item {
+        z-index: 1;
+    }
+    .people-item > div{
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+    .hover-action .thumbnail { margin: 10px 10px 0;}
+    .description-wrapper {
+        // border: 1px solid #ccc;
+        padding: 0 10px;
+        border-top: 0;
+    }
+    .block-col-3.hover-action .item {
+        max-width: 200px;
+        width: 100%;
+    }
+}
+
+@media (min-width: 480px) and (max-width: 769px) {
+    .hover-action .item-list .party-item {
+        padding: 0 10px;
+        // margin-bottom: 20px;
+        margin: 0 0 20px;
+        width: 100%;
+        .follow-section {
+            opacity: 1;
+            font-size: 13px;
+        }
+        .item-inner { background-color: #fff; border-radius: 5px;}
+        .grid-view-thumbnail { min-width: initial;}
+        // .thumbnail { height: 90px; min-height: 90px;}
+        .thumbnail img { 
+            max-width: 100px;
+            max-height: 90px;
+            width: auto;
+            height: auto;
+        }
+    }
+
+    .hover-action {
+        .item-list .party-item.user-image .thumbnail img {
+            max-width: initial;
+            max-height: initial;
+            width: 100%;
+            height: auto;
+        }
+    }
+
+    .people-item .required-approval {
+        top: 11px !important;
+        right: 21px !important;
+    }
+
+}
+
+@media (max-width: 480px) {
+    .hover-action {
+        .love { float: left;}
+        .follow { float: right;}
+        .follow-section { padding: 10px 5px;}
+    }
+}
+
+@media (max-width:320px) {
+    .hover-action .item-list .party-item .thumbnail {
+        height: auto;
+        min-height: 180px;
+    }
+}
+
+// Take Action Module: On grid list
+.hover-action .is-me { 
+    border-color: transparent;
+    // height: 48px;
+}

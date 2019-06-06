@@ -1,0 +1,427 @@
+/* -------------------------------- *\
+    Form Sidebar Menu
+\* -------------------------------- */
+
+.form-sidebar-container {
+
+    /*Clear white bg*/
+    background-color: transparent;
+
+    .page-title {
+        font-size: 28px;
+        font-family: $kanit-medium;
+        z-index: 9999;
+        padding-right: 30px;
+        word-wrap: break-word; 
+    }
+
+    /*Layout*/
+    .content-class {
+        margin-top: -50px;
+
+
+        @media (max-width: 800px) {
+            margin-top: -80px;
+
+            .page-title {
+                margin-bottom: 20px;
+            }
+        }
+        @media (max-width: 768px) {
+            margin-top: 0;      
+        }
+        @media (max-width: 767px) {
+            margin-top: 10px;       
+        }
+        
+    }
+    //.content-focus{
+    //    margin-top: -90px;
+    //
+    //    @media (max-width: 800px) {
+    //        margin-top: 0px;
+    //    }
+    //    .checkbox {
+    //        padding: 0;
+    //    }
+    //}
+
+    .content-focus .tab-content {
+        position: relative;
+        padding: 20px 50px;
+        background-color: #fff;
+
+        @media (max-width: 767px) {
+            padding: 20px;
+        }
+        @media (max-width: 800px) {
+            padding: 20px;
+        }
+
+        //&:before {
+        //    display: block;
+        //    content: " ";
+        //    background-color: #fff;
+        //    width: 100%;
+        //    height: 30px;
+        //    position: absolute;
+        //    top: -30px;
+        //    left: 0;
+        //
+        //    @media (max-width: 800px) {
+        //        display: none;
+        //    }
+        //    @media (max-width: 767px) {
+        //        display: none;
+        //    }
+        //}
+
+    }
+}
+
+.form-sidebar-container {
+    .group-action {
+        padding: 0px 50px 20px 50px;
+        background-color: #fff;
+        margin: 0;
+
+        @media (max-width: $screen-sm-max) {
+            .pull-right {
+                float: none !important;
+            }
+        }
+        @media (max-width: 800px) {
+            padding: 0 20px 20px 20px;
+        }
+        @media (max-width: $screen-xs-max) {
+            .btn {
+                display: block;
+                width: 100%;
+                margin-bottom: 15px;
+            }
+        }
+
+        .popover {
+            width: 100%;
+
+            .btn {
+                padding: 0;
+                font-size: 14px;
+            }
+        }
+    }
+    .group-action .glyphicon {
+        font-size: 14px;
+    }
+}
+
+.wrapper.-form-org {
+    padding-bottom: 0;
+}
+
+/* -------------------------------- *\
+    Create Event, Profile
+\* -------------------------------- */
+.content-smart {
+    padding: 10px 30px;
+    background-color: #fff;
+    max-width: 960px !important;
+}
+
+.owner-detail-wrapper {
+    display: flex;
+    display: -webkit-flex;
+    align-items: center;
+    -webkit-align-items: center;
+    > .owner-img {
+        float: left;
+        border: 1px solid #ccc;
+        margin-right: 20px;
+        > img {
+            max-width: 50px;
+            height: auto;
+        }
+    }
+}
+
+/* -------------------------------- *\
+    Reset Sidebar Navigation
+\* -------------------------------- */
+.tab-form {
+    .nav {
+        background-color: #fafafa;
+        > li {
+            a {
+                color: #595959;
+                font-size: 15px;
+                border-radius: 0;
+
+                &:after {
+                    display: inline-block;
+                    // content: "+";
+                    float: right;
+                }
+            }
+
+            &.require a {
+                &:after {
+                    content: '*';
+                    font-size: 19px;
+                    position: relative;
+                    top: 1px;
+                }
+            }
+
+            &.errors a, &.success a {
+                &:after {
+                    font-family: 'Glyphicons Halflings';
+                    content: "\e101";
+                    color: #fff;
+                    font-style: normal;
+                    font-weight: normal;
+                    line-height: 1;
+                    -webkit-font-smoothing: antialiased;
+                    position: relative;
+                    top: 5px;
+                }
+            }
+
+            &.success a {
+                &:after {
+                    content: "\e084";
+                    color: #3cb371;
+                    font-size: 18px;
+                    top: 1px;
+                    right: -3px;
+                }
+            }
+
+
+            hr {
+                margin-top: 15px;
+                margin-bottom: 15px;
+            }
+
+            &.active a {
+                color: #000;
+                /*font-weight: bold;*/
+                background-color: #E2E2E2;
+            }
+
+            &.nav-header.disabled a{
+                color: #797979;
+                font-size: 12px;
+
+                &:after {
+                    display: none;
+                }
+            }
+
+            &:hover {
+                background-color: #E2E2E2;
+            }
+        } /*end li*/
+    } /*end nav*/
+
+    .glyphicon {
+        margin-left: 10px;
+    }
+}
+
+.nav-pills {
+
+}
+
+/* -------------------------------- *\
+    Component: Form Main Content
+\* -------------------------------- */
+
+
+/*Button*/
+.btn-form {
+    display: inline-block !important;
+    min-width: 180px;
+    border: 1px solid #595959;
+    border-radius: 4px;
+    padding: 10px 20px;
+    text-align: center;
+
+    &:hover {
+        background-color: #E4E4E4;
+    }
+}
+
+/*End Button*/
+
+.tab-pane {
+    border: none;
+    padding: 0;
+
+    .tab-title {
+        font-size: 26px;
+        font-family: $kanit-medium;
+    }
+
+    /*Make margin on control row*/
+    .controls {
+        margin-bottom: 30px;
+    }
+
+    /*All label font size*/
+    label {
+        font-size: 18px;
+        font-family: $kanit-regular;
+    }
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    input[type="number"]:focus, 
+    select:focus,
+    textarea:focus {
+        border: 2px solid #F9B94C;
+        outline: none;
+    }
+
+    .form-group-hilight {
+        background: transparent;
+        padding: 0;
+        margin: 0 0 30px;
+
+        .prettyradio {
+            padding-left: 0 !important;
+            margin: 15px 0 0 0 !important;
+        }
+        .prettyradio a {
+            position: static;
+            float: left;
+        }
+        .field-container { margin-top: 10px;}
+        .choice-item label { font-size: 16px;}
+    }
+    .form-group-hilight .control-label {
+        background: transparent;
+        margin: 0;
+        padding: 0;
+    }
+    .inline-reference-container {
+        margin: 10px 0px;
+    }
+}
+
+
+
+
+
+/* -------------------------------- *\
+    Form Group
+\* -------------------------------- */
+.group-action {
+    .btn {
+        padding: 10px 10px;
+        font-size: 18px;
+        min-width: 110px;
+    }
+}
+
+/* -------------------------------- *\
+    Item Company
+\* -------------------------------- */
+.autocomplete-light-widget .deck > span[data-value] {
+    padding: 10px 10px 10px 30px !important;
+
+    &:last-child {
+        margin-bottom: 20px;
+    }
+}
+
+/* -------------------------------- *\
+    Add New Button
+\* -------------------------------- */
+.inline-create-link-wrapper,
+.autocomplete-add-another {
+    font-size: 15px;
+    color: #595959;
+    a {
+        text-decoration: underline;
+        color: #595959;
+        &:hover, &:active, &:focus {
+            color: #595959;
+        }
+    }
+}
+.autocomplete-add-another { 
+    text-decoration: underline;
+    &:hover, &:active, &:focus {
+        color: #595959;
+    }
+}
+.inline-create-link-wrapper{
+    margin-top: 15px;
+}
+
+.request-popup .wrapper{
+    padding: 0;
+}
+
+
+
+
+
+/* -------------------------------- *\
+            Progress Bar
+\* -------------------------------- */
+
+.organization-percent-point {
+    padding: 15px;
+    margin: 0 0 20px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+
+    @media (max-width: $screen-xs-max) {
+        padding: 15px 5px;
+    }
+    .title {
+        @extend .font-default;
+        font-size: 15px;
+    }
+    .progress {
+        background-color: #eee;
+        border: 1px solid #979797;
+        border-radius: 17px;
+        box-shadow: none;
+        height: 13px;
+        margin: 15px 8px 10px;
+    }
+    .percent {
+        background-color: $main-color;
+        height: 11px;
+        display: block;
+        border-radius: 14px;
+    }
+    .text-percent {
+        @extend .kanit-regular;
+    }
+    .tooltip {
+        opacity: 1;
+    }
+}
+
+.point-form > div:first-child {
+    width: 25% !important;
+    min-width: initial;
+    @media (max-width: 767px) {
+        width: 100% !important;
+    }
+}
+
+
+
+
+
+
+/* -------------------------------- *\
+            topic style
+\* -------------------------------- */
+
+.point-form .checkbox {
+    padding: 0;
+}

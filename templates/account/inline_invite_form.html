@@ -1,0 +1,159 @@
+{% load i18n %}
+{% load staticfiles %}
+{% load account_tags %}
+
+{% csrf_token %}
+{% if form.non_field_errors %}
+<div class="errors alert alert-danger">{{ form.non_field_errors }}</div>
+{%  endif %}
+
+<input type="hidden" name="_win_name" value="{{ field_id }}"/>
+<input type="hidden" name="no_script" value="{{ no_script }}"/>
+<input type="hidden" name="create" value="{{ create }}"/>
+<input type="hidden" name="title" value="{{ title }}"/>
+<input type="hidden" name="manage" value="{{ manage }}"/>
+<input type="hidden" name="next" value="{{ next }}"/>
+
+<div class="controls">
+    {% if create %}
+    <label for="id_email" class="field-container control-label">{% trans "Email" %}</label>
+    {% endif %}
+    <input name="email" type="email" class="form-control" placeholder="{% trans "Enter new email address" %}" value="{{ form.email.value|default_if_none:"" }}" required autofocus>
+    {% if form.email.errors %}
+    <div class="errors alert alert-danger">{{ form.email.errors }}</div>
+    {% endif %}
+
+</div>
+
+{% if create %}
+<div class="controls form-group">
+    <label for="id_first_name" class="field-container control-label">{% trans "First name" %}</label>
+    <div class="field-container">
+        {{ form.first_name }}
+        {% if form.first_name.errors %}
+        <div class="errors alert alert-danger">{{ form.first_name.errors }}</div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="controls form-group">
+    <label for="id_last_name" class="field-container control-label">{% trans "Last name" %}</label>
+    <div class="field-container">
+        {{ form.last_name }}
+        {% if form.last_name.errors %}
+        <div class="errors alert alert-danger">{{ form.last_name.errors }}</div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="controls form-group">
+    <label for="id_image" class="field-container control-label">{% trans "Picture" %}</label>
+    <div class="field-container">
+        {{ form.image }}
+        <span class="help-block">
+            {% trans "Use images that are at least 370 x 280 pixels and 1.3:1 image ratio for the best display." %}
+        </span>
+        {% if form.image.errors %}
+        <div class="errors alert alert-danger">{{ form.image.errors }}</div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="controls form-group">
+    <label for="id_summary" class="field-container control-label">{% trans "Summary/Position" %}</label>
+    <div class="field-container">
+        {{ form.summary }}
+        {% if form.summary.errors %}
+        <div class="errors alert alert-danger">{{ form.summary.errors }}</div>
+        {% endif %}
+    </div>
+</div>
+
+{% endif %}
+
+<div class="form-action">
+
+    {% if no_inline %}
+    <button class="btn btn-lg btn-primary btn-block btn-orange" type="submit">{% trans "Invite" %}</button>
+    {% else %}
+    <button class="btn btn-primary btn-orange" type="submit">{% trans "Invite" %}</button>
+    <a href="." class="btn btn-cancel flat-btn">{% trans "Cancel" %}</a>
+    {% endif %}
+
+
+
+</div>
+
+
+{% if not form.is_valid %}
+<script type="text/javascript" src="/static/files_widget/js/jquery.iframe-transport.js"></script>
+<script type="text/javascript" src="/static/files_widget/js/jquery.fileupload.js"></script>
+<script type="text/javascript" src="/static/files_widget/js/widgets.js"></script>
+{%  endif %}
+
+
+{% if not no_inline %}
+<script type="text/javascript">
+
+    (function ($) {
+
+
+        {% if success %}
+
+
+        var win = {
+            'name': '{{ field_id }}',
+            'close': function () {
+                $('.field-inline-{{ field_id }} .add-another-inline-input-list').html('');
+
+            }
+        };
+
+        dismissAddAnotherPopup(win, '{{ user_id }}', '{{ user_id|user_render_reference:1|safe }}');
+
+        {% else %}
+
+
+        $('.field-inline-{{ field_id }} .add-another-inline-input-list .btn-cancel').click(function (e) {
+            e.preventDefault();
+            $('.field-inline-{{ field_id }} .add-another-inline-input-list').html('');
+            $('.field-inline-{{ field_id }} .inline_overlay').remove();
+        });
+
+        $('.field-inline-{{ field_id }} .add-another-inline-input-list .btn-primary').click(function (e) {
+            e.preventDefault();
+
+
+            var input_list_container = $(this).parents('.add-another-inline-input-list');
+            var input_list = input_list_container.find('[name]');
+
+            var params = {
+                '_inline': '1',
+                'field_id': '{{ field_id }}'
+            };
+            input_list.each(function () {
+                if ($(this).attr('type') == 'checkbox') {
+                    params[$(this).attr('name')] = 0+$(this).prop('checked');
+                }
+                else {
+                    params[$(this).attr('name')] = $(this).val();
+                }
+            });
+
+            var post_url = '{% url 'account_inline_invite' %}';
+            input_list_container.load(post_url, params);
+
+            $('.field-inline-{{ field_id }} .inline_overlay').remove();
+
+
+        });
+
+        $('.field-inline-{{ field_id }} .inline-reference-wrapper').append('<div class="inline_overlay"></div>');
+
+        {% endif %}
+
+
+    }) (jQuery);
+
+</script>
+{% endif %}

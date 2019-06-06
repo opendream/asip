@@ -1,0 +1,26 @@
+{% extends 'base_single.html' %}
+{% load common_tags %}
+{% load i18n %}
+
+{% block title %}{{ instance.title }}{% endblock %}
+{% block description %}{{ instance.description|striptags }}{% endblock %}
+
+{% block title_class %} hidden{% endblock %}
+{% block search_toggle_class %}{% endblock %}
+{% block search_class %}{% endblock %}
+{% block content_class %} bg-white bg-white-wrapper {% endblock %}
+{% block wrapper_class %} -white {% endblock %}
+
+{% block js %}
+{#<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=crosalot"></script>#}
+{% endblock %}
+
+{% block content %}
+<div class="container static-page-detail">
+    <div class="row">
+        <div class="col-xs-12 text-center about-title">
+            {{ instance.description|safe }}
+        </div>
+    </div>
+</div>
+{% endblock %}

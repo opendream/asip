@@ -1,0 +1,354 @@
+{% extends 'base_single.html' %}
+{% load i18n %}
+{% load static %}
+{% load humanize %}
+{% load common_tags %}
+
+{% block title %}รวมพลัง Startup{% endblock %}
+
+{% block description %}
+มาร่วมสร้างฐานข้อมูล Startup ไทย ครั้งประวัติศาสตร์ โดยลงทะเบียนที่ลิงก์ NEW.set.or.th
+{% endblock %}
+
+{% block image %}{% static 'images/startup-share-02.png' %}{% endblock %}
+
+{% block wrapper_class %} -home {% endblock %}
+
+{% block title_class %} site-name _event-title text-center ng-hide{% endblock %}
+{% block search_toggle_class %}{% endblock %}
+{% block search_class %}{% endblock %}
+
+{% block main_extra %} ng-controller="EventController"{% endblock %}
+{% block body_class %}event-page{% endblock %}
+{% block css %}
+{% endblock %}
+
+{% block js %}
+{% endblock %}
+
+{% block content %}
+
+{% captureas total_startup %}{{ organization_list|filter:'status=1'|filter:'organization_roles__permalink=startup'|count|intcomma }}{% endcaptureas %}
+{% captureas total_investor %}{{ party_list|filter:'party_status=1'|filter:'party_roles__permalink=investor'|count|intcomma }}{% endcaptureas %}
+{% captureas total_government %}{{ organization_list|filter:'status=1'|filter:'organization_roles__permalink=supporter'|filter:'organization_types__permalink=government'|count|intcomma }}{% endcaptureas %}
+{% captureas total_organization %}{{ organization_list|filter:'status=1'|filter:'organization_roles__permalink=supporter'|exclude:'organization_types__permalink=government'|count|intcomma }}{% endcaptureas %}
+
+<div class="row front-banner">
+    {% if feature_enable %}
+    <div class="text-center feature-wrapper">
+        {% include settings.FEATURE_TEMPLATE %}
+    </div>
+    {% else %}
+    <div class="text-center main-content-banner">
+        <h2 class="title -banner"><strong>{% trans "Startup" %}</strong><br />{% trans "Ecosystem" %}</h2>
+        <a href="{% url 'about' %}" class="btn btn-outline -black">{% trans "Explore" %} &raquo;</a>
+    </div>
+    {% endif %}
+    <div class="container summary-banner">
+        <div class="row">
+            <div class="col-sm-4 text-center summary-wrapper">
+                <a href="{% url 'presentation_role_list_browse' 'startup' %}" class="link-summary">
+                    <h4 class="title">{% trans "Startup" %}
+                        <i class="glyphicon glyphicon-chevron-right"></i>
+                    </h4>
+                    <div class="amount"><strong>{{ total_startup }}</strong> <span class="unit">{% trans "Companies" %}</span></div>
+                </a>
+            </div>
+            <div class="col-sm-4 text-center summary-wrapper -middle">
+                <a href="{% url 'presentation_role_list_browse' 'investor' %}" class="link-summary">
+                    <h4 class="title">{% trans "Investor" %}
+                        <i class="glyphicon glyphicon-chevron-right"></i>
+                    </h4>
+                    <div class="amount"><strong>{{ total_investor }}</strong> <span class="unit">{% trans "Groups" %}</span></div>
+                </a>
+            </div>
+            <div class="col-sm-4 text-center summary-wrapper">
+                <a href="{% url 'presentation_role_list_browse' 'supporter' %}" class="link-summary">
+                    <h4 class="title">{% trans "Supporter" %}
+                    <i class="glyphicon glyphicon-chevron-right"></i>
+                    </h4>
+                    <div class="amount">
+                        <strong>{{ total_government }}</strong>
+                        <span class="unit">{% trans "Government Organizations" %}</span> <br />
+                        <strong>{{ total_organization }}</strong>
+                        <span class="unit">{% trans "Private Organizations" %}</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row news-fade">
+    <div class="container">
+        <div ng-controller="TimerListController" ng-init="init('/api/v1/happening/', { limit: 20, receiver_or_actor__role_permalink: 'startup', actor_unique: true })">
+            <ul class="item-list news-list" ng-mouseenter="stopTimer()" ng-mouseout="startTimer()">
+                <li class="item news-item">
+                    <div ng-bind-html="currentParty.get_simple_html_display"></div>
+                    <img ng-show="isLoading" ng-src="/static/images/loading.gif" class="loading-icon" />
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="bgcover section-discover-startup block-front">
+    <div class="container wrapper">
+
+        <div class="block-discover-startup">
+            <div class="row">
+                <div class="col-sm-6 static-content">
+                    <div class="vertical-middle -block-lane">
+                        <h2 class="title">{% trans "Discover Startup" %}</h2>
+                        <p>
+                            Browse through a list of Startup residing in Thailand to explore, connect, and learn more about them.
+                        </p>
+<!--                         <p>
+                            With NEW, you’ll get online access to data on more than <strong>{{ total_startup }}</strong> startups, often months—or even years—before they appear in other databases.
+                        </p> -->
+                        <div class="btn-wrapper">
+                            <a href="{% url 'presentation_role_list_browse' 'startup' %}" class="btn btn-primary -big" title="{% trans "Discover Startup" %}">{% trans "Discover Startup" %}</a>
+                            <a href="{% url 'organization_create' 'startup' %}" class="btn btn-outline -big -border" title="{% trans "Register a Startup" %}">{% trans "Register a Startup" %}</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-md-offset-1 col-sm-6">
+                    <!-- Block Startup -->
+                    <div class="vertical-middle -block-lane">
+                        <div ng-controller="BasicPartyListController" ng-init="init('/api/v1/party/search/', {limit: 6, resource:'PartyLiteResource', image__gte: 1, point__gt: 40, organization_roles: 'startup', none_to_all: 1})" class="block -logo-startup">
+                            <ul class="row item-list organization-list">
+                                <li ng-repeat="party in party_list"  class="col-sm-4 col-xs-4 party-item item {[{ party.inst_type }]}-image">
+                                    <div class="small-logo thumbnail -org">
+                                        <span>
+                                            <a ng-href="{[{party.absolute_url}]}" title="{[{ party.get_display_name }]}">
+                                                <img ng-src="{[{ party.get_thumbnail_in_primary }]}" alt="{[{ party.get_display_name }]}">
+                                            </a>
+                                        </span>
+                                    </div>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- End block Startup -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="block-front -wrapper -event -ttsa">
+    <div class="container wrapper">
+
+        <div class="block-discover-startup">
+            <div class="row">
+                <div class="col-sm-8 col-md-9 static-content">
+                    <div class="vertical-middle">
+                        <h2 class="kanit-regular">{% trans "Be a FREE" %}</h2>
+                        <h2 class="kanit-extralight">{% trans "member of Thailand Tech Startup Association (TTSA)" %}</h2>
+                        <p>
+                            TTSA'a members will receive email update and participate some association events.
+                        </p>
+<!--                         <p>
+                            With NEW, you’ll get online access to data on more than <strong>{{ total_startup }}</strong> startups, often months—or even years—before they appear in other databases.
+                        </p> -->
+                        <div class="btn-wrapper">
+                            <a href="{% url 'organization_create' 'startup' %}?utm_source=ttsa_newsletter&utm_medium=banner&utm_campaign=TTSA" class="btn btn-primary -big" title="{% trans "Register a Startup" %}">{% trans "Join us" %}</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-4">
+                    <img ng-src="/static/images/ttsa-logo.jpg" alt="TTSA logo" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="block-front -wrapper -event">
+    <div class="container wrapper">
+        <div class="row">
+            <div class="col-xs-12">
+                <h2 class="title text-center">{% trans "Upcoming Event" %}</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-offset-1 col-sm-10">
+                <div ng-controller="BasicPartyListController" ng-init="init('/api/v1/event/', { limit: 3, offset: 0, end_date__gte: current_date_format }, 'start_date')" class="block block-event">
+                    <ul class="row item-list event-list">
+                        <li ng-repeat="party in party_list" class="col-md-4 col-xs-6 item item-event">
+                            <ng-include src="'template_party_event_front.html'"></ng-include>
+                        </li>
+                    </ul>
+                    <div class="text-center">
+                        <a class="findmore" href="{% url 'event_list' %}" title="">{% trans "View more event" %} &raquo;</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div class="bgcover -investor-so block-front">
+    <div class="container">
+        <div class="block-investor-so">
+            <div class="row">
+                <div class="col-md-5 col-sm-6 static-content text-center -investor">
+                    <div class="vertical-middle">
+                        <h2 class="title">{% trans "Investor" %}</h2>
+                        <!-- <p>Discover a world of great investment opportunities. Becoming authorised to invest.</p> -->
+                        <p>
+                            Discover a list of investors who drive the potential startups with opportunities.
+                        </p>
+                        <a href="{% url 'presentation_role_list_browse' 'investor' %}" class="btn btn-primary">{% trans "Get Started" %} &raquo;</a>
+                    </div>
+                </div>
+                <div class="col-md-5 col-md-offset-2 col-sm-6 static-content text-center -support-org">
+                    <div class="vertical-middle">
+                        <h2 class="title">{% trans "Supporting Organization" %}</h2>
+                            <p>
+                                View a list of supporting parties who provide a supportive environment.
+                            </p>
+<!--                         <p>An important role to play in building an environment for entrepreneurial success and growth.</p> -->
+                        <a href="{% url 'presentation_role_list_browse' 'supporter' %}" class="btn btn-primary">{% trans "Get Started" %} &raquo;</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="bg-white block-front -wrapper -people-section -white">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <h2 class="title text-center">{% trans "People" %}</h2>
+                <div ng-controller="BasicPartyListController" ng-init="init('/api/v1/user/search/', {'resource': 'PartyLiteResource', 'limit': 4, 'none_to_all': 1, 'has_relation': 1, 'image__gt': 0})" class="block block-people -front" ng-class="should_show_list_class()">
+                    <ul class="row item-list people-list">
+                        <li ng-repeat="party in party_list" class="col-sm-3 col-xs-6 user-image party-item item">
+                            <div ng-include="'template_party_item.html'"></div>
+                        </li>
+                    </ul>
+                    <div class="text-center">
+                        <a class="findmore" href="{% url 'people_list' %}" title="">{% trans "View more people" %} &raquo;</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="bg-white block-front -wrapper -happening-news-section -white">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6">
+                <h2 class="title">{% trans "Happening in Startup" %}</h2>
+                <!-- Block Happening -->
+                <div ng-controller="BasicPartyListController" ng-init="init('/api/v1/happening/', { limit: 4, offset: 0, receiver_or_actor__role_permalink: 'startup', actor_unique: true })" class="block block-happening block-front">
+                    <ul class="item-list happen-list">
+                        <li class="row item" ng-repeat="party in party_list" ng-include="'happening_list_action.html'">
+                        </li>
+                    </ul>
+                    <div class="row">
+                        <a class="loadmore-wrapper col-md-6 col-xs-12" href="{% url 'presentation_role_list_happening' 'startup' %}">
+                            <span class="loadmore">{% trans "View more happening" %} &raquo;</span>
+                        </a>
+                    </div>
+                </div><!-- End block Happening -->
+            </div>
+            <div class="col-md-offset-1 col-md-5 col-sm-6 news-section">
+                <h2 class="title">{% trans "News" %}</h2>
+                <div ng-controller="BasicPartyListController" ng-init="init('/api/v1/news/search/', { limit: 3, categories__permalink: 'news', none_to_all: 1 })" class="block block-news">
+                    <div ng-show="!is_loading" ng-if="current_page_party_list.length == 0">No news</div>
+                    <ul class="item-list news-list">
+                        <li ng-repeat="party in current_page_party_list" class="item news-item" ng-clock>
+                            <div ng-include="'template_party_news.html'"></div>
+                        </li>
+                    </ul>
+
+                    <a class="findmore col-md-5 col-xs-12" href="{% url 'news_list' %}" ng-if="current_page_party_list.length > 0">{% trans "View more" %} &raquo;</a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="block-front -wrapper -join-community-section">
+    <div class="container">
+        <div class="block-join-community">
+            <h2 class="title text-center">{% trans "Join the Startup community" %}</h2>
+            <div class="row">
+                <div class="col-sm-offset-3 col-sm-6 col-xs-offset-1 col-xs-10">
+                    <form action="{% url 'organization_create' 'startup' %}" class="form-join text-center">
+                        <div class="form-group row text-center">
+                            <div class="col-sm-7 form-control-wrapper -text">
+                                <input type="text" name="name" class="form-control" placeholder="{% trans "Enter your startup's name" %}">
+                            </div>
+                            <div class="col-sm-4 form-control-wrapper -btn">
+                                <button class="btn btn-primary">{% trans "Create Startup Profile" %} &raquo;</button>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="block-front bg-white -wrapper -jobs">
+    <div class="container wrapper -white">
+        <div class="row">
+            <div class="col-sm-offset-2 col-sm-8 text-center">
+                <div ng-controller="BasicPartyListController" ng-init="init('/api/v1/organization_jobs', {limit: 7})" class="block">
+                    <h2 class="title">Job</h2>
+                    <div ng-show="!is_loading && party_list.length == 0">{% trans "No job avaliable." %}</div>
+                    <p>
+                        Find The Right Opportunities through our network of people we know and trust
+                    </p>
+                    <div class="org-job-wrapper">
+                        <ul class="item-list text-center">
+                            <li class="item item-job" ng-repeat="party in party_list" ng-include="'job_front_list.html'">
+                            </li>
+                        </ul>
+                    </div>
+                    <a class="findmore" href="{% url 'job_list' %}" ng-show="party_list.length > 0">{% trans "View more job" %} &raquo;</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="block-front bg-white -wrapper -supporter" ng-controller="BasicPartyListController" ng-init="init('/api/v1/party/search/', {limit: 12, none_to_all: 1, organization_roles: 'supporter', resource: 'PartyLiteResource'})">
+    <div class="container wrapper -white">
+
+
+        <!-- Wrapper for slides -->
+        <div class="carousel-wrapper -supporter">
+            <ul class="text-center" role="listbox">
+                <li class="item active" ng-repeat="party in current_page_party_list">
+                    <div class="small-logo pull-left thumbnail -org">
+                        <span>
+                            <a ng-href="{[{ party.absolute_url }]}" title="{[{ party.get_display_name }]}"><img ng-src="{[{ party.get_thumbnail_in_primary }]}" alt="{[{ party.get_display_name }]}"></a>
+                        </span>
+                    </div>
+                </li>
+            </ul>
+            <pagination ng-if="total_count > 12"
+                total-items="total_count"
+                ng-model="current_page"
+                max-size="0"
+                items-per-page="12"
+                class="pagination-sm"
+                boundary-links="true"
+                rotate="false"
+                first-text="''"
+                previous-text="'‹'"
+                next-text="'›'"
+                last-text="''"
+                ng-change="load_page(current_page)"
+            >
+            </pagination>
+        </div>
+
+
+    </div>
+</div>
+{% endblock %}

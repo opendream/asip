@@ -1,0 +1,271 @@
+{% extends 'base_single.html' %}
+{% load static %}
+
+{% block title %}Asian social investment portal{% endblock %}
+{% block description %}
+From {{ summary.country }} East and Southeast Asian countries, we have {{ summary.organization.social_enterprise }} social enterprises on our website receiving {{ summary.partysupportparty|add:summary.partyfundparty|add:summary.partyinvestparty }} funding, creating {{ summary.partypartnerparty }} partnership and posting {{ summary.type_of_need.through }} needs.
+{% endblock %}
+{% block title_class %} site-name{% endblock %}
+{% block search_toggle_class %}{% endblock %}
+{% block search_class %} in{% endblock %}
+
+{% block main_extra %} ng-controller="EventController"{% endblock %}
+{% block content %}
+
+
+{% if user.is_authenticated %}
+
+<!-- Block SE in foucus -->
+
+<div ng-controller="BasicPartyListController" ng-init="init('/api/v1/party_following/', {limit: 3, roles: 1})" class="block block-meeting block-feature block-col-3 se-focus" ng-show="party_list.length > 0">
+    <h2 class="block-title">SE in Focus</h2>
+    <ul class="item-list meeting-list row">
+        <li ng-repeat="party in party_list" ng-class="party.item_class()" class="col-md-6 col-xs-6 meeting-item feature-item party-item item height-neighborhood {[{ party.inst_type }]}-image">
+            <ng-include src="'template_party_feature_item.html'"></ng-include>
+        </li>
+    </ul>
+</div><!-- End Block SE in foucus -->
+
+<!-- Block Happening -->
+<div ng-controller="BasicPartyListController" ng-init="init('/api/v1/happening/', { limit: 5, offset: 0 })" class="block block-happening block-front">
+    <h2 class="block-title">Happening</h2>
+    <ul class="item-list happen-list">
+        <li class="row item" ng-repeat="party in party_list" ng-include="'happening_list_full.html'">
+        </li>
+    </ul>
+    <div class="row">
+        <a class="loadmore-wrapper col-md-10 col-xs-10" ng-click="load_more()" ng-class="load_more_class()">
+            <span ng-hide="is_loading" class="loadmore">Load more</span>
+            <img  ng-show="is_loading" ng-src="/static/images/loading.gif" class="loading-icon" >
+        </a>
+    </div>
+</div><!-- End block Happening -->
+
+{% endif %}
+
+{% if settings.ENABLE_SOCIAL_ENTERPRISE %}
+<!-- Block-organization -->
+<div ng-controller="BasicPartyListController" ng-init="init('/api/v1/organization', {type_of_organization: '{{ TYPE_SOCIAL_ENTERPRISE }}'})" class="block block-col-4 block-organization hover-action">
+    <h2 class="block-title">SE in Asia</h2>
+    <ul class="row item-list organization-list">
+        <li ng-repeat="party in party_list" ng-class="party.item_class()" class="col-md-4 col-xs-6 party-item item {[{ party.inst_type }]}-image">
+            <ng-include src="'template_party_item.html'"></ng-include>
+        </li>
+
+    </ul><a class="findmore" href="{% url 'organization_role_list' 'social-enterprise' %}">Find more</a>
+</div><!-- End block Organization -->
+{% endif %}
+
+{% if settings.ENABLE_STARTUP %}
+<!-- Block-organization -->
+<div ng-controller="BasicPartyListController" ng-init="init('/api/v1/organization', {type_of_organization: '{{ TYPE_STARTUP }}'})" class="block block-col-4 block-organization hover-action">
+    <h2 class="block-title">Startup in Asia</h2>
+    <ul class="row item-list organization-list">
+        <li ng-repeat="party in party_list" ng-class="party.item_class()" class="col-md-4 col-xs-6 party-item item {[{ party.inst_type }]}-image">
+            <ng-include src="'template_party_item.html'"></ng-include>
+        </li>
+
+    </ul><a class="findmore" href="{% url 'organization_role_list' 'startup' %}">Find more</a>
+</div><!-- End block Organization -->
+{% endif %}
+
+{% if not user.is_authenticated %}
+
+<div ng-controller="SummaryController" ng-init="init('/api/v1/happening/summary/', {})">
+
+    <div class="row">
+        <!-- Block Statistic -->
+        <div class="block block-statistic col-md-7">
+            <p>From <span class="number">{[{ summary.country }]}</span> East and Southeast Asian countries, we have <span class="number">{[{ summary.organization['social_enterprise'] }]}</span> social enterprises on our website receiving <span class="number">{[{ summary.partysupportparty+summary.partyfundparty+summary.partyinvestparty }]}</span> funding, creating <span class="number">{[{ summary.partypartnerparty }]}</span> partnership and posting <span class="number">{[{ summary.type_of_need.through }]}</span> needs.</p>
+        </div>
+        <!-- End Block Statistic -->
+
+        <!-- Block Update -->
+        <div ng-controller="BasicPartyListController" ng-init="init('/api/v1/news', { limit: 1 })" class="block block-update col-md-4 col-md-offset-1">
+            <h2 class="block-title">Updates</h2>
+            <div ng-show="!is_loading" ng-if="current_page_party_list.length == 0">No news</div>
+            <ul class="item-list">
+                <li ng-repeat="party in current_page_party_list" class="item news-item" ng-clock>
+                    <div ng-include="'template_party_news_sidebar.html'"></div>
+                </li>
+            </ul>
+
+            <a class="findmore" href="{% url 'news_list' %}" ng-show="current_page_party_list.length > 0">View more</a>
+
+        </div><!-- End Block Update -->
+
+    </div>
+
+    <!-- Block Invitation -->
+    <div class="block block-invitation">
+        <div class="row">
+            <div class="col-md-8 col-xs-8">
+                <h2 class="block-title">Where social investors meet social entrepreneurs</h2>
+                <div class="description">
+                    Over {[{ summary.happening }]} activities online
+                </div>
+            </div>
+
+            <div class="col-md-3 col-md-offset-1 col-xs-4 join-wrapper">
+                <a href="#" class="joinnow pull-right" data-target="#modal-register" data-toggle="modal">Join now</a>
+            </div>
+        </div>
+    </div><!-- End block Invitation -->
+
+</div>
+{% else %}
+<hr />
+{% endif %}
+
+
+<!-- Block People -->
+<div ng-show="party_list.length > 0" ng-controller="BasicPartyListController" ng-init="init('/api/v1/user', {})" class="block block-col-4 block-people hover-action">
+    <h2 class="block-title">People</h2>
+    <ul class="row item-list people-list">
+        <li ng-repeat="party in party_list" ng-class="party.item_class()" class="col-md-4 col-xs-6 party-item item {[{ party.inst_type }]}-image">
+            <ng-include src="'template_party_item.html'"></ng-include>
+        </li>
+    </ul>
+    <a class="findmore" href="{% url 'people_list' %}">Find more</a>
+</div><!-- End block People -->
+
+<!-- Block Supporter -->
+<div ng-show="party_list.length > 0" ng-controller="BasicPartyListController" ng-init="init('/api/v1/organization', {organization_primary_role__permalink: 'supporter'})" class="block block-supporter">
+    <div class="block block-supporter block-col-4 hover-action">
+        <h2 class="block-title">Supporters</h2>
+
+        <ul class="row item-list organization-list">
+            <li ng-repeat="party in party_list" ng-class="party.item_class()" class="col-md-4 col-xs-6 party-item item {[{ party.inst_type }]}-image">
+                <ng-include src="'template_party_item.html'"></ng-include>
+            </li>
+        </ul>
+        <a class="findmore" href="{% url 'organization_role_list' 'supporter' %}">Find more</a>
+    </div>
+</div><!-- End block Supporter -->
+
+<!-- Block Investor -->
+<div ng-show="party_list.length > 0" ng-controller="BasicPartyListController" ng-init="init('/api/v1/organization', {organization_primary_role__permalink: 'investor'})" class="block block-supporter">
+    <div class="block block-supporter block-col-4 hover-action">
+        <h2 class="block-title">Investors</h2>
+
+        <ul class="row item-list organization-list">
+            <li ng-repeat="party in party_list" ng-class="party.item_class()" class="col-md-4 col-xs-6 party-item item {[{ party.inst_type }]}-image">
+                <ng-include src="'template_party_item.html'"></ng-include>
+            </li>
+        </ul>
+        <a class="findmore" href="{% url 'organization_role_list' 'investor' %}">Find more</a>
+    </div>
+</div><!-- End block Supporter -->
+
+<div class="bg-white bg-full no-long">
+
+    {% if not user.is_authenticated %}
+
+    <div class="row">
+        <div class="col-md-8">
+
+            <!-- Block Happening -->
+            <div ng-controller="BasicPartyListController" ng-init="init('/api/v1/happening/', { limit: 5, offset: 0})" class="block block-happening block-front">
+                <h2 class="block-title">Happening</h2>
+                <ul class="item-list happen-list">
+                    <li class="row item" ng-repeat="party in party_list" ng-include="'happening_list_text.html'">
+                    </li>
+                </ul>
+            </div><!-- End block Happening -->
+            <!-- Block Invitation -->
+            <!-- {% if not user.is_authenticated %} -->
+            <div class="block block-invitation">
+                <div class="row">
+                    <div class="col-md-8 col-xs-8">
+                        <h2 class="block-title">More Happening</h2>
+
+                        <div class="description">
+                            More News More Events on this month
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 col-md-offset-1 col-xs-4 join-wrapper">
+                        <a class="joinnow pull-right" href="#"  data-target="#modal-register" data-toggle="modal">Join now</a>
+                    </div>
+                </div>
+            </div><!-- End block Invitation -->
+            <!-- {% endif %} -->
+
+        </div>
+        <div class="col-md-4">
+            <div ng-controller="BasicPartyListController" ng-init="init('/api/v1/organization_jobs', {limit: 3})" class="block block-job block-job-front no-login-job">
+                <h2 class="block-title">Jobs</h2>
+                <div ng-show="!is_loading && party_list.length == 0">No job avaliable.</div>
+                <ul class="item-list job-list">
+                    <li class="item item-job" ng-repeat="party in party_list" ng-include="'job_front_list.html'">
+                    </li>
+                </ul>
+                <a class="findmore" href="{% url 'job_list' %}" ng-show="party_list.length > 0">View more</a>
+            </div>
+        </div>
+    </div>
+
+    {% endif %}
+
+    <!-- Start block Events -->    
+    <div ng-controller="BasicPartyListController" ng-init="init('/api/v1/event', { limit: 3, offset: 0, end_date__gte: current_date_format }, 'start_date')" class="block block-event block-feature block-col-3">
+        <h2 class="block-title">Events</h2>
+        <ul class="row item-list event-list">
+            <li ng-repeat="party in party_list" class="col-md-4 col-xs-4 event-item feature-item item">
+                <ng-include src="'template_party_event.html'"></ng-include>
+            </li>
+        </ul>
+        <a class="findmore" href="{% url 'event_list' %}">View more</a>
+    </div>
+    <!-- End block Events -->
+
+    {% if user.is_authenticated %}
+    <!-- Start block Jobs -->   
+    <div ng-controller="BasicPartyListController" ng-init="init('/api/v1/organization_jobs', { limit: 6})" class="block block-job block-job-front">
+        <h2 class="block-title">Jobs</h2>
+        <div ng-show="!is_loading && party_list.length == 0">No job available.</div>
+        <ul class="row item-list job-list">
+            <li class="item item-job col-md-4" ng-repeat="party in party_list" ng-include="'job_front_list.html'">
+            </li>
+        </ul>
+        <a class="findmore" href="{% url 'job_list' %}" ng-show="party_list.length > 0">View more</a>
+    </div>
+    <!-- End block Jobs -->
+    {% endif %}
+
+    <div class="row">
+
+        <div ng-controller="BasicPartyListController" ng-init="init('/api/v1/news', { limit: 2, categories__permalink: 'news' })" class="block block-news col-md-7">
+            <h2 class="block-title">News</h2>
+            <div ng-show="!is_loading" ng-if="current_page_party_list.length == 0">No news</div>
+            <ul class="item-list news-list">
+                <li ng-repeat="party in current_page_party_list" class="item news-item" ng-clock>
+                    <div ng-include="'template_party_news.html'"></div>
+                </li>
+            </ul>
+
+            <a class="findmore" href="{% url 'news_list' %}" ng-if="current_page_party_list.length > 0">View more</a>
+
+        </div>
+
+       
+        <div class="block block-knowledge-list col-md-4 col-md-offset-1" ng-controller="BasicPartyListController" ng-init="init('/api/v1/news', { limit: 3, categories__permalink: 'knowledge-tools'})">
+            <h2 class="block-title">Knowledge & Tools</h2>
+            <div ng-show="!is_loading && party_list.length == 0">Coming soon.</div>
+            <ul class="item-list">
+                <li class="item" ng-repeat="knowledge in party_list">
+                    <h3 class="title">
+                        <a href="{[{ knowledge.absolute_url }]}" ng-bind-html="knowledge.title"></a>
+                    </h3>
+                </li>
+            </ul>
+            <a class="findmore" ng-show="party_list.length > 0" href="/article/knowledge-tools">View more</a>
+        </div>
+       
+    </div>
+
+</div>
+</div>
+
+{% endblock %}
+

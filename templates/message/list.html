@@ -1,0 +1,38 @@
+{% extends 'base_single.html' %}
+{% block content_class %} bg-white bg-white-wrapper{% endblock %}
+{% block content %}
+
+{% block title %}Messages of {{ logged_in_party.get_display_name }}{% endblock %}
+
+
+	<h1 class="page-title">Messages of {{ logged_in_party.get_display_name }}</h1>
+	<!-- Block Message list  -->
+	<div ng-controller="BasicPartyListController" ng-init="init('/api/v1/party_contact_party/', { dst: {{ logged_in_party.id }}, status: 0, limit: 6}, '-id')" class="block message-block unread-box" >
+		<h2 class="block-title"><span class="icon icon-markunread"></span>Unread Messages</h2>
+        <div class="is-empty" ng-hide="party_list.length">- Empty unread message -</div>
+        <ul class="item-list message-list">
+			<li ng-repeat="party in party_list"  class="message-item item">
+				<div ng-include="'message_unread.html'"></div>
+			</li>
+		</ul>
+		<a class="loadmore-wrapper" ng-click="load_more()" ng-class="load_more_class()">
+			<span ng-hide="is_loading" class="loadmore">Load more</span>
+			<img ng-show="is_loading" ng-src="/static/images/loading.gif" class="loading-icon" >
+		</a>
+	</div><!-- End Message list -->
+
+
+	<!-- Block Message list -->
+	<div ng-controller="BasicPartyListController" class="block message-block read-box" ng-init="init('/api/v1/party_contact_party/', { dst: {{ logged_in_party.id }}, status: 1, limit: 6}, '-id')" >
+		<h2 class="block-title"><span class="icon icon-drafts"></span>Read Messages</h2>
+        <div class="is-empty" ng-hide="party_list.length">- Empty read message -</div>
+		<ul class="item-list message-list">
+			<li ng-repeat="party in party_list" class="message-item item">
+                <div ng-include="'message_read.html'"></div>
+			</li>
+		</ul>
+
+        <pagination ng-show="total_count > 6" boundary-links="true" total-items="total_count" ng-model="current_page" class="pagination-sm" previous-text="previous_text" next-text="next_text" first-text="first_text" last-text="last_text" max-size="5" items-per-page="params.limit" ng-change="load_page(current_page)"></pagination>
+
+	</div>
+{% endblock %}

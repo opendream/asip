@@ -1,0 +1,12 @@
+ขอขอบคุณ Startup และองค์กรสนับสนุน
+สำหรับการกรอกข้อมูลร่วมเป็นส่วนหนึ่งของวงการ Startup ในช่วงเวลาที่ผ่านมา
+ขณะนี้ทีมงานได้หรับปรุงระบบจัดเก็บข้อมูล และกำลังกลั่นกรองการนำเสนอข้อมูลให้ดียิ่งขึ้น
+จึงขอเชิญ Startup และองค์กรสนับสนุนทุกท่านร่วมตรวจสอบ แก้ไข หรือเพิ่มเติมข้อมูลต่างๆ ของท่านอีกครั้ง เพื่อให้พร้อมที่จะเปิดตัวในงาน Startup Thailand ระหว่างวันที่ 28 เม.ย. - 1 พ.ค. 2559 ณ ศูนย์ประชุมแห่งชาติสิริกิติ์
+
+{% for organization in organization_list %}
+{{ organization.get_display_name }}
+{{ site_url }}{% url 'account_reset_password_confirm' uidb64=uid token=token %}?redirect={% url 'organization_edit' organization.id %}
+{% endfor %}
+
+ข้อเสนอแนะ
+http://goo.gl/forms/umm39sPX7p

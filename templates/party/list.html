@@ -1,0 +1,142 @@
+{% extends 'base_single.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}
+{{ party_list_title }}
+{% endblock %}
+
+{% block title_class %} hidden{% endblock %}
+{% block search_toggle_class %}{% endblock %}
+{% block search_class %} in{% endblock %}
+{% block content_class %}{% endblock %}
+
+{% block js %}
+<script type="text/javascript">
+    var party_list_type = '{{ party_list_type }}';
+</script>
+{% endblock %}
+
+{% block breadcrumb %}
+{% endblock %}
+
+{% block primary %}
+{% endblock %}
+
+{% block leader %}
+{% if role_permalink %}
+<div class="tab-container container">
+    <ul class="menu-tab list-inline">
+        <li><a href="{% url 'organization_role_list' role_permalink %}">Organization</a></li>
+        <li><a href="{% url 'people_role_list' role_permalink %}">People</a></li>
+    </ul>
+</div>
+{% endif %}
+{%  endblock %}
+
+{% block content %}
+<!-- < Block  Meeting -->
+<div ng-controller="PartyListController" ng-init="init({{ promote_list_config }}, {{ tab_list_config }})">
+    <div class="block block-meeting block-feature block-col-3">
+        <h2 class="block-title">Featured {{ party_list_title }}</h2>
+        <ul class="item-list meeting-list row" >
+            <li class="col-md-6 col-xs-6 meeting-item feature-item party-item item height-neighborhood {[{ party.inst_type }]}-image"  ng-repeat="party in promote_party_list">
+                <div class="feature-wrapper" >
+                    <div class="thumbnail" >
+                        <a href="{[{ party.absolute_url }]}">
+                            <img ng-src="{[{ party.get_thumbnail }]}" >
+                        </a>
+                    </div>
+                    <div class="info">
+                      <h3 class="title">
+                          <a href="{[{ party.absolute_url }]}">
+                            {[{ party.get_display_name }]}
+                          </a>
+                      </h3>
+                      <div class="country">{[{ party.country.title }]}</div>
+                      <div class="description">
+                          {[{ party.get_summary }]}
+                      </div>
+                    </div>
+                    <div class="follow-section">
+                        <div love-button party="party"></div>
+                        <div follow-button party="party"></div>
+                    </div>
+                </div>
+            </li>
+
+        </ul>
+    </div><!-- End block Meeting -->
+
+
+    <!-- Tab Browse party  -->
+    <div class="block-browse-party hidden-xs">
+        <h2 class="block-title">Browse {{ party_list_title }}</h2>
+        <ul class="nav nav-tabs nav-justified nav-party" role="tablist">
+            <li ng-repeat="tab in tab_list">
+                <a ng-href="##{[{ tab.title | lowercase }]}" ng-class="tab.tab_class()" ng-click="tab.active()" id="{[{ tab.title | lowercase }]}">
+                    {[{ tab.title }]}
+                </a>
+            </li>
+        </ul>
+    </div>
+    <!-- End Tab -->
+
+    <!-- block tab to dropdown -->
+    <div class="block-browse-party visible-xs row" >
+        <h2 class="block-title col-xs-6">Browse {{ party_list_title }} </h2>
+        <div class="dropdown dropdown-tab-square col-xs-6">
+            <a href="#" id="party-tab-drop" class="btn btn-default dropdown-toggle pull-right"><span class="text">{[{ tab_list[0].title }]}</span> <span class="caret"></span></a>
+            <ul class="dropdown-menu party-dropdown" role="menu" aria-labelledby="party-tab-drop">
+                <li ng-repeat="tab in tab_list">
+                    <a ng-class="tab.tab_class()" ng-click="tab.active()" >
+                        {[{ tab.title }]}
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!-- End Block party tab -->
+
+    <div class="block block-party hover-action block-col-4" >
+        <div ng-repeat="tab in tab_list" class="party-tab-container" ng-class="tab.content_class()">
+            <div ng-show="tab.has_filter()" class="dropdown col-md-12 pull-left party-filter select-modify">
+                <a href="#" class="btn btn-default dropdown-toggle pull-left"><span class="text">{[{ tab.filter_list[0].title }]}</span> <span class="caret"></span></a>
+                <ul ng-model="tab.filter_list" class="dropdown-menu party-dropdown" role="menu" aria-labelledby="party-tab-drop">
+                    <li  ng-repeat="filter in tab.filter_list">
+                        <!--<div ng-show="'grant-donation' ==  filter.permalink" class="type-of-need-group-filter" >Financial</div>
+                        <div ng-show="'strategic-planning' ==  filter.permalink" class="type-of-need-group-filter"><stong>Non-financial</stong></div>-->
+                        <div class="type-of-need-group-filter" ng-show="'grant-donation' ==  filter.permalink">Financial</div>
+                        <div class="type-of-need-group-filter" ng-show="'incubation' ==  filter.permalink">Incubation</div>
+                        <div ng-show="'strategic-planning' ==  filter.permalink && tab.title != 'Invest'" class="type-of-need-group-filter"><stong>Advisory/Consulting</stong></div>
+                        <div ng-show="'strategic-planning' ==  filter.permalink && tab.title == 'Invest'" class="type-of-need-group-filter"><stong>Advisory</stong></div>
+                        <div class="type-of-need-group-filter" ng-show="'networking' ==  filter.permalink">Networking</div>
+                        <a ng-click="filter.active()">
+                            {[{ filter.title }]}
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <ul class="row item-list party-list" >
+                <li class="col-md-4 col-xs-6 party-item item {[{ party.inst_type }]}-image" ng-repeat="party in tab.data.party_list" ng-class="party.item_class()" >
+                    <ng-include src="'template_party_item.html'"></ng-include>
+                </li>
+            </ul>
+
+            <a class="loadmore-wrapper full" ng-click="tab.load_more()" ng-class="tab.load_more_class()">
+                <span ng-hide="tab.data.is_loading" class="loadmore">Load more</span>
+                <img ng-show="tab.data.is_loading" ng-src="/static/images/loading.gif" class="loading-icon" >
+            </a>
+
+         </div>
+
+     </div>
+     <!-- End block party -->
+
+</div>
+
+
+
+{% endblock %}
+

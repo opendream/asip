@@ -1,0 +1,109 @@
+{% extends 'base_single.html' %}
+{% load static %}
+
+{% block title %}About ImpactConnect{% endblock %}
+{% block title_class %} site-name{% endblock %}
+{% block search_toggle_class %}{% endblock %}
+{% block search_class %} in{% endblock %}
+{% block js %}
+<script type="text/javascript">
+    var organization_permalink = 'changefusion';
+    var organization_id = 185;
+</script>
+{% endblock %}
+{% block main_extra %} ng-clock ng-controller="OrganizationDetailController"{% endblock %}
+{% block content %}
+<alert id="alert_contact" ng-show="alert['message'].show" type="{[{alert['message'].type}]}" close="alert['message'].show = !alert['message'].show" ng-clock>{[{alert['message'].msg}]}</alert>
+    <div class="about-content">
+        <strong>IMPACT CONNECT</strong>
+        <br />
+        Where social investors meet social entrepreneurs
+        <br />
+        <br />
+        <strong>IMPACT CONNECT is an open-access social investment portal in East and Southeast Asia. We connect social investors with social entrepreneurs to facilitate collaboration and investment partnership, fostering social investment ecosystem across the regions.</strong>
+        <br />
+        <br />
+
+        Through our common information reporting standard, social investors and entrepreneurs can now find practical information on numerous social enterprises in East and Southeast Asia: name; description; team members; products and services; social impact assessment; income, cost, and profits, and many more. These will help investors to evaluate and make more informed investment decisions. You will be able to find these by searching or browsing through our social enterprises database categorised by countries, topics, and needs.
+
+        <br />
+        <br />
+        And much more than that, IMPACT CONNECT is also a community where social investors, social entrepreneurs, and SE supporters can have meaningful interactions: you can follow and see updates on organisations and people that you care; you can give testimonials to organisations or people that you know; you can send messages to and receive them from other people whom you may find having a mutual interest for collaboration.
+        <br />
+        <br />
+
+        If you are social investors, social entrepreneurs, or SE supporters focusing in East and Southeast Asia, you are invited to
+        <a href="" data-target="#modal-register" data-toggle="modal">[create a free account]</a> now.
+        If you would like your organisation to be listed in our database please do not hesitate to
+        {% if user.is_authenticated %}
+            <a href="" message-popup="" data-target="#modal-message" data-toggle="modal">[contact us]</a>.
+        {% else %}
+            <a href="" message-popup="" data-target="#modal-login" data-toggle="modal">[contact us]</a>.
+        {% endif %}
+
+
+        <br />
+        <br />
+
+        IMPACT CONNECT is being continuously developed and managed by ChangeFusion and partners. The project was funded by Rockefeller Foundation.
+
+        <br />
+        <br />
+        <strong>Disclaimer:</strong>
+        <br />
+- Information in IMPACT CONNECT is provided as is. We cannot guarantee the correctness and appropriateness of information, although we try our best to make information accurate and useful.
+        <br />
+- Communications between users through IMPACT CONNECT’s system are unfiltered and unsupervised by our team. We strive to cut spams and other annoyances. We you find such things please help telling us.
+    </div>
+
+
+{% endblock %}
+
+{% block modal %}
+
+<!-- Contact modal -->
+<div class="modal fade" id="modal-message" tabindex="-1" >
+    <div class="modal-dialog contact-popup base-action-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal" type="button"><span>&times;</span><span class="sr-only">Close</span></button>
+                <h2 class="modal-title" id="model-contact-label" >Message</h2>
+            </div>
+            <div class="modal-body">
+                {% if user.is_authenticated %}
+
+
+                <form
+                        role="form"
+                        ng-submit="
+                                http_to_api_with_party({
+                                    api: '/api/v1/party_contact_party/',
+                                    party: organization,
+                                    params: {dst: organization.party_resource_uri, data: message},
+                                    update_total: 'total_contact',
+                                    model_name: 'message',
+                                    hide_modal: true,
+                                    type: 'POST',
+                                })"
+                        novalidate
+                        class="form-contact">
+                    <div>
+                        <label ng-cloak>Leave a message for {[{ organization.get_display_name }]}</label>
+                        <img ng-show="is_post_contact" ng-src="/static/images/loading.gif" class="loading-icon">
+                    </div>
+                    <textarea class="form-control" rows="5" name="message" ng-model="message" required></textarea>
+
+                    <button type="submit" class="btn btn-primary btn-post btn-pink">Send</button>
+
+                </form>
+                {% else %}
+
+                <a data-target="#modal-login" data-toggle="modal" ng-cloak> Please login before leave a message for {[{ people.get_display_name }]}</a>
+
+                {% endif %}
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

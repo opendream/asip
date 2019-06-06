@@ -1,0 +1,1404 @@
+{% extends 'base_sidebar_form.html' %}
+{% load i18n %}
+{% load staticfiles %}
+{% load common_tags %}
+
+{% block js %}
+<script type="text/javascript" src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
+{% endblock %}
+
+{% block wrapper_class %} -form-org {% endblock %}
+
+{% block css %}
+
+{% endblock %}
+
+{% block form_class %}dirty-check point-form{% endblock %}
+{% block sidebar_class %} stick-in-parent{% endblock %}
+
+{% block ttsa_header %}
+<div class="block-front -wrapper -event -ttsa _form hidden">
+    <div class="container wrapper">
+
+        <div class="block-discover-startup">
+            <div class="row">
+                <div class="col-sm-8 col-md-9 static-content">
+                    <div class="vertical-middle">
+                        <h2 class="kanit-regular">{% trans "Be a FREE" %}</h2>
+                        <h2 class="kanit-extralight">{% trans "member of Thailand Tech Startup Association (TTSA)" %}</h2>
+                        <p>
+                            TTSA'a members will receive email update and participate some association events.
+                        </p>
+                        <p>
+                            กรอกข้อมูลพร้อมรับสิทธิ์ในการสมัครเป็นสมาชิกสมาคมการค้าเพื่อส่งเสริมผู้ประกอบการเทคโนโลยีรายใหม่ (Thailand Tech Startup Association) เพื่อรับข่าวสารความเคลื่อนไหวที่น่าสนใจจากสมาคม
+                        </p>
+<!--                         <p>
+                            With NEW, you’ll get online access to data on more than <strong>{{ total_startup }}</strong> startups, often months—or even years—before they appear in other databases.
+                        </p> -->
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-4">
+                    <img ng-src="/static/images/ttsa-logo.jpg" alt="TTSA logo" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block title %}
+{% if form.is_new %}{% trans "Create" %} {{ type_of_organization_name }}{% else %}{% trans "Edit" %} {{ form.inst.name }}{% endif %}
+
+{% endblock %}
+
+{% block main_loading %}show{% endblock %}
+
+{% block sidebar %}
+
+{% if settings.POINT %}
+<div class="organization-percent-point">
+    <h4 class="title text-center">
+        {% trans "Information completeness" %}
+        <a href="#" data-toggle="tooltip" data-html="true" data-placement="auto" title="Point description" class="link-tooltip point-tooltip">
+            <span class="glyphicon glyphicon-question-sign">
+            </span>
+        </a>
+
+    </h4>
+    <div class="progress">
+        <span class="percent" style="width: {{ form.inst.point }}%"></span>
+    </div>
+    <div class="text-percent text-center">
+        {{ form.inst.point }}%
+    </div>
+    <!-- Generated markup by the plugin -->
+</div>
+{% endif %}
+
+
+<ul class="nav nav-pills nav-stacked">
+
+    <li class="nav-header disabled"><a>{% trans "Basic Profile" %}</a></li>
+    <li class="active require{% if form.permalink.errors or form.name.errors or form.image.errors or form.summary.errors or form.description.errors or form.organization_primary_role.errors or form.organization_roles.errors %} errors{% endif %}">
+        <a href="#organization-information" tabindex="-1" role="tab" data-toggle="tab">
+            {% trans "Information" %}
+        </a>
+    </li>
+    <li class="require{% if form.type_of_needs.errors or form.topics.errors or form.type_of_supports.errors or form.country.errors or form.organization_types.errors or form.investor_types.errors or form.product_launch.errors or form.funding.errors or form.request_funding.errors or form.deal_size_start.errors or form.deal_size_end.errors %} errors{% endif %}">
+        <a href="#organization-taxonomy" tabindex="-1" role="tab" data-toggle="tab">
+            {% trans "Taxonomy" %}
+        </a>
+    </li>
+
+    <li class="{% if not HIDE_FULL_PROFILE %} show-submit-button{% endif %}{% if form.facebook_url.errors or form.twitter_url.errors or form.linkedin_url.errors or form.homepage_url.errors %} errors{% endif %}">
+        <a href="#organization-social-network" tabindex="-1" role="tab" data-toggle="tab">
+            {% trans "Social Network" %}
+        </a>
+    </li>
+
+    {% if HIDE_FULL_PROFILE %}
+    <li class="show-submit-button{% if organization_section1_form.errors %} errors{% endif %}">
+        <a href="#organization-contact-information" tabindex="-1" role="tab" data-toggle="tab">
+            {% trans "Contact Information" %}
+        </a>
+    </li>
+    {% endif %}
+
+    <li class="nav-header disabled"><hr /><a>{% trans "People" %}</a></li>
+    <li class="show-submit-button{% if form.peoples.errors %} errors{% endif %}">
+        <a href="#organization-people" tabindex="-1" role="tab" data-toggle="tab">
+            {% trans "People in organization" %}
+        </a>
+    </li>
+    <li class="show-submit-button{% if form.partners.errors %} errors{% endif %}">
+        <a href="#organization-partner-client" tabindex="-1" role="tab" data-toggle="tab">
+            {% trans "Partners / Clients" %}
+        </a>
+    </li>
+    <li class="show-submit-button{% if form.jobs.errors %} errors{% endif %}">
+        <a href="#organization-jobs" tabindex="-1" role="tab" data-toggle="tab">
+            {% trans "Jobs" %}
+        </a>
+    </li>
+
+
+    {% if type_of_organization != form.inst.TYPE_SUPPORTING_ORGANIZATION %}
+    <li class="nav-header disabled"><hr />
+        <a>{% trans "Support" %} / {% trans "Investment" %}</a>
+    </li>
+    <li class="show-submit-button{% if form.recipients.errors %} errors{% endif %}">
+
+        <a href="#organization-supported-by" tabindex="-1" role="tab" data-toggle="tab">
+            {% trans "Supported by" %}
+        </a>
+    </li>
+    {% endif %}
+    {% if type_of_organization == form.inst.TYPE_SUPPORTING_ORGANIZATION %}
+    <li class="nav-header disabled depend-on-role depend-on-role-id-2 depend-on-role-id-3"><hr />
+        <a>
+            <span class="depend-on-role depend-on-role-id-2">{% trans "Support" %}</span>
+            <span class="depend-on-role depend-on-role-id--2-3">/</span>
+            <span class="depend-on-role depend-on-role-id-3">{% trans "Investment" %}</span>
+
+        </a>
+    </li>
+    <li class="show-submit-button depend-on-role depend-on-role-id-2{% if form.supporters.errors or form.received_fundings.errors %} errors{% endif %}">
+
+        <a href="#organization-give-support-to" tabindex="-1" role="tab" data-toggle="tab">
+            {% trans "Organisations Supported" %}
+        </a>
+    </li>
+    {% endif %}
+    {% if type_of_organization != form.inst.TYPE_SUPPORTING_ORGANIZATION %}
+    <li class="show-submit-button{% if form.invest_recipients.errors %} errors{% endif %}">
+
+        <a href="#organization-invested-by" tabindex="-1" role="tab" data-toggle="tab">
+            {% trans "Invested by" %}
+        </a>
+    </li>
+    {% endif %}
+    {% if type_of_organization == form.inst.TYPE_SUPPORTING_ORGANIZATION %}
+    <li class="show-submit-button depend-on-role depend-on-role-id-3{% if form.investors.errors %} errors{% endif %}">
+        <a href="#organization-give-invest-to" tabindex="-1" role="tab" data-toggle="tab">
+            {% trans "Organisations Funded" %}
+        </a>
+    </li>
+    {% endif %}
+
+
+    <li class="nav-header disabled"><hr /><a>{% trans "Portfolios / Media" %}</a></li>
+    <li class="show-submit-button{% if form.portfolios.errors %} errors{% endif %}">
+        <a href="#organization-portfolios" tabindex="-1" role="tab" data-toggle="tab">
+            {% trans "Portfolios" %}
+        </a>
+    </li>
+
+    {% comment %}
+    <li class="nav-header disabled"><hr /><a>{% trans "Relationship" %}</a></li>
+
+    <li class="show-submit-button{% if form.peoples.errors %} errors{% endif %}">
+        <a href="#organization-people" tabindex="-1" role="tab" data-toggle="tab">
+            {% trans "People" %}
+        </a>
+    </li>
+    <li class="show-submit-button{% if form.partners.errors %} errors{% endif %}">
+        <a href="#organization-partner-client" tabindex="-1" role="tab" data-toggle="tab">
+            {% trans "Partners / Clients" %}
+        </a>
+    </li>
+    <li class="show-submit-button{% if form.recipients.errors %} errors{% endif %}">
+
+        <a href="#organization-supported-by" tabindex="-1" role="tab" data-toggle="tab">
+            {% trans "Supported by" %}
+        </a>
+    </li>
+    <li class="show-submit-button{% if form.supporters.errors or form.received_fundings.errors %} errors{% endif %}">
+
+        <a href="#organization-give-support-to" tabindex="-1" role="tab" data-toggle="tab">
+            {% trans "Give Support to" %}
+        </a>
+    </li>
+    <li class="show-submit-button{% if form.invest_recipients.errors %} errors{% endif %}">
+
+        <a href="#organization-invested-by" tabindex="-1" role="tab" data-toggle="tab">
+            {% trans "Invested by" %}
+        </a>
+    </li>
+    <li class="show-submit-button{% if form.investors.errors %} errors{% endif %}">
+        <a href="#organization-give-invest-to" tabindex="-1" role="tab" data-toggle="tab">
+            {% trans "Invest to" %}
+        </a>
+    </li>
+
+    <li class="show-submit-button{% if form.jobs.errors %} errors{% endif %}">
+        <a href="#organization-jobs" tabindex="-1" role="tab" data-toggle="tab">
+            {% trans "Jobs" %}
+        </a>
+    </li>
+    <li class="show-submit-button{% if form.portfolios.errors %} errors{% endif %}">
+        <a href="#organization-portfolios" tabindex="-1" role="tab" data-toggle="tab">
+            {% trans "Portfolios" %}
+        </a>
+    </li>
+    {% endcomment %}
+
+    {# Sections #}
+    {% if not HIDE_FULL_PROFILE %}
+    <li class="nav-header disabled"><hr /><a>{% trans "Full Profile" %}</a></li>
+    <li{% if organization_section1_form.errors %} class="errors"{% endif %}>
+        <a href="#organization-section1" tabindex="-1" role="tab" data-toggle="tab" class="link-section">
+            <div class="title-section"><div>{% blocktrans with number=1 %}Section {{ number }}{% endblocktrans %}</div>
+            <span class="help-block">{% trans "General Information" %}</span></div>
+            {% if organization_section1_form.errors %}
+            <span class="glyphicon glyphicon-exclamation-sign pull-right"></span>
+            {% endif %}
+        </a>
+    </li>
+    <li{% if organization_section2_form.errors or measurement_year_values_formset.errors|formset_error_valid %} class="errors"{% endif %}>
+
+        <a href="#organization-section2" tabindex="-1" role="tab" data-toggle="tab" class="link-section">
+             <div class="title-section"><div>{% blocktrans with number=2 %}Section {{ number }}{% endblocktrans %}</div>
+            <span class="help-block">{% trans "Products/Services and Their Impacts" %}</span></div>
+            {% if organization_section2_form.errors or measurement_year_values_formset.errors|formset_error_valid %}
+            <span class="glyphicon glyphicon-exclamation-sign pull-right"></span>
+            {% endif %}
+        </a>
+    </li>
+    <li{% if organization_section3_form.errors %} class="errors"{% endif %}>
+        <a href="#organization-section3" tabindex="-1" role="tab" data-toggle="tab" class="link-section">
+             <div class="title-section"><div>{% blocktrans with number=3 %}Section {{ number }}{% endblocktrans %}</div>
+            <span class="help-block">{% trans "Finance" %}</span></div>
+            {% if organization_section3_form.errors %}
+            <span class="glyphicon glyphicon-exclamation-sign pull-right"></span>
+            {% endif %}
+        </a>
+    </li>
+    <li{% if organization_section4_form.errors %} class="errors"{% endif %}>
+        <a href="#organization-section4" tabindex="-1" role="tab" data-toggle="tab" class="link-section">
+             <div class="title-section"><div>{% blocktrans with number=4 %}Section {{ number }}{% endblocktrans %}</div>
+            <span class="help-block">{% trans "Team" %}</span></div>
+            {% if organization_section4_form.errors %}
+            <span class="glyphicon glyphicon-exclamation-sign pull-right"></span>
+            {% endif %}
+        </a>
+    </li>
+    <li{% if organization_section5_form.errors %} class="errors"{% endif %}>
+        <a href="#organization-section5" tabindex="-1" role="tab" data-toggle="tab" class="link-section">
+             <div class="title-section"><div>{% blocktrans with number=5 %}Section {{ number }}{% endblocktrans %}</div>
+            <span class="help-block">{% trans "Investment" %}</span></div>
+            {% if organization_section5_form.errors %}
+            <span class="glyphicon glyphicon-exclamation-sign pull-right"></span>
+            {% endif %}
+        </a>
+    </li>
+    {% endif %}
+
+    {# management #}
+    <li class="nav-header disabled"><hr /><a>{% trans "Management" %}</a></li>
+    <li class="show-submit-button{% if form.admins.errors %} errors{% endif %}">
+        <a href="#organization-admins" tabindex="-1" role="tab" data-toggle="tab">
+            {% trans "Administrators" %}
+        </a>
+    </li>
+    <li{% if form.status.errors or form.specials.errors %} class="errors"{% endif %}>
+        <a href="#organization-publishing" tabindex="-1" role="tab" data-toggle="tab">
+            {% trans "Publishing" %}
+        </a>
+    </li>
+
+</ul>
+
+{% endblock %}
+
+
+{% block content %}
+<div class="tab-content" id="tab_content">
+    {% if not form.is_new and not request_popup%}
+    <a href="{% url 'organization_detail' form.inst.permalink %}" class="btn btn-default btn-xs btn-view">
+        <span class="glyphicon glyphicon-eye-open"></span> {% trans "View result" %}
+    </a>
+    {% endif %}
+    <div class="tab-pane active in" id="organization-information">
+
+        <h2 class="tab-title">{% trans "Information" %}</h2>
+
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+        <div class="errors alert alert-danger">{{ form.non_field_errors }}</div>
+        {% endif %}
+
+
+        <div class="controls form-group form-group-hilight{% if not form.is_new or type_of_organization == form.inst.TYPE_SUPPORTING_ORGANIZATION %} dev-hidden{% endif %}">
+            <label for="id_kind" class="field-container control-label">{% trans "What kind of your created ?" %}</label>
+            <div class="field-container">
+
+                {% for kind in form.kind %}
+                    <span class="choice-item">
+                        {{ kind.tag }}
+                        <label for="id_kind_{{ kind.index }}">{{ kind.choice_label }}</label>
+                    </span>
+                {% endfor %}
+
+                {% if form.kind.errors %}
+                <div class="errors alert alert-danger">{{ form.kind.errors }}</div>
+                {% endif %}
+
+            </div>
+        </div>
+
+
+        <div class="controls form-group">
+            <label for="id_name" class="field-container control-label">
+                {% trans "Name" %}
+                <span class="depend-on-kind depend-on-kind-id-product">{% trans "of Product" %}</span>
+                <span class="depend-on-kind depend-on-kind-id-organization">{% trans "of" %} {{ type_of_organization_name }}</span>
+                *
+            </label>
+            <div class="field-container">
+                <span id="generate-permalink">
+                    {{ form.name }}
+                </span>
+
+                {% if form.name.errors %}
+                <div class="errors alert alert-danger">{{ form.name.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="controls form-group permalink-inline">
+            <label for="id_permalink" class="field-container control-label">{% trans "Permalink" %} <span class="label-required-ico">*</span></label>
+            <div class="field-container ">
+
+                <span id="id_permalink_readonly" class="form-control">{{ form.permalink.value|default_if_none:'' }}</span>
+                <a id="edit-permalink" href="#id_permalink">{% trans "edit" %}</a>
+
+                <span class="help-block">
+                    {% blocktrans with type_of_organization_name=type_of_organization_name %}This field represent your {{ type_of_organization_name }} url in this website.{% endblocktrans %}<br />
+                    {{ form.permalink.help_text }}
+                </span>
+                <input id="id_permalink" name="permalink" type="text" class="form-control" value="{{ form.permalink.value|default_if_none:'' }}">
+
+                {% if form.permalink.errors %}
+                <div class="errors alert alert-danger">{{ form.permalink.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="controls form-group">
+            <label for="id_image" class="field-container control-label">{% trans "Logo" %}</label>
+            <div class="field-container">
+                <span class="help-block">
+                {% trans "Insert a logo representing your organization/product/service." %}
+                </span>
+
+                {{ form.image }}
+
+                {% if form.image.errors %}
+                <div class="errors alert alert-danger">{{ form.image.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        {% if type_of_organization == form.inst.TYPE_SOCIAL_ENTERPRISE or type_of_organization == form.inst.TYPE_STARTUP %}
+        <input type="hidden" value="1" name="organization_primary_role" />
+        <input type="hidden" value="1" name="organization_roles" />
+        {%  else %}
+        <div class="controls form-group">
+            <label for="id_organization_primary_role" class="field-container control-label">{% trans "Primary Role" %} *</label>
+            <div class="field-container">
+
+                {% for role in form.organization_primary_role %}
+
+                    {% if role.choice_value and role.choice_value|to_int != 1 %}
+                    <span class="choice-item">
+                        {{ role.tag }}
+                         <label for="id_organization_primary_role_{{ role.index }}">{{ role.choice_label }}</label>
+                    </span>
+                    {% endif %}
+
+                {% endfor %}
+
+                {% if form.organization_primary_role.errors %}
+                <div class="errors alert alert-danger">{{ form.organization_primary_role.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="controls form-group">
+            <label for="id_organization_roles" class="field-container control-label">{% trans "Secondary Roles" %} *</label>
+            <div class="field-container">
+
+                {% for role in form.organization_roles %}
+
+                    {% if role.choice_value and role.choice_value|to_int != 1 %}
+                    <span class="choice-item">
+                        {{ role.tag }}
+
+                        <label for="id_organization_roles_{{ role.index }}">{{ role.choice_label }}</label>
+                    </span>
+
+                    {% endif %}
+
+                {% endfor %}
+
+                {% if form.organization_roles.errors %}
+                <div class="errors alert alert-danger">{{ form.organization_roles.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="controls form-group">
+            <label for="id_summary" class="field-container control-label">{% trans "Slogan" %} *</label>
+            <div class="field-container">
+                <span class="help-block">
+                    {% blocktrans with maxlength=form.summary.field.widget.attrs.maxlength %}Short detail in {{ maxlength }} characters{% endblocktrans %}
+                </span>
+
+                {{ form.summary }}
+
+                {% if form.summary.errors %}
+                <div class="errors alert alert-danger">{{ form.summary.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="controls form-group">
+            <label for="id_description" class="field-container control-label">{% trans "Description" %} *</label>
+            <div class="field-container">
+                <span class="help-block">
+                {% trans "Explain about your organization/product/service." %}
+                </span>
+
+                {{ form.description }}
+
+                {% if form.description.errors %}
+                <div class="errors alert alert-danger">{{ form.description.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+
+
+        <div class="controls form-group">
+            <label for="id_images" class="field-container control-label">
+                <span class="depend-on-kind depend-on-kind-id-product">{% trans "Screenshots" %}</span>
+                <span class="depend-on-kind depend-on-kind-id-organization">{% trans "Illustration" %}</span>
+                <span class="depend-on-kind depend-on-kind-id-">{% trans "Illustration" %}</span>
+            </label>
+            <div class="field-container">
+                <span class="help-block">
+                    <span class="depend-on-kind depend-on-kind-id-product">
+                        {% trans "Insert screenshots representing your product/service." %}
+                    </span>
+                    <span class="depend-on-kind depend-on-kind-id-organization">
+                        {% trans "Insert images representing your organization." %}
+                    </span>
+                    <span class="depend-on-kind depend-on-kind-id-">
+                        {% trans "Insert images representing your organization." %}
+                    </span>
+                </span>
+
+                {{ form.images }}
+
+                {% if form.image.errors %}
+                <div class="errors alert alert-danger">{{ form.images.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+
+    <div class="tab-pane" id="organization-taxonomy">
+
+        <h2 class="tab-title">{% trans "Taxonomy" %}</h2>
+
+        <div class="controls form-group"{% if HIDE_COUNTRY %} style="display: none;"{% endif %}>
+            <label for="id_country" class="field-container control-label">{% trans "Country" %} *</label>
+            {{ form.country }}
+            {% if form.country.errors %}
+            <div class="errors alert alert-danger">{{ form.country.errors }}</div>
+            {% endif %}
+        </div>
+
+
+        {% if type_of_organization == form.inst.TYPE_SUPPORTING_ORGANIZATION %}
+        <div class="controls form-group depend-on-role depend-on-role-id-2">
+            <label for="id_organization_types" class="field-container control-label">{% trans "Supporter Type" %} *</label>
+            <div class="checkbox">
+                <ul>
+                    {% for organization_type in form.organization_types %}
+                    <li>
+                        <span class="choice-item">
+                            {{ organization_type.tag }}
+                            <label for="id_organization_types_{{ organization_type.index }}">{{ organization_type.choice_label }}</label>
+                        </span>
+                    </li>
+                    {% endfor %}
+                </ul>
+
+                {% if form.organization_types.errors %}
+                <div class="errors alert alert-danger">{{ form.organization_types.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="controls form-group depend-on-role depend-on-role-id-3">
+            <label for="id_investor_types" class="field-container control-label">{% trans "Investor Type" %} *</label>
+            <div class="checkbox">
+                <ul>
+                    {% for investor_type in form.investor_types %}
+                    <li>
+                        <span class="choice-item">
+                            {{ investor_type.tag }}
+                            <label for="id_investor_types_{{ investor_type.index }}">{{ investor_type.choice_label }}</label>
+                        </span>
+                    </li>
+                    {% endfor %}
+                </ul>
+
+                {% if form.investor_types.errors %}
+                <div class="errors alert alert-danger">{{ form.investor_types.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        {% endif %}
+
+        {% if type_of_organization == form.inst.TYPE_SOCIAL_ENTERPRISE or type_of_organization == form.inst.TYPE_STARTUP %}
+
+        {% if type_of_organization == form.inst.TYPE_STARTUP %}
+
+        <div class="controls form-group">
+            <label for="id_product_launch" class="field-container control-label">{% trans "Product/Service Launch" %} *</label>
+            {{ form.product_launch}}
+            {% if form.product_launch.errors %}
+            <div class="errors alert alert-danger">{{ form.product_launch.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div class="controls form-group">
+            <label for="id_funding" class="field-container control-label">{% trans "Funded" %} *</label>
+            {{ form.funding}}
+            {% if form.funding.errors %}
+            <div class="errors alert alert-danger">{{ form.funding.errors }}</div>
+            {% endif %}
+        </div>
+        <div class="controls form-group">
+            <label for="id_request_funding" class="field-container control-label">{% trans "Request Funding" %}</label>
+            {{ form.request_funding}}
+            {% if form.request_funding.errors %}
+            <div class="errors alert alert-danger">{{ form.request_funding.errors }}</div>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        <div class="controls form-group">
+            <label for="id_type_of_needs" class="field-container control-label">{% trans "Type of needs" %} *</label>
+            <div class="checkbox">
+                <ul>
+                    {% for type_of_need in form.type_of_needs %}
+                    <li>
+                        {% if type_of_need.choice_label == 'Grant / Donation' %}
+                        <div class="type-of-need-group-label" >Financial</div>
+                        {% endif %}
+                        {% if type_of_need.choice_label == 'Incubation' %}
+                        <div class="type-of-need-group-label" >Incubation</div>
+                        {% endif %}
+                        {% if type_of_need.choice_label == 'Strategic Planning' %}
+                        <div class="type-of-need-group-label" >Advisory/Consulting</div>
+                        {% endif %}
+                        {% if type_of_need.choice_label == 'Networking' %}
+                        <div class="type-of-need-group-label" >Networking</div>
+
+                        {% endif %}
+                        <span class="choice-item">
+                            {{ type_of_need.tag }}
+                            <label for="id_type_of_needs_{{ type_of_need.index }}">{{ type_of_need.choice_label }}</label>
+                        </span>
+                    </li>
+                    {% endfor %}
+                </ul>
+
+                {% if form.type_of_needs.errors %}
+                <div class="errors alert alert-danger">{{ form.type_of_needs.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+
+
+
+        <div class="controls form-group">
+            <label for="id_topics" class="field-container control-label">{% trans "Focus on" %} *</label>
+            <div class="checkbox">
+                <ul>
+                    {% for topic in form.topics %}
+                    <li>
+                        <span class="choice-item">
+                            {{ topic.tag }}
+                            <label for="id_topics_{{ topic.index }}">{{ topic.choice_label }}</label>
+                        </span>
+                    </li>
+                    {% endfor %}
+                </ul>
+
+                {% if form.topics.errors %}
+                <div class="errors alert alert-danger">{{ form.topics.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        {% if type_of_organization == form.inst.TYPE_SUPPORTING_ORGANIZATION %}
+        <div class="controls form-group depend-on-role depend-on-role-id-2">
+            <label for="id_type_of_supports" class="field-container control-label">{% trans "Type of Supports" %} *</label>
+            <div class="checkbox">
+                <ul>
+                    {% for type_of_support in form.type_of_supports %}
+                    <li>
+                        <span class="choice-item">
+                            {{ type_of_support.tag }}
+                            <label for="id_type_of_supports_{{ type_of_support.index }}">{{ type_of_support.choice_label }}</label>
+                        </span>
+                    </li>
+                    {% endfor %}
+                </ul>
+
+                {% if form.type_of_supports.errors %}
+                <div class="errors alert alert-danger">{{ form.type_of_supports.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="controls form-group depend-on-role depend-on-role-id-3">
+            <label for="id_growth_stage" class="field-container control-label">{% trans "Investment Growth Stage" %}</label>
+            <div class="checkbox">
+                <ul>
+                    {% for growth_stage in form.growth_stage %}
+                    <li>
+                        <span class="choice-item">
+                            {{ growth_stage.tag }}
+                            <label for="id_growth_stage_{{ growth_stage.index }}">{{ growth_stage.choice_label }}</label>
+                        </span>
+                    </li>
+                    {% endfor %}
+                </ul>
+
+                {% if form.growth_stage.errors %}
+                <div class="errors alert alert-danger">{{ form.growth_stage.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="controls form-group depend-on-role depend-on-role-id-3">
+            <label for="id_deal_size_start" class="field-container control-label">{% trans "Deal Size - Minimum" %}</label>
+            <div class="field-container field-has-suffix">
+                {{ form.deal_size_start }}
+                <span class="field-suffix">{{ CURRENCY }}</span>
+                {% if form.deal_size_start.errors %}
+                <div class="errors alert alert-danger">{{ form.deal_size_start.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="controls form-group depend-on-role depend-on-role-id-3">
+            <label for="id_deal_size_end" class="field-container control-label">{% trans "Deal Size - Maximum" %}</label>
+            <div class="field-container field-has-suffix">
+                {{ form.deal_size_end }}
+                <span class="field-suffix">{{ CURRENCY }}</span>
+                {% if form.deal_size_end.errors %}
+                <div class="errors alert alert-danger">{{ form.deal_size_end.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        {% else %}
+
+        <div class="controls form-group">
+            <label for="id_growth_stage" class="field-container control-label">{% trans "Growth Stage" %}</label>
+            {{ form.growth_stage}}
+            {% if form.growth_stage.errors %}
+            <div class="errors alert alert-danger">{{ form.growth_stage.errors }}</div>
+            {% endif %}
+        </div>
+
+        {% endif %}
+
+
+
+    </div>
+
+    <div class="tab-pane" id="organization-social-network">
+
+        <h2 class="tab-title">{% trans "Social Network" %}</h2>
+
+        <div class="controls form-group">
+            <label for="id_facebook_url" class="field-container control-label">{% trans "Facebook URL" %}</label>
+            <div class="field-container">
+                <input id="id_facebook_url" name="facebook_url" type="text" class="form-control" value="{{ form.facebook_url.value|default_if_none:"" }}">
+                {% if form.facebook_url.errors %}
+                <div class="errors alert alert-danger">{{ form.facebook_url.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="controls form-group">
+            <label for="id_twitter_url" class="field-container control-label">{% trans "Twitter URL" %}</label>
+            <div class="field-container">
+                <input id="id_twitter_url" name="twitter_url" type="text" class="form-control" value="{{ form.twitter_url.value|default_if_none:"" }}">
+                {% if form.twitter_url.errors %}
+                <div class="errors alert alert-danger">{{ form.twitter_url.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="controls form-group">
+            <label for="id_linkedin_url" class="field-container control-label">{% trans "Linkedin URL" %}</label>
+            <div class="field-container">
+                <input id="id_linkedin_url" name="linkedin_url" type="text" class="form-control" value="{{ form.linkedin_url.value|default_if_none:"" }}">
+                {% if form.linkedin_url.errors %}
+                <div class="errors alert alert-danger">{{ form.linkedin_url.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="controls form-group">
+            <label for="id_homepage_url" class="field-container control-label">{% trans "Homepage URL" %}</label>
+            <div class="field-container">
+                <input id="id_homepage_url" name="homepage_url" type="text" class="form-control" value="{{ form.homepage_url.value|default_if_none:"" }}">
+                {% if form.homepage_url.errors %}
+                <div class="errors alert alert-danger">{{ form.homepage_url.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+
+    {% if HIDE_FULL_PROFILE %}
+    <div class="tab-pane" id="organization-contact-information">
+
+        <h2 class="tab-title">{% trans "Contact Information" %}</h2>
+
+        <div class="dev-hidden">
+            {% for field in organization_section1_form %}
+
+            {% if field.name != 'name_of_representative' and field.name != 'email_of_contact_person' and field.name != 'location_of_organizations_headquarters' %}
+            {% include 'field.html' %}
+            {% endif %}
+
+            {% if field.name == 'email_of_contact_person' %}
+            {% render_formset location_of_organizations_operating_facilities_formset 'location_of_organizations_operating_facilities' "Location of Organization's Operating Facilities" %}
+            {% endif %}
+
+            {% endfor %}
+        </div>
+
+        {% include 'field.html' with field=organization_section1_form.name_of_representative %}
+        {% include 'field.html' with field=organization_section1_form.email_of_contact_person %}
+
+        {% captureas label_phone_number_of_organizations_headquarters %}{% trans "Phone number of Organization s Headquarters" %}{% endcaptureas %}
+        {% render_formset phone_number_of_organizations_headquarters_formset 'phone_number_of_organizations_headquarters' label_phone_number_of_organizations_headquarters %}
+
+        {% include 'field.html' with field=organization_section1_form.location_of_organizations_headquarters %}
+
+    </div>
+    {% endif %}
+
+    <div class="tab-pane" id="organization-people">
+        <h2 class="tab-title">{% trans "People in organization" %}</h2>
+
+        <div class="controls form-group">
+            <label for="id_peoples" class="field-container control-label">{% trans "Add people who work at your organization." %}</label>
+
+            <div class="field-container-no-overflow field-inline-id_peoples">
+
+                <div class="inline-reference-container">
+                    <div class="inline-reference-wrapper">
+                        <span class="help-block">
+                            {% trans "Enter person name to display on your organization." %}
+                        </span>
+
+                        {{ form.peoples }}
+
+                        {% if form.peoples.errors %}
+                        <div class="errors alert alert-danger">{{ form.peoples.errors }}</div>
+                        {% endif %}
+
+                        <div class="inline-create-link-wrapper">
+                            {% trans "or" %}
+                            <span class="glyphicon glyphicon-plus icostartup icon-plus"></span>
+                            <a href="{% url 'account_inline_invite' %}?_inline=1&no_script=1&field_id=id_peoples&create=1" class="add-another-inline" id="add_id_peoples" target="peoples_inline">
+                                {% trans "Create new person" %}
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="add-another-inline-input-list" id="peoples_inline">
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="tab-pane" id="organization-partner-client">
+        <h2 class="tab-title">{% trans "Partners / Clients" %}</h2>
+
+        <div class="controls form-group">
+            <label for="id_partners" class="field-container control-label">{% trans "Add partners of your organization." %}</label>
+
+            <div class="field-container-no-overflow field-inline-id_partners">
+
+                <div class="inline-reference-container">
+                    <div class="inline-reference-wrapper">
+
+                        <span class="help-block">
+                            {% trans "Enter partners name to display on your organization." %}
+                        </span>
+
+                        {{ form.partners }}
+
+                        {% if form.partners.errors %}
+                        <div class="errors alert alert-danger">{{ form.partners.errors }}</div>
+                        {% endif %}
+
+                        <div class="inline-create-link-wrapper">
+                            {% trans "or" %}
+                            <span class="glyphicon glyphicon-plus icostartup icon-plus"></span>
+                            <a href="{% url 'organization_inline_create' %}?_inline=1&no_script=1&_win_name=id_partners" class="add-another-inline" id="add_id_partners" target="partners_inline">
+                                {% trans "Create new organization" %}
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="add-another-inline-input-list" id="partners_inline">
+
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+    </div>
+
+    <div class="tab-pane" id="organization-supported-by">
+        <h2 class="tab-title">{% trans "Supported by" %}</h2>
+
+        <div class="controls form-group">
+            <label for="id_supporters" class="field-container control-label">{% trans "Add supporters of your organization" %}</label>
+
+            <div class="field-container-no-overflow field-inline-id_supporters">
+
+                <div class="inline-reference-container">
+                    <div class="inline-reference-wrapper">
+                        <span class="help-block">
+                            {% trans "Enter supporter name to display on your organization." %}
+                        </span>
+
+                        {{ form.supporters }}
+
+                        {% if form.supporters.errors %}
+                        <div class="errors alert alert-danger">{{ form.supporters.errors }}</div>
+                        {% endif %}
+
+                        <div class="inline-create-link-wrapper">
+                            {% trans "or" %}
+                            <span class="glyphicon glyphicon-plus icostartup icon-plus"></span>
+                            <a href="{% url 'organization_inline_create' %}?_inline=1&no_script=1&_win_name=id_supporters&type_of_organization=supporter" class="add-another-inline" id="add_id_supporters" target="supporters_inline">
+                                {% trans "Create new organization" %}
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="add-another-inline-input-list" id="supporters_inline">
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="controls form-group">
+            <label for="id_received_fundings" class="field-container control-label">{% trans "Add records of received funding" %}</label>
+            <div class="field-container">
+
+                <span class="help-block">
+                    {% trans "Received funding record will be displayed on your Happening." %}
+                </span>
+
+                {{ form.received_fundings }}
+
+                <div class="popup-create-link-wrapper">
+                    <span class="glyphicon glyphicon-plus icostartup icon-plus"></span>
+                    <a href="{% url 'party_received_funding_party_create' %}?_popup=1" class="autocomplete-add-another" id="add_id_received_fundings">
+                        {% trans "Create a received funding record" %}
+                    </a>
+                </div>
+
+                {% if form.received_fundings.errors %}
+                <div class="errors alert alert-danger">{{ form.received_fundings.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+
+    <div class="tab-pane" id="organization-give-support-to">
+        <h2 class="tab-title">{% trans "Give Support to" %}</h2>
+
+        <div class="controls form-group">
+            <label for="id_recipients" class="field-container control-label">{% trans "Add organizations who received your support." %}</label>
+
+            <div class="field-container-no-overflow field-inline-id_recipients">
+
+                <div class="inline-reference-container">
+                    <div class="inline-reference-wrapper">
+
+                        <span class="help-block">
+                            {% trans "Enter recipient name to display on your organization." %}
+                        </span>
+
+                        {{ form.recipients }}
+
+                        {% if form.recipients.errors %}
+                        <div class="errors alert alert-danger">{{ form.recipients.errors }}</div>
+                        {% endif %}
+
+                        <div class="inline-create-link-wrapper">
+                            {% trans "or" %}
+                            <span class="glyphicon glyphicon-plus icostartup icon-plus"></span>
+                            <a href="{% url 'organization_inline_create' %}?_inline=1&no_script=1&_win_name=id_recipients&type_of_organization={{ DEFAULT_TYPE_RECEIVER }}" class="add-another-inline" id="add_id_recipients" target="recipients_inline">
+                                {% trans "Create new organization" %}
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="add-another-inline-input-list" id="recipients_inline">
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="controls form-group">
+            <label for="id_gived_fundings" class="field-container control-label">{% trans "Add records of funding given to others." %}</label>
+            <div class="field-container">
+                <span class="help-block">
+                    {% trans "Given funding record will be displayed on your Happening." %}
+                </span>
+
+                {{ form.gived_fundings }}
+
+                <div class="popup-create-link-wrapper">
+                    <span class="glyphicon glyphicon-plus icostartup icon-plus"></span>
+                    <a href="{% url 'party_received_funding_party_create' %}?_popup=1" class="autocomplete-add-another" id="add_id_gived_fundings">
+                        {% trans "Create a given funding record" %}
+                    </a>
+                </div>
+
+
+                {% if form.gived_fundings.errors %}
+                <div class="errors alert alert-danger">{{ form.gived_fundings.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+
+    <div class="tab-pane" id="organization-invested-by">
+        <h2 class="tab-title">{% trans "Invested by" %}</h2>
+
+        <div class="controls form-group">
+            <label for="id_investors" class="field-container control-label">{% trans "Add investors of your organization" %}</label>
+
+            <div class="field-container-no-overflow field-inline-id_investors">
+
+                <div class="inline-reference-container">
+                    <div class="inline-reference-wrapper">
+                        <span class="help-block">
+                            {% trans "Enter investor name to display on your organization." %}
+                        </span>
+
+                        {{ form.investors }}
+
+                        {% if form.investors.errors %}
+                        <div class="errors alert alert-danger">{{ form.investors.errors }}</div>
+                        {% endif %}
+
+                        <div class="inline-create-link-wrapper">
+                            {% trans "or" %}
+                            <span class="glyphicon glyphicon-plus iconstartup icon-plus"></span>
+                            <a href="{% url 'organization_inline_create' %}?_inline=1&no_script=1&_win_name=id_investors&type_of_organization=investor" class="add-another-inline" id="add_id_investors" target="investors_inline">
+                                {% trans "Create new organization" %}
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="add-another-inline-input-list" id="investors_inline">
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="controls form-group">
+            <label for="id_received_investings" class="field-container control-label">{% trans "Add records of investment received" %}</label>
+            <div class="field-container">
+                <span class="help-block">
+                    {% trans "Investment record will be displayed on your Happening." %}
+                </span>
+
+                {{ form.received_investings }}
+
+                <div class="popup-create-link-wrapper">
+                    <span class="glyphicon glyphicon-plus icostartup icon-plus"></span>
+                    <a href="{% url 'party_received_funding_party_create' %}?_popup=1" class="autocomplete-add-another" id="add_id_received_investings">
+                        {% trans "Create a received investment record" %}
+                    </a>
+                </div>
+
+
+                {% if form.received_investings.errors %}
+                <div class="errors alert alert-danger">{{ form.received_investings.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+
+    <div class="tab-pane" id="organization-give-invest-to">
+        <h2 class="tab-title">{% trans "Invest to" %}</h2>
+
+        <div class="controls form-group">
+            <label for="id_invest_recipients" class="field-container control-label">{% trans "Add organizations who received your investment" %}</label>
+
+            <div class="field-container-no-overflow field-inline-id_invest_recipients">
+
+                <div class="inline-reference-container">
+                    <div class="inline-reference-wrapper">
+                        <span class="help-block">
+                            {% trans "Enter invest recipient name to display on your organization." %}
+                        </span>
+
+                        {{ form.invest_recipients }}
+
+                        {% if form.invest_recipients.errors %}
+                        <div class="errors alert alert-danger">{{ form.invest_recipients.errors }}</div>
+                        {% endif %}
+
+                        <div class="inline-create-link-wrapper">
+                            {% trans "or" %}
+                            <span class="glyphicon glyphicon-plus icostartup icon-plus"></span>
+                            <a href="{% url 'organization_inline_create' %}?_inline=1&no_script=1&_win_name=id_invest_recipients&type_of_organization={{ DEFAULT_TYPE_RECEIVER }}" class="add-another-inline" id="add_id_invest_recipients" target="invest_recipients_inline">
+                                {% trans "Create new organization" %}
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="add-another-inline-input-list" id="invest_recipients_inline">
+
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class="controls form-group">
+            <label for="id_gived_investings" class="field-container control-label">{% trans "Add records of investment given to others" %}</label>
+            <div class="field-container">
+
+                <span class="help-block">
+                    {% trans "Investment record will be displayed on your Happening." %}
+                </span>
+
+                {{ form.gived_investings }}
+
+                <div class="popup-create-link-wrapper">
+                    <span class="glyphicon glyphicon-plus icostartup icon-plus"></span>
+                    <a href="{% url 'party_received_funding_party_create' %}?_popup=1" class="autocomplete-add-another" id="add_id_gived_investings">
+                        {% trans "Create a given investment record" %}
+                    </a>
+                </div>
+
+                {% if form.gived_investings.errors %}
+                <div class="errors alert alert-danger">{{ form.gived_investings.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+
+    <div class="tab-pane" id="organization-jobs">
+        <h2 class="tab-title">{% trans "Jobs" %}</h2>
+        <div class="controls form-group">
+            <label for="id_jobs" class="field-container control-label">{% trans "Add your jobs" %}</label>
+            <div class="field-container">
+                <span class="help-block">
+                    {% trans "Create a job to start recruiting." %}
+                </span>
+
+                {{ form.jobs }}
+
+                <div class="popup-create-link-wrapper">
+                    <span class="glyphicon glyphicon-plus icostartup icon-plus"></span>
+                    <a href="{% url 'job_create' form.inst.id|default_if_none:0 %}?_popup=1" class="autocomplete-add-another" id="add_id_jobs">
+                        {% trans "Create job" %}
+                    </a>
+                </div>
+
+
+                {% if form.jobs.errors %}
+                <div class="errors alert alert-danger">{{ form.jobs.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-pane" id="organization-portfolios">
+        <h2 class="tab-title">{% trans "Portfolios" %}</h2>
+
+        <div class="controls form-group">
+            <label for="id_portfolios" class="field-container control-label">{% trans "Add your portfolios" %}</label>
+            <div class="field-container">
+                {{ form.portfolios }}
+
+                <div class="popup-create-link-wrapper">
+                    <span class="glyphicon glyphicon-plus icostartup icon-plus"></span>
+                    <a href="{% url 'portfolio_create' %}?_popup=1" class="autocomplete-add-another" id="add_id_portfolios">
+                        {% trans "Create portfolio" %}
+                    </a>
+                </div>
+
+                <span class="help-block">
+                </span>
+                {% if form.portfolios.errors %}
+                <div class="errors alert alert-danger">{{ form.portfolios.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+
+    {% if not HIDE_FULL_PROFILE %}
+
+    {#  Sections #}
+    <div class="tab-pane form-publishing" id="organization-section1">
+        <h2 class="tab-title">{% trans "General Information" %}</h2>
+
+        {% for field in organization_section1_form %}
+
+        {% include 'field.html' %}
+
+        {#  Custom postion of formset after field name #}
+        {% if field.name == 'location_of_organizations_headquarters' %}
+        {% render_formset phone_number_of_organizations_headquarters_formset 'phone_number_of_organizations_headquarters' "Phone number of Organization s Headquarters" %}
+        {% endif %}
+
+        {% if field.name == 'email_of_contact_person' %}
+        {% render_formset location_of_organizations_operating_facilities_formset 'location_of_organizations_operating_facilities' "Location of Organization's Operating Facilities" %}
+        {% endif %}
+
+        {% endfor %}
+
+    </div>
+
+    {% endif %}
+
+    <div class="tab-pane form-publishing" id="organization-section2">
+        <h2 class="tab-title">{% trans "Products/Services and Their Impacts" %}</h2>
+
+        {% for field in organization_section2_form %}
+
+
+        {% if 'measure' not in field.name %}
+
+        {% include 'field.html' %}
+
+        {% endif %}
+
+        {#  Custom postion of formset after field name #}
+        {% if field.name == 'productservice_description' %}
+
+        <label class="form-group-label">Impact Measurement Information</label>
+
+        <div class="measurement-fields-wrapper field-group">
+
+            <div class="measurement-header-fields">
+                {# render measure meta  #}
+                <div class="row">
+                    <div class="col-md-6">
+                        {% include 'field.html' with field=organization_section2_form.definition_of_unit_of_measure_1 %}
+                    </div>
+                    <div class="col-md-6">
+                        {% include 'field.html' with field=organization_section2_form.unit_of_impact_measurement_1 %}
+                    </div>
+                    <div class="col-md-6">
+                        {% include 'field.html' with field=organization_section2_form.definition_of_unit_of_measure_2 %}
+                    </div>
+                    <div class="col-md-6">
+                        {% include 'field.html' with field=organization_section2_form.unit_of_impact_measurement_2 %}
+                    </div>
+                    <div class="col-md-6">
+                         {% include 'field.html' with field=organization_section2_form.definition_of_unit_of_measure_3 %}
+                    </div>
+                    <div class="col-md-6">
+                        {% include 'field.html' with field=organization_section2_form.unit_of_impact_measurement_3 %}
+                    </div>
+                </div>
+
+<!--                 {% include 'field.html' with field=organization_section2_form.definition_of_unit_of_measure_1 %}
+                {% include 'field.html' with field=organization_section2_form.unit_of_impact_measurement_1 %}
+                {% include 'field.html' with field=organization_section2_form.definition_of_unit_of_measure_2 %}
+                {% include 'field.html' with field=organization_section2_form.unit_of_impact_measurement_2 %}
+                {% include 'field.html' with field=organization_section2_form.definition_of_unit_of_measure_3 %}
+                {% include 'field.html' with field=organization_section2_form.unit_of_impact_measurement_3 %} -->
+            </div>
+            <div class="measurement-body-fields">
+                {% render_formset measurement_year_values_formset 'measurement_year_values' 'Add Measurement Year and Values' %}
+            </div>
+
+        </div>
+
+        {% endif %}
+
+        {% endfor %}
+
+    </div>
+
+    <div class="tab-pane form-publishing" id="organization-section3">
+        <h2 class="tab-title">{% trans "Finance" %}</h2>
+        <span class="help-block-finance">
+        <strong>Note:</strong> Decimal number value in {{ settings.CURRENCY }} do not use a comma.
+        </span>
+
+
+        {% render_formset top_3_major_investors_year_and_amount_formset 'top_3_major_investors_year_and_amount' 'Top 3 major investors, year and amount' True %}
+        {% render_formset top_3_major_donors_year_and_amount_formset 'top_3_major_donors_year_and_amount' 'Top 3 major donors, year and amount' True %}
+
+        {{ organization_section3_form.as_bootstrap }}
+
+
+    </div>
+
+    <div class="tab-pane form-publishing" id="organization-section4">
+        <h2 class="tab-title">{% trans "Team" %}</h2>
+        {% render_formset team_information_formset 'team_information' 'Key Officers (Name and Title)' %}
+        {{ organization_section4_form.as_bootstrap }}
+
+    </div>
+
+    <div class="tab-pane form-publishing" id="organization-section5">
+        <h2 class="tab-title">{% trans "Investment" %}</h2>
+
+        {{ organization_section5_form.as_bootstrap }}
+
+    </div>
+
+
+    {# Management #}
+    <div class="tab-pane" id="organization-admins">
+
+        <h2 class="tab-title">{% trans "Administrators" %}</h2>
+
+        <div class="controls form-group">
+
+            <label for="id_admins" class="field-container control-label">{% trans "Add your organization’s administrators." %}</label>
+            <div class="field-container-no-overflow field-inline-id_admins">
+
+                <div class="inline-reference-container">
+                    <div class="inline-reference-wrapper">
+                        <span class="help-block">
+                            {% trans "Type to search for your admin. This person will be able to represent and manage your organization on this website." %}
+                        </span>
+                        {{ form.admins }}
+
+
+                        {% if form.admins.errors %}
+                        <div class="errors alert alert-danger">{{ form.admins.errors }}</div>
+                        {% endif %}
+
+                        <div class="inline-create-link-wrapper">
+                            {% trans "or" %}
+                            <span class="glyphicon glyphicon-plus icostartup icon-plus"></span>
+                            <a href="{% url 'account_inline_invite' %}?_inline=1&manage=1{% if form.inst.id %}&title={{ form.inst.name }}&next={% url 'organization_edit' form.inst.id %}{% endif %}" class="add-another-inline" id="add_id_admins" target="admins_inline">
+                                {% trans " Invite by Email" %}
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="add-another-inline-input-list" id="admins_inline">
+
+                    </div>
+                </div>
+
+                {% if form.dst.errors %}
+                <div class="errors alert alert-danger">{{ form.dst.errors }}</div>
+                {% endif %}
+
+
+            </div>
+        </div>
+
+    </div>
+
+    <div class="tab-pane form-publishing" id="organization-publishing">
+        <h2 class="tab-title">{% trans "Publishing" %}</h2>
+
+        <div class="controls form-group row">
+            <label for="id_status" class="col-sm-2 control-label">{% trans "Status" %}</label>
+            <div class="col-sm-10">
+                <ul>
+                {% for status in form.status %}
+                    <li>
+                        {% if status.choice_value != STATUS_PUBLISHED|slugify or form.inst.published or user.is_staff or ALLOWED_CREATE_ORGANIZATION_WITHOUT_APPROVAL %}
+                        <span class="choice-item">
+                            {{ status.tag }}
+                             <label for="id_status_{{ status.index }}">{{ status.choice_label }}</label>
+                        </span>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+                </ul>
+                {% if form.status.errors %}
+                <div class="errors alert alert-danger">{{ form.status.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        {% if user.is_staff %}
+        <div class="controls form-group row">
+            <label for="id_specials" class="col-sm-2 control-label">{% trans "Events" %}</label>
+
+            <div class="col-sm-10 checkbox">
+                <ul>
+                    {% for special in form.specials %}
+                    <li>
+                        <span class="choice-item">
+                            {{ special.tag }}
+                            <label for="id_specials_{{ special.index }}">{{ special.choice_label }}</label>
+                        </span>
+                    </li>
+                    {% endfor %}
+                </ul>
+
+                {% if form.specials.errors %}
+                <div class="errors alert alert-danger">{{ form.specials.errors }}</div>
+                {% endif %}
+            </div>
+
+        </div>
+        {% endif %}
+
+    </div>
+
+</div>
+
+
+
+
+<div class="controls form-group group-action">
+    <div class="col-sm-offset-2-bnk field-container form-action">
+        <button value="1" class="btn btn-primary btn-orange btn-next" type="submit" onclick="window.location='#tab_content'">{%  trans "Next" %}</button>
+        <button class="btn btn-primary btn-orange{% if form.is_new %} btn-submit{% endif %}{% if form.errors %} force-show{% endif %}" type="submit">{% if form.is_new %}{% trans "Finish" %}{% else %}{% trans "Save changes" %}{% endif %}</button>
+        <a href="." target="_self" class="btn btn-default btn-cancel">{% trans "Cancel" %}</a>
+
+        {% if not form.is_new and logged_in_party.id == user.id %}
+        <a class="btn btn-md btn-delete pull-right" href="{% url 'presentation_delete' 'organization' 'Organization' form.inst.id %}">
+            <span class="glyphicon glyphicon-remove icostartup icon-delete"></span>
+            {% trans "Delete" %}
+        </a>
+        {% endif %}
+
+    </div>
+</div>
+
+<input type="hidden" name="control_permalink" value="1"/>
+<input type="hidden" name="prevent_scroll_reload" value="1"/>
+<input type="hidden" name="is_new" value="{% if form.is_new %}1{% else %}0{% endif %}"/>
+
+{% endblock %}

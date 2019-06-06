@@ -1,0 +1,97 @@
+<style type="text/css">
+
+    .main-loading {
+        display: none;
+    }
+    .main-loading.show {
+        display: block;
+    }
+
+    .loading-first {
+        text-align: center;
+        overflow: hidden;
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        z-index: 9999;
+        background-color: #FFF;
+    }
+
+    .loading-first svg {
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .loading-first * {
+      /* stroke: #999; */
+      margin: 80px 0;
+      stroke-linecap: round;
+      vector-effec: non-scaling-stroke;
+    }
+
+    .loading-first [id='line'] {
+      stroke-width: 3;
+    }
+
+    .loading-first text {
+      font: .875em century gothic, verdana, sans-serif;
+    }
+
+    .loading-first [id='mover'] {
+      -webkit-animation: sun-motion 5s cubic-bezier(0.175, 0.885, 0.32, 1.275) infinite;
+    }
+
+    .loading-first [id='main'] {
+      fill: transparent;
+      stroke-width: 7;
+    }
+
+    .loading-first [id='eyes'] {
+      -webkit-animation: eye-motion 5s ease-out infinite;
+    }
+    .loading-first [id='eyes'] circle {
+      fill: #999;
+    }
+
+    .loading-first [id='ray'] {
+      stroke-width: 4;
+    }
+
+    .loading-first [id='rays'] {
+      -webkit-animation: rot 5s linear infinite;
+    }
+
+    @-webkit-keyframes rot {
+      to {
+        transform: rotate(0.25turn);
+      }
+    }
+    @-webkit-keyframes eye-motion {
+      0%, 20%, 49%, 100% {
+        transform: translate(-13px);
+      }
+      21%, 25%, 29%, 47% {
+        transform: translate(13px) scaleY(1);
+      }
+      27% {
+        transform: translate(13px) scaleY(0);
+      }
+      48% {
+        transform: translate(0);
+      }
+    }
+    @-webkit-keyframes sun-motion {
+      0%, 99%, 100% {
+        transform: translateY(-16px);
+      }
+      50% {
+        transform: translateY(-29px);
+      }
+      52%, 98% {
+        transform: translate(4px) scaleY(1.25);
+      }
+      53%, 97% {
+        transform: translateY(23px);
+      }
+    }
+</style>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Are you human?</title>
+
+    <script type="text/javascript">
+        function insertParam(key, value) {
+            key = encodeURIComponent(key); value = encodeURIComponent(value);
+
+            var s = document.location.search;
+            var kvp = key+"="+value;
+
+            var r = new RegExp("(&|\\?)"+key+"=[^\&]*");
+
+            s = s.replace(r,"$1"+kvp);
+
+            if(!RegExp.$1) {s += (s.length>0 ? '&' : '?') + kvp;};
+
+            //again, do what you will here
+            document.location.search = s;
+        }
+
+        insertParam('i_am_human', true);
+    </script>
+</head>
+<body>
+
+</body>
+</html>

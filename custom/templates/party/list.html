@@ -1,0 +1,29 @@
+{% extends 'base_single.html' %}
+{% load i18n %}
+{% load static %}
+{% load common_tags %}
+
+{% block title %}
+{{ settings.FILTER|keyvalue:role_permalink|keyvalue:'TITLE' }}
+{% endblock %}
+
+
+
+{% block title_class %}{% captureas header_banner %}{{ settings.FILTER|keyvalue:role_permalink|keyvalue:'HEADER_BANNER' }}{% endcaptureas %}{% if header_banner %} hidden{% else %} extra-top{% endif %}{% endblock %}
+{% block search_toggle_class %}{% endblock %}
+{% block search_class %}{% endblock %}
+{% block content_class %}{% endblock %}
+{% block wrapper_class %} wrapper--list{% endblock %}
+
+{% block breadcrumb %}
+{% endblock %}
+
+{% block leader %}
+{% include 'party/_leader.html' %}
+{%  endblock %}
+
+{% block content %}
+{% include 'party/_filter.html' with params=settings.FILTER|keyvalue:role_permalink %}
+
+{% endblock %}
+

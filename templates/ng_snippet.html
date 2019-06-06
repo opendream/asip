@@ -1,0 +1,712 @@
+{% load i18n %}
+
+<!-- *********************************************** -->
+<!-- *********************** List   **************** -->
+<!-- *********************************************** -->
+
+<script type='text/ng-template' id="template_party_item.html">
+    <div class="item-inner height-neighborhood">
+        <div class="grid-view-thumbnail">
+            <div class="thumbnail">
+                <a ng-href="{[{ party.absolute_url }]}">
+                    <img ng-src="{[{ party.get_thumbnail }]}">
+                </a>
+            </div>
+        </div>
+        <div class="description-wrapper">
+            <div class="body-overflow-auto">
+                <h3 class="title">
+                    <a ng-if="party.get_status == notification_status.active" ng-href="{[{ party.absolute_url }]}">{[{ party.get_display_name}]}</a>
+                    <span ng-if="party.get_status != notification_status.active">{[{ party.get_display_name}]}</span>
+                </h3>
+                <div class="country">{[{ party.country.title }]}</div>
+                <div class="description" ng-bind-html="party.get_summary"></div>
+            </div>
+            <div class="follow-section">
+                <div love-button party="party"></div>
+                <div follow-button party="party"></div>
+            </div>
+        </div>
+        <div ng-class="{'required-approval':party.REQUIRED_APPROVAL, 'approval':party.status == notification_status.active}" ng-if="party.REQUIRED_APPROVAL && party.status == notification_status.active">
+            Approved
+        </div>
+    </div>
+</script>
+
+<script type='text/ng-template' id="template_party_item_style_text_list.html">
+    <h3 class="title" ng-if="party.get_status == notification_status.active"> <a ng-href="{[{ party.absolute_url }]}">{[{ party.get_display_name }]}</a>
+    <h3 class="title" ng-if="party.get_status != notification_status.active"> {[{ party.get_display_name }]}
+        <span class="country" ng-show="party.country.title">
+            {[{party.country.title | dashText }]}
+        </span>
+    </h3>
+    <div class="description" ng-bind-html="party.get_summary">
+    </div>
+    <div ng-class="{'required-approval':party.REQUIRED_APPROVAL, 'approval':(party.status || party.approval_status) == notification_status.active}" ng-if="party.REQUIRED_APPROVAL && (party.status || party.approval_status) == notification_status.active">
+        Approved
+    </div>
+</script>
+
+<script type='text/ng-template' id="template_party_item_style_default.html">
+    <div class="list-view">
+        <div class="small-logo pull-left thumbnail">
+            <span>
+                <a ng-href="{[{ party.absolute_url }]}">
+                    <img ng-src="{[{ party.get_thumbnail }]}">
+                </a>
+            </span>
+        </div>
+        <div class="group-info" >
+            <h3 class="title"> <a ng-href="{[{ party.absolute_url }]}">{[{ party.get_display_name }]}</a>
+                <span class="country" ng-show="party.country.title">
+                    {[{party.country.title | dashText }]}
+                </span>
+            </h3>
+            <div class="description" ng-bind-html="party.get_summary">
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type='text/ng-template' id="template_party_item_style_default_2.html">
+    <div class="thumbnail">
+        <a ng-href="##portfolio-{[{ party.id }]}" data-target="#portfolio-popup" ng-click="open_modal_portfolio(party, $first, $last && !$scope.can_load_more)"> 
+            <img ng-src="{[{party.get_thumbnails[0]}]}"/>
+        </a>
+    </div>
+    <h3 class="title">
+        <a ng-href="##portfolio-{[{ party.id }]}" ng-click="open_modal_portfolio(party, $first, $last && !$scope.can_load_more)" ng-bind-html="party.title">
+        </a>
+    </h3>
+</script>
+
+<!-- *********************************************** -->
+<!-- *************** Portfolio    ****************** -->
+<!-- *********************************************** -->
+
+<script type='text/ng-template' id="template_modal_portfolio.html">
+    <div ng-controller="PopupPortfolioListController" ng-init="init_with_params('/api/v1/portfolio', { limit: 1 }, '-ordering')" ui-keyup="{'right':'next()', 'left':'previous()'}">
+        <div class="modal fade" id="portfolio-popup" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-portfolio ">
+                <div class="modal-content">
+                    <a ng-href="#" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></a>
+                    <div id="carousel-portfolio" class="carousel" data-ride="carousel" data-interval="false">
+                        <div class="title-type">Portfolio</div>
+
+                        <!-- Wrapper for slides -->
+                        <div class="carousel-inner" role="listbox">
+                            <div class="item active">
+                                <h2 class="title" ng-bind-html="current_portfolio.title"></h2>
+                                <div class="row">
+                                    <div class="col-md-6 img-wrapper">
+                                        <div class="img-portfolio">
+                                            <div class="show-img">
+                                                <div class="show-wrapper">
+                                                    <img ng-src="{[{highlight_image}]}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <ul class="list-img">
+                                            <li ng-repeat="thumbnail in current_portfolio.get_thumbnails track by $index">
+                                                <a ng-href="" ng-click="set_highlight_image_at_index($index)">
+                                                <img ng-src="{[{thumbnail}]}" class="img-responsive">
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="caption col-md-6">
+                                        <p ng-bind-html="current_portfolio.description"></p>
+                                        <strong ng-class="portfilo_link_class()">Live preview : </strong>
+                                        <a ng-href="{[{current_portfolio.url}]}" title="{[{current_portfolio.title}]}" ng-class="portfilo_link_class()">{[{current_portfolio.url}]}</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>   
+
+                    <!-- Controls -->
+                    <div class="carousel-control">
+                        <a class="left control" ng-href="#" role="button" data-slide="prev" ng-click="previous()" ng-class="previous_class()">
+                        <span class="glyphicon glyphicon-chevron-left"></span>
+                        <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="right control" ng-href="" role="button" data-slide="next" ng-click="next()" ng-class="next_class()">
+                        <span class="glyphicon glyphicon-chevron-right"></span>
+                        <span class="sr-only">{% trans "Next" %}</span>
+                        </a>
+                    </div>    
+                </div>
+            </div>
+        </div>    
+    </div>
+</script>
+
+<script type='text/ng-template' id="template_party_feature_item.html">
+    <div class="feature-wrapper" >
+        <div class="thumbnail" >
+            <a ng-if="party.get_status == notification_status.active" href="{[{ party.absolute_url }]}" title="{[{ party.get_display_name }]}">
+                <img ng-src="{[{ party.get_thumbnail }]}" >
+            </a>
+            <span ng-if="party.get_status != notification_status.active"><img ng-src="{[{ party.get_thumbnail }]}" ></span>
+        </div>
+        <div class="info">
+          <h3 class="title">
+              <a ng-if="party.get_status == notification_status.active" href="{[{ party.absolute_url }]}" title="{[{ party.get_display_name }]}">
+                {[{ party.get_display_name }]}
+              </a>
+              <span ng-if="party.get_status != notification_status.active">{[{ party.get_display_name }]}</span>
+          </h3>
+          <div class="country">{[{ party.country.title }]}</div>
+          <div class="description" ng-bind-html="party.get_summary">
+          </div>
+        </div>
+        <div class="follow-section">
+            <div love-button party="party"></div>
+            <div follow-button party="party"></div>
+        </div>
+    </div>
+</script>
+
+<!-- *********************************************** -->
+<!-- *************** Fullprofile    **************** -->
+<!-- *********************************************** -->
+
+<script type='text/ng-template' id="template_party_profile_item_style_text.html">
+    <dt>{[{content.label}]}</dt>
+    <dd ng-bind-html="(content.body || 'N/A') | sanitize"></dd>
+</script>
+
+<script type='text/ng-template' id="template_party_profile_item_style_gender.html">
+    <dt>{[{content.label}]}</dt>
+    <dd>{[{content.body | gender}]}</dd>
+</script>
+
+<script type='text/ng-template' id="template_party_profile_item_style_number.html">
+    <dt>{[{content.label}]}</dt>
+    <dd>{[{(content.body | number:0) || "N/A"}]}</dd>
+</script>
+
+<script type='text/ng-template' id="template_party_profile_item_style_date.html">
+    <dt>{[{content.label}]}</dt>
+    <dd>{[{content.body | dateFormText}]}</dd>
+</script>
+
+<script type='text/ng-template' id="template_party_profile_item_style_review.html">
+    <dt>{[{content.label}]}</dt>
+    <dd>{[{(content.body == true) ? 'In review' : 'Not in review'}]}</dd>
+</script>
+
+<script type='text/ng-template' id="template_party_profile_item_style_text_list.html">
+    <dt>{[{content.label}]}</dt>
+    <dd>
+        <div class="sub-body" ng-show="!content.body.length" ng-bind-html="c.title || 'N/A' | sanitize"></div>
+        <ul class="{[{ content.html_class }]}">
+            <li ng-repeat="c in content.body">
+                <div class="title" ng-bind-html="c.title | sanitize"></div><span ng-if="content.html_class != 'list'" ng-show="!$last">,</span>
+            </li>
+        </ul>
+    </dd>
+</script>
+
+<script type='text/ng-template' id="template_party_profile_item_style_text_list_with_subtitle.html">
+    <dt>{[{content.label}]}</dt>
+    <dd>
+        <div class="sub-body" ng-show="!content.body.length" ng-bind-html="c.title || 'N/A' | sanitize"></div>
+        <ul>
+            <li ng-repeat="c in content.body" class="name-title-officer">
+                <div class="title" ng-bind-html="c.name | sanitize"></div>
+                <div class="sub-title" ng-show="c.title" ng-bind-html="c.title | sanitize"></div>
+            </li>
+        </ul>
+    </dd>
+</script>
+
+<script type='text/ng-template' id="template_party_profile_item_style_phone_list.html">
+    <dt>{[{content.label}]}</dt>
+    <dd>
+        <div class="sub-body" ng-show="!content.body.length" ng-bind-html="c.title || 'N/A' | sanitize"></div>
+        <ul>
+            <li ng-repeat="c in content.body">
+                <div class="title"><a ng-bind-html="c.phone_number | sanitize" ng-href="tel:{[{c.phone_number}]}"></a></div><span ng-show="!$last">,</span>
+            </li>
+        </ul>
+    </dd>
+</script>
+
+<script type='text/ng-template' id="template_party_profile_item_style_email.html">
+    <dt>{[{content.label}]}</dt>
+    <dd><a href="" title="Send email" message-popup>Send email</a></dd>
+</script>
+<script type='text/ng-template' id="template_party_profile_item_style_email_phone.html">
+    <dt>{[{content.label}]}</dt>
+    <dd><a href="" title="Send email" message-popup>Request for information</a></dd>
+</script>
+
+<script type='text/ng-template' id="template_party_profile_item_style_link.html">
+    <dt>{[{content.label}]}</dt>
+    <dd><a ng-href="{[{content.body}]}" title="{[{content.body}]}" target="_blank">{[{content.body || 'N/A'}]}</a></dd>
+</script>
+
+<!-- *********************************************** -->
+<!-- ******************   Event ******************** -->
+<!-- *********************************************** -->
+
+<script type='text/ng-template' id="template_party_event.html">
+
+    <div class="feature-wrapper height-neighborhood-wrapper">
+        <div class="event-feature-main-wrapper height-neighborhood">
+            <div class="event-thumbnail-wrapper">
+                <div class="thumbnail">
+                    <a ng-href="{[{ party.absolute_url }]}">
+                        <img ng-src="{[{ party.get_thumbnail }]}"/>
+                    </a>
+                </div>
+            </div>
+            <div class="info">
+                <h3 class="title">
+                    <a ng-href="{[{ party.absolute_url }]}" title="{[{ party.title }]}">
+                        {[{ party.title }]}
+                    </a>
+                </h3>
+                <div class="country">{[{ party.country.title }]}</div>
+                <div class="description" ng-bind-html="(party.get_summary || '') | sanitize"></div>
+            </div>
+        </div>
+        <div class="event-calendar height-neighborhood-footer">
+            <div class="date">{[{ party.start_date | dateEvent:party.end_date }]}</div>
+            <div class="place">{[{ party.location | limitTo: 65 }]} {[{ party.location.length > 65 ? '...' : '' }]}</div>
+        </div>
+    </div>
+</script>
+
+<!-- *********************************************** -->
+<!-- ******************** News ********************* -->
+<!-- *********************************************** -->
+
+<script type='text/ng-template' id="template_party_news.html">
+
+    <div class="thumbnail">
+        <a ng-href="{[{ party.absolute_url }]}">
+            <img ng-src="{[{ party.get_thumbnail }]}" />
+        </a>
+    </div>
+    <div class="group-info">
+        <h3 class="title"><a ng-href="{[{ party.absolute_url }]}" ng-bind-html="(party.title || '')"></a></h3>
+        <div class="date">{[{party.created | dateFormText:"MMMM d, yyyy"}]}</div>
+        <div class="description" ng-bind-html="(party.get_summary || '') | sanitize"></div>
+        <div class="tag-group">
+            <ul class="tag-list item-list">
+                <li class="tag" ng-repeat="topic in party.topics">
+                    <span class="tag-item" href="">
+                        <span class="tag-wrapper">{[{topic.title}]}</span>
+                    </span>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+</script>
+
+<script type='text/ng-template' id="template_party_news_sidebar.html">
+
+    <h3 class="title"><a ng-href="{[{party.absolute_url}]}" ng-bind-html="party.title"></a></h3>
+    <div class="date">{[{party.created | dateFormText:"MMMM d, yyyy"}]}</div>
+    <div class="description" ng-bind-html="party.get_summary | sanitize"></div>
+
+</script>
+
+
+<!-- *********************************************** -->
+<!-- ******************** Follow ******************* -->
+<!-- *********************************************** -->
+
+<script type='text/ng-template' id="follow_button.html">
+
+<div class="follow-action" ng-class="is_loading_class()">
+    <a ng-class="is_follow_class()" class="btn-activity ico-follow" ng-click="follow()" href="" ng-mouseenter="mouse_enter()" ng-mouseleave="mouse_leave()" title="{[{title}]}" >
+
+        <div class="ico-follow-wrapper">
+            <span class="ico-action icon-users-follow"></span>
+            <span class="ico-action icon-plus"></span>
+        </div>
+    </a>
+    <a href="" title="follow {[{party.total_follower}]}" title="follow" ng-href="{[{party.absolute_url}]}##followers">
+        <span class="text-action" ng-clock>{[{party.total_follower}]}</span>
+    </a>
+</div>
+ 
+</script>
+
+<script type='text/ng-template' id="follow_compact_button.html">
+
+<div class="take-action-wrapper middle" ng-class="is_loading_class()">
+    <a ng-class="is_follow_class()" class="btn-activity ico-follow" ng-click="follow()" href="" ng-mouseenter="mouse_enter()" ng-mouseleave="mouse_leave()" title="{[{title}]}">
+
+        <div class="ico-follow-wrapper">
+            <span class="icon-action icon-users-follow"></span>
+            <span class="icon-action icon-plus"></span>
+        </div>
+        <span class="text-action" ng-clock>{[{title || '&nbsp'}]}</span>
+    </a>
+</div>
+
+</script>
+
+<script type='text/ng-template' id="follow_text_button.html">
+
+    <div class="btn-follow-wrapper" ng-class="is_loading_class()">
+        <a ng-class="is_follow_class()" class="btn btn-primary btn-follow btn-default" ng-click="follow()" href="" ng-mouseenter="mouse_enter()" ng-mouseleave="mouse_leave()" title="{[{title}]}" >
+            <span class="text-action" ng-clock>{[{title || '&nbsp'}]}</span>
+        </a>
+    </div>
+
+</script>
+
+<!-- *********************************************** -->
+<!-- ******************** Love ******************* -->
+<!-- *********************************************** -->
+
+<script type='text/ng-template' id="love_button.html">
+
+<div class="love-action" ng-class="is_loading_class()">
+    <a href="" ng-class="is_love_class()" title="{[{title}]}" class="love" ng-click="love()" href="" ng-mouseenter="mouse_enter()" ng-mouseleave="mouse_leave()">
+        <span class="icon-heart"></span>
+    </a>
+    <a href="" title="love{[{party.total_love > 1 ? 's' : ''}]} {[{party.total_love}]}" class="text-action" ng-click="modal_list()" ng-clock>{[{party.total_love}]}</a>
+</div>
+ 
+</script>
+
+<script type='text/ng-template' id="love_compact_button.html">
+
+<div class="take-action-wrapper" ng-class="is_loading_class()">
+    <a ng-class="is_love_class()" class="btn-activity ico-love" ng-click="love()" href="" ng-mouseenter="mouse_enter()" ng-mouseleave="mouse_leave()" title="{[{title}]}" >
+        <span class="ico-action icon-heart"></span>
+        <span class="text-action" ng-clock>{[{title || '&nbsp'}]}</span>
+    </a>
+</div>
+
+</script>
+
+<script type='text/ng-template' id="love_text_button.html">
+
+    <div class="btn-love-wrapper" ng-class="is_loading_class()">
+        <a ng-class="is_love_class()" class="btn-activity" ng-click="love()" href="" ng-mouseenter="mouse_enter()" ng-mouseleave="mouse_leave()" title="{[{title}]}" >
+            <span class="text-action" ng-clock>{[{title || '&nbsp'}]}</span>
+        </a>
+    </div>
+
+</script>
+
+<!-- *********************************************** -->
+<!-- ******************** Modal  ******************* -->
+<!-- *********************************************** -->
+
+<script type='text/ng-template' id="template_modal_list.html">
+
+<div ng-controller="PopupListController">
+    <div class="modal fade" id="love-popup" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog base-action-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="close" data-dismiss="modal" type="button"><span>×</span><span class="sr-only">Close</span></button>
+                    <h2 class="modal-title" id="model-contact-label">Who love this.</h2>
+                </div>
+                <div class="modal-body">
+                    <ul class="item-list followers-list">
+                    <li ng-repeat="party in party_list" class="followers-item listview-item item {[{ party.inst_type }]}-image">
+                        
+                        <div class="list-view">
+                            <div class="small-logo pull-left thumbnail">
+                                <span>
+                                   <a href="{[{ party.absolute_url }]}"><img ng-src="{[{ party.get_thumbnail_in_primary }]}"></a>
+                                </span>
+                            </div>
+                            <div class="group-info" >
+                                 <h3><a href="{[{ party.absolute_url }]}">{[{ party.get_display_name }]}</a></h3>
+                                <div class="description">{[{ party.get_summary }]}</div>
+                                <ul ng-if="party.country" class="country-list item-list item-list-inline">
+                                    <li class="country-item item" ng-cloak>
+                                        <span class="country">{[{ party.country.title }]}</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div follow-button party="party" template="follow_text_button.html"></div>
+                        </div>
+                    </li>
+                    </ul>
+                    <a class="loadmore-wrapper" ng-click="load_more()" ng-class="load_more_class()">
+                        <span ng-hide="is_loading" class="loadmore">Load more</span>
+                        <img  ng-show="is_loading" ng-src="/static/images/loading.gif" class="loading-icon" >
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</script>
+
+<!-- *********************************************** -->
+<!-- ******************** Testimonials ************* -->
+<!-- *********************************************** -->
+
+<script type='text/ng-template' id="testimonials_list.html">
+<div class="item-wrapper">
+    <div class="block-content block-quote" ng-bind-html="party.data | nlToBr"></div>
+    <div class="speaker-info">
+        <a ng-if="party.get_status == notification_status.active" class="title" title="{[{party.get_display_name}]}" ng-href="{[{party.absolute_url}]}" ng-clock>
+            {[{party.get_display_name}]}
+        </a>
+        <span ng-if="party.get_status != notification_status.active" class="title">{[{party.get_display_name}]}</span>
+        <div class="info" ng-if="party.country.title"><span class="organization" ng-clock>{[{party.country.title}]}</div>
+        <a ng-clock ng-if="party.can_edit" class="btn btn-md btn-delete" href="/delete/relation/PartyTestifyParty/{[{ party.id }]}/?next=.##testimonials" data-original-title="" title="">
+            <span class="glyphicon glyphicon-remove"></span>
+            Delete
+        </a>
+
+    </div>
+</div>
+ 
+</script>
+
+<!-- *********************************************** -->
+<!-- **************  Contact (message) ************* -->
+<!-- *********************************************** -->
+
+<script type='text/ng-template' id="message_unread.html">
+
+    <div class="item-wrapper">
+        <div class="message-body-wrapper">
+            <dl>
+              <dt>Date: </dt>
+              <dd>{[{ party.created | dateFormText:"MMMM d, yyyy" }]}</dd>
+            </dl>
+            <dl>
+              <dt>From:</dt>
+              <dd><a ng-href="{[{ party.src.absolute_url }]}">{[{ party.src.get_display_name }]}</a></dd>
+            </dl>
+            <dl class="message-body">
+                <dt>Message: </dt>
+                <dd ng-bind-html="party.data | nlToBr">
+                </dd>
+            </dl>
+        </div>
+        <a href="" class="btn btn-primary btn-pink mark-read" ng-show="!party.status" ng-click="
+                            http_to_api_with_party({
+                                api: '/api/v1/party_contact_party/'+party.id,
+                                party: party,
+                                params: {status: 1},
+                                update_total: 'total_contact',
+                                model_name: 'contact',
+                                type: 'PUT',
+                                update_party: true
+                            })">Mark as read</a>
+    </div>
+</script>
+
+<script type='text/ng-template' id="message_read.html">
+    <div class="item-wrapper">
+        <div class="message-body-wrapper">
+            <dl>
+              <dt>Date: </dt>
+              <dd>{[{ party.created | dateFormText:"MMMM d, yyyy" }]}</dd>
+            </dl>
+            <dl>
+              <dt>From:</dt>
+              <dd><a ng-href="{[{ party.src.absolute_url }]}"><span class="info">{[{ party.src.get_display_name }]}</span></a></dd>
+            </dl>
+            <dl class="message-body">
+                <dt>Message: </dt>
+                <dd ng-bind-html="party.data | nlToBr">
+                </dd>
+            </dl>
+        </div>
+        <!-- <a href="" class="btn btn-primary btn-pink mark-read">Read</a> -->
+    </div>
+</script>
+
+<!-- *********************************************** -->
+<!-- **************      Happening     ************* -->
+<!-- *********************************************** -->
+
+<script type='text/ng-template' id="happening_list_text.html">
+    <div class="col-md-8" ng-bind-html="party.get_simple_html_display | sanitize">
+    </div>
+    <div class="col-md-3 col-md-offset-1">
+        <div class="time-update" ng-clock>
+            {[{ party.created | timeago }]}
+        </div>
+    </div>
+</script>
+
+<script type='text/ng-template' id="happening_list_text2.html">
+    <div>
+        <div class="time-update" ng-clock>
+            {[{ party.created | timeago }]}
+        </div>
+    </div>
+    <div ng-bind-html="party.get_simple_html_display | sanitize">
+    </div>
+</script>
+
+<script type='text/ng-template' id="happening_list_full.html">
+    <div class="col-md-2 col-xs-2 time-wrapper">
+        <strong class="time-update" ng-clock>
+            {[{ party.created | timeago }]}
+        </strong>
+    </div>
+    <div class="col-md-8 col-xs-8 box-wrapper">
+        <div class="box-happening">
+            <div class="happening-header">
+                <div class="happening-title" ng-bind-html="party.get_simple_html_display | sanitize"></div>
+                <div love-button party="party" content_type="notification">
+            </div>
+            <div ng-class="{'required-approval':party.REQUIRED_APPROVAL, 'approval':party.approval_status == notification_status.active}" ng-if="party.REQUIRED_APPROVAL && party.approval_status == notification_status.active">
+                Approved
+            </div>
+            <div class="testimonial-text" ng-if="party.data">
+                <p ng-bind-html="party.data"></p>
+            </div>
+            <div class="group-profile">
+                <div class="pull-left thumbnail">
+                    <span>
+                       <a ng-if="party.actor.get_status == notification_status.active && !party.actor.is_deleted" ng-href="{[{ party.actor.absolute_url }]}"><img ng-src="{[{ party.actor.get_thumbnail }]}"></a>
+                       <img ng-if="party.actor.get_status != notification_status.active || party.actor.is_deleted" ng-src="{[{ party.actor.get_thumbnail }]}">
+                    </span>
+                </div>
+                <div class="group-info">
+                     <h3 ng-if="party.actor.get_status == notification_status.active && !party.actor.is_deleted"><a ng-href="{[{ party.actor.absolute_url }]}" class="ng-binding">{[{ party.actor.get_display_name }]}</a></h3>
+                     <h3 ng-if="party.actor.get_status != notification_status.active || party.actor.is_deleted">{[{ party.actor.get_display_name }]}</h3>
+                    <div class="description ng-binding" ng-if="party.actor.get_summary" ng-bind-html="party.actor.get_summary"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+<!-- *********************************************** -->
+<!-- **************         Job        ************* -->
+<!-- *********************************************** -->
+
+<script type="text/ng-template" id="party_job_list.html">
+    <div class="small-logo pull-left thumbnail">
+        <span>
+            <a ng-if="party.status == 1" ng-href="{[{party.absolute_url}]}"><img ng-src="{[{party.get_thumbnail}]}"></a>
+            <span ng-if="party.status != 1"><img ng-src="{[{party.get_thumbnail}]}"></span>
+        </span>
+    </div>
+    <div class="group-info">
+        <div class="title">
+            <a ng-if="party.status == 1" ng-href="{[{party.absolute_url}]}" title="{[{party.get_display_name}]}">{[{party.get_display_name}]}</a>
+            <span ng-if="party.status != 1">{[{party.get_display_name}]} (Pending)</span>
+        </div>
+        <div class="description">
+            Bangkok, Thailand
+        </div>
+        <div class="block-list-orgjob block-job">
+            <ul class="item-list row">
+                <li class="item item-job" ng-include="'job_list.html'" ng-repeat="job in party.jobs">
+                    
+                </li>
+            </ul>
+        </div>
+        <div class="post-time">
+            {[{(party.jobs | maxDateIn:"created" ) | timeago}]}
+        </div>
+    </div>
+
+</script>
+
+
+<script type="text/ng-template" id="job_list.html">
+    <h3 class="title"><a ng-href="{[{job.absolute_url}]}" title="{[{job.title}]}" ng-bind-html="job.title"></a></h3>
+    <span class="job-location job-list-detail">at&nbsp; {[{job.country.title}]}</span>
+    <div class="description">
+        <span class="job-type job-list-detail">{[{job.position}]}</span>
+        <span class="job-role job-list-detail">{[{job.role}]}</span>   
+        <a class="view-detail" ng-href="{[{job.absolute_url}]}">View details</a>
+    </div>
+</script>
+
+<script type="text/ng-template" id="job_front_list.html">
+
+    <div class="small-logo pull-left thumbnail">
+        <span>
+           <a ng-href="{[{party.absolute_url}]}"><img ng-src="{[{party.get_thumbnail}]}"></a>
+        </span>
+    </div>
+    <div class="group-info">
+        <div class="org-name">{[{party.get_display_name}]}</div>
+        <h3 class="title"><a ng-href="{[{party.jobs[0].absolute_url}]}" title="{[{party.jobs[0].title}]}" ng-bind-html="party.jobs[0].title"></a></h3>
+        <div class="description">
+            {[{party.jobs[0].country.title}]}
+        </div>
+    </div>
+</script>
+
+<!-- *********************************************** -->
+<!-- **************       request      ************* -->
+<!-- *********************************************** -->
+
+
+<script type="text/ng-template" id="request_list.html">
+  <div ng-bind-html="relation.get_html_display | sanitize" class="notification-item-inner"></div>
+  <div class="btn-approve-wrapper">
+
+    <div ng-class="{'required-approval approval':(relation.status || relation.approval_status) == notification_status.active}" ng-if="relation.approval_status == notification_status.active">
+        Approved
+    </div>
+
+    <div ng-class="{'required-approval draft':(relation.status == notification_status.draft || relation.approval_status == notification_status.draft)}" ng-if="relation.approval_status == notification_status.draft">
+        Draft
+    </div>
+
+    <div ng-class="{'required-approval pending':(relation.status == notification_status.pending || relation.approval_status == notification_status.pending)}" ng-if="relation.approval_status == notification_status.pending">
+        Pending
+    </div>
+
+    <div ng-class="{'required-approval reject':(relation.status == notification_status.reject || relation.approval_status == notification_status.reject)}" ng-if="relation.approval_status == notification_status.reject">
+        Rejected
+    </div>
+
+  </div>
+</script>
+
+
+<!-- *********************************************** -->
+<!-- **************    Experience      ************* -->
+<!-- *********************************************** -->
+
+<script type="text/ng-template" id="experience_item.html">
+    <div class="small-logo pull-left thumbnail">
+        <span>
+            <a ng-href="{[{ party.absolute_url }]}" ng-if="party.get_status == 1 && !party.is_deleted">
+                <img ng-src="{[{ party.get_thumbnail_in_primary }]}" ng-href="{[{ party.absolute_url }]}">
+
+            </a>
+            <img ng-src="{[{ party.get_thumbnail_in_primary }]}" ng-if="party.get_status != 1 || party.is_deleted">
+        </span>
+    </div>
+    <dl class="group-infomation dl-horizontal">
+        <dt>
+            <div class="organization" ng-cloak>
+                <span ng-if="party.get_status != 1 || party.is_deleted">{[{ party.get_display_name }]}</span>
+                <a ng-if="party.get_status == 1 && !party.is_deleted" ng-href="{[{ party.absolute_url }]}" title="{[{ party.get_display_name }]}">{[{ party.get_display_name }]}
+                </a>
+            </div>
+            <div class="date">
+                <span ng-cloak>{[{ party.start_date | date:'MMM yyyy' }]}</span>
+                <span ng-show="party.end_date" ng-cloak> - {[{ party.end_date | date:'MMM yyyy' }]}</span>
+            </div>
+        </dt>
+        <dd>
+            <div class="position" ng-cloak>{[{ party.title }]}</div>
+            <div class="description" ng-cloak>{[{ party.get_summary }]}</div>
+        </dd>
+    </dl>
+    <div ng-class="{'required-approval':party.REQUIRED_APPROVAL, 'approval':party.status == notification_status.active}" ng-if="party.REQUIRED_APPROVAL && party.status == notification_status.active">
+        Approved
+    </div>
+</script>

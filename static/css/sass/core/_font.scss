@@ -1,0 +1,81 @@
+$fontPath : "../fonts/";
+
+@font-face {
+    font-family: 'clear_sansbold';
+    src: url('#{$fontPath}clearsans-bold-webfont.eot');
+    src: url('#{$fontPath}clearsans-bold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('#{$fontPath}clearsans-bold-webfont.woff2') format('woff2'),
+         url('#{$fontPath}clearsans-bold-webfont.woff') format('woff'),
+         url('#{$fontPath}clearsans-bold-webfont.ttf') format('truetype'),
+         url('#{$fontPath}clearsans-bold-webfont.svg#clear_sansbold') format('svg');
+    font-weight: 100;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'clear_sansregular';
+    src: url('#{$fontPath}clearsans-regular-webfont.eot');
+    src: url('#{$fontPath}clearsans-regular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('#{$fontPath}clearsans-regular-webfont.woff2') format('woff2'),
+         url('#{$fontPath}clearsans-regular-webfont.woff') format('woff'),
+         url('#{$fontPath}clearsans-regular-webfont.ttf') format('truetype'),
+         url('#{$fontPath}clearsans-regular-webfont.svg#clear_sansregular') format('svg');
+    font-weight: 100;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'clear_sanslight';
+    src: url('#{$fontPath}clearsans-light-webfont.eot');
+    src: url('#{$fontPath}clearsans-light-webfont.eot?#iefix') format('embedded-opentype'),
+         url('#{$fontPath}clearsans-light-webfont.woff2') format('woff2'),
+         url('#{$fontPath}clearsans-light-webfont.woff') format('woff'),
+         url('#{$fontPath}clearsans-light-webfont.ttf') format('truetype'),
+         url('#{$fontPath}clearsans-light-webfont.svg#clear_sanslight') format('svg');
+    font-weight: 100;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'bebas_regular';
+    src: url('../fonts/bebasneue.woff2') format('woff2'),
+         url('../fonts/bebasneue.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+  font-family: 'fontello';
+  src: url('#{$fontPath}fontello.eot?55999357');
+  src: url('#{$fontPath}fontello.eot?55999357#iefix') format('embedded-opentype'),
+       url('#{$fontPath}fontello.woff?55999357') format('woff'),
+       url('#{$fontPath}fontello.ttf?55999357') format('truetype'),
+       url('#{$fontPath}fontello.svg?55999357#fontello') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'icomoon';
+  src:url('#{$fontPath}icomoon.eot?mul90v');
+  src:url('#{$fontPath}icomoon.eot?#iefixmul90v') format('embedded-opentype'),
+    url('#{$fontPath}icomoon.woff?mul90v') format('woff'),
+    url('#{$fontPath}icomoon.ttf?mul90v') format('truetype'),
+    url('#{$fontPath}icomoon.svg?mul90v#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+    font-family: 'icostartup';
+    src:    url('../fonts/icostartup/icostartup.eot?oeutx');
+    src:    url('../fonts/icostartup/icostartup.eot?oeutx#iefix') format('embedded-opentype'),
+        url('../fonts/icostartup/icostartup.ttf?oeutx') format('truetype'),
+        url('../fonts/icostartup/icostartup.woff?oeutx') format('woff'),
+        url('../fonts/icostartup/icostartup.svg?oeutx#icostartup') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}

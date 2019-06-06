@@ -1,0 +1,17 @@
+{% extends 'base_single.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block content %}
+<div class="error-page">
+  <div class="media">
+    <div class="media-body">
+      <div class="big-text">Sorry !</div>
+      <div class="error-number">403</div>
+      <h1 class="page-title">Permission denied</h1>
+      <div class="description">Please check your request url or <a href="/" class="btn btn-primary btn-pink">visit Homepage </a> </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+

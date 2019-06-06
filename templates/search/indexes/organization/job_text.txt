@@ -1,0 +1,23 @@
+{% load common_tags %}
+
+{% captureas content %}
+
+<h2>{{ object.title }}</h2>
+<p>{{ object.contact_information }}</p>
+<p>{{ object.description|safe }}</p>
+<p>{{ object.get_position_display }}</p>
+<p>{{ object.get_role_display }}</p>
+<p>{{ object.country }}</p>
+<p>{{ object.location }}</p>
+
+{% for item in object.skill_set.all %}
+<h3>{{ item.name }}</h3>
+{% endfor %}
+
+{% for item in object.organization_jobs.all.0.topics.all %}
+<h4>{{ item.permalink }} - {{ item.title }}</h4>
+{% endfor %}
+
+{% endcaptureas %}
+
+{{ content|lower }}

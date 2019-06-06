@@ -1,0 +1,19 @@
+/* ----------------------------------- *\
+  Screen size break point
+\* ----------------------------------- */
+
+$screen-xs-max: 767px;
+$screen-md-min: 991px;
+$screen-md-max: 1200px;
+$screen-sm-min: 769px;
+$screen-sm-max: 991px;
+$screen-smartph-max: 480px;
+$screen-small-phone: 359px;
+
+$icons-spacing : 150px;
+$icons-layout: vertical;
+$icons-sprite-dimensions: true;
+
+@import "icons/*.png";
+@include all-icons-sprites;
+$icons: sprite-map("icons/*.png"); 

@@ -1,0 +1,16 @@
+{%  load i18n %}
+
+<div class="table-list -job" ng-class="{'loading': isLoading}">
+    <ul class="item-list">
+        <li class="item" ng-include="'party_job_list.html'" ng-repeat="party in result.objects">
+        </li>
+    </ul>
+
+    <div ng-show="!isLoading && result.meta.total_count == 0" class="text-empty">
+        {% trans "No results" %}
+    </div>
+    <div ng-show="isLoading" class="text-center">
+        <img ng-src="/static/images/loading.gif" class="loading-icon" />
+    </div>
+
+</div>

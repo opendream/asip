@@ -1,0 +1,13 @@
+{% load i18n %}{% autoescape off %}
+{% blocktrans %}Thank you for register with {{ site_name }}.{% endblocktrans %}
+
+{% trans "Please confirm your registration from link:" %}
+{% block reset_link %}
+{{ protocol }}://{{ domain }}{% url 'account_register_confirm' uidb64=uid token=token %}{% if next %}?{{ query.urlencode }}{% endif %}
+{% trans "This link can only be used once to log in and will lead you to a page where you can set your password." %}
+{% endblock %}
+
+
+{% blocktrans %}The {{ site_name }} team{% endblocktrans %}
+
+{% endautoescape %}

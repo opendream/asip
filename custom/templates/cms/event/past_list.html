@@ -1,0 +1,83 @@
+{% extends 'base_single.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}
+Past Event
+{% endblock %}
+
+{% block title_class %} hidden{% endblock %}
+{% block search_toggle_class %}{% endblock %}
+{% block search_class %}{% endblock %}
+{% block wrapper_class %} wrapper-base-sidebarright{% endblock %}
+
+
+{% block js %}
+
+{% endblock %}
+
+{% block breadcrumb %}
+{% endblock %}
+
+{% block main_extra %} ng-controller="EventController"{% endblock %}
+{% block primary %}
+{% endblock %}
+{% block content %}
+
+
+<div class="row" ng-controller="BasicPartyListController" ng-init="init('/api/v1/event', { limit: 6, end_date__lt: current_date_format, need_ordering: false }, '-end_date')">
+
+  <div class="col-sm-8">
+    <div class="event-wrapper">
+      <!-- Block News -->
+      <div class="block block-event -past-event">
+        <h2 class="block-title">{% trans "Past Events" %}</h2>
+        <div ng-show="!is_loading && party_list.length == 0">{% trans "No result" %}</div>
+        <img ng-show="isLoading" ng-src="/static/images/loading.gif" class="loading-icon" >
+
+        <!-- <img ng-show="is_loading && party_list.length == 0" ng-src="/static/images/loading.gif" class="loading-icon" > -->
+        <ul class="item-list event-list">
+          <li ng-repeat="party in current_page_party_list" class="event-item item" ng-clock>
+            <div ng-include="'template_party_event.html'"></div>
+          </li>
+        </ul>
+
+        <pagination ng-if="total_count > params.limit"
+            total-items="total_count"
+            ng-model="current_page"
+            max-size="maxSize"
+            class="pagination-sm text-center"
+            boundary-links="true"
+            rotate="false"
+            first-text="'«'"
+            previous-text="'‹'"
+            next-text="'›'"
+            last-text="'»'"
+            items-per-page="params.limit"
+            ng-change="load_page(current_page, 'pass_event')"
+        >
+        </pagination>
+
+      </div>
+      <!-- End Block News -->
+
+    </div>
+    
+  </div>
+
+  <div class="col-sm-4 sidebar-left">
+
+    <div class="block -bg-white -add-event">
+      <h2 class="block-title">{% trans "Upcoming events" %}</h2>
+      <span>หาคำมาด้วย</span>
+      <a href="{% url 'event_list' %}" title="{% trans "View upcoming events" %}" class="btn btn-primary">{% trans "View upcoming events" %}</a>
+    </div>
+
+
+  </div>
+
+</div>
+
+
+
+{% endblock %}
