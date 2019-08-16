@@ -1,0 +1,23 @@
+.collapse.-custom {
+  display: block !important;
+  overflow: hidden;
+  height: 75px !important;
+  position: relative;
+
+  &:before {
+    display: block;
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    box-shadow: 0 -5px 30px 35px white;
+    z-index: 9999;
+  }
+  &.in {
+    height: auto !important;
+    &:before {
+      display: none;
+    }
+  }
+} 

@@ -1,0 +1,46 @@
+@media print {
+  .input-delete,
+  .files-widget > .controls,
+  #organization-publishing,
+  .permalink-inline {
+    display: none;
+  }
+
+  // Sidebar content
+  form.point-form {
+    > .sidebar-left {
+      display: none;
+    }
+  }
+
+  .help-block {
+    display: none !important;
+  }
+
+  // Example logo and cover upload
+  .description-upload-image .right img {
+    display: none !important;
+  }
+
+  // Next, Cancel, Submit button // Site Footer
+  .group-action,
+  .footer {
+    display: none !important;
+  }
+
+  .add-another-inline-input-list {
+    display: none !important;
+  }
+
+  // Attach file widget
+  .organization-attachment-form-wrapper .files-widget-dropbox {
+    .preview {
+      // display: none;
+    }
+  }
+
+  //
+  .table-investment_stage_type tbody > tr:last-child {
+    display: none;
+  }
+}

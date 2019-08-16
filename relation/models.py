@@ -9,7 +9,7 @@ from django.utils.translation import ugettext as _
 
 from common.constants import STATUS_CHOICES, STATUS_PENDING, SUMMARY_MAX_LENGTH, STATUS_PUBLISHED, STATUS_DELETED, STATUS_REJECTED
 from common.models import PriorityModel, CommonModel, CachedModel
-
+from djmoney.models.fields import MoneyField
 
 RELATION_STATUS_CHOICES = STATUS_CHOICES + ((STATUS_DELETED, 'Deleted'), )
 
@@ -33,6 +33,7 @@ class BaseRelation(CommonModel, PriorityModel, CachedModel):
     REQUIRED_APPROVAL = True
 
     CROSS_TARGET = False
+    CLAIM_APPROVE = False
 
     class Meta:
         abstract = True
@@ -110,7 +111,9 @@ class PartyPartnerParty(BaseRelation):
 
     NOTIFICATION_VERB_DISPLAY = _('add %s as partner')
     CROSS_TARGET = True
-    REQUEST_VERB_DISPLAY = 'Partner'
+    REQUEST_VERB_DISPLAY = 'Partner/Client'
+
+    CLAIM_APPROVE = True
 
 
 class PartySupportParty(BaseRelation):
@@ -246,7 +249,8 @@ class PartyReceivedFundingParty(BaseRelation):
         decimal_places=2,
         null=True,
         blank=True,
-    )
+    ) #deprecated
+    money_amount = MoneyField(null=True, blank=True, max_digits=19, decimal_places=2, default_currency='THB')
 
     title = models.CharField(null=True, blank=True, max_length=255)
 
@@ -261,11 +265,13 @@ class PartyReceivedFundingParty(BaseRelation):
     NOTIFICATION_VERB_SWAP_DISPLAY = _('gives funding to %s')
     NOTIFICATION_DATE_FIELD = 'date'
 
-    NOTIFICATION_DATA_FIELD = 'amount'
-    NOTIFICATION_DATA_FIELD_IS_INTEGER = True
-    NOTIFICATION_DATA_SUFFIX = settings.CURRENCY
+    NOTIFICATION_DATA_FIELD = 'money_amount'
+    NOTIFICATION_DATA_FIELD_IS_INTEGER = False
+    #NOTIFICATION_DATA_SUFFIX = settings.CURRENCY
     REQUEST_VERB_DISPLAY = 'Receives Funding'
     REQUEST_VERB_SWAP_DISPLAY = 'Gives Funding'
+
+    CLAIM_APPROVE = True
 
 
     def get_absolute_url(self):
@@ -282,7 +288,9 @@ class PartyReceivedInvestingParty(BaseRelation):
         decimal_places=2,
         null=True,
         blank=True,
-    )
+    ) #deprecated
+    money_amount = MoneyField(null=True, blank=True, max_digits=19, decimal_places=2, default_currency='THB')
+
 
     title = models.CharField(null=True, blank=True, max_length=255)
 
@@ -297,11 +305,13 @@ class PartyReceivedInvestingParty(BaseRelation):
     NOTIFICATION_VERB_SWAP_DISPLAY = _('invest to %s')
     NOTIFICATION_DATE_FIELD = 'date'
 
-    NOTIFICATION_DATA_FIELD = 'amount'
-    NOTIFICATION_DATA_FIELD_IS_INTEGER = True
-    NOTIFICATION_DATA_SUFFIX = settings.CURRENCY
+    NOTIFICATION_DATA_FIELD = 'money_amount'
+    NOTIFICATION_DATA_FIELD_IS_INTEGER = False
+    #NOTIFICATION_DATA_SUFFIX = settings.CURRENCY
     REQUEST_VERB_DISPLAY = _('Receives Investing')
     REQUEST_VERB_SWAP_DISPLAY = _('Gives Investing')
+
+    CLAIM_APPROVE = True
 
     def get_absolute_url(self):
         return '%s##happening' % self.src.get_absolute_url()
@@ -327,6 +337,33 @@ class PartyInviteTestifyParty(BaseRelation):
     def __unicode__(self):
         return self.party.get_display_name()
 
+
+
+class OrganizationParticipate(BaseRelation):
+    src = models.ForeignKey('organization.Organization', related_name='participate_src')
+    dst = models.ForeignKey('organization.Program', related_name='participate_dst')
+    month = models.PositiveIntegerField(null=True, blank=True)
+
+    swap = models.NullBooleanField(null=True, blank=True)
+
+    status = models.IntegerField(choices=RELATION_STATUS_CHOICES, default=STATUS_PENDING)
+
+
+    NOTIFICATION_VERB_DISPLAY = _('participated in %s')
+    NOTIFICATION_VERB_SWAP_DISPLAY = ('has %s participated in program')
+    # CROSS_TARGET = True
+
+    NOTIFICATION_DATA_FIELD = 'month'
+    NOTIFICATION_DATA_FIELD_IS_INTEGER = False
+    NOTIFICATION_DATA_SUFFIX = 'months'
+    REQUEST_VERB_DISPLAY = _('Program participated')
+
+    NOTIFICATION_CHECK_CRAZY_CREATED = False
+
+    CLAIM_APPROVE = True
+
+    def get_absolute_url(self):
+        return '%s##happening' % self.src.get_absolute_url()
 
 class PartyLove(BaseRelation):
 
@@ -362,3 +399,35 @@ class CmsHasParty(BaseRelation):
     REQUEST_VERB_DISPLAY = 'In The News'
 
     REQUIRED_APPROVAL = False
+
+
+class UserApplyJob(BaseRelation):
+    src = models.ForeignKey('account.User', related_name='user_apply_job_src')
+    dst = models.ForeignKey('organization.Organization', related_name='user_apply_job_dst')
+    job = models.ForeignKey('organization.Job', related_name='user_apply_job_job')
+
+    message = models.TextField(null=True, blank=True)
+
+    status = models.IntegerField(choices=RELATION_STATUS_CHOICES, default=STATUS_PENDING)
+
+
+    NOTIFICATION_VERB_DISPLAY = _('apply to %s')
+    NOTIFICATION_DATA_FIELD = 'job'
+
+    REQUEST_VERB_DISPLAY = _('Apply job')
+
+    NOTIFICATION_CHECK_CRAZY_CREATED = False
+
+    REQUIRED_APPROVAL = False
+
+    def __unicode__(self):
+        return self.get_display_name()
+
+    def get_display_name(self):
+        return self.src.get_display_name()
+
+    def get_thumbnail_in_primary(self):
+        return self.src.get_thumbnail_in_primary()
+
+    def get_absolute_url(self):
+        return reverse('job_applying_detail', args=[self.id])

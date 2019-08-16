@@ -1,0 +1,62 @@
+{% load i18n %}
+{% load staticfiles %}
+{% load common_tags %}
+<div class="controls form-group group-action">
+    <div class="col-sm-offset-2-bnk field-container form-action">
+        <button value="1" class="btn btn-primary btn-orange btn-next" type="submit" onclick="window.location='#tab_content'">{%  trans "Next" %}</button>
+
+        {% if not request_popup %}
+        <a href="{% if form.is_new %}{% url 'home' %}{% else %}.{% endif %}" class="btn btn-default btn-cancel">{% trans "Cancel" %}</a>
+        {%  endif %}
+        {% if request_popup %}
+        <a onclick="parent.dismissAddAnotherPopup({name: '{{ request.GET.winName }}'})" class="btn btn-default btn-cancel">{% trans "Cancel" %}</a>
+        {%  endif %}
+
+        {% captureas btn_finish_group %}
+        <button class="btn btn-primary btn-orange btn-submit{% if form.errors %} force-show{% endif %}" type="submit">{% trans "Finish" %}</button>
+        {% endcaptureas %}
+
+        {% captureas btn_save_change_group %}
+        {% if user.is_staff or ALLOWED_CREATE_ORGANIZATION_WITHOUT_APPROVAL %}
+        <button class="btn btn-primary btn-orange btn-submit{% if form.errors %} force-show{% endif %}" type="submit">{% trans "Save Changes" %}</button>
+        {% else %}
+        <button name="status" value="{{ form.inst.status }}" class="btn btn-primary btn-orange btn-submit{% if form.errors %} force-show{% endif %}" type="submit">{% trans "Save Changes" %}</button>
+        {% endif %}
+        {% endcaptureas %}
+
+        {% captureas btn_request_group %}
+        <button name="status" value="{{ STATUS_DRAFT }}" class="btn-draft btn btn-default{% if form.is_new %} btn-submit{% endif %}{% if form.errors %} force-show{% endif %}" type="submit">{% trans "Save as Draft" %}</button>
+
+        {% if pending_to_publish %}
+        <button name="status" value="{{ STATUS_PUBLISHED }}" class="btn btn-request btn-primary btn-green{% if form.is_new %} btn-submit{% endif %}{% if form.errors %} force-show{% endif %}" type="submit">{% trans "Publish" %}</button>
+        {% else %}
+        <button name="status" value="{{ STATUS_PENDING }}" class="btn btn-request btn-primary btn-orange{% if form.is_new %} btn-submit{% endif %}{% if form.errors %} force-show{% endif %}" type="submit">{% trans "Submit for Approval" %}</button>
+        {% endif %}
+        {% endcaptureas %}
+
+        {% if user.is_staff or ALLOWED_CREATE_ORGANIZATION_WITHOUT_APPROVAL %}
+            {% if form.is_new  %}
+                {{ btn_finish_group }}
+            {% else %}
+                {{ btn_save_change_group }}
+            {% endif %}
+        {% else %}
+            {% if form.is_new or form.inst.status == STATUS_DRAFT %}
+                {{ btn_request_group }}
+            {% else %}
+                {{ btn_save_change_group }}
+            {% endif %}
+        {% endif %}
+
+
+
+        {% if not form.is_new and logged_in_party.id == user.id %}
+        <a class="btn btn-md btn-delete pull-right" href="{% url 'presentation_delete' 'organization' 'Organization' form.inst.id %}">
+            <span class="glyphicon glyphicon-remove icostartup icon-delete"></span>
+            {% trans "Delete" %}
+        </a>
+        {% endif %}
+
+
+    </div>
+</div>

@@ -1,4 +1,5 @@
 {% extends 'base_sidebar_left.html' %}
+{% load i18n %}
 {% block title_class %} hidden{% endblock %}
 {% block title %}Messages of {{ logged_in_party.get_display_name }}{% endblock %}
 
@@ -8,13 +9,13 @@
 {% block sidebar %}
 <div class="row">
     <div class="col-sm-10 col-sm-offset-2 block-filter-msg">
-        <h1 class="page-title">Messages</h1>
+        <h1 class="page-title">{% trans 'Messages' %}</h1>
         <ul class="no-bullet filter-messages" role="tablist">
             <li class="item active" role="presentation">
                 <a href="#unread-message" aria-controls="unread-message" role="tab" data-toggle="tab">
                     <div class="row">
                         <div class="col-sm-8 col-xs-9">
-                            Unread Messages <!--<span class="unread-noti">{[{ party_contact_party_new_count }]}</span> -->
+                            {% trans 'Unread Messages' %} <!--<span class="unread-noti">{[{ party_contact_party_new_count }]}</span> -->
                         </div>
                     </div>
                 </a>
@@ -23,7 +24,7 @@
                 <a href="#read-message" aria-controls="read-message" role="tab" data-toggle="tab">
                     <div class="row">
                         <div class="col-sm-8">
-                            Read Messages
+                            {% trans 'Read Messages' %}
                         </div>
                     </div>
                 </a>
@@ -31,7 +32,7 @@
         </ul>
     </div>
 </div>
-    
+
 {% endblock%}
 
 {% block content %}

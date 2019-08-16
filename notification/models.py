@@ -32,7 +32,7 @@ from account.models import User
 from asip.settings import DEFAULT_FROM_EMAIL, SITE_NAME
 from common.constants import STATUS_DELETED, STATUS_PENDING, STATUS_PUBLISHED, STATUS_DRAFT
 from common.signals import get_request
-from organization.models import Organization
+from organization.models import Organization, Program
 from party.models import Party
 from relation.models import PartyContactParty, PartyFollowParty, PartyLove
 
@@ -44,10 +44,11 @@ notification_model_excludes = [PartyContactParty]
 notification_m2m_includes = [Organization.admins.through, Party.portfolios.through, Organization.jobs.through]
 notification_m2m_private_includes = [Organization.admins.through]
 
-notification_system_includes = [Organization, User]
+notification_system_includes = [User, ]
+notification_model_includes = [Organization, Program]
 
 notification_m2m_verb_display = {
-    Organization.admins.through: 'adds %s as admin in organization',
+    Organization.admins.through: 'adds %s as admin',
     Party.portfolios.through: '<span style="display:none" class="happening-show">%s </span>create the new portfolio %s',
     Organization.jobs.through: '<span style="display:none" class="happening-show">%s </span>add a new job %s'
 }
@@ -73,6 +74,7 @@ class Notification(models.Model):
     )
 
     receiver = models.ForeignKey('party.Party', related_name='notification_receiver')
+    origin_receiver = models.ForeignKey('party.Party', related_name='notification_origin_receiver', null=True, blank=True)
     actor = models.ForeignKey('party.Party', related_name='notification_actor')
 
     verb = models.ForeignKey(ContentType, related_name='notification_verb', null=True, blank=True)
@@ -112,8 +114,10 @@ class Notification(models.Model):
         if hasattr(self.target, 'swap') and self.target.swap:
             dst_field = 'src'
 
-        return hasattr(self.target, 'REQUIRED_APPROVAL') and self.target.REQUIRED_APPROVAL and hasattr(self.target, dst_field) and \
-               user_can_edit(request, getattr(self.target, dst_field))
+        r1 = hasattr(self.target, 'REQUIRED_APPROVAL') and self.target.REQUIRED_APPROVAL and hasattr(self.target, dst_field) and \
+               ((user_can_edit(request, getattr(self.target, dst_field)) and getattr(self.target, dst_field).get_status() != STATUS_DRAFT) or self.origin_receiver)
+
+        return r1
 
     @property
     def approval_status(self):
@@ -149,7 +153,7 @@ class Notification(models.Model):
 
 
     # Magic  Helper Methods
-    def get_html_display(self, display_created=True, display_icon=True, display_data=True, display_you=True):
+    def get_html_display(self, display_created=True, display_icon=True, display_data=True, display_you=True, email=False):
 
         if not self.verb:
             return 'Something wrong in development process. Please, contact administrator'
@@ -167,17 +171,23 @@ class Notification(models.Model):
                 receiver_name = '<strong class="pending">%s (pending)</strong>' % (self.receiver.get_display_name())
 
         if self.organization:
-            if self.organization.get_status() == STATUS_PUBLISHED:
-                if not self.organization.is_deleted:
-                    receiver_name = '<a href="%s"><strong class="your-admin">%s</strong></a>' % (self.organization.get_absolute_url(), self.organization.get_display_name())
-                else:
-                    receiver_name = '<strong class="your-admin">%s</strong>' % (self.organization.get_display_name())
 
+
+            suffix_receiver_name = ''
+            if self.organization.get_status() == STATUS_PENDING:
+                suffix_receiver_name = ' (pending)'
+            elif self.organization.get_status() == STATUS_DRAFT:
+                suffix_receiver_name = ' (draft)'
+
+            organization = self.organization
+            if self.origin_receiver and self.origin_receiver.id != self.organization.id:
+                organization = self.origin_receiver
+                suffix_receiver_name = ' (look alike to <a class="look-alike-item" href="%s">%s</a>)' % (self.organization.get_absolute_url(), self.organization.get_display_name().strip())
+
+            if not organization.is_deleted and (not self.origin_receiver or self.origin_receiver.id == self.organization.id):
+                receiver_name = '<a href="%s"><strong class="your-admin">%s%s</strong></a>' % (organization.get_absolute_url(), organization.get_display_name(), suffix_receiver_name)
             else:
-                if not self.organization.is_deleted:
-                    receiver_name = '<a href="%s"><strong class="your-admin">%s (pending)</strong></a>' % (self.organization.get_absolute_url(), self.organization.get_display_name())
-                else:
-                    receiver_name = '<strong class="your-admin">%s (pending)</strong>' % (self.organization.get_display_name())
+                receiver_name = '<strong class="your-admin">%s%s</strong>' % (organization.get_display_name(), suffix_receiver_name)
 
 
         elif self.party:
@@ -200,7 +210,10 @@ class Notification(models.Model):
             verb_display = Verb.NOTIFICATION_VERB_SYSTEM_DISPLAY
         else:
             try:
-                verb_display = Verb.NOTIFICATION_VERB_DISPLAY
+                if email and hasattr(Verb, 'NOTIFICATION_VERB_DISPLAY_EMAIL'):
+                    verb_display = Verb.NOTIFICATION_VERB_DISPLAY_EMAIL
+                else:
+                    verb_display = Verb.NOTIFICATION_VERB_DISPLAY
             except:
                 verb_display = notification_m2m_verb_display[Verb]
 
@@ -221,7 +234,7 @@ class Notification(models.Model):
             suffix = verb_display % (receiver_name, target_name)
 
 
-        if self.actor == self.receiver or (self.organization and self.actor.id == self.organization.id):
+        if False and self.actor == self.receiver or (self.organization and self.actor.id == self.organization.id):
             html_display = suffix
         else:
             if self.party:
@@ -232,10 +245,16 @@ class Notification(models.Model):
                         html_display = '<strong class="your-following">%s</strong> %s' % (self.actor.get_display_name(), suffix)
 
                 else:
-                    html_display = '<strong class="pending your-following">%s (pending)</strong> %s' % (self.actor.get_display_name(), suffix)
+                    actor_status = ''
+                    if self.actor.get_status() == STATUS_PENDING:
+                        actor_status = '<strong class="pending">(pending)</strong>'
+                    elif self.actor.get_status() == STATUS_DRAFT:
+                        actor_status = '<strong class="pending">(draft)</strong>'
 
-            else:
+                    html_display = '<strong class="pending your-following">%s %s</strong> %s' % (self.actor.get_display_name(), actor_status, suffix)
 
+            elif self.actor != self.receiver:
+                actor_status = ''
                 if self.actor.get_status() == STATUS_PUBLISHED:
                     if not self.actor.is_deleted:
                         html_display = '<a href="%s"><strong>%s</strong></a> %s' % (self.actor.get_absolute_url(), self.actor.get_display_name(), suffix)
@@ -243,7 +262,13 @@ class Notification(models.Model):
                         html_display = '<strong>%s</strong> %s' % (self.actor.get_display_name(), suffix)
 
                 else:
-                    html_display = '<strong class="pending">%s (pending)</strong> %s' % (self.actor.get_display_name(), suffix)
+                    if self.actor.get_status() == STATUS_PENDING:
+                        actor_status = '<strong class="pending">(pending)</strong>'
+                    elif self.actor.get_status() == STATUS_DRAFT:
+                        actor_status = '<strong class="pending">(draft)</strong>'
+                    html_display = '<strong class="pending">%s %s</strong> %s' % (self.actor.get_display_name(), actor_status, suffix)
+            else:
+                html_display = suffix
 
 
         if hasattr(Verb, 'NOTIFICATION_DATE_FIELD'):
@@ -258,16 +283,27 @@ class Notification(models.Model):
             display_data = True
 
         if display_data:
+
+            if self.actor.get_status() == STATUS_PUBLISHED:
+                try:
+                    self.target.get_absolute_url()
+                    target_link = self.target.get_absolute_url()
+                except:
+                    target_link = 'javascript:void()'
+
+            else:
+                target_link = 'javascript:void()'
+
             if hasattr(Verb, 'NOTIFICATION_DATA_FIELD'):
                 data_field = getattr(Verb, 'NOTIFICATION_DATA_FIELD')
-                data_value = getattr_nested(self.target, data_field)
+                data_value = getattr_nested(self.target, data_field) or ''
 
                 if hasattr(Verb, 'NOTIFICATION_DATA_FIELD_IS_INTEGER'):
                     is_integer = getattr(Verb, 'NOTIFICATION_DATA_FIELD_IS_INTEGER')
                     if is_integer:
-                        data_value = intcomma(int(data_value))
+                        data_value = intcomma(int(data_value or 0))
 
-                if hasattr(Verb, 'NOTIFICATION_DATA_SUFFIX'):
+                if data_value and hasattr(Verb, 'NOTIFICATION_DATA_SUFFIX'):
                     data_value = '%s %s' % (data_value, self.target.NOTIFICATION_DATA_SUFFIX)
 
                 target = self.target
@@ -275,16 +311,16 @@ class Notification(models.Model):
                     target = getattr_nested(target, target.NOTIFICATION_TARGET_FIELD)
 
 
-                html_display = '%s &nbsp;<a class="noti-data" href="%s">%s</a>' % (html_display, target.get_absolute_url(), data_value)
+                html_display = '%s &nbsp;<a class="noti-data" href="%s">%s</a>' % (html_display, target_link, data_value)
 
             elif hasattr(Verb, 'NOTIFICATION_DATA_DISPLAY') and Verb.NOTIFICATION_DATA_DISPLAY:
-                html_display = '%s &nbsp;<a class="noti-data" href="%s">%s</a>' % (html_display, self.target.get_absolute_url(), Verb.NOTIFICATION_DATA_DISPLAY)
+                html_display = '%s &nbsp;<a class="noti-data" href="%s">%s</a>' % (html_display, target_link, Verb.NOTIFICATION_DATA_DISPLAY)
             elif hasattr(self.target, 'data') and self.target.data:
 
                 if self.target.status == STATUS_PUBLISHED:
-                    html_display = '%s &nbsp;"<a class="noti-data" href="%s">%s</a>"' % (html_display, self.target.get_absolute_url(), strip_tags(self.target.data)   )
+                    html_display = '%s &nbsp;"<a class="noti-data" href="%s">%s</a>"' % (html_display, target_link, strip_tags(self.target.data)   )
                 else:
-                    html_display = '%s &nbsp;"<span class="noti-data" href="%s">%s</span>"' % (html_display, self.target.get_absolute_url(), strip_tags(self.target.data))
+                    html_display = '%s &nbsp;"<span class="noti-data" href="%s">%s</span>"' % (html_display, target_link, strip_tags(self.target.data))
 
 
         if display_created:
@@ -324,26 +360,25 @@ def instance_is_created(instance, check_crazy_created=True, is_system=False, cre
     if result1 and hasattr(instance, 'status'):
         result1 = result1 and (instance.status != STATUS_DRAFT)
 
-
     # Check status change from deleted to other
     result2 = True
-    if result2 and not is_system and hasattr(instance, 'status') and hasattr(instance, 'var_cache'):
+    if result2 and not is_system and not created_on_published and hasattr(instance, 'status') and hasattr(instance, 'var_cache'):
         origin_status = instance.var_cache.get('status')
         result2 = result2 and (origin_status == STATUS_DELETED)
         result2 = result2 and (instance.status in [STATUS_PENDING, STATUS_PUBLISHED])
 
 
     result2_1 = True
-    if result2_1 and created_on_published and is_system and hasattr(instance, 'status') and hasattr(instance, 'var_cache'):
+    if result2_1 and created_on_published and hasattr(instance, 'status') and hasattr(instance, 'var_cache'):
         origin_status = instance.var_cache.get('status')
-        #origin_published = instance.var_cache.get('published')
+        origin_published = instance.var_cache.get('published')
 
-        # TODO: fix case unpublish first to publish
-        if created or instance.published:
+        # fix case unpublish first to publish
+        if created or origin_published:
             result2_1 = False
         else:
             result2_1 = result2_1 and (origin_status in [STATUS_DRAFT, STATUS_PENDING])
-            result2_1 = result2_1 and (instance.status in [STATUS_PUBLISHED])
+            result2_1 = result2_1 and (int(instance.status) in [STATUS_PUBLISHED])
 
 
     result2_2 = True
@@ -365,10 +400,12 @@ def instance_is_created(instance, check_crazy_created=True, is_system=False, cre
         origin_dst = instance.var_cache.get('dst')
         result4 = result4 and (origin_dst is None)
         result4 = result4 and (instance.dst is not None)
+        result4 = result4 and (not hasattr(instance.dst, 'status') or instance.dst.status in [STATUS_PUBLISHED, STATUS_PENDING])
 
 
+    result = (result1 and ((result2 and result2_1 and result2_2) or (check_crazy_created and (result3 or result4))))
 
-    return (result1 and ((result2 and result2_1 and result2_2) or (check_crazy_created and (result3 or result4))))
+    return result
 
 
 def instance_is_deleted(instance):
@@ -417,12 +454,15 @@ def get_email_service_body(body, party):
         body = body.replace('href="/', 'href="%s' % absolute_uri)
         email = party.email_of_contact_person
 
+    notification_url = absolute_uri[0:-1] + reverse('notification_list')
+
 
     output = render_to_string('notification/email.html', {
         'body': body,
         'email': email,
         'site_name': site_name,
-        'settings_url': settings_url
+        'settings_url': settings_url,
+        'notification_url': notification_url,
     })
     return output.replace('\n', '<br />')
 
@@ -434,7 +474,7 @@ def notification_send_email_helper(notification, email, receiver=False, email_bo
     email_from = '%s<message@%s>' % (notification.actor.get_display_name(), SITE_NAME)
 
     if not email_body:
-        email_body = notification.get_html_display(display_created=False, display_icon=False)
+        email_body = notification.get_html_display(display_created=False, display_icon=False, email=True)
     email_subject = re.sub('<span style="display:none".*?>.*?</span>', '', email_body)
     email_subject = strip_tags(email_subject)
     email_subject = email_subject[:30] + (email_subject[30:] and '...')
@@ -448,18 +488,15 @@ def notification_send_email(notification, email_body=False):
     # Todo contact email is not here
     receiver = notification.receiver.get_inst()
 
-
     if not hasattr(receiver, 'email'):
         return
 
-    print 'lllll'
-    print notification.verb.app_label == 'forum'
-
     allow_send_mail = False
     if notification.organization:
-        allow_field_name = 'notification_allow_email_send_organization_%s' % notification.verb.model
-        if hasattr(receiver, allow_field_name) and getattr(receiver, allow_field_name):
-            allow_send_mail = True
+        allow_send_mail = True
+        # allow_field_name = 'notification_allow_email_send_organization_%s' % notification.verb.model
+        # if hasattr(receiver, allow_field_name) and getattr(receiver, allow_field_name):
+        #     allow_send_mail = True
 
     elif notification.party:
         if receiver.notification_allow_email_send_from_follow:
@@ -469,16 +506,18 @@ def notification_send_email(notification, email_body=False):
         allow_send_mail = True
 
     else:
-        allow_field_name = 'notification_allow_email_send_%s' % notification.verb.model
-        if hasattr(receiver, allow_field_name) and getattr(receiver, allow_field_name):
-            allow_send_mail = True
+
+        allow_send_mail = True
+        # allow_field_name = 'notification_allow_email_send_%s' % notification.verb.model
+        # if hasattr(receiver, allow_field_name) and getattr(receiver, allow_field_name):
+        #     allow_send_mail = True
 
 
     if allow_send_mail:
         notification_send_email_helper(notification, receiver.email, receiver, email_body)
 
 
-def notification_create_helper(instance, receiver, verb, target, actor, data=None, organization=None, party=None, is_system=None, allow_send_to_me=False, ignore_excludes=False, extra_emails=[]):
+def notification_create_helper(instance, receiver, verb, target, actor, origin_receiver=None, data=None, organization=None, party=None, is_system=None, allow_send_to_me=False, ignore_excludes=False, extra_emails=[]):
     # Make sure don't send to me
     if not allow_send_to_me and actor.id == receiver.id:
         return
@@ -513,8 +552,10 @@ def notification_create_helper(instance, receiver, verb, target, actor, data=Non
         elif hasattr(target, 'date_joined') and target.date_joined:
             created = target.date_joined
 
+
     notification = Notification(
         receiver=receiver,
+        origin_receiver=origin_receiver,
         verb=verb,
         target=target,
         actor=actor,
@@ -526,18 +567,19 @@ def notification_create_helper(instance, receiver, verb, target, actor, data=Non
         created=created
     )
 
+    # TODO: check notification is duplicate before create
+
     if ignore_excludes or (instance.__class__ not in notification_model_excludes):
         notification.save()
 
-    notification_post_save_task.delay(notification, allow_create_notification, is_system, extra_emails)
+    if settings.DEBUG:
+        notification_post_save_task(notification, allow_create_notification, is_system, extra_emails)
+    else:
+        notification_post_save_task.delay(notification, allow_create_notification, is_system, extra_emails)
 
 
 @task
 def notification_post_save_task(notification, allow_create_notification, is_system, extra_emails):
-
-
-    print allow_create_notification, is_system
-    print extra_emails
 
     # TODO: make to async
     if allow_create_notification and not is_system:
@@ -590,7 +632,7 @@ def getattr_nested(obj, attrs):
     return obj
 
 
-def notification_create(instance, is_system=False):
+def notification_create(instance, is_system=False, claim_receiver=None):
     data = None
     verb = ContentType.objects.get_for_model(instance)
 
@@ -621,11 +663,15 @@ def notification_create(instance, is_system=False):
         receiver = instance
         allow_send_to_me = True
 
-
     if hasattr(instance, 'swap') and instance.swap:
         swap = receiver
         receiver = actor
         actor = swap
+
+    origin_receiver = None
+    if claim_receiver:
+        origin_receiver = receiver
+        receiver = claim_receiver
 
     if hasattr(instance, 'NOTIFICATION_ACTOR_FIELD'):
         actor = getattr(actor, instance.NOTIFICATION_ACTOR_FIELD)
@@ -657,11 +703,16 @@ def notification_create(instance, is_system=False):
             )
 
 
-    if not is_system and allow_create_notification:
+    if not is_system and allow_create_notification and not claim_receiver:
 
         extra_emails = []
         if hasattr(organization, 'email_of_contact_person') and organization.email_of_contact_person:
             extra_emails.append(organization.email_of_contact_person)
+
+        if hasattr(organization, 'store_email_of_organizations_headquarters') and organization.store_email_of_organizations_headquarters:
+            extra_emails.append(organization.store_email_of_organizations_headquarters)
+
+        extra_emails = list(set(extra_emails))
 
         notification_create_helper(
             instance=instance,
@@ -671,7 +722,7 @@ def notification_create(instance, is_system=False):
             actor=actor,
             data=data,
             allow_send_to_me=allow_send_to_me,
-            extra_emails=extra_emails
+            extra_emails=extra_emails,
         )
 
 
@@ -679,6 +730,7 @@ def notification_create(instance, is_system=False):
     notification_create_helper(
         instance=instance,
         receiver=receiver,
+        origin_receiver=origin_receiver,
         verb=verb,
         target=target,
         actor=actor,
@@ -692,19 +744,21 @@ def notification_create(instance, is_system=False):
 
     # Send notification to admins of organization
     admin_id_list = []
-    if organization.__class__ is Organization and hasattr(organization, 'admins'):
+    if organization.__class__ in [Organization, Program] and hasattr(organization, 'admins') and (not organization.is_mockup or organization.status in [STATUS_PENDING, STATUS_PUBLISHED]):
         for admin in organization.admins.all():
             admin_id_list.append(admin.id)
 
             notification_create_helper(
                 instance=instance,
                 receiver=admin,
+                origin_receiver=origin_receiver,
                 verb=verb,
                 target=target,
                 actor=actor,
                 data=data,
                 organization=organization,
                 ignore_excludes=True,
+                allow_send_to_me=True
             )
 
 
@@ -712,33 +766,34 @@ def notification_create(instance, is_system=False):
     # Send notification to follower of actor
     actor_id_list = []
 
-    for party_follow_party in PartyFollowParty.objects.filter(dst=actor, status=STATUS_PUBLISHED):
-        follower = party_follow_party.src
+    if not claim_receiver:
+        for party_follow_party in PartyFollowParty.objects.filter(dst=actor, status=STATUS_PUBLISHED):
+            follower = party_follow_party.src
 
-        party = receiver
-        if hasattr(party, 'party_ptr'):
-            party = party.party_ptr
+            party = receiver
+            if hasattr(party, 'party_ptr'):
+                party = party.party_ptr
 
-        if follower.id == party.id:
-            continue
+            if follower.id == party.id:
+                continue
 
-        if follower.id in admin_id_list:
-            continue
+            if follower.id in admin_id_list:
+                continue
 
-        actor_id_list.append(follower.id)
+            actor_id_list.append(follower.id)
 
-        notification_create_helper(
-            instance=instance,
-            receiver=follower,
-            verb=verb,
-            target=target,
-            actor=actor,
-            data=data,
-            party=party
-        )
+            notification_create_helper(
+                instance=instance,
+                receiver=follower,
+                verb=verb,
+                target=target,
+                actor=actor,
+                data=data,
+                party=party
+            )
 
     # Send notification to follower of receiver
-    if not hasattr(target, 'NOTIFICATION_PRIVATE') or (hasattr(target, 'NOTIFICATION_PRIVATE') and not target.NOTIFICATION_PRIVATE):
+    if not claim_receiver and (not hasattr(target, 'NOTIFICATION_PRIVATE') or (hasattr(target, 'NOTIFICATION_PRIVATE') and not target.NOTIFICATION_PRIVATE)):
         for party_follow_party in PartyFollowParty.objects.filter(dst=receiver):
             follower = party_follow_party.src
 
@@ -793,10 +848,11 @@ def notification_post_save(sender, **kwargs):
     is_system = False
     if sender in notification_system_includes:
         is_system = True
+
         if not allow_create_notification:
             return
 
-    if (sender._meta.app_label not in notification_app_includes) and (not is_system):
+    if (sender._meta.app_label not in notification_app_includes and sender not in notification_model_includes) and (not is_system):
         return
 
     if not created and ('image' in update_fields or 'images' in update_fields or 'file' in update_fields or 'files' in update_fields):
@@ -827,6 +883,9 @@ def notification_m2m_changed(sender, **kwargs):
     actor = instance
     if hasattr(actor, 'party_ptr'):
         actor = actor.party_ptr
+
+    if hasattr(actor, 'organization') and actor.organization.is_mockup:
+        return
 
     target = instance
     if hasattr(target, 'party_ptr'):

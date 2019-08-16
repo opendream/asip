@@ -1,0 +1,109 @@
+/*----------------------------------
+Component :  Social
+----------------------------------*/
+.social {
+  &__icon {
+    display: inline-block;
+    margin-right: 0.8em;
+  }
+
+  &__link {
+    display: inline-block;
+    font: bold 1.1rem/1.2em $EN-font-body;
+    color: #000;
+  }
+}
+
+
+/*----------------------------------
+Override : block List Item
+----------------------------------*/
+.social-share {
+  .social__icon {
+    margin-right: 0.4em;
+  }
+
+  @media (max-width: $lg) {
+    .block-list__item {
+      display: inline-block;
+      border: none;
+      padding: 0.5rem;
+    }
+    .social__link {
+      display: none;
+    }
+    .social__icon {
+      margin: 0;
+
+      img { width: 25px; }
+    }
+  }
+}
+
+
+/*----------------------------------
+Addthis
+----------------------------------*/
+.addthis-share-block {
+  padding-top: 0.9rem;
+}
+
+@media (min-width: $lg) {
+
+  .addthis-share-block {
+    padding: 0.9rem 0.5rem;
+  }
+
+  .at-share-btn-elements {
+    a.at-share-btn {
+      position: relative;
+      display: block;
+      width: 42px;
+      overflow: visible;
+
+      span.at-icon-wrapper,
+      svg {
+        width: 42px !important;
+        height: 42px !important;
+      }
+
+      &:hover {
+        transform: translateY(0) !important;
+      }
+
+      &:after {
+        display: inline-block;
+        position: absolute;
+        top: 13px;
+        left: 55px;
+        width: 120px;
+        color: #000;
+        font: bold 1rem/1.2em "Source Sans Pro", sans-serif;
+      }
+    }
+
+    .at-svc-facebook:after {
+      content: "Facebook";
+    }
+    .at-svc-twitter:after {
+      content: "Twitter";
+    }
+    .at-svc-pinterest_share:after {
+      content: "Pinterest";
+    }
+    .at-svc-lineme:after {
+      content: "LINE";
+    }
+    .at-svc-linkedin:after {
+      content: "Linkedin";
+    }
+  }
+}
+
+
+.address__copyright {
+  color: #5E686A;
+  font-weight: 400;
+  margin-bottom: 1em;
+  margin-top: 1em;
+}

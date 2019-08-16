@@ -132,12 +132,8 @@
                     <h2 class="title" ng-clock>
                         {[{job.title}]}
                     </h2>
-                    <div class="description -job clear">
-                        <span class="job-type job-list-detail">{[{job.get_position_display}]}</span>
-                        <span class="job-role job-list-detail">{[{job.get_role_display}]}</span>   
-                        <span ng-if="job.salary_min || job.salary_max" class="job-salary_min_max job-list-detail">
-                            {[{job.salary_min | currency:"{{ settings.CURRENCY_SHORT }}"}]} <span ng-if="job.salary_max">-</span> {[{job.salary_max | currency:"{{ settings.CURRENCY_SHORT }}" }]}
-                        </span>
+                    <div class="description -job clear hide">
+                        {[{ job.get_summary }]}
                     </div>
                 </div>
                 <div class="col-sm-4 text-right btn-apply-wrapper">
@@ -153,44 +149,55 @@
             </div>
             <div class="block-content">
 
-                <!-- Location -->
-                <div class="detail-wrapper" ng-if="job.role">
-                    <div class="title-detail">Role</div>
+                 <!-- Position -->
+                <div class="detail-wrapper" ng-if="job.position">
+                    <div class="title-detail">Type of Position</div>
                     <div class="detail">
-                                                {[{job.role}]}
+                        {[{ job.get_position_display }]}
                     </div>
                 </div>
 
-                <!-- Skill -->
-                <div class="detail-wrapper" ng-if="job.skills.length > 0">
-                    <div class="title-detail">Skills</div>
+                <!-- Roles -->
+                <div class="detail-wrapper" ng-if="job.job_primary_role || (job.job_roles && job.job_roles.length > 0)">
+                    <div class="title-detail">Roles</div>
                     <div class="detail">
                         <ul class="item-list item-list-inline">
-                            <li ng-repeat="skill in skills">
-                                {[{skill}]}
+                            <li nf-if="job.job_primary_role">{[{ job.job_primary_role.title }]} (primary)</li>
+                            <li ng-repeat="role in job.job_roles">
+                                {[{ role.title }]}
                             </li>
                         </ul>
                     </div>
                 </div>
 
+
                 <!-- Location -->
-                <div class="detail-wrapper" ng-if="job.location">
-                    <div class="title-detail">Location</div>
+                <div class="detail-wrapper" ng-if="job.locations && job.locations.length > 0">
+                    <div class="title-detail">Locations</div>
                     <div class="detail">
-                        {[{job.location}]}
+                        <ul class="item-list item-list-inline">
+                            <li ng-repeat="location in job.locations">
+                                {[{ location.title }]}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Skill -->
+                <div class="detail-wrapper" ng-if="job.skills">
+                    <div class="title-detail">Skills</div>
+                    <div class="detail">
+                        {[{ job.skills }]}
                     </div>
                 </div>
 
                 <!-- Compensation -->
-                <div class="detail-wrapper" ng-if="job.position || job.equity_min || job.equity_max || job.equity_min || job.equity_max">
+                <div class="detail-wrapper" ng-if="job.money_salary_min || job.money_salary_max || job.equity_min || job.equity_max">
                     <div class="title-detail">Compensation</div>
                     <div class="detail">
                         <ul class="item-list">
-                            <li ng-if="job.position">
-                                {[{job.get_position_display}]}
-                            </li>
-                            <li ng-if="job.salary_min || job.salary_max">
-                                {[{job.salary_min | currency:"{{ settings.CURRENCY_SHORT }}"}]} <span ng-if="job.salary_min && job.salary_max">-</span> {[{job.salary_max | currency:"{{ settings.CURRENCY_SHORT }}"}]} Salary
+                            <li ng-if="job.money_salary_min || job.money_salary_max">
+                                {[{job.money_salary_min}]} <span ng-if="job.money_salary_min && job.money_salary_max">-</span> {[{job.money_salary_max}]} Salary
                             </li>
                             <li ng-if="job.equity_min || job.equity_max">
                                 {[{job.equity_min | addText:"%"}]} <span ng-if="job.equity_min && job.equity_max">-</span> {[{job.equity_max | addText:"%"}]} Equity
@@ -200,7 +207,7 @@
                 </div>
 
                 <!-- Remote -->
-                <div class="detail-wrapper">
+                <div class="detail-wrapper" ng-if="job.remote">
                     <div class="title-detail">Remote</div>
                     <div class="detail" ng-cloak>
                         {[{job.remote ? "YES" : "NO"}]}
@@ -211,7 +218,7 @@
                 <div class="detail-wrapper" ng-if="job.years_of_experience != null">
                     <div class="title-detail">Years of Experience</div>
                     <div class="detail" ng-if="job.years_of_experience > 0">
-                        {[{job.years_of_experience}]} Year{[{job.years_of_experience > 1 ? "s" : ""}]}
+                        {[{job.years_of_experience}]}+ Year{[{job.years_of_experience > 1 ? "s" : ""}]}
                     </div>
                     <div class="detail" ng-if="job.years_of_experience <= 0">
                         Experience not required.
@@ -234,3 +241,152 @@
 
 {% endblock %}
 
+{% block modal %}
+<div class="modal fade" id="modal-apply" tabindex="-1">
+    <div class="modal-dialog base-action-modal">
+        <div class="modal-content">
+                <button class="close" data-dismiss="modal" type=
+                "button"><span>&times;</span><span class=
+                "sr-only">Close</span></button>
+
+            <div class="modal-body">
+
+
+                <div class="row">
+                    <div class="col-sm-2">
+                        <div class="thumbnail">
+                            <br/>
+                            <span>
+                                <a ng-if="organization.get_status == notification_status.active" ng-href="{[{organization.absolute_url}]}" title="{[{organization.get_display_name}]}">
+                                        <img ng-src="{[{organization.get_thumbnail}]}" />
+                                </a>
+                                <img ng-if="organization.get_status != notification_status.active" ng-src="{[{organization.get_thumbnail}]}" />
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-sm-10">
+                        <h4 class="title">
+                            Apply to {[{organization.get_display_name}]}
+                        </h4>
+                        <div class="description" ng-bind-html="organization.get_summary | sanitize"></div>
+                    </div>
+                </div>
+
+                <hr />
+
+                <div class="row">
+                    <div class="col-sm-2">
+                        Profile
+                    </div>
+                    <div class="col-sm-10">
+                        <div class="primary-info">
+                            <div class="small-logo pull-left thumbnail">
+                                <span>
+                                    <img src="{{ user.get_thumbnail_in_primary }}" />
+                                </span>
+                            </div>
+                            <div class="pull-left">
+                                <div>
+                                    <strong>
+                                        {{ user.get_display_name }}
+                                    </strong>
+                                </div>
+                                <div>
+                                    <small class="color-gray">{{ user.get_summary }}</small>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <hr />
+
+                <div class="row">
+                    <div class="col-sm-2">
+                        Position
+                    </div>
+                    <div class="col-sm-10">
+
+                        <div>
+                            <strong>
+                                {[{ job.title }]}
+                            </strong>
+                        </div>
+                        <div>
+                            <small class="color-gray">{[{ job.get_summary }]}</small>
+                        </div>
+
+                        <br/>
+
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <small class="color-lightgray">Experience</small>
+                            </div>
+                            <div class="col-sm-9">
+                                <small class="color-gray">{[{ job.years_of_experience || 0 }]}+</small>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <small class="color-lightgray">Skills</small>
+                            </div>
+                            <div class="col-sm-9">
+                                <small class="color-gray">{[{ job.skills }]}</small>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <small class="color-lightgray">Contact</small>
+                            </div>
+                            <div class="col-sm-9">
+                                <small class="color-gray" ng-bind-html="job.contact_information | sanitize"></small>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <hr />
+
+                <div class="row">
+                    <div class="col-sm-2">
+                        Contact
+                    </div>
+                    <div class="col-sm-10">
+                        <small class="color-gray" ng-bind-html="job.contact_information | sanitize">
+                        </small>
+                    </div>
+                </div>
+
+                <hr />
+
+                <div>
+                    <form action="{% url 'job_apply' %}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="job" value="{[{ job.id }]}" />
+                        <div class="controls form-group">
+                            <div class="field-container">
+                                <textarea name="message" rows="4" maxlength="1000" class="form-control" placeholder="(optional) Write a note to {[{ organization.get_display_name }]} What excites you about {[{ organization.get_display_name }]}? Why would you be a good fit?"></textarea>
+                                <div class="help-block">
+                                    Please write your letter of intent here in 1000 characters
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="controls form-group group-action">
+                            <div class="form-action">
+                                <button class="btn btn-primary btn-orange btn-submit" type="submit">{% trans "Send Application" %}</button>
+                                <a class="btn btn-default btn-cancel" data-dismiss="modal">{% trans "Cancel" %}</a>
+                            </div>
+                    </form>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

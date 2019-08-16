@@ -1,44 +1,51 @@
 {% load i18n %}
-<div class="footer hotfix-hidden">
-    <div class="container">
-        <div class="footer-content row">
-            <div class="col-md-9 col-sm-8">
-                <div class="row">
-                    <ul class="col-md-3 col-sm-4 footer-menu list-unstyled">
-                        <li><a href="{% url 'home' %}">{% trans "Home" %}</a></li>
-                        <li><a href="{% url 'presentation_role_list_redirect' 'startup' %}">{% trans "Startup" %}</a></li>
-                        <li><a href="{% url 'presentation_role_list_redirect' 'investor' %}">{% trans "Investor" %}</a></li>
-                        <li><a href="{% url 'presentation_role_list_redirect' 'supporter' %}">{% trans "Supporting Organization" %}</a></li>
-                    </ul>
-                    <ul class="col-md-2 col-sm-3 footer-menu list-unstyled">
-                        <li><a href="{% url 'people_list' %}">{% trans "People" %}</a></li>
-                        <li><a href="{% url 'job_list' %}">{% trans "Job" %}</a></li>
-                        <li><a href="{% url 'event_list' %}">{% trans "Event" %}</a></li>
-                        <li><a href="{% url 'news_list' %}">{% trans "News" %}</a></li>
-                    </ul>
-                    <ul class="col-md-3 col-sm-4 footer-menu list-unstyled">
-<!--                         {% for category in ARTICLE_CATEGORIES %}
-                        {% if category.permalink != 'news' %}
-                        <li><a href="{% url 'article_list' category.permalink %}">{{ category.title }}</a></li>
-                        {% endif %}  
-                        {% endfor %} -->
-                        <li><a href="{% url 'about' %}">{% trans "About" %}</a></li>
-                        <!--<li><a href="#">Contact Us</a></li>-->
-                    </ul>
-                </div>
-            </div>
-            <div class="col-md-3 col-sm-4 ">
-                <div class="block-followus">
-                    <h2>{% trans "Connect" %}</h2>
-                    <a href="https://www.facebook.com/212443462465022/" target="_blank" title="New Economic Warrior on facebook"><span class="icon-facebook icon-social"></span></a>
-                    <a href="" data-target="#modal-comming-soon" data-toggle="modal" target="_blank" title="New Economic Warrior on twitter"><span class="icon-twitter icon-social"></span></a>
-                    <ul class="list-unstyled term-menu list-inline">
-                        <li><a href="{% url 'term' %}">{% trans "Term of use" %}</a></li>
-                        <li class="last"><a href="{% url 'privacy' %}">{% trans "Privacy policy" %}</a></li>
-                    </ul>
-                    <div class="footer-cc">{% trans "Copyright" %} 2016</div>
-                </div>
-            </div>
-        </div>
+{% load static %}
+<div class="footer">
+  <div class="container">
+    <div class="sponsor-logo"></div>
+    <div class="address text-center">
+      <span>{% trans 'Startup Thailand Center | National Innovation Agency' %}</span>
+      <span class="address__dot"></span>
+      <span>{% trans '73/2 Rama VI Road, Rajdhevee, Bangkok 10400' %}</span>
+      <span class="address__dot"></span>
+      <span>startup@nia.or.th</span>
+      <p class="address__copyright mt-3 mb-3">{% trans 'Copyright 2018 All right reserved. Startup Thailand' %}</p>
     </div>
+    <div class="contact text-center">
+      <p class="contact__title">{% trans 'Contact' %}</p>
+      <div class="contact__social">
+        <a class="social" href="https://facebook.com/ThailandStartup">
+          <span class="social__icon">
+            <img src="{% static '/static/images/icon-facebook-white.svg' %}" alt="facebook" width="30">
+          </span>
+        </a>
+        <a class="social" href="https://twitter.com/ThStartup">
+          <span class="social__icon">
+            <img src="{% static '/static/images/icon-twitter-white.svg' %}" alt="twitter" width="30">
+          </span>
+        </a>
+        <a class="social" href="https://youtube.com/channel/UCy_85vQ6tUvYvNR_B2htuTw">
+          <span class="social__icon">
+            <img src="{% static '/static/images/icon-youtube-white.svg' %}" alt="youtube" width="30">
+          </span>
+        </a>
+        <a class="social" href="https://www.instagram.com/thailandstartup">
+          <span class="social__icon">
+            <img src="{% static '/static/images/icon-instagram-white.svg' %}" alt="youtube" width="30">
+          </span>
+        </a>
+        <a class="social" href="https://www.linkedin.com/company/startup-thailand">
+          <span class="social__icon">
+            <img src="{% static '/static/images/icon-linkedin-white.svg' %}" alt="youtube" width="30">
+          </span>
+        </a>
+      </div>
+      {% comment %}
+      <a class="contact__link" href="{% url 'term' %}">{% trans "Policy and Privacy" %}</a>
+      <a class="contact__link" href="#">{% trans "Help Center" %}</a>
+      <a class="contact__link" href="#">{% trans "FAQ" %}</a>
+      <a class="contact__link" href="#">{% trans "Sitemap" %}</a>
+      {% endcomment %}
+    </div>
+  </div>
 </div>

@@ -64,6 +64,7 @@ class BaseFilesWidget(forms.MultiWidget):
         files, deleted_files, moved_files = value
 
         context = {
+            'SITE_URL': settings.SITE_URL,
             'MEDIA_URL': settings.MEDIA_URL,
             'STATIC_URL': settings.STATIC_URL,
             'use_filebrowser': use_filebrowser(),

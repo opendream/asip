@@ -1,6 +1,7 @@
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
+from common.constants import STATUS_DRAFT
 from common.functions import instance_get_thumbnail, common_clean
 
 
@@ -54,10 +55,16 @@ def user_can_update_status(request, instance, data=None):
 
     num = 1
     if data.get('pk'):
-        num = 2
+        num += 1
+    if data.get('dst'):
+        num += 1
+    if data.get('dst_id'):
+        num += 1
+
+    dst_instance = getattr(instance, dst_field)
 
     return request.user.is_staff or (
         len(list(data)) == num and
         (data.get('status') is not None) and
-        user_can_edit(request, getattr(instance, dst_field))
+        (user_can_edit(request, dst_instance) or dst_instance.get_status() == STATUS_DRAFT)
     )

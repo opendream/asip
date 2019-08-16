@@ -7,7 +7,7 @@
 {% block title %}รวมพลัง Startup{% endblock %}
 
 {% block description %}
-มาร่วมสร้างฐานข้อมูล Startup ไทย ครั้งประวัติศาสตร์ โดยลงทะเบียนที่ลิงก์ NEW.set.or.th
+มาร่วมสร้างฐานข้อมูล Startup ไทย ครั้งประวัติศาสตร์ โดยลงทะเบียนที่ลิงก์ {{ SITE_URL }}
 {% endblock %}
 
 {% block image %}{% static 'images/startup-share-02.png' %}{% endblock %}
@@ -20,19 +20,61 @@
 
 {% block main_extra %} ng-controller="EventController"{% endblock %}
 {% block body_class %}event-page{% endblock %}
-{% block css %}
-{% endblock %}
+{% block css %}{% endblock %}
 
 {% block js %}
 {% endblock %}
 
 {% block content %}
 
-{% captureas total_startup %}{{ organization_list|filter:'status=1'|filter:'organization_roles__permalink=startup'|count|intcomma }}{% endcaptureas %}
-{% captureas total_investor %}{{ party_list|filter:'party_status=1'|filter:'party_roles__permalink=investor'|count|intcomma }}{% endcaptureas %}
-{% captureas total_government %}{{ organization_list|filter:'status=1'|filter:'organization_roles__permalink=supporter'|filter:'organization_types__permalink=government'|count|intcomma }}{% endcaptureas %}
-{% captureas total_organization %}{{ organization_list|filter:'status=1'|filter:'organization_roles__permalink=supporter'|exclude:'organization_types__permalink=government'|count|intcomma }}{% endcaptureas %}
+{% captureas total_startup %}{{ organization_list|filter:'status=1'|filter:'type_of_organization=startup'|count|intcomma }}{% endcaptureas %}
+{% captureas total_investor %}{{ organization_list|filter:'status=1'|filter:'type_of_organization=investor'|count|intcomma }}{% endcaptureas %}
+{% captureas total_supporter %}{{ organization_list|filter:'status=1'|filter:'type_of_organization=supporter'|count|intcomma }}{% endcaptureas %}
+{% captureas total_program %}{{ organization_list|filter:'status=1'|filter:'type_of_organization=program'|count|intcomma }}{% endcaptureas %}
 
+<div class="banner banner-ecosystem -fix-full-width">
+  <div class="banner__container">
+    <h2 class="banner__title">
+      <span class="banner__title--startup banner__title--uppercase banner__title--block">Startup</span>
+      <span class="banner__title--ecosystem banner__title--light banner__title--uppercase">Ecosystem</span>
+    </h2>
+
+    {% blocktrans with title=party_list_title %}
+      <p class="banner__content">To continue support and advance the development of startups in Thailand, Ministry of Science and Technology, together</p>
+    {% endblocktrans %}
+  </div>
+</div>
+<div class="startup-tab-list">
+  <ul class="tab-list">
+    <li class="tab-list__item active">
+      <a class="tab-list__link" href="{% url 'presentation_role_list_browse' 'startup' %}">
+        <span class="tab-list__title">{% trans "Startup" %}</span>
+        <span class="tab-list__info"><strong>{{ total_startup }}</strong> {% trans "Companies" %}</span>
+      </a>
+    </li>
+    <li class="tab-list__item active">
+      <a class="tab-list__link" href="{% url 'presentation_role_list_browse' 'investor' %}">
+        <span class="tab-list__title">{% trans "Investor" %}</span>
+        <span class="tab-list__info"><strong>{{ total_investor }}</strong> {% trans "Groups" %}</span>
+      </a>
+    </li>
+    <li class="tab-list__item active">
+      <a class="tab-list__link" href="{% url 'presentation_role_list_browse' 'supporter' %}">
+        <span class="tab-list__title">{% trans "Supporter" %}</span>
+        <span class="tab-list__info"><strong>{{ total_supporter }}</strong> {% trans "Organizations" %}</span>
+        <span class="tab-list__info"><strong>{{ total_program }}</strong> {% trans "Programs" %}</span>
+      </a>
+    </li>
+    <!-- <li class="tab-list__item active">
+      <a class="tab-list__link" href="#">
+        <span class="tab-list__title">{% trans "Student" %}</span>
+        <span class="tab-list__info"><strong>0</strong> {% trans "Students" %}</span>
+      </a>
+    </li> -->
+  </ul>
+</div>
+
+{% comment %}
 <div class="row front-banner">
     {% if feature_enable %}
     <div class="text-center feature-wrapper">
@@ -90,7 +132,9 @@
         </div>
     </div>
 </div>
+{% endcomment %}
 
+{% comment %}
 <div class="bgcover section-discover-startup block-front">
     <div class="container wrapper">
 
@@ -135,7 +179,9 @@
         </div>
     </div>
 </div>
+{% endcomment %}
 
+{% comment %}
 <div class="block-front -wrapper -event -ttsa">
     <div class="container wrapper">
 
@@ -163,7 +209,9 @@
         </div>
     </div>
 </div>
+{% endcomment %}
 
+{% comment %}
 <div class="block-front -wrapper -event">
     <div class="container wrapper">
         <div class="row">
@@ -188,6 +236,9 @@
 
     </div>
 </div>
+{% endcomment %}
+
+{% comment %}
 <div class="bgcover -investor-so block-front">
     <div class="container">
         <div class="block-investor-so">
@@ -204,7 +255,7 @@
                 </div>
                 <div class="col-md-5 col-md-offset-2 col-sm-6 static-content text-center -support-org">
                     <div class="vertical-middle">
-                        <h2 class="title">{% trans "Supporting Organization" %}</h2>
+                        <h2 class="title">{% trans "Supporter" %}</h2>
                             <p>
                                 View a list of supporting parties who provide a supportive environment.
                             </p>
@@ -216,6 +267,9 @@
         </div>
     </div>
 </div>
+{% endcomment %}
+
+{% comment %}
 <div class="bg-white block-front -wrapper -people-section -white">
     <div class="container">
         <div class="row">
@@ -235,12 +289,95 @@
         </div>
     </div>
 </div>
+{% endcomment %}
 
+<div class="home-content">
+  <div class="container bt-container">
+    <div class="row">
+      <div class="col-lg-6">
+        <div class="block-startup block--stack">
+          <div class="block__header block__header--no-border">
+            <h2 class="block__title">Happening</h2>
+          </div>
+          <div class="block__body block--no-padding" ng-controller="BasicPartyListController" ng-init="init('/api/v1/happening/', { limit: 4, offset: 0, receiver_or_actor__role_permalink: 'startup', actor_unique: true })">
+            <ul class="block-list">
+              <li class="item clearfix" ng-repeat="party in party_list" ng-init="prev_party=party_list[$index-1]; party.days_ago=Math.round((new_Day()-new_Day(party.created))/(1000*3600*24));" ng-include="'happening_list_full.html'">
+              </li>
+
+              </li>
+            </ul>
+
+            {% comment %}
+            <div ng-controller="BasicPartyListController" ng-init="init('/api/v1/happening/', { limit: 4, offset: 0, receiver_or_actor__role_permalink: 'startup', actor_unique: true })" class="block block-happening block-front">
+                <ul class="item-list happen-list">
+                    <li class="row item" ng-repeat="party in party_list" ng-include="'happening_list_full.html'">
+                    </li>
+                </ul>
+                <div class="row">
+                    <a class="loadmore-wrapper col-md-6 col-xs-12" href="{% url 'presentation_role_list_happening' 'startup' %}">
+                        <span class="loadmore">{% trans "View more happening" %} &raquo;</span>
+                    </a>
+                </div>
+            </div><!-- End block Happening -->
+            {% endcomment %}
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="block-startup block--stack">
+          <div class="block__header block__header--no-border">
+            <h2 class="block__title">People</h2>
+          </div>
+          <div class="block__body">
+            <div ng-controller="BasicPartyListController" ng-init="init('/api/v1/user/search/', {'resource': 'PartyLiteResource', 'limit': 3, 'none_to_all': 1, 'has_relation': 1, 'image__gt': 0})" class="block block-people -front" ng-class="should_show_list_class()">
+                <ul class="people-list row">
+                    <li ng-repeat="party in party_list" class="col-sm-4 user-image party-item item">
+                        <div ng-include="'template_party_item.html'"></div>
+                    </li>
+                </ul>
+                <div class="text-center">
+                    <a class="btn-startup btn-startup--third" href="{% url 'people_list' %}" title="">{% trans "View more people" %} &raquo;</a>
+                </div>
+            </div>
+          </div>
+        </div>
+        <div class="block-startup block--stack clearfix">
+          <div class="block__header block__header--no-border">
+            <h2 class="block__title">Jobs</h2>
+          </div>
+          <div class="block__body">
+            <div class="text-center">
+              <p style="margin: 0px auto 30px;font-size: 20px;max-width:400px;">Find The Right Opportunities through our network of people we know and trust </p>
+              <a class="btn btn-startup btn-startup--primary" href="{% url 'job_list' %}">Find a Job</a>
+              <a class="btn btn-startup btn-startup--secondary" href="{% url 'job_create_standalone' %}">Post a Job</a>
+
+              <div class="logo-center text-left clearfix">
+                <div ng-controller="BasicPartyListController" ng-init="init('/api/v1/organization_jobs', {limit: 7})" class="block">
+                    <div ng-show="!is_loading && party_list.length == 0">{% trans "No job avaliable." %}</div>
+                    <div class="jobs">
+                      <ul class="jobs-list">
+                        <li class="jobs-list__item" ng-repeat="party in party_list" ng-include="'job_front_list.html'">
+                        </li>
+                      </ul>
+                    </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% comment %}
 <div class="bg-white block-front -wrapper -happening-news-section -white">
     <div class="container">
         <div class="row">
             <div class="col-sm-6">
                 <h2 class="title">{% trans "Happening in Startup" %}</h2>
+
                 <!-- Block Happening -->
                 <div ng-controller="BasicPartyListController" ng-init="init('/api/v1/happening/', { limit: 4, offset: 0, receiver_or_actor__role_permalink: 'startup', actor_unique: true })" class="block block-happening block-front">
                     <ul class="item-list happen-list">
@@ -271,6 +408,9 @@
         </div>
     </div>
 </div>
+{% endcomment %}
+
+{% comment %}
 <div class="block-front -wrapper -join-community-section">
     <div class="container">
         <div class="block-join-community">
@@ -279,20 +419,23 @@
                 <div class="col-sm-offset-3 col-sm-6 col-xs-offset-1 col-xs-10">
                     <form action="{% url 'organization_create' 'startup' %}" class="form-join text-center">
                         <div class="form-group row text-center">
-                            <div class="col-sm-7 form-control-wrapper -text">
-                                <input type="text" name="name" class="form-control" placeholder="{% trans "Enter your startup's name" %}">
-                            </div>
-                            <div class="col-sm-4 form-control-wrapper -btn">
-                                <button class="btn btn-primary">{% trans "Create Startup Profile" %} &raquo;</button>
-                            </div>
+                          <div class="col-sm-7 form-control-wrapper -text">
+                            <input type="text" name="name" class="form-control"
+                            placeholder="{% trans "Enter your startups name" %}" />
+                          </div>
+                          <div class="col-sm-4 form-control-wrapper -btn">
+                            <button class="btn btn-primary">{% trans "Create Startup Profile" %} &raquo;</button>
+                          </div>
                         </div>
-
                     </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
+{% endcomment %}
+
+{% comment %}
 <div class="block-front bg-white -wrapper -jobs">
     <div class="container wrapper -white">
         <div class="row">
@@ -315,7 +458,9 @@
         </div>
     </div>
 </div>
+{% endcomment %}
 
+{% comment %}
 <div class="block-front bg-white -wrapper -supporter" ng-controller="BasicPartyListController" ng-init="init('/api/v1/party/search/', {limit: 12, none_to_all: 1, organization_roles: 'supporter', resource: 'PartyLiteResource'})">
     <div class="container wrapper -white">
 
@@ -347,8 +492,8 @@
             >
             </pagination>
         </div>
-
-
     </div>
 </div>
+{% endcomment %}
+
 {% endblock %}

@@ -1,0 +1,103 @@
+/*----------------------------------
+Component : Block
+----------------------------------*/
+.block-startup {
+  margin-bottom: 1.5em;
+  background: #FFFFFF;
+  box-shadow: 0 2px 4px 0 rgba(0,0,0,0.30);
+}
+.block {
+  // margin-bottom: 1.5em;
+  // background: #FFFFFF;
+  // box-shadow: 0 2px 4px 0 rgba(0,0,0,0.30);
+
+  @media (min-width: $lg) {
+    margin-bottom: 0;
+  }
+
+  &__header {
+    padding-left: 0.9rem;
+    padding-right: 0.9rem;
+    border-top: 8px solid #000;
+    border-bottom: 1px solid #B5B5B5;
+
+    &--no-border { border-bottom: none; }
+  }
+
+  &__body {
+    padding: 0.9rem;
+  }
+
+  &__footer {
+    padding: 1.2rem 0.9rem;
+    border-top: 1px solid #B5B5B5;
+  }
+
+  &__title {
+    margin: -3px 0 0.5em;
+    text-transform: uppercase;
+    font: 3.8rem / 0.9em $EN-font-heading !important;
+
+    @media (min-width: $md) {
+      font: 4.8rem / 0.9em $EN-font-heading !important;
+    }
+  }
+
+  &__footer-link {
+    font: bold 1rem/1em $EN-font-body;
+    text-transform: uppercase;
+    color: #000;
+
+    .en & { font: bold 1rem/1em $EN-font-body; }
+    .th & { font: bold 1rem/1em $TH-font-body; }
+  }
+
+  &__icon-more {
+    margin-right: 10px;
+    vertical-align: text-top;
+  }
+
+  // Variants
+  &--no-padding { padding: 0; }
+  &--wide-padding {
+    @media (min-width: $lg) {
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+  }
+  &--bd-bottom {
+    padding-top: 1.5em;
+    padding-bottom: 1.5em;
+    border-bottom: 1px solid #B5B5B5;
+  }
+
+  &--stack {
+    @media (min-width: $lg) {
+      margin-bottom: 1.5em;
+    }
+  }
+  &--transparent {
+    box-shadow: none;
+  }
+
+  &--inside-post {
+    @media (min-width: $lg) {
+      max-width: 270px;
+      float: left;
+      clear: left;
+      margin: 40px 40px 40px -40px;
+    }
+  }
+}
+
+/*----------------------------------
+Example of HTML
+----------------------------------*/
+
+// <div class="block">
+//   <div class="block__header">
+//     <h2 class="block__title">SERVICE Variant</h2>
+//   </div>
+//   <div class="block__body block--no-padding">body</div>
+//   <div class="block__footer">More</div>
+// </div>

@@ -47,7 +47,7 @@
 
 @media (max-width: $screen-xs-max) {
     .search-block {
-        > .title { 
+        > .title {
             margin-bottom: 15px;
             font-size: 22px;
         }
@@ -187,12 +187,14 @@
 .block-search.-toggle {
     clear: both;
     width: 100%;
-    background-color: #C4AE89;
+    padding-bottom: 5px;
+    // background-color: #C4AE89;
 }
 
 .form-wrapper.-search {
-    padding: 25px;
-    .form-control { 
+    padding: 25px 10px 10px;
+
+    .form-control {
         height: 49px;
         &:focus { outline: 0;}
     }
@@ -205,6 +207,8 @@
     .btn {
         width: 100%;
         height: 49px;
+        font-family: "Source Sans Pro", sans-serif;
+        font-weight: bold;
     }
     .search-btn-wrapper { padding-left: 0;}
 }
@@ -292,3 +296,14 @@ Search Result [Search list page]
     }
 }
 
+
+.block-search {
+  .form-control {
+    // float: left;
+    // margin-right: 15px;
+    // width: calc(100% - 170px);
+    border-color: #414042;
+    background-color: #414042;
+    color: #fff;
+  }
+}

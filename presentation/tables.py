@@ -18,6 +18,7 @@ class SafeLinkColumn(tables.LinkColumn):
         attrs = AttributeDict(attrs if attrs is not None else
                               self.attrs.get('a', {}))
         attrs['href'] = uri
+
         html = '<a {attrs}>{text}</a>'.format(
             attrs=attrs.as_html(),
             text=text.encode('utf-8')
@@ -68,25 +69,24 @@ class SortableTable(tables.Table):
 
 class OrganizationTable(tables.Table):
     image = ImageColumn()
-    name = SafeLinkColumn('organization_edit', args=[A('id')], verbose_name=_('Name'))
-    created_by = SafeLinkColumn('people_edit', args=[A('id')], accessor='created_by.get_display_name', verbose_name=_('Created by'))
+    name = SafeLinkColumn('organization_detail', args=[A('permalink')], verbose_name=_('Name'), attrs={'target':"_blank"})
+    edit_link = SafeLinkColumn('organization_edit', args=[A('id')], verbose_name=_('Edit Link'), attrs={'target':"_blank"})
+    created_by = SafeLinkColumn('people_edit', args=[A('created_by.id')], accessor='created_by.get_display_name', verbose_name=_('Created by'))
     status = StatusColumn(verbose_name=_('Status'))
     created = DateColumn(verbose_name=_('Created'))
-    specials = MultipleColum(accessor="specials.all.0", empty_values=())
+    # specials = MultipleColum(accessor="specials.all.0", empty_values=())
+    pdf = SafeLinkColumn('organization_pdf', args=[A('id')], verbose_name=_('PDF'))
 
 
     class Meta:
         model = Organization
-        fields = ('image', 'name', 'created_by', 'status', 'created', 'specials')
+        fields = ('image', 'name', 'edit_link', 'created_by', 'status', 'created', 'pdf')
 
-    # def render_specials(self, value):
-    #     print value
-    #     return ', '.join([v.__unicode__() for v in value.all()])
 
 class SortableOrganizationTable(OrganizationTable, SortableTable):
 
     class Meta:
-        fields = ('id', 'priority', 'image',  'name', 'created_by', 'status', 'created', 'specials')
+        fields = ('id', 'priority', 'image',  'name', 'created_by', 'status', 'created')
 
 
 class PeopleTable(tables.Table):

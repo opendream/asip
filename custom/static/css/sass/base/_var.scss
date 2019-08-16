@@ -1,0 +1,38 @@
+/* -----------------------------------------------
+Basic Setting
+------------------------------------------------- */
+
+/*--- TH Font ---*/
+$path-font: "../fonts/";
+$browser-font-context: 18px;
+
+$TH-browser-font-context: 18px;
+$TH-font-color: #000;
+$TH-font-weight: 300;
+$TH-line-height: 1.5em;
+$TH-font-heading: 'DBPatPongX';
+$TH-font-body: 'kanitregular', 'Kanit', 'Helvetica Neue', sans-serif, Arial;
+
+/*--- EN Font ---*/
+$EN-browser-font-context: 18px;
+$EN-font-color: #000;
+$EN-font-weight: normal;
+$EN-line-height: 1.5em;
+$EN-font-heading: 'league_gothic';
+$EN-font-body: 'Source Sans Pro', sans-serif;
+
+/*--- Path of Image ---*/
+$path-img : "../images";
+
+/*--- Breakpoints Media Query ---*/
+
+$xs: 320px; // Extra small screen / phone
+$sm: 576px; // Small screen / phone
+$md: 768px; // Medium screen / tablet
+$lg: 992px; // Large screen / desktop
+$xl: 1200px; // Extra large screen / wide desktop
+
+
+/*--- Link ---*/
+$body-link-color: #000;
+$body-link-color-hover: #D92F78;

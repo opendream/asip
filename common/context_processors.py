@@ -6,9 +6,9 @@ from account.forms import EmailAuthenticationForm, AccountRegisterForm, ResetPas
 from common.constants import STATUS_PENDING, STATUS_PUBLISHED, STATUS_DRAFT, STATUS_DELETED, STATUS_REJECTED
 from organization.models import Organization
 from party.models import Party
-from relation.models import OrganizationHasPeople
+from relation.models import OrganizationHasPeople, UserApplyJob
 from special.models import Special
-from taxonomy.models import ArticleCategory
+from taxonomy.models import ArticleCategory, OrganizationRole
 
 try:
     from asip.settings import feature_enable
@@ -76,6 +76,9 @@ def helper(request):
             summary__isnull=True
         ).distinct()
 
+    vary_print = request.GET.get('vary_print') or request.GET.get('print') or False
+    vary_print = bool(vary_print)
+
     context = {
         'settings': settings,
         'request_popup': bool(request.GET.get('_popup') or request.POST.get('_popup')),
@@ -101,6 +104,7 @@ def helper(request):
         'GOOGLE_ANALYTICS_KEY': settings.GOOGLE_ANALYTICS_KEY,
         'FACEBOOK_APP_ID': settings.FACEBOOK_APP_ID,
         'SITE_URL': settings.SITE_URL,
+        'BASE_FRONT_URL': settings.BASE_FRONT_URL,
 
         'TYPE_SOCIAL_ENTERPRISE': Organization.TYPE_SOCIAL_ENTERPRISE,
         'TYPE_STARTUP': Organization.TYPE_STARTUP,
@@ -130,11 +134,17 @@ def helper(request):
 
         'party_list': Party.objects.all(),
         'organization_list': Organization.objects.all(),
-        'admin_oroganization_list': Organization.objects.filter(Q(admins=request.user)|Q(created_by=request.user)).order_by('-status', 'id') if request.user else [],
+
+        'admin_oroganization_list': Organization.objects.filter((Q(admins=request.user)|Q(created_by=request.user)) & Q(is_mockup=False)).distinct().extra(select={'is_published': 'status = %d' % STATUS_PUBLISHED, 'is_pending': 'status = %d' % STATUS_PENDING}).order_by('-is_published', '-is_pending', '-status', 'id') if request.user.is_authenticated() else [],
+        'admin_oroganization_mockup_list': Organization.objects.filter((Q(admins=request.user)|Q(created_by=request.user)) & Q(is_mockup=True)).distinct().extra(select={'is_published': 'status = %d' % STATUS_PUBLISHED, 'is_pending': 'status = %d' % STATUS_PENDING}).order_by('-is_published', '-is_pending', '-status', 'id') if request.user.is_authenticated() else [],
+        'admin_user_apply_job_exists': UserApplyJob.objects.filter(dst__admins=request.user).exists() if request.user.is_authenticated() else False,
 
         'feature_enable': feature_enable(),
         'special': special,
-        'required_organizations': required_organizations
+        'required_organizations': required_organizations,
+        'organization_role_list': OrganizationRole.objects.all(),
+
+        'vary_print': vary_print
     }
 
     return context

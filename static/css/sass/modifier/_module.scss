@@ -440,7 +440,7 @@
 		content: "\e628";
 	}
 
-	.icon-noti-party-support-party:before, .icon-noti-party-received-funding-party:before {
+	.icon-noti-party-support-party:before {
 		content: "\e61b";
 		font-size: 20px;
 	}
@@ -480,8 +480,11 @@
 	.icon-noti-party-received-investing-party, .icon-noti-party-invest-party {
 		padding-top: 21px;
 	}
-	.icon-noti-party-received-investing-party:before, .icon-noti-party-invest-party:before {
+	.icon-noti-party-received-investing-party:before,
+	.icon-noti-party-received-funding-party:before,
+	.icon-noti-party-invest-party:before {
 		content: "\e634";
+		// content: "\e90e";
 		font-size: 24px;
 	}
 }

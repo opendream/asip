@@ -15,7 +15,7 @@ function getUrlVars() {
 var topicsSearch = getUrlVars()["topics"];
 
 
-var asipApp = angular.module('asipApp', ['ui.bootstrap', 'ngTouch', 'ui.utils', 'duScroll', 'ngSanitize', 'ngRoute']);
+var asipApp = angular.module('asipApp', ['ui.bootstrap', 'ngTouch', 'ui.utils', 'duScroll', 'ngSanitize', 'ngRoute', 'rzModule']);
 asipApp.config(function($interpolateProvider, $locationProvider, $httpProvider, $sceDelegateProvider) {
     $interpolateProvider.startSymbol('{[{');
     $interpolateProvider.endSymbol('}]}');
@@ -31,18 +31,6 @@ asipApp.config(function($interpolateProvider, $locationProvider, $httpProvider, 
     $rootScope.notification_status = notification_status;
     $rootScope.love_status = love_status;
     $rootScope.follow_status = follow_status;
-
-    if (navigator.userAgent.match(/Mobi/)) {
-        $('.dropdown-toggle').click();
-        $('.dropdown-toggle').click();
-
-        $('.icon-search.hidden-sm.hidden-md.hidden-lg').click();
-        $('.icon-search.hidden-sm.hidden-md.hidden-lg').click();
-
-        if (!$('.icon-search.hidden-sm.hidden-md.hidden-lg.collapsed').length) {
-            $('.icon-search.hidden-sm.hidden-md.hidden-lg').click();
-        }
-    }
 
     $rootScope.new_Day = function (time) {
         if (!time) {
@@ -60,9 +48,62 @@ asipApp.value('duScrollOffset', 5);
 
 asipApp.filter("sanitize", ['$sce', function ($sce) {
     return function (htmlCode) {
+        return $sce.trustAsHtml(String(htmlCode));
+    };
+}]);
 
-        return String(htmlCode);
-        //return $sce.trustAsHtml(String(htmlCode));
+asipApp.filter("roundNumber", [function ($sce) {
+    return function (value) {
+        return String(value).split('.')[0];
+    };
+}]);
+
+asipApp.filter("toDate", [function () {
+    return function (value) {
+        return moment(new Date(value));
+    };
+}]);
+asipApp.filter("toDateFormat", [function () {
+    return function (value, format) {
+        return moment(new Date(value)).format(format);
+    };
+}]);
+asipApp.filter("toJSON", [function () {
+    return function (value) {
+        return JSON.parse(value);
+    };
+}]);
+asipApp.filter("cut", [function () {
+    return function (value, trigger, wordwise, max, tail) {
+        if (!value) return '';
+
+        if (trigger) {
+            max = parseInt(max, 10);
+            if (!max) return value;
+            if (value.length <= max) return value;
+
+            value = value.substr(0, max);
+            if (wordwise) {
+                var lastspace = value.lastIndexOf(' ');
+                if (lastspace !== -1) {
+                  //Also remove . and , so its gives a cleaner result.
+                  if (value.charAt(lastspace-1) === '.' || value.charAt(lastspace-1) === ',') {
+                    lastspace = lastspace - 1;
+                  }
+                  value = value.substr(0, lastspace);
+                }
+            }
+
+            return value + (tail || ' …');
+        } else {
+            return value;
+        }
+
+    };
+}]);
+asipApp.filter("hasKey", [function () {
+    return function (value, key) {
+        return value.filter(function (item) {return item[key]}).length > 0;
     };
 }]);
 
@@ -532,7 +573,7 @@ asipApp.directive('loveButton', function($http, $rootScope) {
     return {
         scope: {
             party: "=?",
-            contentType: "@"
+            contentType: "=?"
         },
         restrict: 'AE',
         templateUrl: function($node, tattrs) {
@@ -621,7 +662,7 @@ asipApp.directive('loveButton', function($http, $rootScope) {
             scope.modal_list = function () {
 
                 if (scope.party.total_love > 0) {
-                    $rootScope.$broadcast('modal', { modal_id: 'love-popup', url: api, params: { limit: 10 , dst_id: scope.party.id, dst_content_type__model: content_type, offset: 0 }, field_name: 'src' } );
+                    $rootScope.$broadcast('modal', { modal_id: 'love-popup', url: api, params: { limit: 10 , dst_id: scope.party.pk, dst_content_type__model__in: 'party,user,organization,program', offset: 0 }, field_name: 'src' } );
                 }
 
             }
@@ -936,6 +977,7 @@ asipApp.controller('PostPartyDataController', function ($scope, $document, ApiSe
         var http_request_type = http_request.type;
         var need_update_status = http_request.update_party;
         var status = http_request.status || 'status';
+        var need_remove_party = http_request.remove_party;
 
         if (!$scope[model_name] && http_request_type == 'POST') {
             return;
@@ -957,6 +999,10 @@ asipApp.controller('PostPartyDataController', function ($scope, $document, ApiSe
 
             if (need_update_status) {
                 party[status] = data.status;
+            }
+
+            if (need_remove_party) {
+                party.removed = true;
             }
             
 
@@ -1263,6 +1309,18 @@ asipApp.controller('OrganizationDetailController', function ($scope, $http, $tim
         }
     }
 
+    $scope.check_content_length = function (value) {
+        return value.length > 100;
+    };
+
+    $scope.collapse_class = function (value) {
+        if (value.length > 100) {
+            return 'collapse';
+        } else {
+            return (value.length > 100)? 'collapse': '';
+        }
+    };    
+
 });
 
 asipApp.controller('PeopleDetailController', function ($scope, $http, $controller, $rootScope) {
@@ -1363,15 +1421,18 @@ asipApp.controller('JobDetailController', function ($scope, $http, SendMailServi
         $scope.skills = $scope.job.skills.split(',');
         $scope.organization = $scope.job.organization_jobs[0];
 
-        var scope = jQuery.extend(true, {}, ApiService.get_scope_for_api(api_job));
-        var params = jQuery.extend(true, {}, scope.params );
+    });
 
-        params.organization_jobs =  $scope.organization.id;
+});
 
-        scope.set_params(api_job, {limit: 10, offset: 0, organization_jobs: $scope.organization.id});
-
-        ApiService.set_scope_for_api(scope, api_job);
-        ApiService.refresh_api(api_job);
+asipApp.controller('JobApplyingDetailController', function ($scope, $http, SendMailService, ApiService) {
+    var api_job_applying = "/api/v1/user_apply_job/";
+    $scope.apply_id = apply_id;
+    $http.get(api_job_applying + $scope.apply_id, { cache: true}).success(function(data) {
+        $scope.job_applying = data;
+        $scope.organization = data.dst;
+        $scope.job = data.job;
+        $scope.src = data.src;
     });
 
 });
@@ -1873,7 +1934,15 @@ asipApp.controller('BasicPartyListController', function ($scope, $http, $locatio
                     party = party[$scope.field_name];
                     if ($scope.put_extra) {
                         angular.forEach($scope.put_extra, function (value) {
-                            party[value] = temp_party[value];
+                            if (typeof(value) == 'object') {
+                                if (value[1].substr(0, 8) == 'function') {
+                                    party[value[0]] = eval('(' + value[1] + ')(temp_party, party)');
+                                } else {
+                                    party[value[0]] = temp_party[value[1]];
+                                }
+                            } else {
+                                party[value] = temp_party[value];
+                            }
                         });
                     }
 
@@ -2488,6 +2557,8 @@ asipApp.controller('FilterController', function ($scope, $location, $window, $ti
         options = angular.extend(options, o);
     };
 
+    $scope.search = $location.search();
+
     $scope.filters=[];
     $scope.filtersMap = {}; // User in single mode
 
@@ -2516,7 +2587,10 @@ asipApp.controller('FilterController', function ($scope, $location, $window, $ti
         $scope.successFilter(fieldName);
     };
 
-    $scope.addFilter = function(fieldName, permalink, freeform) {
+    $scope.addFilter = function(fieldName, permalink, freeform, single, prefix, suffix) {
+
+        prefix = prefix || '';
+        suffix = suffix || '';
 
         $scope[fieldName + 'FocusMe'] = true;
         $scope[fieldName + 'Value'] = '';
@@ -2528,7 +2602,11 @@ asipApp.controller('FilterController', function ($scope, $location, $window, $ti
         }
 
         if (freeform) {
-            filter = {'title': permalink};
+            permalinkString = permalink;
+            if ($.isNumeric(permalink) && permalink >= 1000) {
+                permalinkString = (permalink/1000) + 'k'
+            }
+            filter = {'title': prefix + permalinkString + suffix};
             filter['permalink'] = fieldName + '=' + permalink;
         }
 
@@ -2542,7 +2620,7 @@ asipApp.controller('FilterController', function ($scope, $location, $window, $ti
 
 
         if (allowAdd) {
-            if (options.single || fieldName == 'q') {
+            if (options.single || single || fieldName == 'q') {
                 $scope.filters = $scope.filters.filter(function (obj) {
                     return obj.permalink.split('=')[0] != fieldName;
                 })
@@ -2551,9 +2629,9 @@ asipApp.controller('FilterController', function ($scope, $location, $window, $ti
             $scope.filters.push(filter);
         }
 
-        if (fieldName == 'q') {
-            if (!permalink.trim()) {
-                $scope.removeFilter({permalink: 'q='});
+        if (single || fieldName == 'q') {
+            if (!permalink || $.isNumeric(permalink) || !permalink.trim()) {
+                $scope.removeFilter({permalink: fieldName + '='});
             }
         }
 
@@ -2577,27 +2655,35 @@ asipApp.controller('FilterController', function ($scope, $location, $window, $ti
 
     };
 
-    $scope.addFilterDelay = function(fieldName, key, freeform) {
+    $scope.addFilterDelay = function(fieldName, key, freeform, single, prefix, suffix, defaultValue) {
 
         $timeout(function () {
 
+            key = key || '';
+
             var permalink = $scope;
+
             angular.forEach(key.split('.'), function (k) {
                 permalink = permalink[k];
             });
+            if (permalink) {
+                $scope.addFilter(fieldName, permalink, freeform, single, prefix, suffix);
+            }
 
-            $scope.addFilter(fieldName, permalink, freeform);
-        }, 2000)
+            if (typeof defaultValue != 'undefined') {
+                $scope.params[fieldName] = defaultValue;
+            }
+        }, 1500)
     };
 
-    $scope.removeFilter = function(filter) {
+    $scope.removeFilter = function(filter, single) {
 
         var fieldName = filter.permalink.split('=')[0];
 
         angular.forEach($scope.filters, function (f, index) {
 
 
-            var canDelete = options.single ? fieldName == f.permalink.split('=')[0]: filter.permalink == f.permalink;
+            var canDelete = options.single || single ? fieldName == f.permalink.split('=')[0]: filter.permalink == f.permalink;
             if (canDelete) {
                 $scope.filters.splice(index, 1);
                 delete($scope.filtersMap[fieldName]);
@@ -2842,6 +2928,46 @@ asipApp.controller('FilterController', function ($scope, $location, $window, $ti
             $scope.submit();
         }
     };
+
+    $scope.sliderTranslate = function (value, sliderId, label, options) {
+        var valueString = '' + value;
+        if (value >= 1000) {
+            valueString = (value/1000) + 'k'
+        }
+        switch (label) {
+            case 'model':
+                return options.prefix + valueString + options.suffix;
+            case 'high':
+                return options.prefix + valueString + options.suffix + (value >= options.ceil? '+': '');
+            default:
+                return options.prefix + valueString + options.suffix;
+        }
+    };
+
+    $scope.sliderOnEnd = function (sliderId, modelValue, highValue, pointerType, options) {
+        if (pointerType == 'min') {
+            if (modelValue <= options.floor) {
+                $timeout(function () {
+                    $scope.removeFilter({permalink: options.minField + '='}, true);
+                }, 1);
+            } else {
+                $scope.addFilter(options.minField, modelValue, true, true, options.labelMinPrefix, options.labelMinSuffix);
+            }
+        } else if (pointerType == 'max') {
+            if (highValue >= options.ceil) {
+                $timeout(function () {
+                    $scope.removeFilter({permalink: options.maxField + '='}, true);
+                }, 1);
+            } else {
+                $scope.addFilter(options.maxField, highValue, true, true, options.labelMaxPrefix, options.labelMaxSuffix);
+            }
+        }
+    };
+
+
+    //setTimeout(function(){
+    //    $scope.$broadcast('reCalcViewDimensions');
+    //}, 100);
 });
 
 function get_all_url_parameter()
@@ -2866,4 +2992,3 @@ asipApp.service('FollowerService', function() {
     this.total_following = '';
 
 });
-

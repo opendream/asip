@@ -1,5 +1,5 @@
 {% extends 'base_single.html' %}
-{% block content_class %} bg-white bg-white-wrapper{% endblock %}
+{% block content_class %} bg-white bg-white-wrapper manage-page{% endblock %}
 {% load i18n %}
 {% load common_tags %}
 {% load staticfiles %}
@@ -48,7 +48,21 @@
 <h4>Drag and drop to ordering</h4>
 <form method="post" role="form" enctype="multipart/form-data" class="form-group" ng-non-bindable>
 {% csrf_token %}
+{% else %}
+
+<form action="">
+    <div class="controls form-group">
+        <div class="field-container">
+            <input id="id_q" name="q" type="text" placeholder="Type for search" value="{{ request.GET.q }}" />
+        </div>
+        <div class="controls form-group group-action">
+            <button class="btn btn-primary btn-orange">Submit</button>
+        </div>
+    </div>
+</form>
 {% endif %}
+
+
 <table class="table table-striped"{% if table.attrs %} {{ table.attrs.as_html }}{% endif %}>
     {% block table.thead %}
     <thead>

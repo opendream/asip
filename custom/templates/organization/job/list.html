@@ -11,7 +11,7 @@
 {% block search_toggle_class %}{% endblock %}
 {% block search_class %}{% endblock %}
 {% block content_class %}{% endblock %}
-{% block wrapper_class %} wrapper--list{% endblock %}
+{% block wrapper_class %} wrapper--list job--list-page{% endblock %}
 
 
 {% block breadcrumb %}
@@ -31,7 +31,7 @@
                         Promote your job listing to the right candidates.
                     </p>
                 </div>
-                <div class="col-2 text">
+                <div class="col-sm-3 text">
                     <a class="btn btn-primary" href="{% url 'job_create_standalone' %}">
                         {% trans "Post a Job" %}
                     </a>

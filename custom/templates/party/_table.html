@@ -9,7 +9,7 @@
     </tr>
 
     <tr ng-repeat="item in result.objects" class="party-item" ng-cloak>
-        <td class="_hidelabel" data-th="{% trans 'Company' %}">
+        <td class="_hidelabel">
             <div class="table-content -company">
                 <div class="media">
                     <div class="media-left media-middle">
@@ -21,7 +21,7 @@
                     </div>
                     <div class="media-body media-middle">
                         <h4><a ng-href="{[{ item.absolute_url }]}">{[{ item.get_display_name }]}</a></h4>
-                        <span>{[{ item.get_summary }]}</span>
+                        <span><span ng-if="item.type_of_organization == 'program'">Program : </span>{[{ item.get_summary }]}</span>
                     </div>
                 </div>
             </div>
@@ -32,14 +32,15 @@
             <div class="table-content-wrapper">
                 <div class="table-content -column">
                     {% if column.is_m2m %}
-                    <div ng-class="{'field-expand-able': !item.column.expland && item.{{ column.field_name }}Height >35, 'invisible': !item.{{ column.field_name }}OrderFilters }" class="col-taxanomy text-left" report-my-height height="item.{{ column.field_name }}Height">
+                    <div ng-class="{'field-expand-able': !item.column.expland && item.{{ column.field_name }}Height >35 }" class="col-taxanomy text-center" report-my-height height="item.{{ column.field_name }}Height">
                         <span ng-repeat="value in item.{{ column.field_name }}" class="topics {{ column.field_name }} m2m-tag">
-                            <a ng-click="successFilter('{{ column.field_name }}__permalink', true)" ng-href="#?{{ column.field_name }}__permalink={[{ value.permalink }]}">{[{ value.title }]}</a>
+                            <a ng-click="successFilter('{{ column.field_name }}__permalink', true)" ng-href="#?{{ column.field_filter|default:column.field_name }}__permalink={[{ value{{ column.field_attribute|default:'' }}.permalink }]}">{[{ value{{ column.field_attribute|default:'' }}.title }]}</a>
                         </span>
                     </div>
                     <div ng-hide="item.{{ column.field_name }}.length">
                         -
                     </div>
+
                     {% elif column.field_name == 'action' %}
                     <div class="table-action text-right">
                         <div class="action-panel -oneline" ng-if="logged_in_party.id != item.pk">
@@ -58,11 +59,15 @@
                             </div>
                         </div>
                     </div>
+                    {% elif column.date_format %}
+                    <span>{[{ item.{{ column.field_name }}.split('T')[0] }]}</span>
+                    {% elif column.link %}
+                    <a ng-href="{[{ item.{{ column.link }} }]}" title="{[{ item.get_display_name }]}">{[{ item.{{ column.field_name }}.title||item.{{ column.field_name }}||'{{ column.field_name }}' }]}</a>
                     {% else %}
                     <span>{[{ item.{{ column.field_name }}.title||item.{{ column.field_name }}||'-' }]}</span>
                     {% endif %}
                     {% if column.is_m2m %}
-                    <a class="field-expand-link" ng-href="{[{ item.absolute_url }]}" ng-if="!item.column.expland && item.{{ column.field_name }}Height>35">{% trans "More" %} ›</a>
+                    <a class="field-expand-link text-center" ng-href="{[{ item.absolute_url }]}" ng-if="!item.column.expland && item.{{ column.field_name }}Height>35">{% trans "More" %} ›</a>
                     {% endif %}
                 </div>
             </div>

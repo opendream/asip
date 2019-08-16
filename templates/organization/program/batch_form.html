@@ -1,0 +1,51 @@
+{% load i18n %}
+
+<div class="col-sm-6 batch_section1_form">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <h4 class="title">Batch {{ i|add:1 }}:</h4>
+            <div class="controls form-group hidden">
+                <label for="id_{{ prefix }}-{{ i }}-title" class="col-sm-4 control-label">{% trans "Title" %}</label>
+                <div class="col-sm-8">
+                    <input id="id_{{ prefix }}-{{ i }}-title" name="{{ prefix }}-{{ i }}-title" type="text" class="form-control" placeholder="" value="batch-{{ i|add:1 }}" readonly>
+                </div>
+            </div>
+            <div class="controls form-group">
+                <label for="id_{{ prefix }}-{{ i }}-amount_pre_seed_stage" class="col-sm-4 control-label">{% trans "Pre-seed" %}</label>
+                <div class="col-sm-8">
+                    <input id="id_{{ prefix }}-{{ i }}-amount_pre_seed_stage" name="{{ prefix }}-{{ i }}-amount_pre_seed_stage" type="number" class="form-control" placeholder="" value="{{ form.amount_pre_seed_stage.value|default_if_none:"" }}">
+                </div>
+            </div>
+            <div class="controls form-group">
+                <label for="id_{{ prefix }}-{{ i }}-amount_seed_stage" class="col-sm-4 control-label">{% trans "Seed" %}</label>
+                <div class="col-sm-8">
+                    <input id="id_{{ prefix }}-{{ i }}-amount_seed_stage" name="{{ prefix }}-{{ i }}-amount_seed_stage" type="number" class="form-control" placeholder="" value="{{ form.amount_seed_stage.value|default_if_none:"" }}">
+                </div>
+            </div>
+            <div class="controls form-group">
+                <label for="id_{{ prefix }}-{{ i }}-amount_pre_series_a_stage" class="col-sm-4 control-label">{% trans "Pre-series A" %}</label>
+                <div class="col-sm-8">
+                    <input id="id_{{ prefix }}-{{ i }}-amount_pre_series_a_stage" name="{{ prefix }}-{{ i }}-amount_pre_series_a_stage" type="number" class="form-control" placeholder="" value="{{ form.amount_pre_series_a_stage.value|default_if_none:"" }}">
+                </div>
+            </div>
+            <div class="controls form-group">
+                <label for="id_{{ prefix }}-{{ i }}-amount_series_a_stage" class="col-sm-4 control-label">{% trans "Series A" %}</label>
+                <div class="col-sm-8">
+                    <input id="id_{{ prefix }}-{{ i }}-amount_series_a_stage" name="{{ prefix }}-{{ i }}-amount_series_a_stage" type="number" class="form-control" placeholder="" value="{{ form.amount_series_a_stage.value|default_if_none:"" }}">
+                </div>
+            </div>
+            <div class="controls form-group">
+                <label for="id_{{ prefix }}-{{ i }}-amount_series_b_stage" class="col-sm-4 control-label">{% trans "Series B" %}</label>
+                <div class="col-sm-8">
+                    <input id="id_{{ prefix }}-{{ i }}-amount_series_b_stage" name="{{ prefix }}-{{ i }}-amount_series_b_stage" type="number" class="form-control" placeholder="" value="{{ form.amount_series_b_stage.value|default_if_none:"" }}">
+                </div>
+            </div>
+            <div class="controls form-group">
+                <label for="id_{{ prefix }}-{{ i }}-amount_series_c_stage" class="col-sm-4 control-label">{% trans "Series C" %}</label>
+                <div class="col-sm-8">
+                    <input id="id_{{ prefix }}-{{ i }}-amount_series_c_stage" name="{{ prefix }}-{{ i }}-amount_series_c_stage" type="number" class="form-control" placeholder="" value="{{ form.amount_series_c_stage.value|default_if_none:"" }}">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

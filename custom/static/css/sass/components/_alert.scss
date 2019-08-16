@@ -16,14 +16,14 @@ $bg-info: #ECAD41;
 
 .tab-form {
     li.errors, li.active.errors {
-        > a { 
+        > a {
             background-color: $bg-error !important;
             border: 0;
             color: #fff !important;
             border-radius: 0;
         }
-    }  
-} 
+    }
+}
 
 // Alert
 .alert {
@@ -40,7 +40,7 @@ $bg-info: #ECAD41;
     @media (max-width: $screen-xs-max) {
         padding: 10px 10px 10px 60px;
     }
-    a { 
+    a {
         color: #fff !important;
         text-decoration: underline;
     }
@@ -91,7 +91,8 @@ $bg-info: #ECAD41;
     &:before {
         // content: "\e083";
         content: 'OOPS!!';
-        font-family: kanitregular;
+        font-family: "league_gothic";
+        // font-family: kanitregular;
         letter-spacing: 2px;
         font-size: 30px;
         top: 10px;

@@ -261,7 +261,7 @@ function checkTreeChange(input) {
         li = li.next('li');
         var curr_label = li.find('label').eq(0);
 
-        if (curr_label.html() && (curr_label.html().indexOf('dlcorn;') > -1 ||  curr_label.html().indexOf('⌞') > -1)) {
+        if (curr_label && curr_label.html() && (curr_label.html().indexOf('dlcorn;') > -1 ||  curr_label.html().indexOf('⌞') > -1)) {
 
             curr_label.parent().addClass('children-indent');
 
@@ -289,7 +289,7 @@ $(document).ready(function () {
     $('input[type=checkbox], input[type=radio]').each(function () {
 
         var label = $('label[for=' + $(this).attr('id') + ']');
-        if (label.html().indexOf('dlcorn;') == -1 && label.html().indexOf('⌞') == -1) {
+        if (label && label.html() && label.html().indexOf('dlcorn;') == -1 && label.html().indexOf('⌞') == -1) {
 
             $(this).change(function () {
                 checkTreeChange(this);
@@ -333,28 +333,86 @@ $(document).ready(function () {
             return false;
         }
 
-
         var depend_roles = '';
         $('.depend-on-role').hide()
         $('input[name=organization_roles]:checked').each(function() {
-            $('.depend-on-role-id-' + this.value).show();
+            $('.depend-on-role-id-' + this.value).show().removeClass('hide');
             depend_roles += '-' + this.value;
         });
-        $('.depend-on-role-id-'+depend_roles).show();
+        $('.depend-on-role-id-'+depend_roles).show().removeClass('hide');
     });
     $('input[name=organization_roles]').trigger('change');
+
+    $('input[name=investor_type]').change(function () {
+
+        if ($(this).prop('readonly')) {
+            return false;
+        }
+
+        var depend_investor_type = '';
+        $('.depend-on-investor_type').hide().addClass('hide');
+        $('input[name=investor_type]:checked').each(function() {
+            $('.depend-on-investor_type-id-' + this.value).show().removeClass('hide');
+            depend_investor_type += '-' + this.value;
+        });
+        $('.depend-on-investor_type-id-'+depend_investor_type).show().removeClass('hide');
+    });
+    $('input[name=investor_type]').trigger('change');
+
+    $('input[name=investment_stage_type]').change(function () {
+
+        if ($(this).prop('readonly')) {
+            return false;
+        }
+
+        var depend_investment_stage_type = '';
+        $('.depend-on-investment_stage_type').hide().addClass('hide');
+        $('input[name=investment_stage_type]:checked').each(function() {
+            $('.depend-on-investment_stage_type-id-' + this.value).show().removeClass('hide');
+            depend_investment_stage_type += '-' + this.value;
+        });
+        $('.depend-on-investment_stage_type-id-'+depend_investment_stage_type).show().removeClass('hide');
+    });
+    $('input[name=investment_stage_type]').trigger('change');
+
+    $('input[name=specific_stage]').change(function () {
+
+        if ($(this).prop('readonly')) {
+            return false;
+        }
+
+        if (this.value) {
+            $('.depend-on-specific_stage').show().removeClass('hide');
+            $('.depend-on-specific_stage-render').html(this.value);
+        } else {
+            $('.depend-on-specific_stage').hide().addClass('hide');
+        }
+    });
+    $('input[name=specific_stage]').trigger('change');
 
     $('input[name=kind]').change(function () {
 
         var depend_kinds = '';
-        $('.depend-on-kind').hide()
+        $('.depend-on-kind').hide().addClass('hide');
         $('input[name=kind]:checked').each(function() {
-            $('.depend-on-kind-id-' + this.value).show();
+            $('.depend-on-kind-id-' + this.value).show().removeClass('hide');
             depend_kinds += '-' + this.value;
         });
-        $('.depend-on-kind-id-'+depend_kinds).show();
+        $('.depend-on-kind-id-'+depend_kinds).show().removeClass('hide');
     });
     $('input[name=kind]').trigger('change');
+
+    $('.is-yes-depend input[type=radio], .is-yes-depend input[type=checkbox]').change(function () {
+
+        console.log($(this).val(), $(this).prop('checked'));
+
+        if ($(this).val() == 'True' && $(this).prop('checked')) {
+            $('.is-yes-depend-on-' + $(this).attr('name')).show().removeClass('hide');
+        } else {
+            $('.is-yes-depend-on-' + $(this).attr('name')).hide().addClass('hide');
+        }
+
+    }).trigger('change');
 
     $('input[name=user_roles]').change(function (e) {
 
@@ -362,10 +420,10 @@ $(document).ready(function () {
 
         if (input.parent().hasClass('permalink-individual')) {
             if (input.prop('checked')) {
-                $('.hide-on-individual').hide();
+                $('.hide-on-individual').hide().addClass('hide');;
             }
             else {
-                $('.hide-on-individual').show();
+                $('.hide-on-individual').show().removeClass('hide');
             }
         }
 
@@ -545,7 +603,7 @@ $(document).ready(function () {
     $('.btn-next').click(function (e) {
         e.preventDefault();
         var next_tab = $('li.active', tab_stacked).next();
-        if (next_tab.hasClass('disabled')) {
+        while (next_tab.hasClass('disabled') || next_tab.hasClass('hide')) {
             next_tab = next_tab.next();
         }
 
@@ -560,13 +618,17 @@ $(document).ready(function () {
         $('body').scrollTo('h1');
 
     });
+
     $('form a[data-toggle=tab]').click(function () {
         if ($(this).parent('li').next().length) {
             if ($(this).parent('li').hasClass('show-submit-button')) {
                 $('.btn-submit').show();
             }
-            else {
+            else if ($(this).parent('li').hasClass('hide-submit-button')) {
                 $('.btn-submit').hide();
+            }
+            else {
+                $('.btn-submit').show();
             }
             $('.btn-next').show();
         }
@@ -578,10 +640,6 @@ $(document).ready(function () {
             scrollTop: $("#tab_content").offset().top - 30
         }, 500);
     });
-    if ($('.btn-next').length) {
-        $('.btn-submit').hide();
-    }
-
 
 
     // Dropdown
@@ -667,7 +725,10 @@ $(document).ready(function () {
     $('.link-tooltip').tooltip();
 
     // stick-in-parent
-    $('.stick-in-parent').stick_in_parent();
+    setTimeout(function () {
+    //    $('.stick-in-parent').stick_in_parent();
+        $('.form-sidebar-wrapper').stickem({offset: 20});
+    }, 1000);
 
 
     // Point form
@@ -879,5 +940,25 @@ $(document).ready(function () {
         $('.menu-action-wrapper', this).css({display: 'none'});
     })
 
+    $('.create-profile__close').click(function () {
+        var cp = $('.create-profile');
+        cp.toggleClass('collapse-right');
+        if (cp.hasClass('collapse-right')) {
+            $(this).html('◄');
+        } else {
+            $(this).html('x');
+        }
+    })
+
+
+    setTimeout(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    }, 3000);
+
+
+    // slice
+    setTimeout(function () {
+        $('.btn-group.range .dropdown-menu').removeAttr("style");
+    }, 2000);
 
 });

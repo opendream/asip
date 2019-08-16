@@ -1,0 +1,13 @@
+{% load common_tags %}
+
+{% captureas content %}
+
+<h2>{{ object.name }}</h2>
+<p>{{ object.contact_information }}</p>
+<p>{{ object.contact_person }}</p>
+
+<h4>{{ object.organization.title }}</h4>
+
+{% endcaptureas %}
+
+{{ content|lower }}

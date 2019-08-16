@@ -1,31 +1,70 @@
 {% load i18n %}
+{% load staticfiles %}
 
 <div class="menu">
 
-    <a class="brand-logo" href="{% url 'home' %}">{%  trans "Logo" %}</a>
+  {% comment %}
+  <div class="hamburger">
+    <svg width="21" height="15" xmlns="http://www.w3.org/2000/svg"><g fill="#FFF" fill-rule="evenodd"><rect width="21" height="2" rx="1"/><rect y="6.5" width="21" height="2" rx="1"/><rect y="13" width="21" height="2" rx="1"/></g></svg>
+  </div>
+  {% endcomment %}
+{% comment %}
+  <div class="site-name">
+    <a href="{% url 'home' %}"><img src="{% static 'images/logo.png' %}"
+    srcset=" {% static 'images/logo.png' %} 1x, {% static 'images/logo@2x.png' %} 2x" /></a>
+  </div>
+{% endcomment %}
 
-    <div class="menu__hamburger navbar-header hotfix-hidden">
-      <button class="menu__toggle navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-      </button><!-- <a href="/" class="navbar-brand">ImpactConnect</a> -->
+    <a class="brand-logo" href="{{ BASE_FRONT_URL }}">{%  trans "Logo" %}</a>
+
+
+    <div class="menu__hamburger navbar-header">
+        <button class="menu__toggle navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button><!-- <a href="/" class="navbar-brand">ImpactConnect</a> -->
     </div>
 
-    <ul class="menu__level-0 hidden-xs hidden-sm list-unstyled hotfix-hidden">
-      <li class="menu__item"><a href="{% url 'about' %}">Ecosystem</a></li>
-      <li class="menu__item"><a href="{% url 'presentation_role_list_redirect' 'startup' %}">Startup</a></li>
-      <li class="menu__item"><a href="{% url 'presentation_role_list_redirect' 'investor' %}">Investor</a></li>
-      <li class="menu__item"><a href="{% url 'presentation_role_list_redirect' 'supporter' %}">Supporting Organization</a></li>
-      <li class="menu__item"><a href="{% url 'event_list' %}">Event</a></li>
+
+    <ul class="menu__level-0 hidden-xs hidden-sm list-unstyled">
+
+        <li class="menu__item"><a href="{{ BASE_FRONT_URL }}/about/">About</a></li>
+        <li class="menu__item"><a href="{{ BASE_FRONT_URL }}/category/activity/">Activity</a></li>
+        <li class="menu__item menu__item-has-children menu__item-has-hover">
+            <a href="{{ BASE_FRONT_URL }}/resource/">Resource</a>
+            <ul class="sub-menu-hover">
+                <li class="menu-item"><a href="http://www.startupthailandacademy.org/" target="_blank">E-LEARNING</a></li>
+                <li class="menu-item"><a href="{{ BASE_FRONT_URL }}/category/resource/magazine/">MAGAZINE</a></li>
+                <li class="menu-item"><a href="{{ BASE_FRONT_URL }}/resource/">TV PROGRAMS</a></li>
+            </ul>
+        </li>
+        <li class="menu__item"><a href="{{ BASE_FRONT_URL }}/news/">News</a></li>
+        <li class="menu__item"><a href="{{ BASE_FRONT_URL }}/events/month/">Event</a></li>
+        <li class="menu__item menu__item-has-children menu__item-has-hover">
+            <a href="{% url 'home' %}" class="active hotfix-children-hidden">Ecosystem</a>
+            <ul class="sub-menu-hover hotfix-hidden">
+                <li class="menu-item"><a href="{% url 'presentation_role_list_redirect' 'startup' %}">STARTUP</a></li>
+                <li class="menu-item"><a href="{% url 'presentation_role_list_redirect' 'investor' %}">INVESTOR</a></li>
+                <li class="menu-item"><a href="{% url 'presentation_role_list_redirect' 'supporter' %}">SUPPORTER</a></li>
+                {% comment %}
+                <li class="menu-item"><a href="#">STUDENT</a></li>
+                {% endcomment %}
+            </ul>
+        </li>
+        <li class="menu__item hotfix-hidden"><a href="{% url 'job_landing' %}">Job</a></li>
     </ul>
 
 </div>
 
-
-<div id="block-search" class="block-search -toggle collapse{{ search_class_content }}"{% if request.path != '/search/' %} ng-controller="FilterController" ng-init="init({url: '/api/v1/search/', live: false, successFilterCount: 0, single: true})"{% endif %}>
-
+<div id="block-search" class="block-search -toggle collapse{{ search_class_content }}"
+    {% if request.path != '/search/' %}
+    ng-controller="FilterController" ng-init="init({url: '/api/v1/search/', live: false, successFilterCount: 0, single: true})"
+    {% else %}
+    ng-init="initFilter('q', {permalink: search.q, title: search.q})"
+    {% endif %}
+>
     <div class="form-wrapper -search">
         <div class="container">
             {% if request.path != '/search/' %}
@@ -35,7 +74,7 @@
                 <div class="row">
                     <div class="col-sm-10 col-xs-8">
                         <input type="hidden" name="ajax" value="1" />
-                        <input id="search-q" name="q" type="text" placeholder="{% trans "Search" %}"
+                        <input id="search-q" name="q" type="text" placeholder="{% trans "Keywords" %}"
                                focus-me="true"
                                ng-model="params.q"
                                ng-keydown="controlQ($event)"
@@ -46,7 +85,7 @@
                         {% if request.path == '/search/' %}
                         <button class="btn btn-outline -black" ng-click="addFilter('q', params.q, true); submit();">{% trans "Go" %}</button>
                         {% else %}
-                        <button class="btn btn-outline -black">{% trans "Go" %}</button>
+                        <button class="btn btn-default btn-lg btn--dark-blue">{% trans "Search" %}</button>
                         {% endif %}
                     </div>
                 </div>
@@ -57,8 +96,39 @@
     </div>
 </div>
 
+
 <nav class="menu__collapse bs-navbar-collapse collapse" role="navigation">
     <div class="row">
+
+        <ul class="menu__level-0 list-unstyled nav-menu-mobile">
+            <li class="menu__item"><a href="{{ BASE_FRONT_URL }}/about/">About</a></li>
+            <li class="menu__item"><a href="{{ BASE_FRONT_URL }}/category/activity/">Activities</a></li>
+            <li class="menu__item menu__item-has-children">
+                <a href="{{ BASE_FRONT_URL }}/resource/">Resource</a>
+                <ul class="sub-menu-mobile">
+                    <li class="menu-item"><a href="http://www.startupthailandacademy.org/" target="_blank">E-LEARNING</a></li>
+                    <li class="menu-item"><a href="{{ BASE_FRONT_URL }}/category/resource/magazine/">MAGAZINE</a></li>
+                    <li class="menu-item"><a href="{{ BASE_FRONT_URL }}/resource/">TV PROGRAMS</a></li>
+                </ul>
+            </li>
+            <li class="menu__item"><a href="{{ BASE_FRONT_URL }}/news/">News</a></li>
+            <li class="menu__item"><a href="{{ BASE_FRONT_URL }}/events/month/">Event</a></li>
+            <li class="menu__item">
+                <a href="{% url 'home' %}" class="active hotfix-children-hidden">Ecosystem</a>
+                <ul class="sub-menu-mobile">
+                    <li class="menu-item hotfix-hidden"><a href="{% url 'presentation_role_list_redirect' 'startup' %}">STARTUP</a></li>
+                    <li class="menu-item hotfix-hidden"><a href="{% url 'presentation_role_list_redirect' 'investor' %}">INVESTOR</a></li>
+                    <li class="menu-item hotfix-hidden"><a href="{% url 'presentation_role_list_redirect' 'supporter' %}">SUPPORTER</a></li>
+                    {% comment %}
+                    <li class="menu-item"><a href="#">STUDENT</a></li>
+                    {% endcomment %}
+                </ul>
+            </li>
+            <li class="menu__item hotfix-hidden"><a href="{% url 'job_landing' %}">Job</a></li>
+        </ul>
+
+
+        {% comment %}
         <div class="block-followus pull-left hidden-xs col-sm-2">
             <h2>Connect</h2>
             <a href="https://www.facebook.com/212443462465022/" target="_blank" title="New Economic Warrior on facebook"><span class="icon-facebook icon-social"></span></a>
@@ -71,11 +141,11 @@
                         <li><a href="{% url 'home' %}">Home</a></li>
                         <li><a href="{% url 'presentation_role_list_redirect' 'startup' %}">Startup</a></li>
                         <li><a href="{% url 'presentation_role_list_redirect' 'investor' %}">Investor</a></li>
-                        <li><a href="{% url 'presentation_role_list_redirect' 'supporter' %}">Supporting Organization</a></li>
+                        <li><a href="{% url 'presentation_role_list_redirect' 'supporter' %}">Supporter</a></li>
 
                     </ul>
                 </li>
-                
+
                 <li class="menu-group level-0 col-sm-3">
                     <ul class="menu-group__list list-unstyled">
                         <li><a href="{% url 'people_list' %}">People</a></li>
@@ -104,5 +174,6 @@
             <a href="https://www.facebook.com/212443462465022/" target="_blank" title="New Economic Warrior on facebook"><span class="icon-facebook icon-social"></span></a>
             <a href="" data-target="#modal-comming-soon" data-toggle="modal" target="_blank" title="New Economic Warrior on twitter"><span class="icon-twitter icon-social"></span></a>
         </div>
+        {% endcomment %}
     </div>
 </nav>

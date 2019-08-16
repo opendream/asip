@@ -9,11 +9,11 @@
 <nav class="navbar-collapse bs-navbar-collapse collapse asip-menu" role="navigation">
     <ul class="nav navbar-nav navbar-main-menu">
         <li><a href="{% url 'home' %}">Home</a></li>
-        <li><a href="{% url 'presentation_role_list_redirect' 'social-enterprise' %}">Social Enterprise</a></li>
-        <li><a href="{% url 'presentation_role_list_redirect' 'supporter' %}">Supporter</a></li>
-        <li><a href="{% url 'presentation_role_list_redirect' 'investor' %}">Investor</a></li>
+        {% for role in organization_role_list %}
+        <li><a href="{% url 'presentation_role_list_redirect' role.permalink %}" class="">{{ role.title }}</a></li>
+        {% endfor %}
         <li><a href="{% url 'people_list' %}">People</a></li>
-        <li><a href="{% url 'job_list' %}">Job</a></li>
+        <li><a href="{% url 'job_landing' %}">Job</a></li>
         <li><a href="{% url 'news_list' %}">Update</a></li>
         <li><a href="{% url 'article_list' 'knowledge-tools' %}">Knowledge</a></li>
         <li class="navbar-main-menu-hidden"><a href="">About</a></li>

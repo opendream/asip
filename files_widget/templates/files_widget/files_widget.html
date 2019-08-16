@@ -14,6 +14,7 @@
             {% endif %}
         </span>
         {% for path_to_file in files.splitlines %}{% spaceless %}
+            <div><a class="file-link hide" target="_blank" href="{{ SITE_URL }}{{ MEDIA_URL }}{{ path_to_file }}">{{ path_to_file|filename_from_path }}</a></div>
             <div class="preview" data-image-path="{{ path_to_file }}">
                 <span class="image-holder">
                     {% if widget_class != 'file-widget-file-wg' or path_to_file|is_image %}
@@ -30,6 +31,7 @@
                         </a>
                     </span>
                 </span>
+                <span class="file-name"> {{ path_to_file|filename_from_path }} </span>
             </div>
         {% endspaceless %}{% endfor %}
     </div>
@@ -66,7 +68,7 @@
         </span>
         <span class="upload-progress-stats"></span>
     </div>
-    <div class="files-widget-deleted" style="display: none">
+    <div class="files-widget-deleted hide" style="display: none">
         <p>{% trans 'Files to be removed' %}:</p>
         <div class="deleted-list hidden-xs">
             {% for path_to_file in deleted_files.splitlines %}
@@ -76,7 +78,7 @@
                     </span>
                     <span class="name">{{ path_to_file|filename_from_path }}</span>
                     <span class="undo">
-                        <a href="javascript:void(0);" class="undo-remove-button">
+                        <a href="javascript:void(0);" class="btn btn-default undo-remove-button">
                             Undo
                         </a>
                     </span>

@@ -6,7 +6,7 @@
 {% load thumbnail files_widget_tags %}
 
 {% block title %}{% trans "About" %}{% endblock %}
-{% block description %}New Economic Warrior: Startup -- Investor -- Supporting Organization{% endblock %}
+{% block description %}{{ SITE_SLOGAN }}: Startup -- Investor -- Supporter -- Student{% endblock %}
 {% block image %}{% static 'images/startup-ecosystem.png' %}{% endblock %}
 
 
@@ -22,11 +22,11 @@
 <div class="container">
     <div class="row">
         <div class="col-xs-12 text-center about-title">
-            <h2 class="title -banner"><strong>Startup</strong><br />Ecosystem</h2>
+            <h2 class="title -banner"><strong>{% trans 'Startup'%}</strong><br />{% trans 'Ecosystem' %}</h2>
             <div class="row">
                 <div class="col-sm-8 col-sm-offset-2 content-full-xs">
                     <p class="special-default">
-                    Though the very heart of ecosystem are StartUps and Investors, surrounding players are playing an important role in providing friendly and high-quality environment, supporting ease and security on doing businesses and deals and improving resources in both senses of quality and quantity.
+                    {% trans 'Though the very heart of ecosystem are StartUps and Investors, surrounding players are playing an important role in providing friendly and high-quality environment, supporting ease and security on doing businesses and deals and improving resources in both senses of quality and quantity.'%}
                     </p>
                 </div>
             </div>
@@ -35,25 +35,25 @@
     <div class="row block-normal">
         <div class="sub-block col-sm-4 content-full-xs">
             <div class="text-wrapper">
-                <h3 class="title">Startup</h3>
+                <h3 class="title">{% trans 'Startup' %}</h3>
                 <p>
-                Thai companies whose solutions, services and platforms provide a business advantage in the highly competitive market and a better life for people.
+                {% trans 'Thai companies whose solutions, services and platforms provide a business advantage in the highly competitive market and a better life for people.'%}
                 </p>
             </div>
         </div>
         <div class="sub-block col-sm-4 -middle content-full-xs">
             <div class="text-wrapper">
-                <h3 class="title">Investor</h3>
+                <h3 class="title">{% trans 'Investor' %}</h3>
                 <p>
-                Persons or business bodies committing capital with the expectation of returns from the growth of competitive Thai companies.
+                {% trans 'Persons or business bodies committing capital with the expectation of returns from the growth of competitive Thai companies.'%}
                 </p>
             </div>
         </div>
         <div class="sub-block col-sm-4 content-full-xs">
             <div class="text-wrapper">
-                <h3 class="title">Supporting Organization</h3>
+                <h3 class="title">{% trans 'Supporter' %}</h3>
                 <p>
-                Surrounding players providing friendly and high-quality environment, supporting ease and security on doing businesses and deals and improving resources in both senses of quality and quantity.
+                {% trans 'Surrounding players providing friendly and high-quality environment, supporting ease and security on doing businesses and deals and improving resources in both senses of quality and quantity.' %}
                 </p>
             </div>
         </div>
@@ -64,8 +64,8 @@
             <?xml version="1.0" encoding="UTF-8" standalone="no"?>
             <svg width="781px" height="781px" viewBox="0 0 781 781" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <!-- Generator: Sketch 3.7.1 (28215) - http://www.bohemiancoding.com/sketch -->
-                <title>cycle-ecosystem</title>
-                <desc>Created with Sketch.</desc>
+                <title>{% trans 'cycle-ecosystem' %}</title>
+                <desc>{% trans 'Created with Sketch.' %}</desc>
                 <defs></defs>
                 <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                     <g id="cycle-ecosystem">
@@ -398,7 +398,7 @@
     <div class="row block-new">
         <div class="col-xs-12 text-center">
             <div>
-                <img src="../static/images/NEW@2x.png" alt="NEW : New Economic Warrior" style="width: 240px;">
+                <img src="../static/images/NEW@2x.png" alt="{{ SITE_SLOGAN }}" style="width: 240px;">
             </div>
 <!--             <h2 class="title -banner">
                 <strong>NEW</strong>
@@ -408,7 +408,7 @@
             <div class="row">
                 <div class="col-sm-8 col-sm-offset-2 content-full-xs">
                     <p class="special-default">
-                    Emerging technologies especially in ICT is causing paradigm shift in economic and much more competitiveness in every vertical. Companies who are not transforming and adapting to the new battlefield quickly enough, will be faded and replaced with the emerging companies. Thailand needs a new breed of warriors at business frontiers who can move faster with the new tools and lead all Thai industries to the new age of digital transformation.
+                    {% trans 'Emerging technologies especially in ICT is causing paradigm shift in economic and much more competitiveness in every vertical. Companies who are not transforming and adapting to the new battlefield quickly enough, will be faded and replaced with the emerging companies. Thailand needs a new breed of warriors at business frontiers who can move faster with the new tools and lead all Thai industries to the new age of digital transformation.'%}
                     </p>
                 </div>
             </div>
@@ -418,9 +418,9 @@
         <!-- <div class="col-md-5 col-md-offset-1 col-sm-6 content-full-xs"> -->
         <div class="col-sm-8 col-sm-offset-2">
             <div class="block-normal text-center">
-                <h2 class="title">What we do</h2>
+                <h2 class="title">{% trans 'What we do' %}</h2>
                 <p>
-                Initiated by SET, NEW is a Thailand online community platform which consists of innovative solutions, services, and platforms created by Thai companies, Thailand-based Investors and supporting players in Thai Startup Ecosystem. We are aiming at bringing together all key players in Thailand StartUp Ecosystem to create more visibility and to provide an effective communication platform reaching key players in Thailand.
+               {% trans ' Initiated by SET, NEW is a Thailand online community platform which consists of innovative solutions, services, and platforms created by Thai companies, Thailand-based Investors and supporting players in Thai Startup Ecosystem. We are aiming at bringing together all key players in Thailand StartUp Ecosystem to create more visibility and to provide an effective communication platform reaching key players in Thailand.' %}
                 </p>
                 <br />
                 <br />
@@ -430,7 +430,7 @@
         <!-- <div class="col-sm-12"> -->
         <div class="col-md-5 col-md-offset-1 col-sm-6 content-full-xs hide">
             <div class="block-normal -team">
-                <h2 class="title">Team</h2>
+                <h2 class="title">{% trans 'Team' %}</h2>
                 
                 <ul class="item-list row">
                     <li class="col-sm-4 col-xs-6 item">

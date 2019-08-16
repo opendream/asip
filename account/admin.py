@@ -1,5 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.models import Group
+from django.contrib.admin import DateFieldListFilter
+from rangefilter.filter import DateRangeFilter, DateTimeRangeFilter
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 
@@ -21,8 +23,10 @@ class UserResource(resources.ModelResource):
 
 class UserAdmin(ImportExportModelAdmin):
     resource_class = UserResource
-
-    list_filter = ('interests', 'user_roles', 'is_active')
+    
+    list_display = ('id', 'username', 'first_name', 'email', 'date_joined')
+    list_filter = ('is_staff', 'user_roles', 'is_active', ('date_joined', DateTimeRangeFilter))
+    search_fields = ('username', 'email')
 
 
 admin.site.register(User, UserAdmin)

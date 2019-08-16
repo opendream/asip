@@ -4,6 +4,7 @@
 
 .wrapper.-home {
     padding: 0;
+    background-color: #fff;
 }
 
 
@@ -321,19 +322,20 @@ Block:  Join Startup Community
 .block-people.-front {
     .follow-section { display: none;}
     .item-inner {
-        border: 1px solid #ccc;
-        min-height: 250px;
+        // border: 1px solid #ccc;
+        // min-height: 250px;
         position: relative;
+
         @media (min-width: $screen-sm-max) {
-            margin: 0 10px;
+            // margin: 0 10px;
         }
     }
     .description-wrapper {padding: 0 10px 10px; }
     .item {
-        max-width: 270px;
+        // max-width: 270px;
         margin-bottom: 20px;
         @media (min-width: 991px) {
-            max-width: 290px;
+            // max-width: 290px;
         }
         @media (max-width: 500px) {
             clear: both;
@@ -343,15 +345,17 @@ Block:  Join Startup Community
         }
     }
     .item .thumbnail img {
-        max-width: 239px;
-        max-height: 200px;
+      width: 100%;
+        // max-width: 239px;
+        // max-height: 200px;
     }
     .title {
         @extend .kanit-regular;
-        font-size: 18px;
+        font-size: 16px;
         margin: 10px 0 5px;
     }
     .country { display: none;}
+    .btn-startup { margin-bottom: 20px; }
 }
 
 
@@ -725,4 +729,34 @@ Block:  Join Startup Community
     hr._medium {
         margin-top: 40px;
     }
+}
+
+
+
+.block-people.-front .people-list {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+
+  .title a {
+    display: block;
+    margin-bottom: 10px;
+    font: 20px/1em $TH-font-body;
+    color: #000;
+
+    &:hover {
+
+    }
+  }
+
+
+}
+.block-people.-front .people-list {
+    .party-item .item-inner .description-wrapper {
+        padding: 0 0px 10px;
+    }
+}
+
+.home-content {
+  margin-bottom: 3em;
 }

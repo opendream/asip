@@ -1,0 +1,8 @@
+{% load common_tags %}
+
+{% captureas content %}
+<p>{{ object.dst }}</p>
+<p>{{ object.src }}</p>
+{% endcaptureas %}
+
+{{ content|lower }}

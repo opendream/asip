@@ -8,44 +8,67 @@
 {% block title_class %} hidden {% endblock %}
 {% block title %}Notification for {{ logged_in_party.get_display_name }}{% endblock %}
 
+{% block custom-class %} -notification{% endblock %}
+
 
 
 {% block content %}
-	<h1 class="page-title">Notifications for {{ logged_in_party.get_display_name }}</h1>
+	<h1 class="page-title">{% trans 'Notifications for' %} {{ logged_in_party.get_display_name }}</h1>
 	<!-- Block Message list -->
 	<div class="block notification-block" ng-controller="BasicPartyListController" ng-init="init('/api/v1/notification/', {limit: 8}, '-id')">
-            <div ng-show="!is_loading && party_list.length == 0">No notification.</div>
+            <div ng-show="!is_loading && party_list.length == 0">{% trans 'No notification.' %}</div>
             <ul class="item-list notification-list">
-                <li class="notification-item item noti-testimonial " ng-class="is_unread_class(relation)" ng-repeat="relation in party_list">
+                <li class="notification-item item noti-testimonial " ng-class="is_unread_class(relation)" ng-hide="relation.removed" ng-repeat="relation in party_list">
                     <div ng-bind-html="relation.get_html_display | sanitize"></div>
+
                     <div ng-show="relation.approval_required" class="btn-approve-wrapper">
-                        <a href="" class="btn btn-primary btn-transparent btn-verify" ng-class="{'active' : relation.approval_status == notification_status.active, 'pendding' : relation.approval_status == notification_status.pending}" ng-click="
-                            http_to_api_with_party({
-                                api: relation.target,
-                                party: relation,
-                                params: {status: notification_status.active},
-                                type: 'PUT',
-                                update_party: true,
-                                status: 'approval_status'
-                            })">
-                            Verify
-                        </a>
-                        <a href="" class="btn btn-primary btn-transparent btn-reject" ng-class="{'active' : relation.approval_status == notification_status.reject, 'pendding' : relation.approval_status == notification_status.pending}" ng-click="
-                            http_to_api_with_party({
-                                api: relation.target,
-                                party: relation,
-                                params: {status: notification_status.reject},
-                                type: 'PUT',
-                                update_party: true,
-                                status: 'approval_status'
-                            })">
-                            Reject
-                        </a>
+                        <div class="btn-approve-inner">
+                            <a href="" class="btn btn-primary btn-transparent btn-verify" ng-class="{'active' : relation.approval_status == notification_status.active, 'pendding' : relation.approval_status == notification_status.pending}" ng-click="
+                                params={status: notification_status.active};
+                                relation.origin_receiver? params[relation.target_claim_field] = relation.organization.resource_uri: null;
+                                http_to_api_with_party({
+                                    api: relation.target,
+                                    party: relation,
+                                    params: params,
+                                    type: 'PUT',
+                                    update_party: true,
+                                    status: 'approval_status'
+                                })">
+                                Verify
+                            </a>
+                            <a href="" class="btn btn-primary btn-transparent btn-reject" ng-class="{'active' : relation.approval_status == notification_status.reject, 'pendding' : relation.approval_status == notification_status.pending}" ng-click="
+                                params={status: notification_status.reject};
+                                relation.origin_receiver? params[relation.target_claim_field] = relation.organization.resource_uri: null;
+                                http_to_api_with_party({
+                                    api: relation.target,
+                                    party: relation,
+                                    params: params,
+                                    type: 'PUT',
+                                    update_party: true,
+                                    status: 'approval_status'
+                                })">
+                                Reject
+                            </a>
+                        </div>
+                        <div ng-show="relation.origin_receiver && relation.approval_status == notification_status.pending" class="btn-not-you-wrapper">
+                            <small>
+                                <em>
+                                    <a class="not-you-link" href="" ng-click="
+                                        http_to_api_with_party({
+                                            api: relation.resource_uri,
+                                            party: relation,
+                                            type: 'DELETE',
+                                            remove_party: true
+                                        })">Not you?
+                                    </a>
+                                </em>
+                            </small>
+                        </div>
                     </div>
                 </li>
             </ul>
             <a class="loadmore-wrapper" ng-click="load_more()" ng-class="load_more_class()">
-                <span ng-hide="is_loading" class="loadmore">Load more</span>
+                <span ng-hide="is_loading" class="loadmore">{% trans 'Load more' %}</span>
                 <img ng-show="is_loading" ng-src="/static/images/loading.gif" class="loading-icon" >
             </a>
 

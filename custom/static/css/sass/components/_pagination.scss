@@ -4,10 +4,10 @@
     Table of pagination
 
     Component: pagination
-    Elements: 
-    Elements: 
-    Elements: 
-    Elements: 
+    Elements:
+    Elements:
+    Elements:
+    Elements:
 \* -------------------------- ------ */
 
 .pagination {
@@ -15,7 +15,7 @@
 
     > li > a {
         /*color: #9ea4ae;*/
-        font-size: 12px;
+        font-size: 14px;
         /*border: 1px solid #e9e9eb;
         background-color: #f5f5f7*/
     }
@@ -51,9 +51,9 @@
         border-bottom: 1px solid #C7C7C7;
     }
     .item:last-child a{
-        border-bottom: none;   
+        border-bottom: none;
     }
     .item:first-child a{
-        border-top: 1px solid #C7C7C7;   
+        border-top: 1px solid #C7C7C7;
     }
 }

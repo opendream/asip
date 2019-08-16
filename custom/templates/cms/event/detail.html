@@ -63,9 +63,9 @@
     </ul>
 
     <div class="block block-share">
-        <h2 class="block-title">Share this:</h2>
-        <a class="share-btn share-fb" href="#" facebook-share name="{[{ event.title }]}" picture="{[{ event.get_thumbnail }]}" description="{[{ event.get_summary }]}" ><span class="icon icon-facebook"></span>Facebook</a>
-        <a class="share-btn share-tw" twitter-share href="http://twitter.com/share" ><span class="icon icon-twitter"></span>Twitter</a>
+        <h2 class="block-title">{% trans 'Share this' %}:</h2>
+        <a class="share-btn share-fb" href="#" facebook-share name="{[{ event.title }]}" picture="{[{ event.get_thumbnail }]}" description="{[{ event.get_summary }]}" ><span class="icon icon-facebook"></span>{% trans 'Facebook' %}</a>
+        <a class="share-btn share-tw" twitter-share href="http://twitter.com/share" ><span class="icon icon-twitter"></span>{% trans 'Twitter' %}</a>
     </div>
 </div>
 <!-- End Block Event sidebar on detail page -->
@@ -74,7 +74,7 @@
 
 {% block content %}
 
-<a href="{% url 'event_list' %}" class="link-breadcrumb hidden-sm hidden-md hidden-lg">Upcoming Events</a>
+<a href="{% url 'event_list' %}" class="link-breadcrumb hidden-sm hidden-md hidden-lg">{% trans 'Upcoming Events' %}</a>
 
 <div class="block article-info hidden-sm hidden-md hidden-lg">
     <h1 class="page-title" ng-clock ng-bind-html="(event.title || '')"></h1>
@@ -109,7 +109,7 @@
 <div class="article-wrapper event-wrapper">
     {% if user.is_authenticated %}
     <a href="/updates/event/{[{ event.id }]}/edit/" ng-if="event.can_edit" class="btn btn-default btn-xs pull-right ico-edit">
-            <span class="glyphicon glyphicon-edit"></span> Edit
+            <span class="glyphicon glyphicon-edit"></span> {% trans 'Edit' %}
     </a>
     {% endif %}
     <div class="date hidden" ng-clock><span>Create Date : </span>{[{event.created | dateFormText:'MMMM d, yyyy'}]}</div>
@@ -127,17 +127,17 @@
                     <span ng-if="!$last">,</span>
                 </span>
             </div>
-            <div class="organiser-email organiser-detail" ng-show="event.email" ><span class="icon icon-markunread"></span><a href=""ng-click="mail_service.send_mail(event.email)" title="Email">Send Email</a></div>
+            <div class="organiser-email organiser-detail" ng-show="event.email" ><span class="icon icon-markunread"></span><a href=""ng-click="mail_service.send_mail(event.email)" title="Email">{% trans 'Send Email' %}</a></div>
 
-            <div class="no-text organiser-facebook organiser-detail" ng-show="event.facebook_url"><a href="{[{ event.facebook_url }]}" target="_blank" class="icon icon-facebook" title="Facebook"></a></div>
-            <div class="no-text organiser-twitter organiser-detail" ng-show="event.twitter_url"><a href="{[{ event.twitter_url }]}" target="_blank" class="icon icon-twitter" title="Twitter"></a></div>
+            <div class="no-text organiser-facebook organiser-detail" ng-show="event.facebook_url"><a href="{[{ event.facebook_url }]}" target="_blank" class="icon icon-facebook" title="{% trans 'Facebook' %}"></a></div>
+            <div class="no-text organiser-twitter organiser-detail" ng-show="event.twitter_url"><a href="{[{ event.twitter_url }]}" target="_blank" class="icon icon-twitter" title="{% trans 'Twitter' %}"></a></div>
         </div>
     </div>
 </div>
 <div class="block block-share hidden-sm hidden-md hidden-lg">
-    <h2 class="block-title">Share this:</h2>
-    <a class="share-btn share-fb" href="#" facebook-share name="{[{ event.title }]}" picture="{[{ event.get_thumbnail }]}" description="{[{ event.get_summary }]}" ><span class="icon icon-facebook"></span>Facebook</a>
-    <a class="share-btn share-tw" twitter-share href="http://twitter.com/share" ><span class="icon icon-twitter"></span>Twitter</a>
+    <h2 class="block-title">{% trans 'Share this' %}:</h2>
+    <a class="share-btn share-fb" href="#" facebook-share name="{[{ event.title }]}" picture="{[{ event.get_thumbnail }]}" description="{[{ event.get_summary }]}" ><span class="icon icon-facebook"></span>{% trans 'Facebook' %}</a>
+    <a class="share-btn share-tw" twitter-share href="http://twitter.com/share" ><span class="icon icon-twitter"></span>{% trans 'Twitter' %}</a>
 </div>
 
 {% endblock %}

@@ -2,10 +2,10 @@
 {% load static %}
 {% load common_tags %}
 
-<div class="filter-wrapper" ng-controller="FilterController" ng-init="init({url: '{{ params.API_URL }}', successFilterCount: {{ params.FILTERS|exclude_key:'query'|length }}, extraParams: {{ params.EXTRA_PARAMS|safe }}, orderByFiltersFields: {{ params.ORDER_BY_FIELDS|safe }}})">
-    <p class="filter-label">
+<div class="filter-wrapper" ng-controller="FilterController" ng-init="init({url: '{{ params.API_URL }}', successFilterCount: {{ params.FILTERS|exclude_key:'query'|exclude_key:'range'|length }}, extraParams: {{ params.EXTRA_PARAMS|safe }}, orderByFiltersFields: {{ params.ORDER_BY_FIELDS|safe }}})">
+    <!-- <p class="filter-label">
         {% trans "Filter by" %}:
-    </p>
+    </p> -->
     <div class="filter-group btn-group btn-group-justified text-left" role="group">
         <!--
         <div class="btn-group" role="group">
@@ -53,15 +53,84 @@
                 </ul>
             </div>
         </div>
+        {% elif filter.range %}
+        <div class="btn-group range" role="group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                {{ filter.label }}
+                <span class="caret"></span>
+            </button>
+            {% with filter.range|split:'|' as range %}
+            <ul class="dropdown-menu" style="display: block; height: 0;">
+                {% for fn in filter.field_name|split:'|' %}
+                <li class="range-wrapper">
+
+                    {% with range|keyvalue:forloop.counter0|split:',' as range_item_group %}
+                    {% with range_item_group|keyvalue:0|split:'-' as range_items %}
+                    {% with range_item_group|keyvalue:1 as range_step %}
+                    {% with range_item_group|keyvalue:2 as range_prefix %}
+                    {% with range_item_group|keyvalue:3 as range_suffix %}
+                    {% with fn|split:':' as fn_field %}
+                    {% with fn_field|keyvalue:1|split:',' as range_fields %}
+                    {% with fn_field|keyvalue:0 as range_label %}
+
+                    <div class="filter-range-info-wrapper">
+                        <strong class="filter-range-label">
+                            {{ range_label }}
+                        </strong>
+                    </div>
+                    <div class="filter-range-slice-wrapper">
+                        <input type="hidden" ng-model="params.{{ range_fields|keyvalue:0 }}__gte" ng-init="addFilterDelay('{{ range_fields|keyvalue:0 }}__gte', 'params.{{ range_fields|keyvalue:0 }}__gte', true, true, '{{ range_label }} more than {{ range_prefix }}', '{{ range_suffix }}', {{ range_items|keyvalue:0 }})" />
+                        <input type="hidden" ng-model="params.{{ range_fields|keyvalue:1 }}__lte" ng-init="addFilterDelay('{{ range_fields|keyvalue:1 }}__lte', 'params.{{ range_fields|keyvalue:1 }}__lte', true, true, '{{ range_label }} less than {{ range_prefix }}', '{{ range_suffix }}', {{ range_items|keyvalue:1 }})" />
+                        <rzslider class="custom-slider"
+                            rz-slider-model="params.{{ range_fields|keyvalue:0 }}__gte"
+                            rz-slider-high="params.{{ range_fields|keyvalue:1 }}__lte"
+                            rz-slider-options="{
+                                floor: {{ range_items|keyvalue:0 }},
+                                ceil: {{ range_items|keyvalue:1 }},
+                                step: {{ range_step }},
+                                prefix: '{{ range_prefix }}',
+                                suffix: '{{ range_suffix }}',
+                                labelMinPrefix: '{{ range_label }} more than {{ range_prefix }}',
+                                labelMaxPrefix: '{{ range_label }} less than {{ range_prefix }}',
+                                labelMinSuffix: '{{ range_suffix }}',
+                                labelMaxSuffix: '{{ range_suffix }}',
+                                minField: '{{ range_fields|keyvalue:0 }}__gte',
+                                maxField: '{{ range_fields|keyvalue:1 }}__lte',
+                                translate: sliderTranslate,
+                                onEnd: sliderOnEnd,
+                                noSwitching: true,
+                                precision: true
+                            }">
+                        </rzslider>
+                    </div>
+                    {% endwith %}
+                    {% endwith %}
+                    {% endwith %}
+                    {% endwith %}
+                    {% endwith %}
+                    {% endwith %}
+                    {% endwith %}
+                    {% endwith %}
+                </li>
+                {% endfor %}
+            </ul>
+            {% endwith %}
+
+        </div>
         {% else %}
         <div class="btn-group" role="group" ng-controller="BasicPartyListController" ng-init="init('{{ filter.api_url }}', {limit: 100})">
             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 {{ filter.label }}
                 <span class="caret"></span>
             </button>
-            <ul class="dropdown-menu">
-                <li ng-repeat="party in party_list">
+            <ul class="dropdown-menu{% if filter.multi_level %} multi-level{% endif %}">
+                <li ng-repeat="party in party_list" ng-class="{'dropdown-submenu': party.childrens && party.childrens.length > 0}">
                     <a ng-init="initFilter('{{ filter.field_name }}', party)" ng-click="addFilter('{{ filter.field_name }}', party.permalink||party.name)">{[{ party.title||party.name }]}</a>
+                    <ul class="dropdown-menu" ng-if="party.childrens && party.childrens.length > 0">
+                        <li ng-repeat="child in party.childrens">
+                            <a ng-init="initFilter('{{ filter.field_name }}', child)" ng-click="addFilter('{{ filter.field_name }}', child.permalink||child.name)">{[{ child.title||child.name }]}</a>
+                        </li>
+                    </ul>
                 </li>
             </ul>
         </div>
@@ -69,9 +138,9 @@
         {% endfor %}
     </div>
 
-    <h2>{% blocktrans with title=params.RESULT_TITLE %}{[{ result.meta.total_count }]} {{ title }} found{% endblocktrans %}</h2>
+    <h2 class="filter-title">{% blocktrans with title=params.RESULT_TITLE %}{[{ result.meta.total_count }]} {{ title }} found{% endblocktrans %}</h2>
 
-    <div class="filter-selected">
+    <div class="filter-selected" ng-show="filters.length > 0">
 
         <div class="filter-label pull-left">
             {% trans "Selected Filters" %}:

@@ -8,11 +8,19 @@
     background-color: transparent;
 
     .page-title {
-        font-size: 28px;
-        font-family: $kanit-medium;
+        font-size: 42px;
+        font-family: "league_gothic";
+        font-weight: 400;
+        text-transform: uppercase;
+        // font-family: $kanit-medium;
         z-index: 9999;
         padding-right: 30px;
-        word-wrap: break-word; 
+        word-wrap: break-word;
+        > .header-status {
+            font-size: 0.6em;
+            text-transform: none;
+            margin-left: 0.5em;
+        }
     }
 
     /*Layout*/
@@ -28,12 +36,12 @@
             }
         }
         @media (max-width: 768px) {
-            margin-top: 0;      
+            margin-top: 0;
         }
         @media (max-width: 767px) {
-            margin-top: 10px;       
+            margin-top: 10px;
         }
-        
+
     }
     //.content-focus{
     //    margin-top: -90px;
@@ -116,7 +124,7 @@
 }
 
 .wrapper.-form-org {
-    padding-bottom: 0;
+    // padding-bottom: 0;
 }
 
 /* -------------------------------- *\
@@ -149,7 +157,9 @@
 \* -------------------------------- */
 .tab-form {
     .nav {
+        margin-top: 0;
         background-color: #fafafa;
+        
         > li {
             a {
                 color: #595959;
@@ -210,7 +220,10 @@
 
             &.nav-header.disabled a{
                 color: #797979;
-                font-size: 12px;
+                font-size: 22px;
+                font-family: "league_gothic";
+                font-weight: 400;
+                text-transform: uppercase;
 
                 &:after {
                     display: none;
@@ -258,8 +271,12 @@
     padding: 0;
 
     .tab-title {
-        font-size: 26px;
-        font-family: $kanit-medium;
+        // font-size: 26px;
+        // font-family: $kanit-medium;
+        font-family: "league_gothic";
+        font-weight: 400;
+        text-transform: uppercase;
+        font-size: 32px;
     }
 
     /*Make margin on control row*/
@@ -269,12 +286,13 @@
 
     /*All label font size*/
     label {
-        font-size: 18px;
+        font-size: 16px;
         font-family: $kanit-regular;
+        font-weight: normal;
     }
     input[type="text"]:focus,
     input[type="email"]:focus,
-    input[type="number"]:focus, 
+    input[type="number"]:focus,
     select:focus,
     textarea:focus {
         border: 2px solid #F9B94C;
@@ -348,7 +366,7 @@
         }
     }
 }
-.autocomplete-add-another { 
+.autocomplete-add-another {
     text-decoration: underline;
     &:hover, &:active, &:focus {
         color: #595959;

@@ -1,0 +1,67 @@
+/*----------------------------------
+Component : Tab Lists
+----------------------------------*/
+.startup-tab-list {
+  margin-bottom: 2em;
+
+  @media (min-width: $lg) {
+    margin-bottom: 4em;
+  }
+}
+.tab-list {
+  display: flex;
+  display: flexbox;
+  flex-direction: column;
+
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  @media (min-width: $lg) {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  &__item {
+    margin-bottom: 0;
+    border-top: 3px solid #ccc;
+    text-align: center;
+    opacity: .4;
+
+    @media (min-width: $lg) {
+      border-left: 1px solid #ccc;
+    }
+
+    &.active {
+      border-top: 3px solid #D92F78;
+      opacity: 1;
+    }
+    &:hover { opacity: 1; }
+    &:last-child {
+      @media (min-width: $lg) {
+        border-left: 1px solid #ccc;
+        border-right: 1px solid #ccc;
+      }
+    }
+
+    strong { font-size: 1.6rem; }
+  }
+  &__link {
+    display: block;
+    padding: .7rem 4rem;
+    color: #000;
+  }
+  &__title {
+    display: block;
+    margin-bottom: .5em;
+    font: 2em / 1.1em $EN-font-heading;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  &__info {
+    display: block;
+    line-height: 1.2em;
+    font-size: 1.5rem;
+    margin-bottom: .2em;
+  }
+}

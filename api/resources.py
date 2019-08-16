@@ -1,3 +1,4 @@
+from decimal import Decimal
 import json
 import shlex
 import urllib
@@ -14,7 +15,7 @@ from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist, 
 from django.core.paginator import InvalidPage, Paginator as DjangoPaginator
 from django.core.urlresolvers import reverse
 from django.db import models
-from django.db.models import Q, Max, Sum, Count, QuerySet
+from django.db.models import Q, Max, Sum, Count, QuerySet, NOT_PROVIDED
 from django.forms import model_to_dict
 from django.http import Http404
 from django.utils.html import strip_tags
@@ -39,14 +40,18 @@ from account.functions import user_can_edit, user_can_update_status
 from account.models import User
 from common.constants import STATUS_PUBLISHED, STATUS_PENDING, STATUS_DRAFT, STATUS_REJECTED
 from notification.models import Notification
-from organization.models import Organization, Job
+from organization.models import Organization, Job, OrganizationAssistance, Program, OrganizationStaff, \
+    OrganizationFundingRound, ProgramBatch, InTheNews
 from party.models import Party, Portfolio
 from presentation.views import get_summary
 from relation.models import PartySupportParty, PartyPartnerParty, \
     PartyFollowParty, PartyContactParty, PartyTestifyParty, OrganizationHasPeople, UserExperienceOrganization, PartyLove, \
-    PartyReceivedFundingParty, PartyInviteTestifyParty, PartyReceivedInvestingParty, PartyInvestParty, CmsHasParty
+    PartyReceivedFundingParty, PartyInviteTestifyParty, PartyReceivedInvestingParty, PartyInvestParty, CmsHasParty, \
+    OrganizationParticipate, UserApplyJob
 from taxonomy.models import Topic, TypeOfNeed, TypeOfSupport, Interest, UserRole, Country, OrganizationRole, OrganizationType, \
-    OrganizationProductLaunch, OrganizationFunding, OrganizationGrowthStage, ArticleCategory, InvestorType
+    OrganizationProductLaunch, OrganizationFunding, OrganizationGrowthStage, ArticleCategory, InvestorType, ProgramType, \
+    TypeOfFocusIndustry, TypeOfStageOfParticipant, TypeOfInvestment, TypeOfInvestmentStage, TypeOfFunding, TypeOfBatch, \
+    TypeOfAssistantship, TypeOfAttachment, TypeOfFocusSector, TypeOfFinancialSource, Location, JobRole, TypeOfOffice
 from cms.models import News, Event, CommonCms
 
 from tastypie.authorization import Authorization
@@ -77,7 +82,7 @@ class UserAuthorization(Authorization):
 
     def read_detail(self, object_list, bundle):
 
-        return (hasattr(bundle.obj, 'status') and bundle.obj.status in [STATUS_PUBLISHED]) or \
+        return (hasattr(bundle.obj, 'status') and bundle.obj.status in [STATUS_PUBLISHED, STATUS_PENDING, STATUS_DRAFT]) or \
                (hasattr(bundle.obj, 'is_active') and bundle.obj.is_active) or \
                user_can_edit(bundle.request, bundle.obj, bypass_created=True) or \
                (hasattr(bundle.obj, 'REQUIRED_APPROVAL') and bundle.obj.REQUIRED_APPROVAL and user_can_update_status(bundle.request, bundle.obj, bundle.data))
@@ -113,6 +118,12 @@ class UserAuthorization(Authorization):
 
     def delete_detail(self, object_list, bundle):
         raise Unauthorized("Sorry, no deletes.")
+
+
+class UserAuthorizationWithDelete(UserAuthorization):
+
+    def delete_detail(self, object_list, bundle):
+        return user_can_edit(bundle.request, bundle.obj, bypass_created=True)
 
 
 class StaffAuthorization(UserAuthorization):
@@ -171,7 +182,9 @@ class BaseResource(ModelResource):
 
     def dehydrate(self, bundle):
 
-        bundle.data['can_edit'] = user_can_edit(bundle.request, bundle.obj, bypass_created=True)
+        auth_key = bundle.request.META.get('HTTP_AUTHORIZATION', False)
+        if not auth_key:
+            bundle.data['can_edit'] = user_can_edit(bundle.request, bundle.obj, bypass_created=True)
 
         return bundle
 
@@ -226,6 +239,71 @@ class ToManyFieldForList(fields.ToManyField):
                 objects_saved=bundle.objects_saved
             )
             return related_resource.full_dehydrate(bundle, for_list=True)
+
+class ToManyFieldWithQuery(fields.ToManyField):
+
+    def __init__(self, to, attribute, related_name=None, default=NOT_PROVIDED,
+                 null=False, blank=False, readonly=False, full=False,
+                 unique=False, help_text=None, use_in='all', verbose_name=None,
+                 full_list=True, full_detail=True, query=None):
+        super(ToManyFieldWithQuery, self).__init__(
+            to, attribute, related_name=related_name, default=default,
+            null=null, blank=blank, readonly=readonly, full=full,
+            unique=unique, help_text=help_text, use_in=use_in,
+            verbose_name=verbose_name, full_list=full_list,
+            full_detail=full_detail
+        )
+
+        self.query = query
+
+
+    def dehydrate(self, bundle, for_list=True):
+        if not bundle.obj or not bundle.obj.pk:
+            if not self.null:
+                raise ApiFieldError("The model '%r' does not have a primary key and can not be used in a ToMany context." % bundle.obj)
+
+            return []
+
+        the_m2ms = None
+        previous_obj = bundle.obj
+        attr = self.attribute
+
+        if callable(self.attribute):
+            the_m2ms = self.attribute(bundle)
+        elif isinstance(self.attribute, six.string_types):
+            the_m2ms = bundle.obj
+
+            for attr in self._attrs:
+                previous_obj = the_m2ms
+                try:
+                    the_m2ms = getattr(the_m2ms, attr, None)
+                except ObjectDoesNotExist:
+                    the_m2ms = None
+
+                if not the_m2ms:
+                    break
+
+        if not the_m2ms:
+            if not self.null:
+                raise ApiFieldError("The model '%r' has an empty attribute '%s' and doesn't allow a null value." % (previous_obj, attr))
+
+            return []
+
+        if isinstance(the_m2ms, models.Manager):
+            if self.query:
+                the_m2ms = the_m2ms.filter(self.query)
+
+        m2m_dehydrated = [
+            self.dehydrate_related(
+                Bundle(obj=m2m, request=bundle.request),
+                self.get_related_resource(m2m),
+                for_list=for_list
+            )
+            for m2m in the_m2ms
+        ]
+
+        return m2m_dehydrated
+
 
 class TopicResource(BaseResource):
 
@@ -387,10 +465,197 @@ class OrganizationGrowthStageResource(BaseResource):
             'permalink': ALL,
         }
 
+class TypeOfNeedResource(BaseResource):
+    class Meta:
+        allowed_methods = ['get']
+        authorization = StaffAuthorization()
+        queryset = TypeOfNeed.objects.all()
+        resource_name = 'type_of_need'
+        filtering = {
+            'permalink': ALL,
+            'priority': ALL
+        }
+
+############## New For 2018 ######################
+
+class ProgramTypeResource(BaseResource):
+    class Meta:
+        allowed_methods = ['get']
+        authorization = StaffAuthorization()
+        queryset = ProgramType.objects.all()
+        resource_name = 'program_type'
+        filtering = {
+            'permalink': ALL,
+            'priority': ALL
+        }
+
+class TypeOfOfficeResource(BaseResource):
+    class Meta:
+        allowed_methods = ['get']
+        authorization = StaffAuthorization()
+        queryset = TypeOfOffice.objects.all()
+        resource_name = 'type_of_office'
+        filtering = {
+            'permalink': ALL,
+            'priority': ALL
+        }
+
+class TypeOfFocusSectorResource(BaseResource):
+    class Meta:
+        allowed_methods = ['get']
+        authorization = StaffAuthorization()
+        queryset = TypeOfFocusSector.objects.all()
+        resource_name = 'type_of_focus_sector'
+        filtering = {
+            'permalink': ALL,
+            'priority': ALL
+        }
+
+class TypeOfFocusIndustryResource(BaseResource):
+    class Meta:
+        allowed_methods = ['get']
+        authorization = StaffAuthorization()
+        queryset = TypeOfFocusIndustry.objects.all()
+        resource_name = 'type_of_focus_industry'
+        filtering = {
+            'permalink': ALL,
+            'priority': ALL
+        }
+
+class TypeOfStageOfParticipantResource(BaseResource):
+    class Meta:
+        allowed_methods = ['get']
+        authorization = StaffAuthorization()
+        queryset = TypeOfStageOfParticipant.objects.all()
+        resource_name = 'type_of_stage_of_participant'
+        filtering = {
+            'permalink': ALL,
+            'priority': ALL
+        }
+
+class TypeOfInvestmentResource(BaseResource):
+    class Meta:
+        allowed_methods = ['get']
+        authorization = StaffAuthorization()
+        queryset = TypeOfInvestment.objects.all()
+        resource_name = 'type_of_investment'
+        filtering = {
+            'permalink': ALL,
+            'priority': ALL
+        }
+
+class TypeOfInvestmentStageResource(BaseResource):
+    class Meta:
+        allowed_methods = ['get']
+        authorization = StaffAuthorization()
+        queryset = TypeOfInvestmentStage.objects.all()
+        resource_name = 'type_of_investment_stage'
+        filtering = {
+            'permalink': ALL,
+            'priority': ALL
+        }
+
+class TypeOfFundingResource(BaseResource):
+    class Meta:
+        allowed_methods = ['get']
+        authorization = StaffAuthorization()
+        queryset = TypeOfFunding.objects.all()
+        resource_name = 'type_of_funding'
+        filtering = {
+            'permalink': ALL,
+            'priority': ALL
+        }
+
+class TypeOfBatchResource(BaseResource):
+    class Meta:
+        allowed_methods = ['get']
+        authorization = StaffAuthorization()
+        queryset = TypeOfBatch.objects.all()
+        resource_name = 'type_of_batch'
+        filtering = {
+            'permalink': ALL,
+            'priority': ALL
+        }
+
+class TypeOfFinancialSourceResource(BaseResource):
+    class Meta:
+        allowed_methods = ['get']
+        authorization = StaffAuthorization()
+        queryset = TypeOfFinancialSource.objects.all()
+        resource_name = 'type_of_financial_source'
+        filtering = {
+            'permalink': ALL,
+            'priority': ALL
+        }
+
+class TypeOfAssistantshipResource(BaseResource):
+    class Meta:
+        allowed_methods = ['get']
+        authorization = StaffAuthorization()
+        queryset = TypeOfAssistantship.objects.all()
+        resource_name = 'type_of_assistantship'
+        filtering = {
+            'permalink': ALL,
+            'priority': ALL
+        }
+
+class TypeOfAttachmentResource(BaseResource):
+    class Meta:
+        allowed_methods = ['get']
+        authorization = StaffAuthorization()
+        queryset = TypeOfAttachment.objects.all()
+        resource_name = 'type_of_attachment'
+        filtering = {
+            'permalink': ALL,
+            'priority': ALL
+        }
+
+class OrganizationAssistanceResource(BaseResource):
+
+    assistance = fields.ToOneField('api.resources.TypeOfAssistantshipResource', 'assistance', related_name='assistance', null=True, blank=True, full=True)
+
+    class Meta:
+        allowed_methods = ['get']
+        authorization = StaffAuthorization()
+        queryset = OrganizationAssistance.objects.filter(is_required=True)
+        resource_name = 'organization_assistance'
+        filtering = {
+            'organization': ALL_WITH_RELATIONS,
+            'assistance': ALL_WITH_RELATIONS,
+            'is_required': ALL
+        }
+
+class JobRoleResource(BaseResource):
+
+    childrens = fields.ToManyField('self', 'children', null=True, full=True)
+    parent = fields.ToOneField('self', 'parent', null=True)
+
+    class Meta:
+        allowed_methods = ['get']
+        authorization = StaffAuthorization()
+        queryset = JobRole.objects.filter(level=0).order_by('tree_id', 'lft', 'id')
+        resource_name = 'job_role'
+        filtering = {
+            'level': ALL,
+            'childrens': ALL_WITH_RELATIONS,
+            'permalink': ALL
+        }
+
+class LocationResource(BaseResource):
+    class Meta:
+        allowed_methods = ['get']
+        authorization = StaffAuthorization()
+        queryset = Location.objects.all()
+        resource_name = 'location'
+        filtering = {
+            'permalink': ALL,
+            'priority': ALL
+        }
+
 
 preserve_keys = [
     'q', 'page', 'limit', 'offset', 'resource', 'none_to_all', 'content_type', 'order_by',
-    'roles', 'created__year__lte', 'created__month__lte', 'is_published', 'include_unpublished',
+    'roles', 'created__year__lte', 'created__month__lte', 'is_published', 'include_unpublished'
 ]
 
 def base_get_search(self, request, model=None, for_list=True, get_queryset=False, **kwargs):
@@ -424,19 +689,24 @@ def base_get_search(self, request, model=None, for_list=True, get_queryset=False
         if key in preserve_keys:
             continue
 
+
         param_sq = None
         for value in values:
 
-            if not param_sq:
-                param_sq = SQ(**{key: value})
-            else:
-                param_sq |= SQ(**{key: value})
+            for v in value.split(','):
+
+                if (key.endswith('__lt') or key.endswith('__lte') or key.endswith('__gt') or key.endswith('__gte')):
+                    v = int(Decimal(v) * Decimal(100))
+
+                if not param_sq:
+                    param_sq = SQ(**{key: v})
+                else:
+                    param_sq |= SQ(**{key: v})
 
         if not params_sq:
             params_sq = param_sq
         else:
             params_sq &= param_sq
-
 
     if request.GET.get('created__year__lte'):
         now = datetime.datetime.now()
@@ -465,8 +735,6 @@ def base_get_search(self, request, model=None, for_list=True, get_queryset=False
             params_sq &= SQ(created__lte=created__lte)
 
 
-
-
     if request.GET.get('roles'):
 
         role = request.GET.get('roles')
@@ -476,6 +744,9 @@ def base_get_search(self, request, model=None, for_list=True, get_queryset=False
             params_sq = param_sq
         else:
             params_sq &= param_sq
+
+    print params_sq
+
 
 
     if none_to_all and keywords == '*':
@@ -489,7 +760,6 @@ def base_get_search(self, request, model=None, for_list=True, get_queryset=False
 
     if params_sq:
         sqs = sqs.filter(params_sq)
-
 
     if keywords == '*':
         sqs = sqs.order_by('-store_popular', '-created')
@@ -526,6 +796,7 @@ def base_get_search(self, request, model=None, for_list=True, get_queryset=False
 
 
         bundle = self.build_bundle(obj=result.object, request=request)
+
         bundle = resource.full_dehydrate(bundle, for_list=for_list)
         objects.append(bundle)
 
@@ -748,6 +1019,12 @@ class UserResource(PartyResource):
     skill_set = fields.ManyToManyField('api.resources.SkillResource', 'skill_set', related_name='skill_set',
                                        null=True, blank=True, full=True, use_in='detail')
 
+    # job_roles = fields.ManyToManyField('api.resources.JobRoleResource', 'job_roles',
+    #                                    null=True, blank=True, full=True, use_in='detail')
+    #
+    # locations = fields.ManyToManyField('api.resources.LocationResource', 'locations',
+    #                                    null=True, blank=True, full=True, use_in='detail')
+
 
     class Meta:
         allowed_methods = ['get']
@@ -811,9 +1088,13 @@ class UserLiteResource(UserResource):
 class OrganizationResource(PartyResource):
 
     get_thumbnail_images = fields.ListField(attribute='get_thumbnail_images' ,null=True, blank=True, use_in='detail')
+    get_thumbnail_cover_image = fields.CharField(attribute='get_thumbnail_cover_image' ,null=True, blank=True, use_in='detail')
+    get_type_of_organization = fields.CharField(attribute='get_type_of_organization' ,null=True, blank=True, use_in='detail')
 
     ordering = fields.IntegerField(attribute='ordering')
     party_ptr = fields.ToOneField('api.resources.PartyResource', 'party_ptr')
+    program = fields.ToOneField('api.resources.ProgramResource', 'program', null=True, blank=True, use_in='detail', full=True)
+    program_organization = fields.ToManyField('api.resources.PartyLiteResource', 'program_organization', null=True, blank=True, use_in='detail', full=True)
 
     TYPE_SOCIAL_ENTERPRISE = fields.CharField(attribute='TYPE_SOCIAL_ENTERPRISE')
     TYPE_STARTUP = fields.CharField(attribute='TYPE_STARTUP')
@@ -840,8 +1121,7 @@ class OrganizationResource(PartyResource):
                                 related_name='organization_types', null=True, blank=True,
                                 full=True)
 
-    investor_types = fields.ToManyField('api.resources.InvestorTypeResource', 'investor_types',
-                                          related_name='investor_types', null=True, blank=True,
+    investor_type = fields.ForeignKey('api.resources.InvestorTypeResource', 'investor_type', null=True, blank=True,
                                           full=True)
 
     product_launch = fields.ForeignKey('api.resources.OrganizationProductLaunchResource', 'product_launch',
@@ -859,6 +1139,44 @@ class OrganizationResource(PartyResource):
     growth_stage = fields.ToManyField('api.resources.OrganizationGrowthStageResource', 'growth_stage',
                                             related_name='growth_stage',
                                             null=True, blank=True, full=True)
+
+    ############## New For 2018 ######################
+    office_type = fields.ToManyField('api.resources.TypeOfOfficeResource', 'office_type',
+                                            null=True, blank=True, full=True)
+
+    focus_sector = fields.ToManyField('api.resources.TypeOfFocusSectorResource', 'focus_sector',
+                                            related_name='focus_sector',
+                                            null=True, blank=True, full=True)
+
+    focus_industry = fields.ToManyField('api.resources.TypeOfFocusIndustryResource', 'focus_industry',
+                                            related_name='focus_industry',
+                                            null=True, blank=True, full=True)
+
+    stage_of_participants = fields.ToManyField('api.resources.TypeOfStageOfParticipantResource', 'stage_of_participants',
+                                            related_name='stage_of_participants',
+                                            null=True, blank=True, full=True)
+
+
+    funding_type = fields.ToManyField('api.resources.TypeOfFundingResource', 'funding_type',
+                                            null=True, blank=True, full=True)
+
+    financial_source = fields.ToManyField('api.resources.TypeOfFinancialSourceResource', 'financial_source',
+                                            related_name='financial_source',
+                                            null=True, blank=True, full=True)
+
+
+    attachments_types = fields.ToManyField('api.resources.TypeOfAttachmentResource', 'attachments_types',
+                                            related_name='attachments_types',
+                                            null=True, blank=True, full=True)
+
+    assistance_organization = ToManyFieldWithQuery('api.resources.OrganizationAssistanceResource', 'assistance_organization',
+                                            related_name='assistance_organization',
+                                            null=True, blank=True, full=True,
+                                            query=Q(is_required=True))
+
+    in_the_news = fields.ToManyField('api.resources.InTheNewsResource', 'in_the_news', related_name='in_the_news',
+                                    null=True, blank=True, full=True, use_in='detail')
+
     #jobs = ToManyFieldForList('api.resources.JobResource', 'jobs',
     #                                full=True, null=True, blank=True, use_in='detail')
 
@@ -892,6 +1210,18 @@ class OrganizationResource(PartyResource):
     top_3_major_investors_year_and_amount = fields.ListField(attribute='top_3_major_investors_year_and_amount', use_in='detail')
     top_3_major_donors_year_and_amount = fields.ListField(attribute='top_3_major_donors_year_and_amount', use_in='detail')
 
+    # money_taken_equity_amount = fields.CharField(readonly=True) # TODO: make to decimal
+    # money_deal_size_start = fields.CharField(readonly=True) # TODO: make to decimal
+    # money_deal_size_end = fields.CharField(readonly=True) # TODO: make to decimal
+    # money_money_raise = fields.CharField(readonly=True) # TODO: make to decimal
+    # money_target_funding = fields.CharField(readonly=True) # TODO: make to decimal
+    # money_pre_money_valuation = fields.CharField(readonly=True) # TODO: make to decimal
+    # money_amount_of_money_invested = fields.CharField(readonly=True) # TODO: make to decimal
+
+    funding_round_organization = fields.ToManyField('api.resources.OrganizationFundingRoundResource', 'funding_round_organization', null=True, blank=True, full=True, use_in='detail')
+
+    admins = fields.ToManyField('api.resources.UserResource', 'admins',
+                                             null=True, blank=True, use_in='detail')
 
     class Meta:
         allowed_methods = ['get']
@@ -901,6 +1231,16 @@ class OrganizationResource(PartyResource):
 
         resource_name = 'organization'
         include_absolute_url = True
+
+        # fields = [
+        #     'name', 'preferred_name',
+        #     'preferred_name', 'other_focus_sector',
+        #     'stage_of_participants',
+        #     'homepage_url', 'facebook_url', 'twitter_url', 'linkedin_url', 'instagram_url', 'other_channel',
+        #     'image', 'cover_image', 'description',
+        #     'name_of_representative', 'title_of_contact_person', 'email_of_contact_person', 'phone_number_of_contact_person', 'office_type',
+        #     'company_vision', 'company_mission', 'business_model', 'growth_strategy'
+        # ]
         excludes = ['changed', 'created', 'created_raw', 'is_deleted', 'published',
                     'store_team_information',
                     'store_phone_number_of_organizations_headquarters',
@@ -926,7 +1266,17 @@ class OrganizationResource(PartyResource):
             'ordering': ALL,
             'image': ALL,
             'status': ALL,
-            'promote': ALL
+            'promote': ALL,
+            'company_registration_number': ALL,
+            'admins': ALL_WITH_RELATIONS,
+            ############## New For 2018 ######################
+            'investor_type': ALL_WITH_RELATIONS,
+            'focus_sector': ALL_WITH_RELATIONS,
+            'focus_industry': ALL_WITH_RELATIONS,
+            'stage_of_participants': ALL_WITH_RELATIONS,
+            'funding_type': ALL_WITH_RELATIONS,
+            'financial_source': ALL_WITH_RELATIONS,
+            'attachments_types': ALL_WITH_RELATIONS,
         }
         ordering = ['ordering', 'id', 'priority', 'order_by_role', 'promote']
 
@@ -947,9 +1297,79 @@ class OrganizationResource(PartyResource):
         return query
 
 
+    def dehydrate(self, bundle):
+
+        bundle = super(OrganizationResource, self).dehydrate(bundle)
+
+        auth_key = bundle.request.META.get('HTTP_AUTHORIZATION', False)
+        if auth_key and hasattr(settings, 'API_ALLOW_KEYS') and settings.API_ALLOW_KEYS.get(auth_key):
+            access = settings.API_ALLOW_KEYS.get(auth_key)
+            if access['organization_fields'] != '__all__' and type(access['organization_fields']) == list:
+                bundle.data = { field_name: bundle.data.get(field_name) for field_name in access['organization_fields']}
+
+        return bundle
+
+class ProgramResource(PartyResource):
+    pk = fields.IntegerField(attribute='id')
+
+    organization = fields.ToOneField('api.resources.PartyLiteResource', 'organization', null=True, blank=True, use_in='detail', full=True)
+    batch_program = fields.ToManyField('api.resources.ProgramBatchResource', 'batch_program', null=True, blank=True, use_in='detail', full=True)
+    investment_stage_type = fields.ToManyField('api.resources.TypeOfInvestmentStageResource', 'investment_stage_type', null=True, blank=True, use_in='detail', full=True)
+
+    get_service_and_facility_information = fields.ListField(attribute='get_service_and_facility_information', null=True, blank=True, use_in='detail')
+    get_summary = fields.CharField(attribute='get_summary', null=True, blank=True)
+    class Meta:
+        allowed_methods = ['get']
+        authorization = UserAuthorization()
+        queryset = Program.objects.all().order_by('-ordering')
+
+        resource_name = 'program'
+        include_absolute_url = True
+        fields = [
+            'type_of_organization', 'get_thumbnail', 'get_thumbnail_in_primary', 'get_display_name', 'get_summary', 'specific_stage',
+            'has_taken_equity_in_participating_team', 'does_provide_financial_supports', 'amount_of_financial_supports',
+            'does_provide_working_spaces', 'working_spaces_information',
+            'is_own_working_space', 'does_provide_service_and_facility',
+            'investment_stage_type',
+
+        ]
+
+class ProgramLiteResource(BaseResource):
+    pk = fields.IntegerField(attribute='id')
+
+    organization = fields.ToOneField('api.resources.PartyLiteResource', 'organization', null=True, blank=True, use_in='detail', full=True)
+    investment_stage_type = fields.ToManyField('api.resources.TypeOfInvestmentStageResource', 'investment_stage_type', null=True, blank=True, use_in='detail', full=True)
+    get_summary = fields.CharField(attribute='get_summary', null=True, blank=True)
+
+    class Meta:
+        allowed_methods = ['get']
+        authorization = UserAuthorization()
+        queryset = Program.objects.all().order_by('-ordering')
+
+        resource_name = 'program'
+        # include_absolute_url = True
+        fields = [
+            'type_of_organization', 'get_thumbnail', 'get_thumbnail_in_primary', 'get_display_name', 'get_summary', 'specific_stage',
+            'has_taken_equity_in_participating_team', 'does_provide_financial_supports', 'amount_of_financial_supports',
+            'does_provide_working_spaces', 'working_spaces_information',
+            'is_own_working_space', 'does_provide_service_and_facility',
+            'investment_stage_type',
+
+        ]
+
+class ProgramBatchResource(BaseResource):
+    class Meta:
+        allowed_methods = ['get']
+        authorization = UserAuthorization()
+        queryset = ProgramBatch.objects.all()
+
+        resource_name = 'program_batch'
+
 class PartyLiteResource(PartyResource):
 
     pk = fields.IntegerField(attribute='id')
+
+    type_of_organization = fields.CharField(attribute='type_of_organization', null=True, blank=True,)
 
     topics = fields.ToManyField('api.resources.TopicItemResource', 'topics', related_name='topics',
                                 null=True, blank=True, full=True)
@@ -968,21 +1388,57 @@ class PartyLiteResource(PartyResource):
     organization_types = fields.ToManyField('api.resources.OrganizationTypeResource', 'organization_types',
                                 related_name='organization_types',
                                 null=True, blank=True, full=True)
-    investor_types = fields.ToManyField('api.resources.InvestorTypeResource', 'investor_types',
-                                          related_name='investor_types',
+    investor_type = fields.ForeignKey('api.resources.InvestorTypeResource', 'investor_type',
                                           null=True, blank=True, full=True)
     growth_stage = fields.ToManyField('api.resources.OrganizationGrowthStageResource', 'growth_stage',
                                       related_name='growth_stage',
                                       null=True, blank=True, full=True)
 
-    deal_size_start = fields.IntegerField(attribute='deal_size_start', null=True, blank=True,)
-    deal_size_end = fields.IntegerField(attribute='deal_size_end', null=True, blank=True,)
-    deal_size = fields.CharField(null=True, blank=True,)
+    # deal_size_start = fields.IntegerField(attribute='deal_size_start', null=True, blank=True,)
+    # deal_size_end = fields.IntegerField(attribute='deal_size_end', null=True, blank=True,)
+
+    # deal_size = fields.CharField(null=True, blank=True,)
 
     get_status = fields.IntegerField(attribute='get_status')
 
     popular = fields.DecimalField(attribute='popular', null=True, blank=True,)
 
+    ############## New For 2018 ######################
+    focus_sector = fields.ToManyField('api.resources.TypeOfFocusSectorResource', 'focus_sector',
+                                            related_name='focus_sector',
+                                            null=True, blank=True, full=True)
+
+    focus_industry = fields.ToManyField('api.resources.TypeOfFocusIndustryResource', 'focus_industry',
+                                            related_name='focus_industry',
+                                            null=True, blank=True, full=True)
+
+    stage_of_participants = fields.ToManyField('api.resources.TypeOfStageOfParticipantResource', 'stage_of_participants',
+                                            related_name='stage_of_participants',
+                                            null=True, blank=True, full=True)
+
+
+    funding_type = fields.ToManyField('api.resources.TypeOfFundingResource', 'funding_type',
+                                            related_name='funding_type',
+                                            null=True, blank=True, full=True)
+
+    financial_source = fields.ToManyField('api.resources.TypeOfFinancialSourceResource', 'financial_source',
+                                            related_name='financial_source',
+                                            null=True, blank=True, full=True)
+
+
+    attachments_types = fields.ToManyField('api.resources.TypeOfAttachmentResource', 'attachments_types',
+                                            related_name='attachments_types',
+                                            null=True, blank=True, full=True)
+
+    assistance_organization = ToManyFieldWithQuery('api.resources.OrganizationAssistanceResource', 'assistance_organization',
+                                            related_name='assistance_organization',
+                                            null=True, blank=True, full=True,
+                                            query=Q(is_required=True))
+
+    program = fields.ToOneField('api.resources.ProgramLiteResource', 'program', null=True, blank=True, full=True)
+
+    # money_deal_size_start = fields.CharField(readonly=True) # TODO: make to decimal
+    # money_deal_size_end = fields.CharField(readonly=True) # TODO: make to decimal
 
     class Meta:
         allowed_methods = ['get']
@@ -992,9 +1448,9 @@ class PartyLiteResource(PartyResource):
         resource_name = 'party'
         include_absolute_url = True
         fields = [
-            'get_thumbnail', 'get_thumbnail_in_primary', 'get_display_name', 'get_summary', 'topics', 'interests',
+            'type_of_organization', 'get_thumbnail', 'get_thumbnail_in_primary', 'get_display_name', 'get_summary', 'topics', 'interests',
             'product_launch', 'funding', 'request_funding', 'image', 'total_love', 'total_follower', 'popular',
-            'deal_size_start', 'deal_size_end', 'store_popular'
+            'money_deal_size_start', 'money_deal_size_end', 'store_popular'
         ]
 
     def dehydrate_deal_size(self, bundle):
@@ -1063,6 +1519,96 @@ class BaseRelationResource(BaseResource):
         return self.create_response(request, queryset.aggregate(**filters))
 
 
+
+# Take action
+class BasePartySendDataPartyResource(BaseRelationResource):
+
+    src = fields.ForeignKey('api.resources.PartyResource', 'src', blank=True, full=True)
+    dst = fields.ForeignKey('api.resources.PartyResource', 'dst', blank=True, full=True)
+
+    default_status = STATUS_PUBLISHED
+
+    def obj_create(self, bundle, **kwargs):
+
+
+        bundle.obj = self._meta.object_class()
+
+        for key, value in kwargs.items():
+            setattr(bundle.obj, key, value)
+
+        if bundle.data.get('status') is None:
+            bundle.data['status'] = self.default_status
+
+        bundle = self.full_hydrate(bundle)
+        bundle.obj.src = bundle.request.logged_in_party
+
+        if not user_can_edit(bundle.request, bundle.obj, bypass_created=True):
+            raise PermissionDenied()
+
+
+        return self.save(bundle)
+
+
+    def obj_update(self, bundle, skip_errors=False, **kwargs):
+
+        if not bundle.obj or not self.get_bundle_detail_data(bundle):
+            try:
+                lookup_kwargs = self.lookup_kwargs_with_identifiers(bundle, kwargs)
+            except:
+
+                lookup_kwargs = kwargs
+            try:
+                bundle.obj = self.obj_get(bundle=bundle, **lookup_kwargs)
+            except ObjectDoesNotExist:
+                raise NotFound("A model instance matching the provided arguments could not be found.")
+
+
+        actor_field = 'src'
+        receiver_field = 'dst'
+        if bundle.obj:
+
+            if hasattr(bundle.obj, 'swap') and bundle.obj.swap:
+                actor_field = 'dst'
+                receiver_field = 'src'
+
+        if bundle.data.get(actor_field):
+            del(bundle.data[actor_field])
+
+
+        bundle = self.full_hydrate(bundle)
+
+        data_receiver = bundle.data.get(receiver_field)
+        obj_receiver = getattr(bundle.obj, receiver_field)
+
+        # dst pdate status approve or reject
+        if user_can_update_status(bundle.request, bundle.obj, bundle.data):
+           pass
+
+
+        elif not user_can_edit(bundle.request, bundle.obj, bypass_created=True) or (data_receiver and not user_can_edit(bundle.request, obj_receiver, bypass_created=True)):
+            raise PermissionDenied()
+
+        out = self.save(bundle, skip_errors=skip_errors)
+
+        publish_src = bundle.obj.dst and bundle.obj.src and bundle.obj.dst.get_status() == STATUS_PUBLISHED and bundle.obj.src.get_status() == STATUS_PENDING
+        publish_dst = bundle.obj.src and bundle.obj.dst and bundle.obj.src.get_status() == STATUS_PUBLISHED and bundle.obj.dst.get_status() == STATUS_PENDING
+
+        status = bundle.data.get('status')
+
+        src = bundle.obj.src.get_inst()
+        if status == STATUS_PUBLISHED and publish_src:
+            src.status = STATUS_PUBLISHED
+        src.save()
+
+        dst = bundle.obj.dst.get_inst()
+        if status == STATUS_PUBLISHED and publish_dst:
+            dst.status = STATUS_PUBLISHED
+        dst.save()
+
+        return out
+
+
+
 # Relation
 class OrganizationHasPeopleResource(BaseRelationResource):
     src = fields.ForeignKey('api.resources.PartyResource', 'src', blank=True, full=True,
@@ -1083,6 +1629,35 @@ class OrganizationHasPeopleResource(BaseRelationResource):
             'status': ALL,
         }
         ordering = ['id', 'created', 'changed', 'status']
+
+
+class OrganizationStaffResource(BaseResource):
+    organization = fields.ForeignKey('api.resources.OrganizationResource', 'organization', blank=True, full=True)
+
+    user = fields.ForeignKey('api.resources.UserResource', 'user', blank=True, full=True)
+
+    class Meta:
+        authorization = UserAuthorization()
+        always_return_data = True
+        queryset = OrganizationStaff.objects.all().order_by('id')
+        resource_name = 'organization_staff'
+        filtering = {
+            'organization': ALL_WITH_RELATIONS,
+            'user': ALL_WITH_RELATIONS,
+            'id': ALL,
+            'staff_status': ALL,
+        }
+        ordering = ['id']
+
+        excludes = ['email', 'contact_number', 'attachments']
+
+
+class OrganizationFundingRoundResource(BaseResource):
+    class Meta:
+        authorization = UserAuthorization()
+        always_return_data = True
+        queryset = OrganizationFundingRound.objects.all().order_by('id')
+        resource_name = 'organization_funding_round'
 
 
 class PartySupportPartyResource(BaseRelationResource):
@@ -1124,11 +1699,11 @@ class PartyInvestPartyResource(BaseRelationResource):
         ordering = ['id', 'created', 'changed', 'status']
 
 
-class PartyPartnerPartyResource(BaseRelationResource):
+class PartyPartnerPartyResource(BasePartySendDataPartyResource):
     src = fields.ForeignKey('api.resources.PartyResource', 'src', blank=True, full=True,
-                            related_name='partner_src')
+                            )
     dst = fields.ForeignKey('api.resources.PartyResource', 'dst', blank=True, full=True,
-                            related_name='partner_dst')
+                            )
 
     class Meta:
         authorization = UserAuthorization()
@@ -1254,62 +1829,6 @@ class PartyFollowPartyResource(BasePartySendUniqueDataPartyResource):
         ordering = ['id']
 
 
-# Take action
-class BasePartySendDataPartyResource(BaseRelationResource):
-
-    src = fields.ForeignKey('api.resources.PartyResource', 'src', blank=True, full=True)
-    dst = fields.ForeignKey('api.resources.PartyResource', 'dst', blank=True, full=True)
-
-    default_status = STATUS_PUBLISHED
-
-    def obj_create(self, bundle, **kwargs):
-
-
-        bundle.obj = self._meta.object_class()
-
-        for key, value in kwargs.items():
-            setattr(bundle.obj, key, value)
-
-        if bundle.data.get('status') is None:
-            bundle.data['status'] = self.default_status
-
-        bundle = self.full_hydrate(bundle)
-        bundle.obj.src = bundle.request.logged_in_party
-
-        if not user_can_edit(bundle.request, bundle.obj, bypass_created=True):
-            raise PermissionDenied()
-
-
-        return self.save(bundle)
-
-
-    def obj_update(self, bundle, skip_errors=False, **kwargs):
-
-        if bundle.data.get('src'):
-            del(bundle.data['src'])
-
-        if not bundle.obj or not self.get_bundle_detail_data(bundle):
-            try:
-                lookup_kwargs = self.lookup_kwargs_with_identifiers(bundle, kwargs)
-            except:
-
-                lookup_kwargs = kwargs
-            try:
-                bundle.obj = self.obj_get(bundle=bundle, **lookup_kwargs)
-            except ObjectDoesNotExist:
-                raise NotFound("A model instance matching the provided arguments could not be found.")
-
-        bundle = self.full_hydrate(bundle)
-
-
-        # dst pdate status approve or reject
-        if user_can_update_status(bundle.request, bundle.obj, bundle.data):
-           pass
-
-        elif not user_can_edit(bundle.request, bundle.obj, bypass_created=True):
-            raise PermissionDenied()
-
-        return self.save(bundle, skip_errors=skip_errors)
 
 
 # Take action
@@ -1366,7 +1885,25 @@ class PartyTestifyPartyResource(BasePartySendDataPartyResource):
             'dst': ALL_WITH_RELATIONS,
             'status': ALL,
         }
-        ordering = ['-ordering']
+        ordering = ['ordering']
+
+class OrganizationParticipateResource(BasePartySendDataPartyResource):
+
+    default_status = STATUS_PENDING
+
+    class Meta:
+        serializer = VerboseSerializer(formats=['json'])
+        authorization = UserAuthorization()
+        always_return_data = True
+        queryset = OrganizationParticipate.objects.all().order_by('-ordering')
+        resource_name = 'organization_participate'
+        filtering = {
+            'src': ALL_WITH_RELATIONS,
+            'dst': ALL_WITH_RELATIONS,
+            'status': ALL,
+        }
+        ordering = ['ordering']
+
 
 class PartyInviteTestifyPartyResource(BasePartySendDataPartyResource):
 
@@ -1383,7 +1920,7 @@ class PartyInviteTestifyPartyResource(BasePartySendDataPartyResource):
             'dst': ALL_WITH_RELATIONS,
             'status': ALL,
         }
-        ordering = ['-created']
+        ordering = ['created']
 
 
 class PartyReceivedFundingPartyResource(BasePartySendDataPartyResource):
@@ -1392,14 +1929,14 @@ class PartyReceivedFundingPartyResource(BasePartySendDataPartyResource):
         serializer = VerboseSerializer(formats=['json'])
         authorization = UserAuthorization()
         always_return_data = True
-        queryset = PartyReceivedFundingParty.objects.all().order_by('-ordering')
+        queryset = PartyReceivedFundingParty.objects.all().order_by('-date')
         resource_name = 'party_received_funding_party'
         filtering = {
             'src': ALL_WITH_RELATIONS,
             'dst': ALL_WITH_RELATIONS,
             'status': ALL,
         }
-        ordering = ['-ordering']
+        ordering = ['date']
 
 
 class PartyReceivedInvestingPartyResource(BasePartySendDataPartyResource):
@@ -1415,7 +1952,7 @@ class PartyReceivedInvestingPartyResource(BasePartySendDataPartyResource):
             'dst': ALL_WITH_RELATIONS,
             'status': ALL,
         }
-        ordering = ['-ordering']
+        ordering = ['ordering']
 
 class ContentTypeResource(BaseResource):
 
@@ -1451,6 +1988,20 @@ class PortfolioResource(BaseResource):
         excludes = ['changed', 'created', 'is_deleted', 'images']
 
 
+class InTheNewsResource(BaseResource):
+
+    get_thumbnail = fields.CharField(attribute='get_thumbnail')
+
+    class Meta:
+        allowed_methods = ['get']
+        queryset = InTheNews.objects.all()
+        resource_name = 'in_the_news'
+        excludes = ['created', 'is_deleted']
+        filtering = {
+            'organization_in_the_news': ALL_WITH_RELATIONS,
+        }
+
+
 class JobToManyFieldForList(ToManyFieldForList):
 
     def dehydrate(self, bundle, for_list=True):
@@ -1469,7 +2020,9 @@ class JobToManyFieldForList(ToManyFieldForList):
             attrs = self.attribute.replace('job__', 'job_').replace('job_', 'job__').split('__')
             the_m2ms = bundle.obj
 
+
             for attr in attrs:
+
                 previous_obj = the_m2ms
                 try:
                     the_m2ms = getattr(the_m2ms, attr, None)
@@ -1510,15 +2063,19 @@ class JobToManyFieldForList(ToManyFieldForList):
 
             group_filter = None
             for value in values:
+
+
                 if not group_filter:
                     group_filter = Q(**{field_name: value})
                 else:
                     group_filter |= Q(**{field_name: value})
 
+                if field_name == 'job_primary_role__permalink':
+                    group_filter |= Q(**{'job_roles__permalink': value})
+
             filter &= group_filter
 
-
-        for m2m in the_m2ms.filter(filter):
+        for m2m in the_m2ms.filter(filter).distinct():
             m2m_resource = self.get_related_resource(m2m)
             m2m_bundle = Bundle(obj=m2m, request=bundle.request)
             self.m2m_resources.append(m2m_resource)
@@ -1567,6 +2124,14 @@ class JobResource(BaseResource):
 
     get_position_display = fields.CharField(attribute='get_position_display', readonly=True)
     get_role_display = fields.CharField(attribute='get_role_display', readonly=True)
+    get_summary = fields.CharField(attribute='get_summary', readonly=True)
+
+    # money_salary_min = fields.CharField(readonly=True) # TODO: make to decimal
+    # money_salary_max = fields.CharField(readonly=True) # TODO: make to decimal
+
+    job_primary_role = fields.ToOneField('api.resources.JobRoleResource', 'job_primary_role', null=True, blank=True, full=True)
+    job_roles = fields.ToManyField('api.resources.JobRoleResource', 'job_roles', null=True, blank=True, full=True)
+    locations = fields.ToManyField('api.resources.LocationResource', 'locations', null=True, blank=True, full=True)
 
     class Meta:
         allowed_methods = ['get']
@@ -1580,9 +2145,12 @@ class JobResource(BaseResource):
             'skills': ALL,
             'skill_set': ALL_WITH_RELATIONS,
             'role': ALL,
+            'job_primary_role': ALL,
+            'job_roles': ALL,
+            'locations': ALL,
             'position': ALL,
-            'salary_min': ALL,
-            'salary_max': ALL,
+            'money_salary_min': ALL,
+            'money_salary_max': ALL,
             'equity_min': ALL,
             'equity_max': ALL,
             'remote': ALL,
@@ -1681,6 +2249,33 @@ class UserExperienceOrganizationResource(BaseRelationResource):
         }
         ordering = ['id', 'end_date', 'status']
 
+class UserApplyJobResource(BaseRelationResource):
+    src = fields.ForeignKey('api.resources.UserResource', 'src', full=True)
+    dst = fields.ForeignKey('api.resources.OrganizationResource', 'dst', full=True)
+    job = fields.ForeignKey('api.resources.JobResource', 'job', full=True)
+
+    get_thumbnail_in_primary = fields.CharField(attribute='get_thumbnail_in_primary', readonly=True, null=True)
+    get_display_name = fields.CharField(attribute='get_display_name', readonly=True, null=True)
+
+    class Meta:
+        serializer = VerboseSerializer(formats=['json'])
+        authorization = UserAuthorization()
+        always_return_data = True
+        include_absolute_url = True
+        queryset = UserApplyJob.objects.all().order_by('id')
+        resource_name = 'user_apply_job'
+        filtering = {
+            'src': ALL_WITH_RELATIONS,
+            'dst': ALL_WITH_RELATIONS,
+            'id': ALL,
+            'status': ALL,
+        }
+        ordering = ['id']
+
+    def get_list(self, request, **kwargs):
+
+        kwargs['dst__admins'] = request.logged_in_party.id
+        return  super(UserApplyJobResource, self).get_list(request, **kwargs)
 
 class CmsResource(BaseResource):
     get_thumbnail = fields.CharField(attribute='get_thumbnail')
@@ -1801,7 +2396,7 @@ class VerbResource(BaseResource):
     permalink = fields.IntegerField(attribute='id')
 
     class Meta:
-        queryset = ContentType.objects.filter(app_label='relation')
+        queryset = ContentType.objects.filter(model__in=['partyreceivedfundingparty', 'organizationparticipate', 'partypartnerparty', 'userexperienceorganization'])
         allowed_methods = ['get']
         resource_name = 'verb'
         filtering = {
@@ -1857,6 +2452,7 @@ class PartyFollowingResource(PartyResource):
             ContentType.objects.get_for_model(PartySupportParty),
             ContentType.objects.get_for_model(PartyInvestParty),
             ContentType.objects.get_for_model(PartyTestifyParty),
+            ContentType.objects.get_for_model(OrganizationParticipate),
             ContentType.objects.get_for_model(UserExperienceOrganization),
             ContentType.objects.get_for_model(PartyReceivedFundingParty),
             ContentType.objects.get_for_model(PartyReceivedInvestingParty),
@@ -1901,7 +2497,7 @@ class HappeningResource(BaseResource):
 
     class Meta:
         queryset = Notification.objects\
-            .filter(is_system=True, verb__isnull=False).exclude(status=STATUS_REJECTED)\
+            .filter(Q(is_system=True) & Q(verb__isnull=False) & (Q(origin_receiver__isnull=True) | Q(status=STATUS_PUBLISHED))).exclude(status=STATUS_REJECTED)\
             .prefetch_related('receiver', 'actor', 'verb').order_by('-created')
 
 
@@ -1959,6 +2555,13 @@ class HappeningResource(BaseResource):
                 Q(actor__organization__organization_roles__permalink=receiver_or_actor__role_permalink)
             ).distinct()
 
+        receiver_or_actor__type_of_organization = request.GET.get('receiver_or_actor__type_of_organization')
+        if receiver_or_actor__type_of_organization:
+            query = query.filter(
+                Q(receiver__organization__type_of_organization=receiver_or_actor__type_of_organization) |
+                Q(actor__organization__type_of_organization=receiver_or_actor__type_of_organization)
+            ).distinct()
+
         receiver_or_actor__is_user = request.GET.get('receiver_or_actor__is_user')
         if receiver_or_actor__is_user:
             query = query.filter(
@@ -1974,6 +2577,7 @@ class HappeningResource(BaseResource):
                 ContentType.objects.get_for_model(PartySupportParty),
                 ContentType.objects.get_for_model(PartyInvestParty),
                 ContentType.objects.get_for_model(PartyTestifyParty),
+                ContentType.objects.get_for_model(OrganizationParticipate),
                 ContentType.objects.get_for_model(UserExperienceOrganization),
                 ContentType.objects.get_for_model(PartyReceivedFundingParty),
                 ContentType.objects.get_for_model(PartyReceivedInvestingParty),
@@ -2049,6 +2653,7 @@ class SearchResource(Resource):
     get_thumbnail_in_primary = fields.CharField(attribute='get_thumbnail_in_primary', readonly=True, null=True)
     get_display_name = fields.CharField(attribute='get_display_name', readonly=True, null=True)
     get_summary = fields.CharField(attribute='get_summary', readonly=True, null=True)
+    type_of_organization = fields.CharField(attribute='type_of_organization', readonly=True, null=True)
 
 
     inst_type = fields.CharField(attribute='inst_type', readonly=True, null=True)
@@ -2125,6 +2730,9 @@ class PartyLoveResource(BasePartySendUniqueDataPartyResource):
     dst_content_type = fields.ForeignKey('api.resources.ContentTypeResource', 'dst_content_type', blank=True, full=True)
     dst = GenericForeignKeyField({
         Party: PartyResource,
+        Organization: OrganizationResource,
+        Program: ProgramResource,
+        User: UserResource,
         Notification: HappeningResource,
     }, 'dst', null=True, blank=True, full=True)
 
@@ -2147,6 +2755,7 @@ class PartyLoveResource(BasePartySendUniqueDataPartyResource):
 
 class NotificationResource(BaseResource):
     receiver = fields.ForeignKey('api.resources.PartyResource', 'receiver')
+    origin_receiver = fields.ForeignKey('api.resources.PartyResource', 'origin_receiver', null=True, blank=True)
     actor = fields.ForeignKey('api.resources.PartyResource', 'actor', full=True)
     verb = fields.ForeignKey('api.resources.VerbResource', 'verb', blank=True)
 
@@ -2159,9 +2768,9 @@ class NotificationResource(BaseResource):
 
     class Meta:
         serializer = VerboseSerializer(formats=['json'])
-        authorization = UserAuthorization()
+        authorization = UserAuthorizationWithDelete()
         always_return_data = True
-        queryset = Notification.objects.filter(is_system=None, verb__isnull=False).prefetch_related('receiver', 'actor', 'verb', 'organization', 'target').order_by('-created')
+        queryset = Notification.objects.filter(is_system=None, verb__isnull=False).prefetch_related('receiver', 'origin_receiver', 'actor', 'verb', 'organization', 'target').order_by('-created')
         resource_name = 'notification'
         filtering = {
             'receiver': ALL_WITH_RELATIONS,
@@ -2194,8 +2803,10 @@ class NotificationResource(BaseResource):
                 PartyReceivedFundingParty: PartyReceivedFundingPartyResource,
                 PartyReceivedInvestingParty: PartyReceivedInvestingPartyResource,
                 PartyTestifyParty: PartyTestifyPartyResource,
+                OrganizationParticipate: OrganizationParticipateResource,
                 PartyInviteTestifyParty: PartyInviteTestifyPartyResource,
                 UserExperienceOrganization: UserExperienceOrganizationResource,
+                UserApplyJob: UserApplyJobResource,
                 PartyLove: PartyLoveResource,
 
             }[bundle.obj.verb.model_class()]
@@ -2203,6 +2814,11 @@ class NotificationResource(BaseResource):
             target_resource = TargetResource()
 
             bundle.data['target'] = target_resource.get_resource_uri(bundle.obj.target)
+            bundle.data['target_swap'] = False
+            bundle.data['target_claim_field'] = 'dst'
+            if hasattr(bundle.obj.target, 'swap') and bundle.obj.target.swap:
+                bundle.data['target_swap'] = True
+                bundle.data['target_claim_field'] = 'src'
 
         return bundle
 
@@ -2266,7 +2882,7 @@ class RequestResource(NotificationResource):
         serializer = VerboseSerializer(formats=['json'])
         authorization = UserAuthorization()
         always_return_data = True
-        queryset = Notification.objects.filter(is_system=None, party__isnull=True, organization__isnull=True)\
+        queryset = Notification.objects.filter(is_system=None, party__isnull=True, organization__isnull=True, verb__model__in=['partyreceivedfundingparty', 'organizationparticipate', 'partypartnerparty', 'userexperienceorganization'])\
             .prefetch_related('receiver', 'actor', 'verb', 'organization', 'target')\
             .order_by('-created')
 
@@ -2291,7 +2907,17 @@ class RequestResource(NotificationResource):
     def get_list(self, request, **kwargs):
         base_bundle = self.build_bundle(request=request)
 
-        kwargs['actor'] = request.logged_in_party.id
+        actor_ids = ['%s' % request.logged_in_party.id]
+        try:
+            user = User.objects.get(id=request.logged_in_party.id)
+            for aid in Organization.objects.filter(Q(admins=user) | Q(created_by=user)).values_list('id', flat=True):
+                actor_ids.append('%s' % aid)
+
+        except User.DoesNotExist:
+            pass
+
+
+        kwargs['actor__in'] = ','.join(actor_ids)
 
         objects = self.obj_get_list(bundle=base_bundle, **self.remove_api_resource_names(kwargs))
         sorted_objects = self.apply_sorting(objects, options=request.GET)

@@ -1,0 +1,306 @@
+{% extends 'base_pdf.html' %}
+
+{% load static %}
+{% load common_tags %}
+{% load organization_tags %}
+
+
+{% block content %}
+<div id="top">
+    <h1 class="heading1">
+        Application for Registration of Startup from National Innovation Agency(NIA)
+    </h1>
+</div>
+
+<div class="section1">
+    <h3 class="title underline">Part1: Program General Details</h3>
+    <div class="content">
+        <div class="description">
+            <span class="text-label">Name of The Startup</span><span>{{ organization.name }}</span>
+            <span class="text-label">Preferred Name (if any)</span><span>{{ organization.preferred_name }}</span>
+            <span class="text-label">Company Registration No</span><span>{{ organization.company_registration_number }}</span>
+            <span class="text-label">Date of Establishment (dd/mm/yy)</span><span> {{ organization.date_of_establishment }}</span>
+            <span class="text-label">Office Address</span><span></span>
+            <span class="text-label">Organization Email</span><span></span>
+        </div>
+
+        <div class="table">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th col="2">The Program Focus</th>
+                    </tr>
+                    <tr>
+                        <th>Focus Sectors</th>
+                        <th>Stage of Participants</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="table">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th col="2">Social Media Channel</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Homepage URL</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Facebook URL</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Twitter URL</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>LinkedIn URL</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Other Channels</td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="logo">
+            <span class="text-label">Logo (if any)</span>
+            <span class="text-hint">Insert a logo representing your startup</span>
+        </div>
+
+        <div class="description">
+            <span class="text-label">Description</span>
+            <span class="text-hint">Explain about your organization/product/service</span>
+
+        </div>
+
+        <div class="description">
+            <span class="text-label">Contact Person</span>
+        </div>
+
+        <div class="description">
+            <span class="text-label">Would you like to register for a certified startup program by NIA</span>
+            <span class="text-hint">If yes, please continue to complete part 2 to 5</span>
+        </div>
+    </div>
+</div>
+
+<div class="section2">
+    <h3 class="title underline">Part2: Organization Strategy</h3>
+    <div class="content">
+        <div class="description">
+            <span class="text-label">Company Vision</span>
+            <span class="text-hint">Description of your organization’s vision</span>
+        </div>
+        <div class="description">
+            <span class="text-label">Company Mission</span>
+            <span class="text-hint">Description of your organization’s mission</span>
+        </div>
+        <div class="description">
+            <span class="text-label">Business Model</span>
+            <span class="text-hint">Description of the idea and business model</span>
+        </div>
+        <div class="description">
+            <span class="text-label">Growth Strategy</span>
+            <span class="text-hint">Please explain your growth objectives and how you intend to develop your startup business</span>
+        </div>
+        <div class="description">
+            <span class="text-label">Has the organization ever participated in an incubator/accelerator program?</span>
+        </div>
+        <div class="description">
+            <span class="text-label">If yes, please specify the program name</span><span></span>
+            <span class="text-label">Period of the program (in month)</span><span></span>
+        </div>
+    </div>
+</div>
+
+<div class="section3">
+    <h3 class="title underline">Part3: Personnel</h3>
+    <div class="content">
+        <div class="table">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th col="5">
+                            <span class="text-label">Key Persons</span>
+                            <span class="text-hint">(Please provide brief information of management level in your startup)</span>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <span class="text-label">Name</span>
+                            <span class="text-hint">(First Name/Middle Name/Last Name)</span>
+                        </td>
+                        <td>Job Title</td>
+                        <td>Email</td>
+                        <td>Contact Number</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Total Number of the key persons</td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+            <span class="text-label">Supplementary sheets may be attached if additional space is required</span><span></span>
+        </div>
+
+        <div class="table">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th col="5">
+                            <span class="text-label">Operating Staffs</span>
+                            <span class="text-hint">(Please provide brief information of main operating staffs in the program)</span>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <span class="text-label">Name</span>
+                            <span class="text-hint">(First Name/Middle Name/Last Name)</span>
+                        </td>
+                        <td>Job Title</td>
+                        <td>Email</td>
+                        <td>Contact Number</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Total Number of the operating staffs</td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+            <span class="text-label">Supplementary sheets may be attached if additional space is required</span><span></span>
+        </div>
+
+        <div class="description">
+            <span class="text-label">Total number of people in the company</span><span></span>
+        </div>
+
+    </div>
+</div>
+
+<div class="section4">
+    <h3 class="title underline">Part4: Financial Support and Investment</h3>
+    <div class="content">
+        <div class="description">
+            <span class="text-label">Has the organization ever received investment from investors?</span><span></span>
+        </div>
+        <div class="description">
+            <span class="text-label">What is the company financial source?</span><span></span>
+        </div>
+
+        <div class="table">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th col="5">
+                            <span class="text-label">Please clarify your funding sources</span>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>No.</td>
+                        <td>Name of the financial source</td>
+                        <td>Type of Investment</td>
+                        <td>Total Amount</td>
+                        <td>Date Received (dd/mm/yy)</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="description">
+            <span class="text-label">Has the investor ever taken equity in the startup</span><span></span>
+        </div>
+        <div class="description">
+            <span class="text-label">If yes, please specify the amount (THB) </span><span></span>
+            <span class="text-hint">Note: The amount provided can be in range or percentages</span>
+        </div>
+    </div>
+</div>
+
+<div class="section5">
+    <h3 class="title underline">Part5: Assistance Needed</h3>
+    <div class="content">
+        <div class="table">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th col="5">
+                            <span class="text-label">What is the assistance that your startup requires?</span>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>Assistantship required</td>
+                        <td>Detail (if any)</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="description">
+            <span class="text-label">Required attached documents to be submitted for registration of a certified startup programs </span><span></span>
+            <span class="text-hint">The program shall provide a brief about itself and include points such as:</span>
+        </div>
+    </div>
+</div>
+
+<div class="section-summary">
+    <span></span>
+    <span class="text-label">
+        I hereby certify that the information and the evidence provided above is true and complete in all respects.
+        If there are any false statements which are considered perjury, I will agree to be subject to an applicable any criminal persecution.
+    </span>
+    <span class="text-right">
+        <span>(Signature)…………………………………. Applicant</span> <br/>
+        <span>(………………………………………………………………)</span>
+    </span>
+</div>
+{% endblock %}

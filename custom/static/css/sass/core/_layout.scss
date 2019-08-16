@@ -5,7 +5,7 @@
 .body-container {
     width: 100%;
 }
-.wrapper { 
+.wrapper {
     position: relative;
     z-index: 1;
 
@@ -17,8 +17,15 @@
         padding-bottom: 0px;
     }
 }
+.has-message {
+    .wrapper.--profile-setting {
+        padding-top: 0;
+    }
+}
 .wrapper-base{
-    padding-top: 30px; 
+    padding-top: 30px;
+    background-color: #B1B9C1;
+
     .breadcrumb a {
         margin: 0 0 30px;
     }
@@ -145,13 +152,15 @@
 .container { padding: 0;}
 
 @media (max-width: $screen-xs-max) {
-    .container { padding: 0 1em;}
-    .bg-white-wrapper { padding: 1em;}
+    .container { padding: 0 15px;}
+    .bg-white-wrapper { padding: 15px;}
+    .bg-white-wrapper.organize { padding-top: 0; }
 }
 
 @media (min-width: $screen-sm-min) and (max-width: $screen-sm-max) {
-    .container { width: 100%; padding: 0 1em;}
-    .bg-white-wrapper { padding: 1em;}
+    .container { width: 100%; padding: 0 15px;}
+    .bg-white-wrapper { padding: 15px;}
+    .bg-white-wrapper.organize { padding-top: 0; }
 }
 
 @media (max-width: $screen-xs-max) {
@@ -190,12 +199,22 @@
 \* ---------------------------------- */
 
 .block-primary {
-    @media (min-width: $screen-sm-max) {
-        padding: 60px 60px 0 60px;
+  margin: 0 -15px 0 -15px;
+  padding: 15px 0;
+  background-color: #282932;
+
+    // @media (min-width: $screen-sm-max + 1) {
+    @media (min-width: 992px) {
+        margin: 0;
+        padding: 40px 60px 0 60px;
     }
 }
 
-
+.startup-cover {
+  @media (max-width: 992px) {
+    // margin: -15px -15px 0;
+  }
+}
 
 
 
@@ -219,13 +238,11 @@
         }
     }
     > .sidebar-right {
-        @media (min-width: 768px) {
-            // padding-right: 75px;
-        }
         @media (min-width: 990px) {
             padding-right: 75px;
         }
         @media (max-width: 768px) {
+            margin-top: 0;
             padding-right: 15px;
         }
     }
@@ -255,7 +272,7 @@
 \* -------------------------------------- */
 
 .full-height-wrapper {
-    > .sidebar-left { 
+    > .sidebar-left {
         margin-bottom: 80px;
         @media (max-width: $screen-xs-max) {
             margin-bottom: 20px;

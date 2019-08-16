@@ -1,0 +1,11 @@
+@media print {
+  .field-money {
+    display: flex;
+    input {
+      width: auto;
+    }
+    select {
+      position: relative !important;
+    }
+  }
+}

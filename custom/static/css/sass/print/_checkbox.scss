@@ -1,0 +1,50 @@
+@media print {
+  .checkbox-list-label {
+    font-weight: bold;
+  }
+  .form-group .checkbox ul {
+    overflow-y: none;
+    max-height: none;
+    padding: 0 !important;
+    border: none;
+    // margin: 0;
+    li {
+      height: auto;
+      width: 33.3333%;
+      float: left;
+      margin-bottom: 0;
+    }
+    li .choice-item {
+      // height: 30px;
+      float: left;
+      input {
+        padding: 0 12px;
+        margin-top: 0;
+      }
+      label {
+        line-height: 25px;
+      }
+    }
+    li .choice-item + .other-field {
+      width: 100%;
+      display: inline-block;
+      // height: 30px;
+
+      input {
+        // height: 30px;
+        // line-height: 30px;
+        padding: 0 12px;
+      }
+    }
+
+    li:last-child {
+      width: 100%;
+    }
+  }
+
+  .form-group .checkbox.print-float-none ul {
+    li {
+      width: 100%;
+    }
+  }
+}

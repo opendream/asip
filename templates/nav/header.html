@@ -15,73 +15,7 @@
         <a class="icon-search hidden-xs hide" data-toggle="collapse" href="#block-search">
         </a>
 
-        <div id="block-search" class="collapse{{ search_class_content }}"
-             ng-class="loading_class()"
-             ng-controller="SearchFormController"
-             ng-init="init({
-                 tab_list_config: [
-                     {% if settings.ENABLE_SOCIAL_ENTERPRISE %}
-                     {
-                         title: 'Social Enterprise',
-                         filters: [ 'topics', 'country', 'type_of_needs'],
-                         api: '/api/v1/organization/search',
-                         default_params: { type_of_organization: '{{ TYPE_SOCIAL_ENTERPRISE }}' }
-                     },
-                     {% endif %}
-                     {% if settings.ENABLE_STARTUP %}
-                     {
-                         title: 'Startup',
-                         filters: [ 'topics', 'country', 'type_of_needs'],
-                         api: '/api/v1/organization/search',
-                         default_params: { type_of_organization: '{{ TYPE_STARTUP }}' }
-                     },
-                     {% endif %}
-                     {
-                         title: 'Supporter',
-                         filters: [ 'topics', 'country', 'type_of_supports'],
-                         api: '/api/v1/organization/search',
-                         default_params: { organization_roles: '{{ TYPE_SUPPORTING_ORGANIZATION }}' }
-                     },
-                     {
-                         title: 'Investor',
-                         filters: [ 'topics', 'country', ['type_of_supports', 'type_of_invests']],
-                         api: '/api/v1/organization/search',
-                         default_params: { organization_roles: '{{ TYPE_INVESTOR }}' }
-                     },
-                     {
-                         title: 'People',
-                         filters: [ 'topics', 'country', 'user_roles'],
-                         api: '/api/v1/user/search'
-                     }
-                 ],
-                 filter_list_config: {
-                     topics: {
-                         title: 'Any Issue',
-                         api: '/api/v1/topic/',
-                         params: { level: 0 }
-                     },
-                     country: {
-                         title: 'Any Country',
-                         api: '/api/v1/country',
-                     },
-                     type_of_needs: {
-                         title: 'Any Need',
-                         api: '/api/v1/type_of_need/'
-                     },
-                     type_of_supports: {
-                         title: 'Any Support',
-                         api: '/api/v1/type_of_support/?priority__lt=4'
-                     },
-                     type_of_invests: {
-                         title: 'Any Invest',
-                         api: '/api/v1/type_of_support/'
-                     },
-                     user_roles: {
-                         title: 'Any Role',
-                         api: '/api/v1/user_role/'
-                     }
-                 }
-             })">
+        <div id="block-search" class="collapse{{ search_class_content }}">
             <div class="search-wrapper">
               <div ng-repeat="tab in tab_list" class="party-tab-container" ng-show="tab.is_active">
                 <form role="form" class="form-search" action="{% url 'search' %}" name="search_form">

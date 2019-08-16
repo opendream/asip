@@ -6,6 +6,7 @@
 <p>{{ object.summary }}</p>
 <p>{{ object.description|safe }}</p>
 <p>{{ object.country }}</p>
+<p>{{ object.type_of_organization }}</p>
 
 <p>{{ object.facebook_url }}</p>
 <p>{{ object.twitter_url }}</p>

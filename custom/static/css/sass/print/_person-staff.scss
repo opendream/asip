@@ -1,0 +1,43 @@
+@media print {
+  #organization-key-person {
+    .control-label,
+    .add-another-inline-input-list {
+      display: none;
+    }
+    .section-title {
+      font-size: 16px;
+      margin-top: 0;
+      display: none;
+    }
+  }
+
+  #organization-staff {
+    .control-label,
+    .add-another-inline-input-list {
+      display: none;
+    }
+    .section-title {
+      font-size: 16px;
+      text-align: center;
+      margin-top: 0;
+    }
+    .help-block {
+      text-align: center;
+    }
+  }
+
+  #organization-partner-client {
+    .control-label,
+    .add-another-inline-input-list {
+      display: none;
+    }
+    .section-title {
+      font-size: 18px;
+      text-align: center;
+      margin-top: 0;
+    }
+    .help-block {
+      text-align: center;
+    }
+  }
+}

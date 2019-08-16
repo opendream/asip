@@ -1,0 +1,8 @@
+@media print {
+  div[id$="-participate_form"] {
+    .form-group {
+      display: flex;
+      align-items: center;
+    }
+  }
+}

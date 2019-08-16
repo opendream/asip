@@ -1,0 +1,8 @@
+.detail > .row > .sidebar-right {
+  &._pl-50 {
+    @media (min-width: 990px) {
+      padding-left: 50px !important;
+    }
+    padding-left: 15px !important;
+  }
+}

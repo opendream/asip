@@ -25,17 +25,22 @@ $breakpoint-alpha: 767px; // adjust to your needs
     float: left;
     margin-bottom: 10px;
     border: 1px solid #D8D8D8;
+    font-size: 16px;
 
     > tbody > tr > th {
-        font-family: $font-regular;
-        font-size: 15px;
+        // font-family: $font-regular;
+        // font-size: 15px;
+        font-family: $EN-font-heading;
+        text-transform: uppercase;
+        font-size: 2rem;
+        font-weight: 400;
     }
     tr {
         border-top: 1px solid #ddd;
         border-bottom: 1px solid #ddd;
     }
     th {
-        display: none; // for accessibility, use a visually hidden method here instead! Thanks, reddit!   
+        display: none; // for accessibility, use a visually hidden method here instead! Thanks, reddit!
     }
     td {
         display: block;
@@ -43,7 +48,7 @@ $breakpoint-alpha: 767px; // adjust to your needs
             min-width: 150px;
         }
     }
-    tbody > tr > td:first-child { 
+    tbody > tr > td:first-child {
         width: 50%;
         @media (max-width: 767px) {
             width: 100%;
@@ -60,7 +65,7 @@ $breakpoint-alpha: 767px; // adjust to your needs
         font-weight: bold;
 
         margin-bottom: 15px;
-  
+
         @media (min-width: $breakpoint-alpha) {
             display: none;
         }
@@ -69,15 +74,15 @@ $breakpoint-alpha: 767px; // adjust to your needs
         display: none;
     }
     td:not(.no-label) {
-        
+
     }
-  
+
     th, td {
         padding: 15px 15px 0 15px;
 
         @media (min-width: $breakpoint-alpha) {
             display: table-cell;
-            padding: 15px;
+            padding: 10px;
         }
     }
     td:last-child {
@@ -85,16 +90,34 @@ $breakpoint-alpha: 767px; // adjust to your needs
     }
 }
 
-.table-list .media-left { padding-right: 20px;} 
+.table-list .party-item > td {
+    vertical-align: top;
+}
+.table-list .party-item > td:last-child {
+    padding: 10px;
+    @media (max-width: 767px) {
+        padding: 15px;
+    }
+}
+
+.table-list .media-left {
+    padding-right: 20px;
+}
 
 .table-heading {
-    background-color: #EEEEEE;
+  background-color: #D1D8E0;
 }
 
 .table-content.-column {
     position: relative;
     @media (min-width: $breakpoint-alpha) {
         text-align: center;
+    }
+
+    .text-center {
+        @media (max-width: 480px) {
+            text-align: left !important;
+        }
     }
 }
 
@@ -111,11 +134,14 @@ $breakpoint-alpha: 767px; // adjust to your needs
     .media-body > h4 {
         margin-top: 0;
         margin-bottom: 5px;
+        font-family: Kanit;
+        font-size: 20px;
+        font-weight: 400;
     }
 
     .media-body > span {
-        color: #777;
-        font-size: 12px;
+        color: #555;
+        font-size: 15px;
     }
 }
 
@@ -126,16 +152,15 @@ $breakpoint-alpha: 767px; // adjust to your needs
 }
 
 .field-expand-link {
-    text-align: left;
     font-size: 11px;
     color: #777;
     display: block;
-    margin-top: -20px;
+    margin-top: -15px;
 }
 
 .col-taxanomy {
     margin-top: 5px;
-    .topics { 
+    .topics {
         font-size: 12px;
         margin-bottom: 2px;
     }
@@ -155,25 +180,34 @@ div[report-my-height] {
 }
 
 /* ----------------------------------- *\
-            Job List 
+            Job List
 \* ----------------------------------- */
 
 .table-list.-job {
     border-radius: 5px;
     .title {
-        @extend .kanit-light;
+        // @extend .kanit-light;
+        font-family: Kanit;
+        font-size: 16px;
+        font-weight: 400;
     }
+
+    .media-body > .title {
+      font-size: 18px;
+      font-weight: 500;
+    }
+
     > .item-list > .item {
         padding: 20px;
         border-top: 1px solid #D8D8D8;
         &:first-child { border-top: 0;}
         .title { margin: 0;}
-        .place { 
+        .place {
             color: $font-desc-color--secondary;
             font-size: 13px;
         }
     }
-    .post-time.visible-xs { 
+    .post-time.visible-xs {
         margin-top: 10px;
     }
     .item-job {
@@ -201,7 +235,7 @@ div[report-my-height] {
         }
     }
     @media (max-width: $screen-xs-max) {
-        .media-left {        
+        .media-left {
             margin-bottom: 10px;
         }
     }

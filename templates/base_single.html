@@ -1,7 +1,5 @@
 {% extends 'base.html' %}
 
-
-
 {% block base_content %}
 
 	{% if messages %}
@@ -20,7 +18,7 @@
 
 	<div class="wrapper{% block wrapper_class %}{% endblock %}">
 
-        {% block leader %}{%  endblock %}
+		{% block leader %}{%  endblock %}
 
 	    <div class="container main-content{% if request_popup %} bg-white{% endif %}">
             {% if breadcrumb_content %}

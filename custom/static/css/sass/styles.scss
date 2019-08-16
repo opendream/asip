@@ -2,6 +2,12 @@
 @import "bootstrap-variables";
 @import "bootstrap";
 
+@import "base/mixins.scss";
+@import "base/var.scss";
+@import "base/font.scss";
+@import "base/base.scss";
+@import "base/utils.scss";
+
 @import "compass/css3/box-sizing";
 @import "core/reset.scss"; // startup
 @import "modifier/help.scss";
@@ -19,13 +25,50 @@
 @import "modifier/module.scss";
 
 @import "core/nav.scss";
-@import "core/footer.scss";
+
+@import "layout/footer.scss";
+@import "layout/header.scss";
+@import "layout/sidebar-right";
 
 @import "core/event-page.scss"; // startup
 @import "core/hotfix.scss"; // startup
 
-@import "core/elements.scss"; // startup
+// @import "core/elements.scss"; // startup
 @import "core/home.scss"; // startup
 @import "core/breadcrumb.scss"; // startup
+@import "core/bootstrap"; // custom bootstrap rules
 
 @import "components/*"; // startup
+
+@import "startup/admin";
+@import "startup/block";
+@import "startup/tab-list";
+@import "startup/banner";
+@import "startup/jobs";
+@import "startup/button";
+@import "startup/block-list";
+@import "startup/startup-list";
+@import "startup/social";
+@import "startup/manage-page";
+
+// Print PDF
+@import "print/utils"; // Util classes
+@import "print/removed-element"; // All deleted element in print style
+@import "print/main"; // Print style
+@import "print/input"; // All input element style
+@import "print/checkbox"; // checkbox style
+@import "print/inline-form"; // horizontal textfield form
+@import "print/label"; // All label printing style.
+@import "print/person-staff"; // key person and operating staff form
+@import "print/participated"; // Program participated form for Startup.
+@import "print/partners"; // Partner list Government, Media, Associations, Partners
+@import "print/support-by"; // Financial Support and Investment
+@import "print/phone"; // Phone style
+@import "print/form-money"; // Form money
+@import "print/files-widget"; // image widget
+
+@import "components/button/toggle-button";
+
+@import "components/ng-snippet/in-the-news";
+
+@import "components/bootstrap-custom/collapse";

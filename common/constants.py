@@ -31,6 +31,7 @@ TYPE_SOCIAL_ENTERPRISE = 'social-enterprise'
 TYPE_STARTUP = 'startup'
 TYPE_SUPPORTING_ORGANIZATION = 'supporter'
 TYPE_INVESTOR = 'investor'
+TYPE_PROGRAM = 'program'
 
 
 TYPE_CHOICES = ()
@@ -43,10 +44,16 @@ if settings.ENABLE_STARTUP:
     TYPE_CHOICES += ((TYPE_STARTUP, _('Startup')), )
     EXPAND_TYPE_CHOICES += ((TYPE_STARTUP, _('Startup')), )
 
+# if settings.ENABLE_PROGRAM:
+#     TYPE_CHOICES += ((TYPE_PROGRAM, _('Program')), )
+
 TYPE_CHOICES += (
-    (TYPE_SUPPORTING_ORGANIZATION, _('Supporters/Investors')),
+    (TYPE_INVESTOR, _('Investors')),
+    (TYPE_SUPPORTING_ORGANIZATION, _('Supporter')),
+    (TYPE_PROGRAM, _('Program'))
 )
 EXPAND_TYPE_CHOICES += (
-    (TYPE_SUPPORTING_ORGANIZATION, _('Supporting Organization')),
-    (TYPE_INVESTOR, _('Investors'))
+    (TYPE_SUPPORTING_ORGANIZATION, _('Supporter')),
+    (TYPE_INVESTOR, _('Investors')),
+    (TYPE_PROGRAM, _('Program'))
 )

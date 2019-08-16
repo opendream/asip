@@ -185,3 +185,26 @@
         </div>
 	</div><!-- End Block Job -->
 {% endblock %}
+
+
+{% block modal %}
+<div class="modal fade" id="modal-apply" tabindex="-1">
+    <div class="modal-dialog base-action-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal" type=
+                "button"><span>&times;</span><span class=
+                "sr-only">Close</span></button>
+
+                <h2 class="modal-title" id="model-title"> How to Apply </h2>
+            </div>
+
+            <div class="modal-body">
+              <div class="content-editor" ng-bind-html="job.contact_information | sanitize">
+              </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

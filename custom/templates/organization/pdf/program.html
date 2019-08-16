@@ -1,0 +1,450 @@
+{% extends 'base_pdf.html' %}
+
+{% load static %}
+{% load common_tags %}
+{% load organization_tags %}
+
+{% block content %}
+<div id="top">
+    <h1 class="heading1">
+        Application for Certification of Incubation/Acceleration Programs from National Innovation Agency(NIA)
+    </h1>
+</div>
+
+<div class="section1">
+    <h3 class="title underline">Part1: Program General Details</h3>
+    <div class="content">
+        <div class="description">
+            <span class="text-label">Name of The Program</span><span>{{ program.name }}</span>
+            <span class="text-label">Type of The Program</span><span></span>
+
+        </div>
+
+        <div class="description">
+            <span class="text-label">Name of The Startup</span><span>{{ program.organization.name }}</span>
+            <span class="text-label">Company Registration No</span><span>{{ program.organization.company_registration_number }}</span>
+            <span class="text-label">Office Address</span><span></span>
+            <span class="text-label">Organization Email</span><span></span>
+        </div>
+
+        <div class="table">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th col="3">The Program Focus</th>
+                    </tr>
+                    <tr>
+                        <th>Focus Sectors</th>
+                        <th>Focus Industry (10 S-Curve)</th>
+                        <th>Stage of Participants</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="table">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th col="2">Social Media Channel</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Homepage URL</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Facebook URL</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Twitter URL</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>LinkedIn URL</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Other Channels</td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="logo">
+            <span class="text-label">Logo (if any)</span>
+            <span class="text-hint">Insert a logo representing your organization/Incubation/ Acceleration Programs</span>
+        </div>
+
+        <div class="description">
+            <span class="text-label">Description</span>
+            <span class="text-hint">Explain about your organization/product/service</span>
+
+        </div>
+
+        <div class="description">
+            <span class="text-label">Contact Person</span>
+        </div>
+
+        <div class="description">
+            <span class="text-label">Would you like to register for a certified incubation/Acceleration program by NIA</span>
+            <span class="text-hint">If yes, please continue to complete part 2 to 5</span>
+        </div>
+    </div>
+</div>
+
+<div class="section2">
+    <h3 class="title underline">Part2: Program Personnel</h3>
+    <div class="content">
+        <div class="table">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th col="5">
+                            <span class="text-label">Mentorships</span>
+                            <span class="text-hint">(Please provide brief information of main mentors, coaches, speakers and trainers of the program)</span>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <span class="text-label">Name</span>
+                            <span class="text-hint">(First Name/Middle Name/Last Name)</span>
+                        </td>
+                        <td>Job Title</td>
+                        <td>Email</td>
+                        <td>Contact Number</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Total Number of the program mentors</td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+            <span class="text-label">Note: ***Each mentor is required to attach resume or portfolio consisting of previous achievement
+            Supplementary sheets may be attached if additional space is required.
+            </span><span></span>
+        </div>
+
+        <div class="table">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th col="5">
+                            <span class="text-label">Operating Staffs</span>
+                            <span class="text-hint">(Please provide brief information of main operating staffs in the program)</span>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <span class="text-label">Name</span>
+                            <span class="text-hint">(First Name/Middle Name/Last Name)</span>
+                        </td>
+                        <td>Job Title</td>
+                        <td>Email</td>
+                        <td>Contact Number</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Total Number of the operating staffs</td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+            <span class="text-label">Supplementary sheets may be attached if additional space is required</span><span></span>
+        </div>
+    </div>
+</div>
+
+<div class="section3">
+    <h3 class="title underline">Part3: Financial Support and Investment</h3>
+    <div class="content">
+        <div class="description">
+            <span class="text-label">Is the organization acting as an investors</span><span></span>
+            <span class="text-label">Has the organization ever invested in the participant team?</span><span></span>
+
+            <span class="text-label">If yes, what’s the type of investment?</span><span></span>
+            <span class="text-label">What’s the investment stage that the program has been focusing on? </span><span></span>
+            <span class="text-label">specify</span><span></span>
+
+        </div>
+
+        <div class="table">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th col="8">
+                            <span class="text-label">Approximate amount of investment in each stage (THB)</span>
+                            <span class="text-hint">Note: The amount provided can be an exact number or in range</span>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <th>Pre-seed</th>
+                        <th>Seed</th>
+                        <th>Pre-series A</th>
+                        <th>Series A</th>
+                        <th>Series B</th>
+                        <th>Series C</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Batch 1</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Batch 2</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Batch 3</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Batch 4</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Batch 5</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Total</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="description">
+            <span class="text-label">Has the organization ever taken equity in the participating teams</span><span></span>
+            <span class="text-label">Has the organization ever invested in the participant team?</span><span></span>
+
+            <span class="text-label">If yes, what’s the type of investment?</span><span></span>
+            <span class="text-label">Does the organization provide grants or financial supports to the participating team </span><span></span>
+            <span class="text-label">If yes, please specify the amount (THB) </span><span></span>
+            <span class="text-hint">Note: The amount provided can be in range </span>
+
+        </div>
+    </div>
+</div>
+
+<div class="section4">
+    <h3 class="title underline">Part4: Participants Details</h3>
+    <div class="content">
+                <div class="table">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th col="7">
+                            <span class="text-label">Participants Details</span>
+                            <span class="text-hint">Detail of teams or startups participating in the previous batches/ to be participated in the future batches</span>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th>Batch 1</th>
+                        <th>Batch 2</th>
+                        <th>Batch 3</th>
+                        <th>Batch 4</th>
+                        <th>Batch 5</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Total number of teams applying for the program</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Total number of teams accepted for the program</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Total number of participants accepted for the program</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>Total number of graduated teams from the program</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>Number of training programs conducted and to be conducted</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td>Numbers of events, conferences seminars workshops organized or to be organized</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td>Number of coaches, mentors and speakers in the program</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>8</td>
+                        <td>Number of assisting staffs in the program</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>9</td>
+                        <td>Approximated number of new products, innovations or technologies to be developed and commercialized</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+            <span class="text-label">Note: Supplementary sheets may be attached if additional space is required </span>
+        </div>
+
+        <div class="description">
+            <span class="text-label">Contract period of engagement with the participant during the program (in months) </span><span></span>
+        </div>
+
+    </div>
+</div>
+
+<div class="section5">
+    <h3 class="title underline">Part5: Program Facilities</h3>
+    <div class="content">
+        <div class="description">
+            <span class="text-label">Does the organization provide the participant working spaces and facilities during the program </span><span></span>
+            <span class="text-label">If yes, please specify the address of the working space provided </span><span></span>
+
+            <span class="text-label">Is the working space own by the organization</span><span></span>
+            <span class="text-label">Is there any service or facility provided by the program? </span><span></span>
+            <span class="text-label">If yes, please specify </span><span></span>
+
+        </div>
+
+        <div class="description">
+            <span class="text-label">Required attached documents to be submitted for certification of eligibility for a certified incubation/acceleration programs</span>
+            <span class="text-label">The program shall provide a brief about itself and include points such as:</span><span></span>
+
+        </div>
+    </div>
+</div>
+
+    <div class="section-summary">
+    <span class="text-label">
+        ***Please Note: The Certificate of certified program will now be issued after examination of the application and documents submitted.
+    </span>
+    <span class="text-label">
+        I hereby certify that the information and the evidence provided above is true and complete in all respects.
+        If there are any false statements which are considered perjury, I will agree to be subject to an applicable any criminal persecution.
+    </span>
+    <span class="text-right">
+        <span>(Signature)…………………………………. Applicant</span> <br/>
+        <span>(………………………………………………………………)</span>
+    </span>
+</div>
+{% endblock %}

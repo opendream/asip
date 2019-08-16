@@ -1,5 +1,7 @@
 from django.db import models
 
+from django.utils.translation import ugettext as _
+
 # Create your models here.
 from common.constants import STATUS_PUBLISHED, STATUS_CHOICES
 from common.models import AbstractPermalink, CommonTrashModel
@@ -8,7 +10,7 @@ import files_widget
 
 class Special(CommonTrashModel, AbstractPermalink):
     title = models.CharField(max_length=512)
-    image = files_widget.ImageField(verbose_name='Banner Image', null=True, blank=True)
+    image = files_widget.ImageField(verbose_name=_('Banner Image'), null=True, blank=True)
 
     status = models.IntegerField(choices=STATUS_CHOICES, default=STATUS_PUBLISHED)
 

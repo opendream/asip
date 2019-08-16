@@ -1,0 +1,54 @@
+{% load static %}
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link href="{% static 'libs/bootstrap/css/bootstrap.min.css' %}" type="text/css" rel="stylesheet">
+
+    <style>
+        * {
+            font-family: 'TH Sarabun New', sans-serif;
+            font-weight: normal;
+        }
+
+        body {
+            font-weight: 100;
+            font-size: 20px;
+            line-height: 24px;
+            color: #000;
+        }
+
+        .text-right { text-align: right !important; }
+        .text-center { text-align: center !important; }
+        .text-left { text-align: left !important; }
+        .text-justify { text-align: justify !important; }
+
+        .break {
+            page-break-before:always;
+        }
+        h1,h2,h3,h4 {
+            font-weight: bold;
+            line-height: 26px;
+        }
+        h1 { font-size: 28px; margin: 0 0 20px;}
+        h2 { font-size: 26px; margin: 10px 0;}
+        h3 { font-size: 22px; margin-bottom: 10px;}
+        h4 { font-size: 20px; margin-bottom: 5px;}
+
+        .description { font-size: 20px; color: #666; margin-top: 5px;}
+
+        .underline {
+            text-decoration: underline;
+        }
+
+
+    </style>
+    <style>{% include 'pdf.css' %}</style>
+</head>
+
+<body>
+
+    {% block content %}{% endblock %}
+    <script type="text/javascript">print()</script>
+</body>
+</html>

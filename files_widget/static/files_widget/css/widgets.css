@@ -48,15 +48,26 @@
 	text-align: center;
 }
 
+.files-widget-dropbox .preview {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+
 .files-widget-dropbox .image-holder {
+	margin-right: 10px;
 	min-height: 50px;
 	min-width: 50px;
 	line-height: 50px;
 }
+.files-widget-dropbox .file-name {
+	font-size: 0.8em;
+	text-align: left;
+}
 
 .files-widget-dropbox .preview .thumbnail {
 	vertical-align: middle;
-    background: url(/static/files_widget/img/transparent-bg.gif) left top;
+  background: url(/static/files_widget/img/transparent-bg.gif) left top;
 }
 
 .files-widget-dropbox .preview.new .thumbnail {
@@ -190,7 +201,7 @@
 }
 
 .files-widget-deleted .deleted-file {
-	height: 38px;
+	/* height: 38px; */
 	line-height: 38px;
 	margin-bottom: 5px;
 }
@@ -214,9 +225,9 @@
 }
 
 .files-widget-deleted .deleted-file .name {
-	white-space: nowrap;
+	/* white-space: nowrap; */
 	text-decoration: line-through;
-	margin: 0 10px;
+	/* margin: 0 10px; */
 }
 
 .files-widget-deleted .deleted-file .undo {

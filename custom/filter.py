@@ -9,7 +9,7 @@ FILTER = {
         'CREATE_URL': '/organization/startup/create/',
         'CREATE_URL_PARAMS': (),
 
-        'HEADER_BANNER': '/static/images/header-startup.jpg',
+        'HEADER_BANNER': '/static/images/bg-startup@2x.png',
         'PROMOTE_LIST': '',
 
         'API_URL': '/api/v1/party/search/',
@@ -82,7 +82,7 @@ FILTER = {
         'CREATE_URL': '/organization/supporter/create/',
         'CREATE_URL_PARAMS': (('organization_primary_role', 'investor'), ),
 
-        'HEADER_BANNER': '/static/images/header-investor.jpg',
+        'HEADER_BANNER': '/static/images/bg-investor@2x.png',
         'PROMOTE_LIST': '',
 
         'API_URL': '/api/v1/party/search/',
@@ -139,14 +139,14 @@ FILTER = {
         ]
     },
     'supporter': {
-        'TITLE': _('Supporting Organization'),
+        'TITLE': _('Supporter'),
         'RESULT_TITLE': _('organizations'),
         'HEAD_TITLE': _('Organization'),
 
         'CREATE_URL': '/organization/supporter/create/',
         'CREATE_URL_PARAMS': (('organization_primary_role', 'supporter'),),
 
-        'HEADER_BANNER': '/static/images/header-supporter.jpg',
+        'HEADER_BANNER': '/static/images/bg-support@2x.png',
         'PROMOTE_LIST': '',
 
         'API_URL': '/api/v1/party/search/',

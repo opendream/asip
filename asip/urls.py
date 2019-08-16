@@ -6,6 +6,8 @@ from django.contrib import admin
 from django.http import HttpResponse
 from django.views.generic import TemplateView
 
+from django.conf.urls.i18n import i18n_patterns
+
 autocomplete_light.autodiscover()
 admin.autodiscover()
 
@@ -16,6 +18,7 @@ except ImportError:
     CUSTOM_ENABLED = False
 
 
+# urlpatterns = i18n_patterns('', # not trans now
 urlpatterns = patterns('',
     url(r'^autocomplete/', include('autocomplete_light.urls')),
     url(r'^tagging_autocomplete_tagit/', include('tagging_autocomplete_tagit.urls')),
@@ -29,6 +32,8 @@ urlpatterns = patterns('',
     url(r'^forum/', include('forum.urls', app_name='forum')),
 
     url(r'^api/', include('api.urls')),
+    url(r'^i18n/', include('django.conf.urls.i18n')),
+
     url(r'', include('notification.urls')),
     url(r'', include('taxonomy.urls', app_name='taxonomy')),
 
@@ -48,7 +53,9 @@ urlpatterns = patterns('',
 )
 
 if CUSTOM_ENABLED:
+    # urlpatterns += i18n_patterns('', # not trans now
     urlpatterns += patterns('',
+
         url(r'', include('custom.urls')),
     )
 

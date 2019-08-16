@@ -16,6 +16,9 @@ class UserIndex(indexes.ModelSearchIndex, indexes.Indexable):
 
     is_published = indexes.BooleanField(indexed=True, stored=True)
 
+    job_roles =  indexes.MultiValueField(indexed=True, stored=True)
+    job_locations = indexes.MultiValueField(indexed=True, stored=True)
+
     class Meta:
         model = get_user_model()
         fields_to_skip = ['_total_follower', '_total_following', '_total_love', '_total_testify', 'password']
@@ -30,6 +33,12 @@ class UserIndex(indexes.ModelSearchIndex, indexes.Indexable):
 
     def prepare_interests(self, object):
         return [inst.permalink for inst in object.interests.all()]
+
+    def prepare_job_roles(self, object):
+        return [inst.permalink for inst in object.job_roles.all()]
+
+    def prepare_job_locations(self, object):
+        return [inst.permalink for inst in object.job_locations.all()]
 
     def prepare_country(self, object):
 

@@ -1,0 +1,387 @@
+// Show in print version only
+.show-print {
+  display: none;
+  @media print {
+    display: block;
+    &.hide {
+      display: block !important;
+    }
+  }
+}
+
+// Do not show in print version
+.hide-print {
+  @media print {
+    display: none !important;
+  }
+}
+
+@media print {
+
+  h2, h3,
+  .tab-pane .tab-title,
+  .tab-pane label,
+  .print-title {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  }
+
+  body {
+    font-size: 14px;
+  }
+
+  @page {
+    margin: 2cm;
+  }
+
+  img {
+    max-width: 100% !important;
+  }
+
+  // page-break-inside
+  ul, img {
+    page-break-inside: avoid;
+  }
+
+  //--- Font Size
+
+  // Value : 15px, bold
+  // Label Group : bold
+  // Label Description : 10px, bold
+
+  // Title : 14px, bold
+
+  .tab-content > .tab-pane {
+    min-height: auto !important;
+    margin-bottom: 30px;
+  }
+
+  .tab-pane label.print-title {
+    font-size: 14px !important;
+    font-weight: bold !important;
+  }
+
+  // Select Date (ฺBirthday)
+  .select-date-wrapper {
+    width: auto !important;
+    padding: 0 !important;
+    margin-right: 15px !important;
+  }
+
+  // Make form (Select) element inline
+  #id_product_launch,
+  #id_funding,
+  #id_request_funding {
+    width: auto !important;
+  }
+
+
+  //---- Section Group
+  .print-section {
+    border: 1px solid #000;
+    margin: 15px 0 !important;
+    padding: 15px;
+
+    .section-title {
+      display: block;
+      font-size: 14px !important;
+      margin-top: 0;
+      font-weight: bold !important;
+      text-transform: capitalize;
+    }
+
+    ul {
+      margin-bottom: 15px;
+    }
+
+    .checkbox.-resize {
+      margin: 0;
+
+      ul {
+        padding-top: 0;
+        padding-bottom: 0;
+      }
+    }
+  }
+  .tab-pane .controls {
+    margin-bottom: 15px;
+  }
+
+  // Hide this element for all conditions
+  // Create link
+  .popup-create-link-wrapper,
+  .inline-create-link-wrapper {
+    display: none;
+  }
+  // Link Edit inline form
+  a[id*="edit_id_"] {
+    display: none !important;
+  }
+  // Funding round
+  #add_funding_round {
+    display: none;
+  }
+}
+
+// 
+.tab-title {
+  @media print {
+    margin-bottom: 15px;
+  }
+}
+
+@media print {
+  form.point-form {
+    > .sidebar-left {
+      display: none;
+    }
+    > .content-focus {
+      width: 100%;
+    }
+  }
+  .tab-content {
+    padding: 0 !important;
+    a.btn-viewม
+    .help-block {
+      display: none;
+    }
+    > .tab-pane {
+      display: block !important;
+    }
+    > .tab-pane .tab-title {
+      font-size: 18px;
+    }
+  }
+
+  .cke_top,
+  .cke_bottom {
+    display: none !important;
+  }
+
+  span.icon-plus,
+  .add_more {
+    display: none !important;
+  }
+
+  #organization-focus {
+    padding: 16px;
+    border: 1px solid #000000;
+    margin-bottom: 30px;
+
+    .section-title {
+      font-size: 20px;
+      // text-align: center;
+      margin-top: 0;
+    }
+
+    label.col-sm-3 {
+      width: 100%;
+      padding-left: 0;
+    }
+    .checkbox.col-sm-9 {
+      width: 100%;
+    }
+  }
+
+
+
+
+
+  // TODO: Social Media Channel
+  #organization-social-network {
+    padding: 16px;
+    border: 1px solid #000000;
+    margin-bottom: 60px !important;
+
+    .form-group {
+      .control-label,
+      .field-container {
+        display: inline-block;
+      }
+    }
+
+    .section-title {
+      font-size: 20px;
+      margin-top: 0;
+    }
+
+    .form-group {
+      width: 100%;
+      margin-bottom: 0;
+    }
+    .form-group > label {
+      width: 130px;
+    }
+    .form-group > div.field-container {
+      width: calc(100% - 150px);
+    }
+
+    .form-group.id_other_channel > .field-container {
+      vertical-align: top;
+    }
+    .form-group.id_other_channel > .field-container > textarea {
+      width: 800px;
+    }
+  }
+
+
+
+
+
+  #organization-contact-information {
+
+    .form-group {
+      display: inline-block;
+      margin-right: 15px;
+      margin-bottom: 15px !important;
+      .control-label,
+      .field-container {
+        display: inline-block;
+      }
+      .control-label { margin-right: 8px; }
+      .field-container .form-control { font-weight: bold; }
+
+      .field-container textarea {
+        display: inline-block;
+        height: 40px;
+        line-height: 40px;
+        vertical-align: middle;
+      }
+    }
+
+    #id_name_of_representative,
+    #id_email_of_contact_person {
+      min-width: 300px;
+    }
+  }
+
+  #id_taken_equity_amount {
+    min-width: 200px;
+  }
+
+}
+
+
+
+
+
+// hide the last input if they empty
+@media print {
+
+  // Phone Number
+  #id_phone_number_of_organizations_headquarters {
+    > li:last-child {
+      display: none;
+    }
+  }
+  input:valid {
+    color: red;
+  }
+  input:invalid {
+    display: none;
+  }
+  input[value=""] {
+    display: none !important;
+  }
+}
+
+
+
+
+
+// Organization-strategy
+@media print {
+  #organization-strategy {
+    .cke {
+      padding-bottom: 15px;
+    }
+  }
+}
+
+
+
+
+
+// organization-participate
+@media print {
+  #organization-participate {
+    .participate_form:last-child {
+      display: none;
+    }
+
+    .add-another-inline-input-list {
+      display: none;
+    }
+
+    .inline-reference-container {
+      padding: 0;
+      border: none;
+    }
+    .autocomplete-light-widget .deck > span[data-value]:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+
+
+
+
+// Personnel
+@media print {
+  .autocomplete-light-widget .deck > span[data-value] {
+    padding-left: 10px !important;
+  }
+  .people-reference-wrapper {
+    > span {
+      display: flex;
+      width: 100%;
+      justify-content: flex-start;
+      align-items: flex-start;
+      flex-direction: row;
+      > .ref-wrapper {
+        width: auto;
+      }
+    }
+  }
+}
+
+
+
+
+
+// Assistance Needed
+@media print {
+  .assistantship_form {
+    > .panel { border: none; }
+    > .panel > .panel-body { padding: 0; border: none; }
+    textarea { font-size: 14px; line-height: 14px; border-bottom: 0; }
+  }
+}
+
+
+
+
+
+// organization-address
+@media print {
+  #organization-address {
+    .form-group ol {
+      margin: 0;
+    }
+  }
+}
+
+
+
+
+
+@media print {
+  .participate_form {
+    .col-sm-5 {
+      width: auto;
+    }
+    .col-sm-7 {
+      width: auto;
+    }
+  }
+}

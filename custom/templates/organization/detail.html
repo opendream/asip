@@ -21,11 +21,11 @@
 
 {% block content_class %} detail organize bg-white bg-white-wrapper{% endblock %}
 
-{% block link_back %} <a class="back-link" ng-href="/organization/startup/"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> Supporting Organizations</a>{% endblock %}
+{% block link_back %} <a class="back-link" ng-href="/organization/startup/"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> {% trans 'Supporter' %}</a>{% endblock %}
 
 {% block breadcrumb %}
-    <a href="/{{ instance.organization_primary_role.permalink }}/" class="link-breadcrumb" ng-cloak>
-        {[{ organization.organization_primary_role.title }]}
+    <a href="/{{ instance.type_of_organization }}/" class="link-breadcrumb" ng-cloak style="text-transform: capitalize">
+        {[{ organization.type_of_organization }]}
     </a>
     {{ organization }}
 {% endblock %}
@@ -39,19 +39,46 @@
 {#<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=crosalot"></script>#}
 {% endblock %}
 {% block main_extra %} ng-clock ng-controller="OrganizationDetailController"{% endblock %}
+
+{% block alert %}
+<div class="alert alert-warning" ng-if="organization.status==-1">
+    This {[{ organization.type_of_organization }]} is pending for approval
+</div>
+<div class="alert alert-warning" ng-if="organization.status==0">
+    <span ng-if="!organization.is_mockup">This {[{ organization.type_of_organization }]} is draft</span>
+    <span ng-if="organization.is_mockup">
+        This {[{ organization.type_of_organization }]} is mockup.<br />
+        * If you are administrator of {[{ organization.type_of_organization }]} name "{[{ organization.get_display_name }]}",
+        please
+        <a ng-href="{% url 'account_register' %}?next=%2Forganization%2F{[{ organization.type_of_organization }]}%2Fcreate%2F%3Fname%3D{[{ organization.get_display_name }]}">join</a>
+        or
+        <a ng-href="{% url 'account_login' %}?next=%2Forganization%2F{[{ organization.type_of_organization }]}%2Fcreate%2F%3Fname%3D{[{ organization.get_display_name }]}">login</a>
+        to claim the {[{ organization.type_of_organization }]}.</span>
+</div>
+{% endblock %}
+
 {% block primary %}
 
 <!-- Block Primary -->
-<div class="row block-primary">
+<div class="row startup-cover-wrapper">
+    <div ng-if="organization.get_thumbnail_cover_image" class="startup-cover" style="background-image: url('{[{ organization.get_thumbnail_cover_image }]}')"></div>
+
+    <div ng-if="!organization.get_thumbnail_cover_image" class="startup-cover-blank">
+    <!-- <img src="http://via.placeholder.com/1140x469" alt="" width="100%"/> -->
+    <img src="/static/images/default.jpg" alt="" width="100%" />
+    </div>
+</div>
+<div class="block-primary clearfix">
     {% if user.is_authenticated %}
     <a ng-if="organization.can_edit" href="/organization/{[{ organization_id }]}/edit/" class="btn btn-default btn-xs pull-right ico-edit">
-        <span class="glyphicon glyphicon-edit"></span> Edit
+        <span class="glyphicon glyphicon-edit"></span> {% trans 'Edit' %}
     </a>
     {% endif %}
-    <div class="col-md-12 primary-party ">
+
+    <div class="col-md-12 primary-party">
         <alert id="alert_contact" ng-show="alert['message'].show" type="{[{alert['message'].type}]}" close="alert['message'].show = !alert['message'].show" ng-bind="alert['message'].msg" ng-clock></alert>
         <div class="row">
-            <div class="col-md-7 col-xs-8 block-org info-wrapper">
+            <div class="col-sm-7 block-org info-wrapper">
                 <div class="primary-info">
                     <div class="small-logo pull-left thumbnail">
                         <span>
@@ -63,32 +90,21 @@
                             {[{ organization.name }]}
                         </h2>
 
-                        <div ng-if="organization.summary" class="description" ng-cloak ng-bind="organization.summary">
+                        <div ng-if="organization.get_summary" class="description" ng-cloak ng-bind="organization.get_summary">
                         </div>
-
-                        {% comment %}
-                        <div ng-if="organization.topics.length" class="sub-description">
-                            <ul class="utopic-list item-list item-list-inline item-list-zen">
-                                <li class="topic-item item" ng-repeat="topic in organization.topics.slice(0, 2)">
-                                    <span class="topic" ng-cloak>{[{ topic.title }]}</span>
-                                </li>
-                                <li ng-if="organization.topics.length > 3"><a href="#block-topic-list">more...</a></li>
-                            </ul>
-                        </div>
-                        {% endcomment %}
 
                     </div>
                 </div>
             </div>
             {% if logged_in_party != organization_id %}
-            <div class="col-md-5 col-xs-4 block-follow">
+            <div class="col-sm-5 block-follow">
                 <div class="action-panel">
                     <div love-button party="organization" template="love_compact_button.html"></div>
                     <div follow-button party="organization" template="follow_compact_button.html"></div>
                     <div class="take-action-wrapper" ng-class="hide_self_class()">
                         <a class="btn-activity" message-popup>
                             <span class="icostartup icon-contact"></span>
-                            <span class="text-action">Contact</span>
+                            <span class="text-action">{% trans 'Contact' %}</span>
                         </a>
                     </div>
                 </div>
@@ -96,68 +112,51 @@
                     <div class="view-like-wrapper">
                         <div class="like-count -org text-right -like" ng-cloak>
                             <div class="text-center">
-                                <a href="" title="Who love this" ng-click="modal_love_list()" ng-cloak>{[{ organization.total_love | number:0 }]}</a> Love{[{organization.total_love > 1 ? 's' : ''}]}
+                                <a href="" title="{% trans 'Who love this' %}" ng-click="modal_love_list()" ng-cloak>{[{ organization.total_love | number:0 }]}</a> {% trans 'Love' %}{[{organization.total_love > 1 ? 's' : ''}]}
                             </div>
                         </div>
 
                         <div class="like-count -org text-right" ng-cloak>
                             <div class="text-center">
-                                <a title="Who view this" ng-cloak>{[{ organization.total_views | number:0 }]}</a> View{[{organization.total_views > 1 ? 's' : ''}]}
+                                <a title="{% trans 'Who view this' %}" ng-cloak>{[{ organization.total_views | number:0 }]}</a> {% trans 'View' %}{[{organization.total_views > 1 ? 's' : ''}]}
                             </div>
                         </div>
                     </div>
 
-                </div>
-                <div class="block-social">
-                    <div class="outlink pull-right">
-                        <ul class="social pull-right">
-                            <li ng-if="organization.facebook_url"><a href="{[{ organization.facebook_url }]}" class="icon-social icon-facebook" target="_blank"></a></li>
-                            <li ng-if="!organization.facebook_url"><span class="icon-social icon-facebook no-link"></span></li>
-                            <li ng-if="organization.twitter_url"><a href="{[{ organization.twitter_url }]}" class="icon-social icon-twitter" target="_blank"></a></li>
-                            <li ng-if="!organization.twitter_url"><span class="icon-social icon-twitter no-link"></span></li>
-                            <li ng-if="organization.linkedin_url"><a href="{[{ organization.linkedin_url }]}" class="icon-social icon-linkedin" target="_blank"></a></li>
-                            <li ng-if="!organization.linkedin_url"><span class="icon-social icon-linkedin no-link"></span></li>
-                        </ul>
-                        <div class="website pull-right" ng-if="organization.homepage_url">
-                            <a href="{[{ organization.homepage_url }]}" class="homepage" target="_blank" ng-cloak>{[{ organization.homepage_url }]}</a>
-                        </div>
-                    </div>
                 </div>
             </div>
             {% endif %}
         </div>
     </div>
 </div>
-
-
 <!-- End Block Primary -->
 
 
 <!-- Nav tabs Party -->
 <div id="nav-tab-party"></div>
 <ul class="nav nav-tabs nav-party primary-tab hidden-xs clearfix" ng-controller="FollowerParamController">
-    <li><a href="##overview" ng-click="selected_tab(1)" id="overview" ng-class="tab_list_active_class(1)">Overview</a></li>
+    <li><a href="##overview" ng-click="selected_tab(1)" id="overview" ng-class="tab_list_active_class(1)">{% trans 'Overview' %}</a></li>
     {% if not HIDE_FULL_PROFILE %}
-    <li ng-show="is_not_type_support()"><a href="##full_profile" ng-click="selected_tab(2)" id="full_profile" ng-class="tab_list_active_class(2)">Full Profile</a></li>
+    <li ng-show="is_not_type_support()"><a href="##full_profile" ng-click="selected_tab(2)" id="full_profile" ng-class="tab_list_active_class(2)">{% trans 'Full Profile' %}</a></li>
     {% endif %}
-    <li><a href="##happening" ng-click="selected_tab(3)" id="happening" ng-class="tab_list_active_class(3)">Happening</a></li>
-    <li><a href="##followers" ng-click="selected_tab(4)" id="followers" ng-class="tab_list_active_class(4)">Followers<span class="label label-grey" ng-cloak>{[{FollowerService.total_followers}]}</span></a></li>
+    <li><a href="##happening" ng-click="selected_tab(3)" id="happening" ng-class="tab_list_active_class(3)">{% trans 'Happening' %}</a></li>
+    <li><a href="##followers" ng-click="selected_tab(4)" id="followers" ng-class="tab_list_active_class(4)">{% trans 'Followers' %}<span class="label label-grey" ng-cloak>{[{FollowerService.total_followers}]}</span></a></li>
     {% if not HIDE_FOLLOWING %}
-    <li><a href="##followings" id="followings" ng-click="selected_tab(5)" ng-class="tab_list_active_class(5)">Following<span class="label label-grey" ng-cloak>{[{FollowerService.total_following}]}</span></a></li>
+    <li><a href="##followings" id="followings" ng-click="selected_tab(5)" ng-class="tab_list_active_class(5)">{% trans 'Following' %}<span class="label label-grey" ng-cloak>{[{FollowerService.total_following}]}</span></a></li>
     {% endif %}
     {% if not HIDE_TESTIMONIAL %}
-    <li><a href="##testimonials" ng-click="selected_tab(6)" id="testimonials" ng-class="tab_list_active_class(6)" ng-clock>Testimonials<span class="label label-grey" >{[{organization.total_testify}]}</span></a></li>
+    <li><a href="##testimonials" ng-click="selected_tab(6)" id="testimonials" ng-class="tab_list_active_class(6)" ng-clock>{% trans 'Testimonials' %}<span class="label label-grey" >{[{organization.total_testify}]}</span></a></li>
     {% endif %}
 </ul>
 
 <div class="primary-tab dropdown dropdown-tab-square visible-xs" ng-controller="FollowerParamController">
-    <a id="party-tab-drop" class="dropdown-toggle btn btn-default"><span class="text">Overview</span> <span class="caret pull-right"></span></a>
+    <a id="party-tab-drop" class="dropdown-toggle btn btn-default"><span class="text">{% trans 'Overview' %}</span> <span class="caret pull-right"></span></a>
     <ul class="dropdown-menu" role="menu" aria-labelledby="party-tab-drop">
-        <li><a ng-click="selected_tab(1)" ng-class="tab_list_active_class(1)">Overview</a></li>
+        <li><a ng-click="selected_tab(1)" ng-class="tab_list_active_class(1)">{% trans 'Overview' %}</a></li>
         {% if not HIDE_FULL_PROFILE %}
-        <li ng-show="is_not_type_support()"><a ng-click="selected_tab(2)" ng-class="tab_list_active_class(2)">Full Profile</a></li>
+        <li ng-show="is_not_type_support()"><a ng-click="selected_tab(2)" ng-class="tab_list_active_class(2)">{% trans 'Full Profile' %}</a></li>
         {% endif %}
-        <li><a ng-click="selected_tab(3)" ng-class="tab_list_active_class(3)">Happening</a></li>
+        <li class="hide"><a ng-click="selected_tab(3)" ng-class="tab_list_active_class(3)">Happening</a></li>
         <li><a ng-click="selected_tab(4)" ng-class="tab_list_active_class(4)" ng-cloak>Followers&nbsp;<span class="label label-grey">{[{ FollowerService.total_followers}]}</span></a></li>
         {% if not HIDE_FOLLOWING %}
         <li><a ng-click="selected_tab(5)" ng-class="tab_list_active_class(5)" ng-cloak>Following&nbsp;<span class="label label-grey">{[{ FollowerService.total_following}]}</span></a></li>
@@ -169,53 +168,105 @@
 </div>
 <!-- End Nav Party -->
 
-
 {% endblock %}
 
 {% block content %}
 
+<!-- Start Overview Tab -->
 <div class="overview" ng-class="tab_active_class(1)">
+
+    {[{ working_spaces_information=organization.program && (organization.program.working_spaces_information|toJSON);'' }]}
+
+    <!-- Start : Use by Startup, Supporter, Investor -->
+    <div ng-if="organization.code" class=" _mb-15">
+        <div class="block block-ecosystem-id">{% trans 'Ecosystem ID :' %} <span ng-bind-html="organization.code | sanitize"></span></div>
+        <hr />
+    </div>
+    <!-- End : Use by Startup, Supporter, Investor -->
 
     <!-- Block-About -->
     <div ng-if="organization.description" class="block block-experience overview-about">
-        
-        <h2 class="-summary" ng-if="organization.summary" ng-cloak ng-bind="organization.summary"></h2>
 
-        <hr class="_short">
-        
-        <div ng-bind-html="organization.description | sanitize" class="content -description"></div>
+        {% comment %}
+        <h2 class="-summary _mb-30" ng-if="organization.summary" ng-cloak ng-bind="organization.summary"></h2>
+        {% endcomment %}
+
+        <h2 class="block-title">{% trans "About" %}</h2>
+
+        <div id="description" 
+             ng-bind-html="organization.description | sanitize"
+             class="content -description -custom"
+             ng-class="collapse_class(organization.description)">
+        </div>
+
+        <button ng-if="check_content_length(organization.description)"
+                data-toggle="collapse" data-target="#description" 
+                ng-click="flag = !flag" 
+                class="btn-link _pl-0 _pr-0 toggle-button _border-no" 
+                ng-class="{ active : flag }">
+            <span class="toggle-collapsed">{% trans "Read more" %}</span>
+            <span class="toggle-expanded">{% trans "Close" %}</span>
+        </button>
 
         <hr />
 
     </div><!-- End block About -->
 
-   
+    <!-- Block Organization's Program -->
+    <div ng-if="organization.program && organization.program.organization" class="block block-organization">
 
-    <!-- Block-Images -->
-    <div ng-if="organization.get_thumbnail_images.length" class="block block-screenshort">
-        <h2 class="block-title">{% trans "Screenshots" %}</h2>
-        <div class="screenshort-wrapper">
-            <div class="screenshort-content">
-                <ul class="row item-list images-list">
-                    <li ng-repeat="image in organization.get_thumbnail_images"  class="image-item item">
-                        <div class="img-wrapper">
-                            <div class="img-bg">
-                                <div class="relative">
-                                    <div class="img-bg bg-black box-shadow">
-                                    </div>
-                                </div>
-                            </div>
-                            <img ng-src="{[{ image }]}" alt="screenshort" />
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
+        <h2 class="block-title">Organization's Program</h2>
+
+        <ul class="item-list support-list">
+            <li class="support-item item" ng-init="party=organization.program.organization">
+                <div ng-include="'template_party_item_style_default_small.html'"></div>
+            </li>
+        </ul>
         <hr />
 
+    </div><!-- End block Organization's Program -->
+
+    <!-- TODO : Block-Images -->
+    <div ng-if="false">
+        <div ng-if="organization.get_thumbnail_images.length" class="block block-screenshort">
+            <h2 class="block-title">{% trans "Screenshots" %}</h2>
+            <div class="screenshort-wrapper">
+                <div class="screenshort-content">
+                    <ul class="row item-list images-list">
+                        <li ng-repeat="image in organization.get_thumbnail_images"  class="image-item item">
+                            <div class="img-wrapper">
+                                <div class="img-bg">
+                                    <div class="relative">
+                                        <div class="img-bg bg-black box-shadow">
+                                        </div>
+                                    </div>
+                                </div>
+                                <img ng-src="{[{ image }]}" alt="screenshort" />
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <hr />
+    
+        </div>
     </div><!-- End block Images -->
 
 
+    <!-- Block : Programs list -->
+    <div class="block list-view" ng-if="organization.program_organization.length > 0">
+        <h2 class="block-title">{% trans "Incubation/Acceleration Programs" %}</h2>
+        <ul class="item-list support-list">
+            <li ng-repeat="party in organization.program_organization"  class="support-item item">
+                {[{ party.status }]}
+                <div ng-include="'template_party_item_style_default_small.html'"></div>
+            </li>
+        </ul>
+        <hr />
+
+    </div><!-- End Block : Programs list -->
+
+    {% comment %}
     <!-- Block Portfolio -->
     <div ng-controller="BasicPartyListController" ng-init="init('/api/v1/portfolio', { party_portfolios: organization_id, limit: 6}, '-ordering')" class="block block-portfolio block-col-3" ng-class="should_show_list_class()">
         <h2 class="block-title">{% trans "Portfolio" %}</h2>
@@ -225,19 +276,282 @@
             </li>
         </ul>
         <a class="loadmore-wrapper" ng-click="load_more()" ng-class="load_more_class()">
-            <span ng-hide="is_loading" class="loadmore">Load more</span>
+            <span ng-hide="is_loading" class="btn-startup btn-startup--third">{% trans 'Load more' %}</span>
             <img ng-show="is_loading" ng-src="/static/images/loading.gif" class="loading-icon" >
         </a>
-        
-        <hr>
-    
+
+        <hr />
+
     </div>
     <!-- End Block Portfolio -->
+    {% endcomment %}
 
-    <!-- Block has people-->
-    <div ng-controller="BasicPartyListController" ng-init="init('/api/v1/organization_has_people/', {src: organization_id, limit: 6}, '-id', 'dst', ['REQUIRED_APPROVAL', 'status'])" class="block block-people block-col-3 hover-action" ng-class="should_show_list_class()">
+    <!-- Block-company_vision -->
 
-        <h2 class="block-title">{% trans "People" %}</h2>
+    <div ng-if="organization.company_vision" class="block block-experience overview-about">
+
+        <h2 class="block-title">Company Vision</h2>
+
+        <div id="company_vision"
+            ng-bind-html="organization.company_vision | sanitize"
+            class="content -description -custom"
+            ng-class="collapse_class(organization.company_vision)">
+        </div>
+
+        <button ng-if="check_content_length(organization.company_vision)"
+                data-toggle="collapse" data-target="#company_vision" 
+                ng-click="flag = !flag" 
+                class="btn-link _pl-0 _pr-0 toggle-button _border-no" 
+                ng-class="{ active : flag }">
+            <span class="toggle-collapsed">{% trans "Read more" %}</span>
+            <span class="toggle-expanded">{% trans "Close" %}</span>
+        </button>
+
+        <hr />
+
+    </div><!-- End Block-company_vision -->
+
+    <!-- Block-company_mission -->
+    <div ng-if="organization.company_mission" class="block block-experience overview-about">
+
+        <h2 class="block-title">Company Mission</h2>
+
+        <div id="company_mission" 
+            ng-bind-html="organization.company_mission | sanitize" 
+            class="content -description -custom"
+            ng-class="collapse_class(organization.company_mission)">
+        </div>
+
+        <button ng-if="check_content_length(organization.company_mission)"
+                data-toggle="collapse" data-target="#company_mission" 
+                ng-click="flag = !flag" 
+                class="btn-link _pl-0 _pr-0 toggle-button _border-no" 
+                ng-class="{ active : flag }">
+            <span class="toggle-collapsed">{% trans "Read more" %}</span>
+            <span class="toggle-expanded">{% trans "Close" %}</span>
+        </button>
+
+        <hr />
+
+    </div><!-- End Block-company_mission -->
+
+    <!-- Block-business_model -->
+    <div ng-if="organization.business_model" class="block block-experience overview-about">
+
+        <h2 class="block-title">Business Model</h2>
+
+        <div id="business_model" 
+             ng-bind-html="organization.business_model | sanitize" 
+             class="content -description -custom"
+             ng-class="collapse_class(organization.business_model)">
+        </div>
+
+        <button ng-if="check_content_length(organization.business_model)"
+                data-toggle="collapse" data-target="#business_model" 
+                ng-click="flag = !flag"
+                class="btn-link _pl-0 _pr-0 toggle-button _border-no" 
+                ng-class="{ active : flag }">
+            <span class="toggle-collapsed">{% trans "Read more" %}</span>
+            <span class="toggle-expanded">{% trans "Close" %}</span>
+        </button>
+
+        <hr />
+
+    </div><!-- End block business_model -->
+
+    <!-- Block-business_model -->
+    <div ng-if="organization.growth_strategy" class="block block-experience overview-about">
+
+        <h2 class="block-title">Growth Strategy</h2>
+
+        <div id="growth_strategy" 
+             ng-bind-html="organization.growth_strategy | sanitize" 
+             class="content -description -custom"
+             ng-class="collapse_class(organization.growth_strategy)">
+        </div>
+
+        <button ng-if="check_content_length(organization.growth_strategy)"
+                data-toggle="collapse" data-target="#growth_strategy" 
+                ng-click="flag = !flag" 
+                class="btn-link _pl-0 _pr-0 toggle-button _border-no" 
+                ng-class="{ active : flag }">
+            <span class="toggle-collapsed">{% trans "Read more" %}</span>
+            <span class="toggle-expanded">{% trans "Close" %}</span>
+        </button>        
+
+        <hr />
+
+    </div><!-- End block business_model -->
+
+    <!-- Block In THe News -->
+    <div ng-if="organization.in_the_news.length > 0">
+
+        <h2 class="block-title">{% trans "In The News" %}</h2>
+        <ul class="item-list support-list -inthenews">
+            <li class="support-item item" ng-repeat="party in organization.in_the_news">
+                <div ng-include="'template_in_the_news.html'"></div>
+            </li>
+        </ul>
+        <hr />
+
+    </div>
+    <!-- End block Received funding record -->
+
+    {% comment %}
+    <!-- Block Clients  -->
+    <div ng-controller="BasicPartyListController" ng-init="init('/api/v1/party_partner_party/', 
+                                                        {status: 1, dst: organization_id, limit: 6}, 
+                                                        '', 
+                                                        'src', 
+                                                        ['REQUIRED_APPROVAL', 
+                                                        'status'])" 
+                            class="block list-view" ng-class="should_show_list_class()">
+
+        <h2 class="block-title">{% trans "Partners" %}</h2>
+        <ul class="item-list support-list">
+            <li class="support-item item" ng-repeat="party in party_list" >
+                <div ng-include="'template_party_item_style_default_small.html'"></div>
+            </li>
+        </ul>
+
+        <a class="loadmore-wrapper" ng-click="load_more()" ng-class="load_more_class()">
+            <span ng-hide="is_loading" class="btn-startup btn-startup--third">{% trans 'Load more' %}</span>
+            <img ng-show="is_loading" ng-src="/static/images/loading.gif" class="loading-icon" >
+        </a>
+        <hr />
+
+    </div>
+    <!-- End block Clients  -->
+    {% endcomment %}
+
+    <!-- Block Funding Round -->
+    <div ng-if="organization.funding_round_organization.length > 0" class="block block-funding-round">
+
+        <h2 class="block-title">Funding Round</h2>
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-center">
+                <thead>
+                    <tr>
+                        <th colspan="3">Announced Date</th>
+                        <th colspan="3">Closed on Date</th>
+                    </tr>
+                    <tr>
+                        <th>Year</th>
+                        <th>Month</th>
+                        <th>Day</th>
+                        <th>Year</th>
+                        <th>Month</th>
+                        <th>Day</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="item in organization.funding_round_organization">
+                        <td ng-bind="item.announced_date|toDateFormat:'YYYY'"></td>
+                        <td ng-bind="item.announced_date|toDateFormat:'MMMM'"></td>
+                        <td ng-bind="item.announced_date|toDateFormat:'D'"></td>
+                        <td ng-bind="item.closed_date|toDateFormat:'YYYY'"></td>
+                        <td ng-bind="item.closed_date|toDateFormat:'MMMM'"></td>
+                        <td ng-bind="item.closed_date|toDateFormat:'D'"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <hr />
+    </div>
+    <!-- End block Funding Round -->
+
+    <!-- Block Funding Detail -->
+    <div ng-if="organization.get_type_of_organization == 'investor' && organization.money_deal_size_start || organization.money_deal_size_end" class="block block-funding-detail">
+
+        <h2 class="block-title">Funding Detail</h2>
+
+        <div class="row">
+
+            <div ng-if="organization.money_deal_size_start || organization.money_deal_size_end" class="block-content-group col-sm-12">
+                <div class="label-title"><strong>Deal Size</strong></div>
+                <div class="content -description">
+                    <span ng-bind="organization.money_deal_size_start"></span> - <span ng-bind="organization.money_deal_size_end"></span>
+                </div>
+                <br />
+            </div>
+
+            <div ng-if="organization.money_money_raise" class="block-content-group col-sm-6">
+                <div class="label-title"><strong>Money Raise</strong></div>
+                <div class="content -description">
+                    <span ng-bind="organization.money_money_raise"></span>
+                </div>
+                <br />
+            </div>
+
+            <div ng-if="organization.money_target_funding" class="block-content-group col-sm-6">
+                <div class="label-title"><strong>Target Funding</strong></div>
+                <div class="content -description">
+                    <span ng-bind="organization.money_target_funding"></span>
+                </div>
+                <br />
+            </div>
+
+            <div ng-if="organization.money_pre_money_valuation" class="block-content-group col-sm-6">
+                <div class="label-title"><strong>Pre-Money Valuation</strong></div>
+                <div class="content -description">
+                    <span ng-bind="organization.money_pre_money_valuation"></span>
+                </div>
+                <br />
+            </div>
+
+
+        </div>
+
+
+        <div ng-if="organization.money_amount_of_money_invested">
+            <div class="label-title">
+                <span>
+                    <span class="glyphicon glyphicon-check check-icon"></span>
+                    <span class="check-label">The company acting as a Lead Investor in this funded organization<span ng-if="organization.money_amount_of_money_invested">, {[{ organization.money_amount_of_money_invested }]} THB</span></span>
+                </span>
+            </div>
+        </div>
+
+        <div ng-if="organization.has_taken_equity_in_fund_organization">
+            <div class="label-title">
+                <span>
+                    <span class="glyphicon glyphicon-check check-icon"></span>
+                    <span class="check-label">The company has ever taken equity in the funded organization</span>
+                </span>
+            </div>
+        </div>
+
+        <hr />
+
+    </div><!-- End block Funding Detail -->
+
+    <!-- Block Program Participate -->
+    <div ng-controller="BasicPartyListController" ng-init="init('/api/v1/organization_participate/', {status: 1, src: organization_id, limit: 6}, '', 'dst', ['REQUIRED_APPROVAL', 'status', ['data', 'function (item) { return item.month ? (item.month + \' months\') : \'\' }']])" class="block list-view" ng-class="should_show_list_class()">
+
+        <h2 class="block-title">{% trans "Participated Programs" %}</h2>
+        <ul class="item-list support-list">
+            <li class="support-item item" ng-repeat="party in party_list">
+                <div ng-include="'template_party_item_style_default_small.html'"></div>
+            </li>
+        </ul>
+
+        <a class="loadmore-wrapper" ng-click="load_more()" ng-class="load_more_class()">
+            <span ng-hide="is_loading" class="btn-startup btn-startup--third">{% trans 'Load more' %}</span>
+            <img ng-show="is_loading" ng-src="/static/images/loading.gif" class="loading-icon" >
+        </a>
+
+        <hr />
+
+    </div>
+    <!-- End block Program Participate -->
+
+
+    <!-- Block Teams -->
+    <div ng-controller="BasicPartyListController" ng-init="init('/api/v1/organization_staff/', {organization__id: organization_id, limit: 6, staff_status: 100}, 'id', 'user', [['get_summary', 'function (item, user) {return item.job_title || user.get_summary}']])" class="block block-people block-col-3 hover-action" ng-class="should_show_list_class()">
+
+        <h2 class="block-title">{% trans "Teams" %}</h2>
         <ul class="row item-list people-list">
             <li ng-repeat="party in party_list" class="col-md-4 col-xs-6 user-image people-item party-item item" ng-class="party.item_class_row_three()">
                 <div ng-include="'template_party_item.html'"></div>
@@ -245,19 +559,79 @@
         </ul>
 
         <a class="loadmore-wrapper" ng-click="load_more()" ng-class="load_more_class()">
-            <span ng-hide="is_loading" class="loadmore">Load more</span>
+            <span ng-hide="is_loading" class="btn-startup btn-startup--third">{% trans 'Load more' %}</span>
             <img ng-show="is_loading" ng-src="/static/images/loading.gif" class="loading-icon" >
         </a>
-        
-        <hr>
-    
+
+        <hr />
+
     </div>
-    <!-- End block has people -->
+    <!-- End block Teams -->
 
-    <!-- Block give support to-->
-    <div ng-controller="BasicPartyListController" ng-init="init('/api/v1/party_support_party/', {src: organization_id, limit: 6}, '-id', 'dst', ['REQUIRED_APPROVAL', 'status'])" class="block block-support list-view" ng-class="should_show_list_class()">
+    <!-- Block Mentor -->
+    <div ng-controller="BasicPartyListController" ng-init="init('/api/v1/organization_staff/', {organization__id: organization_id, limit: 6, staff_status: 101}, 'id', 'user', [['get_summary', 'function (item, user) {return item.job_title || user.get_summary}']])" class="block block-people block-col-3 hover-action" ng-class="should_show_list_class()">
 
-        <h2 class="block-title">{% trans "Give Support to" %}</h2>
+        <h2 class="block-title">{% trans "Mentorships" %}</h2>
+        <ul class="row item-list people-list">
+            <li ng-repeat="party in party_list" class="col-md-4 col-xs-6 user-image people-item party-item item" ng-class="party.item_class_row_three()">
+                <div ng-include="'template_party_item.html'"></div>
+            </li>
+        </ul>
+
+        <a class="loadmore-wrapper" ng-click="load_more()" ng-class="load_more_class()">
+            <span ng-hide="is_loading" class="btn-startup btn-startup--third">{% trans 'Load more' %}</span>
+            <img ng-show="is_loading" ng-src="/static/images/loading.gif" class="loading-icon" >
+        </a>
+
+        <hr />
+
+    </div>
+    <!-- End block Operating Staffs -->
+
+    <!-- Block Operating Staffs -->
+    <div ng-controller="BasicPartyListController" ng-init="init('/api/v1/organization_staff/', {organization__id: organization_id, limit: 6, staff_status: 1}, 'id', 'user', [['get_summary', 'function (item, user) {return item.job_title || user.get_summary}']])" class="block block-people block-col-3 hover-action" ng-class="should_show_list_class()">
+
+        <h2 class="block-title">{% trans "Operating Staffs" %}</h2>
+        <ul class="row item-list people-list">
+            <li ng-repeat="party in party_list" class="col-md-4 col-xs-6 user-image people-item party-item item" ng-class="party.item_class_row_three()">
+                <div ng-include="'template_party_item.html'"></div>
+            </li>
+        </ul>
+
+        <a class="loadmore-wrapper" ng-click="load_more()" ng-class="load_more_class()">
+            <span ng-hide="is_loading" class="btn-startup btn-startup--third">{% trans 'Load more' %}</span>
+            <img ng-show="is_loading" ng-src="/static/images/loading.gif" class="loading-icon" >
+        </a>
+
+        <hr />
+
+    </div>
+    <!-- End block Operating Staffs -->
+
+    <!-- Block partner -->
+    <div ng-controller="BasicPartyListController" ng-init="init('/api/v1/party_partner_party/', {status: 1, src: organization_id, limit: 6}, '', 'dst', ['REQUIRED_APPROVAL', 'status'])" class="block list-view" ng-class="should_show_list_class()">
+
+        <h2 class="block-title">{% trans "Partners" %}</h2>
+        <ul class="item-list support-list partners-list">
+            <li class="support-item item" ng-repeat="party in party_list">
+                <div ng-include="'template_party_item_style_default_small.html'"></div>
+            </li>
+        </ul>
+
+        <a class="loadmore-wrapper" ng-click="load_more()" ng-class="load_more_class()">
+            <span ng-hide="is_loading" class="btn-startup btn-startup--third">{% trans 'Load more' %}</span>
+            <img ng-show="is_loading" ng-src="/static/images/loading.gif" class="loading-icon" >
+        </a>
+
+        <hr />
+
+    </div>
+    <!-- End block partners -->
+
+    <!-- Block Received funding record -->
+    <div ng-controller="BasicPartyListController" ng-init="init('/api/v1/party_received_funding_party/', {status: 1, src: organization_id, limit: 6}, '-date', 'dst', ['REQUIRED_APPROVAL', 'status', ['data', 'function (item) { return item.money_amount + (item.date? (\', \' + moment(new Date(item.date)).fromNow()): \'\') + (item.title? (\', \' + item.title): \'\')}']])" class="block list-view" ng-class="should_show_list_class()">
+
+        <h2 class="block-title">{% trans "Received Funding records" %}</h2>
         <ul class="item-list support-list">
             <li class="support-item item" ng-repeat="party in party_list">
                 <div ng-include="'template_party_item_style_default_small.html'"></div>
@@ -265,16 +639,28 @@
         </ul>
 
         <a class="loadmore-wrapper" ng-click="load_more()" ng-class="load_more_class()">
-            <span ng-hide="is_loading" class="loadmore">Load more</span>
+            <span ng-hide="is_loading" class="btn-startup btn-startup--third">{% trans 'Load more' %}</span>
             <img ng-show="is_loading" ng-src="/static/images/loading.gif" class="loading-icon" >
         </a>
+
+        <div ng-if="organization.taken_equity_amount">
+            <div class="label-title">
+                <span>
+                    <span class="glyphicon glyphicon-check check-icon"></span>
+                    <span class="check-label">The investor ever taken equity in the startup<span ng-if="organization.taken_equity_amount">, {[{ organization.taken_equity_amount }]} THB</span></span>
+                </span>
+            </div>
+        </div>
+
+        <hr />
+
     </div>
-    <!-- End block give support to -->
+    <!-- End block Received funding record -->
 
-    <!-- Block give support by-->
-    <div ng-controller="BasicPartyListController" ng-init="init('/api/v1/party_support_party/', {dst: organization_id, limit: 6}, 'id', 'src', ['REQUIRED_APPROVAL', 'status'])" class="block block-support list-view" ng-class="should_show_list_class()">
+    <!-- Block Gave funding record -->
+    <div ng-controller="BasicPartyListController" ng-init="init('/api/v1/party_received_funding_party/', {status: 1, dst: organization_id, limit: 6}, '-date', 'src', ['REQUIRED_APPROVAL', 'status', ['data', 'function (item) { return item.money_amount + (item.date? (\', \' + moment(new Date(item.date)).fromNow()): \'\') + (item.title? (\', \' + item.title): \'\')}']])" class="block list-view" ng-class="should_show_list_class()">
 
-        <h2 class="block-title">{% trans "Supported by" %}</h2>
+        <h2 class="block-title">{% trans "Given Funding Records" %}</h2>
         <ul class="item-list support-list">
             <li class="support-item item" ng-repeat="party in party_list">
                 <div ng-include="'template_party_item_style_default_small.html'"></div>
@@ -282,18 +668,209 @@
         </ul>
 
         <a class="loadmore-wrapper" ng-click="load_more()" ng-class="load_more_class()">
-            <span ng-hide="is_loading" class="loadmore">Load more</span>
+            <span ng-hide="is_loading" class="btn-startup btn-startup--third">{% trans 'Load more' %}</span>
             <img ng-show="is_loading" ng-src="/static/images/loading.gif" class="loading-icon" >
         </a>
-        
-        <hr>
-    
-    </div>
-    <!-- End block give support by -->
 
+        <hr />
+
+    </div>
+    <!-- End block Received funding record -->
+
+    <!-- Block Received funding record -->
+    <div ng-if="organization.program && ((organization.program.batch_program && (organization.program.batch_program | hasKey:'amount_total_stage')) || organization.program.has_taken_equity_in_participating_team || organization.program.does_provide_financial_supports)" class="block">
+
+        <div ng-if="organization.program.batch_program && (organization.program.batch_program | hasKey:'amount_total_stage')">
+            <h2 class="block-title">{% trans "Financial Support and Investment" %}</h2>
+
+            <div class="label-title">
+                <strong>Approximate amount of investment in each stage (THB)</strong>
+            </div>
+            <table class="table table-bordered table-investment_stage_type">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th ng-repeat="item in organization.program.investment_stage_type" ng-if="item.title != 'Other'">{[{ item.title }]}</th>
+                        <th ng-if="organization.program.specific_stage">{[{ organization.program.specific_stage }]}</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="row in organization.program.batch_program">
+                        <th>{[{ $last ? 'Total' : 'Batch ' + ($index+1) }]}</th>
+                        <th ng-repeat="item in organization.program.investment_stage_type" ng-if="item.title != 'Other'">{[{ row['amount_' + item.permalink.split('-').join('_') + '_stage'] }]}</th>
+                        <th ng-if="organization.program.specific_stage">{[{ row['amount_specific_stage'] }]}</th>
+                        <th>{[{ row['amount_total_stage'] }]}</th>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div ng-if="organization.program.has_taken_equity_in_participating_team">
+            <div class="label-title">
+                <span>
+                    <span class="glyphicon glyphicon-check check-icon"></span>
+                    <span class="check-label">The organization ever taken equity in participanting teams</span>
+                </span>
+            </div>
+        </div>
+
+        <div ng-if="organization.program.does_provide_financial_supports">
+            <div class="label-title">
+                <span>
+                    <span class="glyphicon glyphicon-check check-icon"></span>
+                    <span class="check-label">The organozation provide grants or financial supports to the participanting teams<span ng-if="organization.program.amount_of_financial_supports">, {[{ organization.program.amount_of_financial_supports }]} THB</span></span>
+                </span>
+            </div>
+        </div>
+
+        <hr />
+
+    </div>
+    <!-- End block Received funding record -->
+
+    <div ng-if="organization.program && (organization.program.batch_program && (organization.program.batch_program | hasKey:'amount_total_stage'))" class="block">
+        <h2 class="block-title">{% trans "Participants Details" %}</h2>
+        <table class="table table-bordered table-program-facilities">
+            <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>Topic</th>
+                    <th ng-repeat="item in organization.program.batch_program.slice(0, -1)">{[{ item.title.replace('batch-', 'Batch ') }]}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>Total number of teams applying for the program</td>
+                    <td ng-repeat="item in organization.program.batch_program.slice(0, -1)">{[{ item.total_teams_applying || '-' }]}</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Total number of teams accepted for the program</td>
+                    <td ng-repeat="item in organization.program.batch_program.slice(0, -1)">{[{ item.total_teams_accepted || '-' }]}</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>Total number of participants accepted for the program</td>
+                    <td ng-repeat="item in organization.program.batch_program.slice(0, -1)">{[{ item.total_participants_accepted || '-' }]}</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>Total number of team graduted teams for the program</td>
+                    <td ng-repeat="item in organization.program.batch_program.slice(0, -1)">{[{ item.total_graduated_teams_accepted || '-' }]}</td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td>Number of training programs conducted and to be conducted</td>
+                    <td ng-repeat="item in organization.program.batch_program.slice(0, -1)">{[{ item.total_training_program || '-' }]}</td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td>Number of events, conferences seminars workshops organized or to be organized</td>
+                    <td ng-repeat="item in organization.program.batch_program.slice(0, -1)">{[{ item.total_organized_event || '-' }]}</td>
+                </tr>
+                <tr>
+                    <td>7</td>
+                    <td>Number of coaches, mentors and speakers in the program</td>
+                    <td ng-repeat="item in organization.program.batch_program.slice(0, -1)">{[{ item.total_coached_staff || '-' }]}</td>
+                </tr>
+                <tr>
+                    <td>8</td>
+                    <td>Number of assisting staffs in the program</td>
+                    <td ng-repeat="item in organization.program.batch_program.slice(0, -1)">{[{ item.total_assisting_staff || '-' }]}</td>
+                </tr>
+                <tr>
+                    <td>9</td>
+                    <td>Approximated number of new products, innovations or technologies to be developed and commercialized</td>
+                    <td ng-repeat="item in organization.program.batch_program.slice(0, -1)">{[{ item.total_approximated_products }]}</td>
+                </tr>
+            </tbody>
+        </table>
+        <br />
+
+        <hr />
+    </div>
+
+    <div ng-if="organization.program && organization.program.does_provide_working_spaces" class="block">
+
+        <h2 class="block-title">{% trans "Program Facilities" %}</h2>
+
+        <div class="row">
+
+            <div ng-if="working_spaces_information['address']" class="block-content-group col-sm-12">
+                <div class="label-title"><strong>Address</strong></div>
+                <div class="content -description">
+                    <span ng-bind="working_spaces_information['address']"></span>
+                </div>
+                <br />
+            </div>
+
+            <div ng-if="working_spaces_information['tel']" class="block-content-group col-sm-6">
+                <div class="label-title"><strong>Tel</strong></div>
+                <div class="content -description">
+                    <span ng-bind="working_spaces_information['tel']"></span>
+                </div>
+                <br />
+            </div>
+
+            <div ng-if="working_spaces_information['email']" class="block-content-group col-sm-6">
+                <div class="label-title"><strong>Email</strong></div>
+                <div class="content -description">
+                    <span ng-bind="working_spaces_information['email']"></span>
+                </div>
+                <br />
+            </div>
+
+            <div ng-if="organization.program.is_own_working_space" class="col-sm-12">
+                <div class="label-title">
+                    <span>
+                        <span class="glyphicon glyphicon-check check-icon"></span>
+                        <span class="check-label">The working space own by the organization</span>
+                    </span>
+                </div>
+                <br />
+            </div>
+
+            <div ng-if="organization.program.does_provide_service_and_facility && organization.program.get_service_and_facility_information" class="block-content-group col-sm-12">
+                <div class="label-title"><strong>Service or facility provided by the program</strong></div>
+                <div class="content -description">
+                    <ul>
+                        <li ng-repeat="item in organization.program.get_service_and_facility_information track by $index" ng-if="item.trim()">{[{ item }]}</li>
+                    </ul>
+                </div>
+                <br />
+            </div>
+
+
+        </div>
+        <hr />
+
+    </div>
+
+    <!-- Block Participated Startups -->
+    <div ng-controller="BasicPartyListController" ng-init="init('/api/v1/organization_participate/', {status: 1, dst: organization_id, limit: 6}, '', 'src', ['REQUIRED_APPROVAL', 'status', ['data', 'function (item) { return item.month ? (item.month + \' months\') : \'\' }']])" class="block list-view" ng-class="should_show_list_class()">
+
+        <h2 class="block-title">{% trans "Participated Startups" %}</h2>
+        <ul class="item-list support-list">
+            <li class="support-item item" ng-repeat="party in party_list">
+                <div ng-include="'template_party_item_style_default_small.html'"></div>
+            </li>
+        </ul>
+
+        <a class="loadmore-wrapper" ng-click="load_more()" ng-class="load_more_class()">
+            <span ng-hide="is_loading" class="btn-startup btn-startup--third">{% trans 'Load more' %}</span>
+            <img ng-show="is_loading" ng-src="/static/images/loading.gif" class="loading-icon" >
+        </a>
+
+        <hr />
+
+    </div>
+    <!-- End block  Participated Startups  -->
 
     <!-- Block partners / Clients by -->
-    <div ng-controller="BasicPartyListController" ng-init="init('/api/v1/party/' + organization_id + '/partners', {dst: organization_id, limit: 6}, '-ordering', '', ['REQUIRED_APPROVAL', 'status'])" class="block block-support list-view" ng-class="should_show_list_class()">
+    {% comment %}
+    <div ng-controller="BasicPartyListController" ng-init="init('/api/v1/party/' + organization_id + '/partners', {dst: organization_id, limit: 6}, '-ordering', '', ['REQUIRED_APPROVAL', 'status'])" class="block list-view" ng-class="should_show_list_class()">
 
         <h2 class="block-title">{% trans "Partners / Clients" %}</h2>
         <ul class="item-list support-list">
@@ -303,291 +880,30 @@
         </ul>
 
         <a class="loadmore-wrapper" ng-click="load_more()" ng-class="load_more_class()">
-            <span ng-hide="is_loading" class="loadmore">Load more</span>
-            <img ng-show="is_loading" ng-src="/static/images/loading.gif" class="loading-icon" >
-        </a>
-        
-        <hr>
-
-    </div>
-
-    <div ng-controller="BasicPartyListController" ng-init="init('/api/v1/user_experience_organization/', {dst: organization_id, src__isnull: false, limit: 6, offset: 0}, '', 'src', ['REQUIRED_APPROVAL', 'status', 'start_date', 'end_date', 'title', 'get_summary'])" class="block block-experience list-view" ng-class="should_show_list_class()">
-
-        <h2 class="block-title">{% trans "People who has experiences in organization" %}</h2>
-        <ul class="item-list support-list">
-            <li class="experience-item listview-item item" ng-repeat="party in party_list">
-                <div ng-include="'experience_item.html'"></div>
-            </li>
-        </ul>
-
-        <a class="loadmore-wrapper" ng-click="load_more()" ng-class="load_more_class()">
-            <span ng-hide="is_loading" class="loadmore">Load more</span>
+            <span ng-hide="is_loading" class="btn-startup btn-startup--third">{% trans 'Load more' %}</span>
             <img ng-show="is_loading" ng-src="/static/images/loading.gif" class="loading-icon" >
         </a>
 
-        <hr>
+        <hr />
 
     </div>
-
-    <!-- Block Invest to -->
-    <div ng-controller="BasicPartyListController" ng-init="init('/api/v1/party_invest_party/', {src: organization_id, limit: 6}, 'id', 'dst', ['REQUIRED_APPROVAL', 'status'])" class="block block-support list-view" ng-class="should_show_list_class()">
-
-        <h2 class="block-title">{% trans "Invest to" %}</h2>
-        <ul class="item-list support-list">
-            <li class="support-item item" ng-repeat="party in party_list">
-                <div ng-include="'template_party_item_style_text_list.html'"></div>
-            </li>
-        </ul>
-
-        <a class="loadmore-wrapper" ng-click="load_more()" ng-class="load_more_class()">
-            <span ng-hide="is_loading" class="loadmore">{% trans 'Load more' %}</span>
-            <img ng-show="is_loading" ng-src="/static/images/loading.gif" class="loading-icon" >
-        </a>
-    </div>
-    <!-- End block Invest to -->
-
-    <!-- Block Funding -->
-    <!--
-    <div ng-controller="SummaryController" ng-init="init('/api/v1/party_received_investing_party/sum/', {src: organization_id, fields: ['amount']})" class="block block-support list-view" ng-class="should_show_list_class()">
-
-        <h2 class="block-title">Funding</h2>
-        <div class="funding">
-            <div class="-total">{[{ summary.amount }]}</div>
-        </div>
-    </div>
-    -->
-
-    <div ng-controller="BasicPartyListController" ng-init="init('/api/v1/party_invest_party/', {dst: organization_id, limit: 6}, 'id', 'src', ['REQUIRED_APPROVAL', 'status'])" class="block block-support list-view" ng-class="should_show_list_class()">
-
-        <h2 class="block-title">{% trans "Investors" %}</h2>
-        <ul class="item-list support-list">
-            <li class="support-item item" ng-repeat="party in party_list">
-                <div ng-include="'template_party_item_style_default_small.html'"></div>
-            </li>
-        </ul>
-
-        <a class="loadmore-wrapper" ng-click="load_more()" ng-class="load_more_class()">
-            <span ng-hide="is_loading" class="loadmore">Load more</span>
-            <img ng-show="is_loading" ng-src="/static/images/loading.gif" class="loading-icon" >
-        </a>
-
-    </div>
-    <!-- End block Funding -->
+    {% endcomment %}
+    <!-- End block partners / Clients by -->
 
 </div>
-{% if not HIDE_FULL_PROFILE %}
-<div class="full-profile" ng-class="tab_active_class(2)">
-    <!--Menu tab description -->
-    <div id="full-profile-tab-1" ng-class="" empty-text ng-if="is_not_type_support()">
-        <div class="section-name">
-            <div class="section-count">Section 1 :</div>
-            <h2 class="block-title">General Information</h2>
-        </div>
-        <dl class="dl-horizontal">
-            <!-- <content-item content="{ label: 'Report Start Date', body: organization.report_start_date }" template="template_party_profile_item_style_date.html"></content-item> -->
-            <!-- <content-item content="{ label: 'Report End Date', body: organization.report_end_date }" template="template_party_profile_item_style_date.html"></content-item> -->
-            <content-item content="{ label: 'Name of the organization', body: organization.name }"></content-item>
-            <content-item content="{ label: 'Organization Web Address', body: organization.homepage_url }" template="template_party_profile_item_style_link.html"></content-item>
-            <content-item content="{ label: 'Year Founded', body: organization.year_founded }"></content-item>
-            <content-item content="{ label: 'Company description', body: organization.description }"></content-item>
-            <content-item content="{ label: 'Name of representative', body: organization.name_of_representative }"></content-item>
-            <content-item content="{ label: 'Gender of representataive', body: organization.gender_of_representative }"></content-item>
-            <content-item content="{ label: 'Brief bio of representative', body: organization.brief_bio_of_representative }"></content-item>
-            <content-item content="{ label: 'Legal Structure', body: organization.legal_structure }"></content-item>
-            <content-item content="{ label: 'Location of Organization\'s Headquarters', body: organization.location_of_organizations_headquarters }"></content-item>
-            <!--<content-item content="{ label: 'Phone number of Organization\'s Headquarters', body: organization.phone_number_of_organizations_headquarters }" template="template_party_profile_item_style_phone_list.html"></content-item>-->
-            <content-item content="{ label: 'Phone number of Organization\'s Headquarter', body: organization.email_of_contact_person }" template="template_party_profile_item_style_email_phone.html"></content-item>
-            <content-item content="{ label: 'Email of Contact Person', body: organization.email_of_contact_person }" template="template_party_profile_item_style_email.html"></content-item>
-            <!--<content-item content="{ label: 'Email of Contact Person', body: '<a class=\'btn-activity\'  data-target=\'#modal-contact\' data-toggle=\'modal\'>Send email</a>'}"></content-item>-->
-
-            <content-item content="{ label: 'Location of Organization\'s Operating Facilities', body: organization.location_of_organizations_operating_facilities }" template="template_party_profile_item_style_text_list.html" field="address"></content-item>
-            <content-item content="{ label: 'Name of referring organization', body: organization.name_of_referring_organization }"></content-item>
-            <content-item content="{ label: 'Contact information of referring organization', body: organization.contact_information_of_referring_organization }"></content-item>
-            <content-item content="{ label: 'Sector Activities', body: organization.sector_activities }" template="template_party_profile_item_style_text_list.html"></content-item>
-            <content-item content="{ label: 'Target Beneficiary', body: organization.target_beneficiary }"></content-item>
-            <content-item content="{ label: 'Mission Statement', body: organization.mission_statement }"></content-item>            
-        </dl>
-    </div>
-    <hr class="col-sm-12 hidden-xs">
-    <div id="full-profile-tab-2" ng-class="" empty-text ng-if="is_not_type_support()">
-        <div class="section-name">            
-            <div class="section-count">Section 2 :</div>
-            <h2 class="block-title">Products/Services and Thair Impacts</h2>
-        </div>  
-        <dl class="dl-horizontal">
-
-            <content-item content="{ label: 'Product/Service Type', body: organization.productservice_type }" template="template_party_profile_item_style_text_list.html"></content-item>
-            <content-item content="{ label: 'Product/Service Detailed Type', body: organization.productservice_detailed_type }"></content-item>
-            <content-item content="{ label: 'Product/Service Description', body: organization.productservice_description }"></content-item>
-
-        </dl>
-        <div class="table-responsive" ng-if="(organization.measurement_year_values.length && (organization.definition_of_unit_of_measure_1 || organization.definition_of_unit_of_measure_2 || organization.definition_of_unit_of_measure_3))">
-            <dl>Impact</dl>
-            <table class="table">
-                <thead>
-                  <tr>
-                    <th>Year of Impact Measurement (Year)</th>
-                    <td ng-repeat="measurement_year_value in organization.measurement_year_values" ng-clock>{[{ measurement_year_value.year_of_datapoint }]}</td>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr ng-if="organization.definition_of_unit_of_measure_1">
-                      <th>
-                          {[{ organization.definition_of_unit_of_measure_1 }]}
-                          <span ng-if="organization.unit_of_impact_measurement_1">
-                              ({[{ organization.unit_of_impact_measurement_1 }]})
-                          </span>
-                      </th>
-                      <td ng-repeat="measurement_year_value in organization.measurement_year_values">
-                          {[{ measurement_year_value.value_of_impact_1 }]}
-                      </td>
-                  </tr>
-                  <tr ng-if="organization.definition_of_unit_of_measure_2">
-                      <th>
-                          {[{ organization.definition_of_unit_of_measure_2 }]}
-                          <span ng-if="organization.unit_of_impact_measurement_2">
-                              ({[{ organization.unit_of_impact_measurement_2 }]})
-                          </span>
-                      </th>
-                      <td ng-repeat="measurement_year_value in organization.measurement_year_values">
-                          {[{ measurement_year_value.value_of_impact_2 }]}
-                      </td>
-                  </tr>
-                  <tr ng-if="organization.definition_of_unit_of_measure_3">
-                      <th>
-                          {[{ organization.definition_of_unit_of_measure_3 }]}
-                          <span ng-if="organization.unit_of_impact_measurement_3">
-                              ({[{ organization.unit_of_impact_measurement_3 }]})
-                          </span>
-                      </th>
-                      <td ng-repeat="measurement_year_value in organization.measurement_year_values">
-                          {[{ measurement_year_value.value_of_impact_3 }]}
-                      </td>
-                  </tr>
-
-                </tbody>
-          </table>
-        </div>
-
-        <dl class="dl-horizontal">
-            <content-item content="{ label: 'Client Type', body: organization.client_type }"></content-item>
-            <content-item content="{ label: 'Client Information', body: organization.client_information }"></content-item>
-            <content-item content="{ label: 'Client Locations', body: organization.client_locations }" template="template_party_profile_item_style_text_list.html"></content-item>
-
-        </dl>
-
-    </div>
-    <hr class="col-sm-12 hidden-xs">
-    <div id="full-profile-tab-3" ng-class="" empty-text ng-if="is_not_type_support()">
-        <div class="section-name">
-            <div class="section-count">Section 3 :</div>
-            <h2 class="block-title">Finance</h2>
-        </div>
-        <dl class="dl-horizontal">
-            <content-item content="{ label: 'Top 3 major investors, year and amount', body: organization.top_3_major_investors_year_and_amount, html_class: 'list' }" template="template_party_profile_item_style_text_list.html"></content-item>
-            <content-item content="{ label: 'Top 3 major donors, year and amount', body: organization.top_3_major_donors_year_and_amount, html_class: 'list' }" template="template_party_profile_item_style_text_list.html"></content-item>
-            <content-item content="{ label: 'Annual revenue', body: organization.annual_revenue }"></content-item>
-            <content-item content="{ label: 'Revenue Model', body: organization.revenue_model }"></content-item>
-            <!--
-            <content-item content="{ label: 'Earned Revenue', body: organization.earned_revenue }" template="template_party_profile_item_style_number.html"></content-item>
-            <content-item content="{ label: 'Cost of Goods Sold', body: organization.cost_of_goods_sold }" template="template_party_profile_item_style_number.html"></content-item>
-            <content-item content="{ label: 'Gross Profit', body: organization.gross_profit }" template="template_party_profile_item_style_number.html"></content-item>
-            <content-item content="{ label: 'Personnel Expense', body: organization.personnel_expense }" template="template_party_profile_item_style_number.html"></content-item>
-            <content-item content="{ label: 'Selling, General, and Administration Expense ', body: organization.selling_general_and_administration_expense }" template="template_party_profile_item_style_number.html"></content-item>
-            <content-item content="{ label: 'Operating Expense', body: organization.operating_expense }" template="template_party_profile_item_style_number.html"></content-item>
-            <content-item content="{ label: 'EBITDA', body: organization.ebitda }" template="template_party_profile_item_style_number.html"></content-item>
-            <content-item content="{ label: 'Interest Expense', body: organization.interest_expense }" template="template_party_profile_item_style_number.html"></content-item>
-            <content-item content="{ label: 'Depreciation and Amortization Expense', body: organization.depreciation_and_amortization_expense }" template="template_party_profile_item_style_number.html"></content-item>
-            <content-item content="{ label: 'Taxes', body: organization.taxes }" template="template_party_profile_item_style_number.html"></content-item>
-            <content-item content="{ label: 'Net Income Before Donations', body: organization.net_income_before_donations }" template="template_party_profile_item_style_number.html"></content-item>
-            <content-item content="{ label: 'Contributed Revenue', body: organization.contributed_revenue }" template="template_party_profile_item_style_number.html"></content-item>
-            <content-item content="{ label: 'Net Income', body: organization.net_income }" template="template_party_profile_item_style_number.html"></content-item>
-            -->
-            <!--
-            <content-item content="{ label: 'Current Assets', body: organization.current_assets }" template="template_party_profile_item_style_number.html"></content-item>
-            <content-item content="{ label: 'Total Value of Loans and Investments', body: organization.total_value_of_loans_and_investments }" template="template_party_profile_item_style_number.html"></content-item>
-            <content-item content="{ label: 'Financial Assets', body: organization.financial_assets }" template="template_party_profile_item_style_number.html"></content-item>
-            <content-item content="{ label: 'Fixed Assets', body: organization.fixed_assets }" template="template_party_profile_item_style_number.html"></content-item>
-            <content-item content="{ label: 'Total Assets', body: organization.total_assets }" template="template_party_profile_item_style_number.html"></content-item>
-            <content-item content="{ label: 'Retained Earnings', body: organization.retained_earnings }" template="template_party_profile_item_style_number.html"></content-item>
-            <content-item content="{ label: 'Accounts Payable', body: organization.accounts_payable }" template="template_party_profile_item_style_number.html"></content-item>
-            <content-item content="{ label: 'Accounts Receivable', body: organization.accounts_receivable }" template="template_party_profile_item_style_number.html"></content-item>
-            <content-item content="{ label: 'Current Liabilities', body: organization.current_liabilities }" template="template_party_profile_item_style_number.html"></content-item>
-            <content-item content="{ label: 'Financial Liabilities', body: organization.financial_liabilities }" template="template_party_profile_item_style_number.html"></content-item>
-            <content-item content="{ label: 'Loans Payable', body: organization.loans_payable }" template="template_party_profile_item_style_number.html"></content-item>
-            <content-item content="{ label: 'Total Liabilities', body: organization.total_liabilities }" template="template_party_profile_item_style_number.html"></content-item>
-            <content-item content="{ label: 'Equity or Net Assets', body: organization.equity_or_net_assets }" template="template_party_profile_item_style_number.html"></content-item>
-            <content-item content="{ label: 'Cash and Cash Equivalents- Period Start', body: organization.cash_and_cash_equivalents_period_start }" template="template_party_profile_item_style_number.html"></content-item>
-            <content-item content="{ label: 'Cash Flow from Operating Activities', body: organization.cash_flow_from_operating_activities }" template="template_party_profile_item_style_number.html"></content-item>
-            <content-item content="{ label: 'Cash Flow from Investing Activities ', body: organization.cash_flow_from_investing_activities }" template="template_party_profile_item_style_number.html"></content-item>
-            <content-item content="{ label: 'Cash Flow from Financing Activities', body: organization.cash_flow_from_financing_activities }" template="template_party_profile_item_style_number.html"></content-item>
-            <content-item content="{ label: 'New Investment Capital', body: organization.new_investment_capital }" template="template_party_profile_item_style_number.html"></content-item>
-            <content-item content="{ label: 'Net Cash Flow', body: organization.net_cash_flow }" template="template_party_profile_item_style_number.html"></content-item>
-            <content-item content="{ label: 'Cash and Cash Equivalents- Period End', body: organization.cash_and_cash_equivalents_period_end }" template="template_party_profile_item_style_number.html"></content-item>
-            <content-item content="{ label: 'Revenue Growth', body: organization.revenue_growth }" template="template_party_profile_item_style_number.html"></content-item>
-            <content-item content="{ label: 'Income Growth', body: organization.income_growth }" template="template_party_profile_item_style_number.html"></content-item>
-            <content-item content="{ label: 'Gross Margin', body: organization.gross_margin }" template="template_party_profile_item_style_number.html"></content-item>
-            <content-item content="{ label: 'Operating Profit Margin', body: organization.operating_profit_margin }" template="template_party_profile_item_style_number.html"></content-item>
-            <content-item content="{ label: 'Working Capital', body: organization.working_capital }" template="template_party_profile_item_style_number.html"></content-item>
-            <content-item content="{ label: 'Return on Assets (ROA)', body: organization.return_on_assets_roa }" template="template_party_profile_item_style_number.html"></content-item>
-            <content-item content="{ label: 'Return on Equity (ROE)', body: organization.return_on_equity_roe }" template="template_party_profile_item_style_number.html"></content-item>
-            <content-item content="{ label: 'Fixed Costs', body: organization.fixed_costs }" template="template_party_profile_item_style_number.html"></content-item>
-            <content-item content="{ label: 'Entrepreneur Investment', body: organization.entrepreneur_investment }" template="template_party_profile_item_style_number.html"></content-item>
-            <content-item content="{ label: 'Community Service Donations', body: organization.community_service_donations }" template="template_party_profile_item_style_number.html"></content-item>
-            <content-item content="{ label: 'Board of Directors', body: organization.board_of_directors }" template="template_party_profile_item_style_number.html"></content-item>
-            <content-item content="{ label: 'Female Ownership', body: organization.female_ownership }" template="template_party_profile_item_style_number.html"></content-item>
-            <content-item content="{ label: 'Financial Statement Review', body: organization.financial_statement_review }" template="template_party_profile_item_style_review.html"></content-item>
-            -->
-        </dl>
-        <div ng-class="hide_self_class()">
-            <a class="btn-activity" href="" message-staff-popup><span></span><span class="text-action">Contact administrator for more financial information</span></a>
-        </div>
-    </div>
-    <hr class="col-sm-12 hidden-xs">
-    <div id="full-profile-tab-4" ng-class="" empty-text ng-if="is_not_type_support()">
-        <div class="section-name">
-            <div class="section-count">Section 4 :</div>
-            <h2 class="block-title">Team</h2>
-        </div>
-        <dl class="dl-horizontal">
-            <content-item content="{ label: 'Name and title of key officers/directors', body: organization.team_information}" template="template_party_profile_item_style_text_list_with_subtitle.html" template="template_party_profile_item_style_number.html"></content-item>
-            <content-item content="{ label: 'Full-time Employees', body: organization.full_time_employees }" template="template_party_profile_item_style_number.html"></content-item>
-            <content-item content="{ label: 'Full-time Employees: Female', body: organization.full_time_employees_female }" template="template_party_profile_item_style_number.html"></content-item>
-            <content-item content="{ label: 'Part-time Employees', body: organization.part_time_employees }" template="template_party_profile_item_style_number.html"></content-item>
-            <content-item content="{ label: 'Part-time Employees: Female', body: organization.part_time_employees_female }" template="template_party_profile_item_style_number.html"></content-item>
-            <content-item content="{ label: 'Volunteer Hours Worked', body: organization.volunteer_hours_worked }" template="template_party_profile_item_style_number.html"></content-item>
-            <content-item content="{ label: 'Number of Individual Clients', body: organization.client_individuals }" template="template_party_profile_item_style_number.html"></content-item>
-            <content-item content="{ label: 'Number of Organizational Clients', body: organization.client_organizations }" template="template_party_profile_item_style_number.html"></content-item>
-        </dl>
-    </div>
-    <hr class="col-sm-12 hidden-xs">
-    <div id="full-profile-tab-5" ng-class="" empty-text ng-if="is_not_type_support()">
-        <div class="section-name">
-            <div class="section-count">Section 5 :</div>
-            <h2 class="block-title">Investment</h2>
-        </div>
-        <dl class="dl-horizontal">
-
-            <content-item content="{ label: 'Possible form of financial support', body: organization.possible_form_of_financial_support }"></content-item>
-            <content-item content="{ label: 'Potential size of investment', body: organization.potential_size_of_investment }" template="template_party_profile_item_style_number.html"></content-item>
-            <content-item content="{ label: 'Potential use of investment', body: organization.potential_use_of_investment }"></content-item>
-            <content-item content="{ label: 'Possible form of non-financial support', body: organization.possible_form_of_non_financial_support }"></content-item>
-        </dl>
-    </div>
-</div>
-{% endif %}
+<!-- End : Overview Section -->
 
 <div class="happening block-happening-detail" ng-class="tab_active_class(3)">
     <!-- Block Happening -->
     <div ng-controller="BasicPartyListController" ng-init="init('/api/v1/happening/', { limit: 5, offset: 0, unpublished: true, receiver_or_actor: organization_id })" class="">
-        <h2 class="block-title">Happening</h2>
-        <div ng-show="!is_loading && party_list.length == 0">Nothing happen.</div>
+        <h2 class="block-title">{% trans 'Happening' %}</h2>
+        <div ng-show="!is_loading && party_list.length == 0">{% trans 'Nothing happen.' %}</div>
         <ul class="list-unstyled happen-list -detailpage">
             <li class="row item" ng-repeat="party in party_list" ng-init="prev_party=party_list[$index-1]; party.days_ago=Math.round((new_Day()-new_Day(party.created))/(1000*3600*24));" ng-include="'happening_list_full.html'">
-            </li> 
+            </li>
         </ul>
         <a class="loadmore-wrapper" ng-click="load_more()" ng-class="load_more_class()">
-            <span ng-hide="is_loading" class="loadmore">Load more</span>
+            <span ng-hide="is_loading" class="btn-startup btn-startup--third">{% trans 'Load more' %}</span>
             <img  ng-show="is_loading" ng-src="/static/images/loading.gif" class="loading-icon" >
         </a>
     </div><!-- End block Happening -->
@@ -597,7 +913,7 @@
     <!-- Block Followers -->
     <div ng-controller="BasicPartyListController" ng-init="init('/api/v1/party_follow_party/', {dst: organization_id, limit: 10, status: 1, is_followers: true, status: 1}, '-id', 'src')" class="block block-followers-list-view" ng-class="should_show_list_class()">
 
-        <h2 class="block-title" >Followers</h2>
+        <h2 class="block-title" >{% trans 'Followers' %}</h2>
         <ul class="item-list followers-list">
             <li ng-repeat="relation in party_list" class="followers-item listview-item item {[{ relation.inst_type }]}-image">
                 <div class="list-view">
@@ -623,108 +939,12 @@
 
         </ul>
         <a class="loadmore-wrapper" ng-click="load_more()" ng-class="load_more_class()">
-            <span ng-hide="is_loading" class="loadmore">Load more</span>
+            <span ng-hide="is_loading" class="btn-startup btn-startup--third">{% trans 'Load more' %}</span>
             <img  ng-show="is_loading" ng-src="/static/images/loading.gif" class="loading-icon" >
         </a>
         <!-- End block give support to -->
     </div>
 </div>
-
-{% if not HIDE_FOLLOWING %}
-<div class="followers followings" ng-class="tab_active_class(5)">
-    <!-- Block Following -->
-    <div ng-controller="BasicPartyListController" ng-init="init('/api/v1/party_follow_party/', {src: organization_id, limit: 10, is_following: true, status: 1}, '-id', 'dst')" class="block block-followers-list-view" ng-class="should_show_list_class()">
-
-        <h2 class="block-title" >Following</h2>
-        <ul class="item-list followers-list">
-            <li ng-repeat="relation in party_list" class="followers-item listview-item item {[{ relation.inst_type }]}-image">
-                <div class="list-view">
-                    <div class="small-logo pull-left thumbnail">
-                        <span>
-                           <a ng-if="relation.get_status == notification_status.active" href="{[{ relation.absolute_url }]}"><img ng-src="{[{ relation.get_thumbnail_in_primary }]}"></a>
-                           <img ng-if="relation.get_status != notification_status.active" ng-src="{[{ relation.get_thumbnail_in_primary }]}">                        </span>
-                    </div>
-                    <div class="group-info" >
-                        <h3 class="title"><a ng-if="relation.get_status == notification_status.active" ng-href="{[{ relation.absolute_url }]}" ng-clock>{[{ relation.get_display_name }]}</a></h3>
-                        <h3 class="title" ng-if="relation.get_status != notification_status.active">{[{ relation.get_display_name }]}</h3>                        <div class="description" ng-clock>{[{ relation.get_summary }]}</div>
-                        <ul ng-if="relation.country" class="country-list item-list item-list-inline">
-                            <li class="country-item item" ng-cloak>
-                                <span class="country" ng-clock>{[{ relation.country.title }]}</span>
-                            </li>
-                        </ul>
-                    </div>
-                    <div follow-button party="relation" template="follow_text_button.html"></div>
-                </div>
-            </li>
-
-        </ul>
-        <a class="loadmore-wrapper" ng-click="load_more()" ng-class="load_more_class()">
-            <span ng-hide="is_loading" class="loadmore">Load more</span>
-            <img  ng-show="is_loading" ng-src="/static/images/loading.gif" class="loading-icon" >
-        </a>
-        <!-- End block give support to -->
-    </div>
-</div>
-{% endif %}
-
-{% if not HIDE_TESTIMONIAL %}
-<div class="testimonials" ng-class="tab_active_class(6)">
-
-    {% if user.is_authenticated %}
-    <alert id="alert_testimonials" ng-show="alert['testimonials'].show" type="{[{alert['testimonials'].type}]}" close="alert['testimonials'].show = !alert['testimonials'].show">{[{ alert['testimonials'].msg }]}</alert>
-
-    <form 
-        role="form"
-        ng-submit="
-        http_to_api_with_party({
-            api: '/api/v1/party_testify_party/', 
-            party: organization, 
-            params: {dst: organization.party_resource_uri, data: testimonials},
-            update_total: 'total_testify',
-            model_name: 'testimonials',
-            reload_when_done: true,
-            type: 'POST',
-        })"
-        novalidate 
-        class="form-testimonial"
-        ng-class="hide_self_class()"
-        ng-show="organization.get_display_name">
-        <div>
-            <label ng-clock>Give {[{ organization.get_display_name }]} a testimonial</label>
-            <img ng-show="is_posting" ng-src="/static/images/loading.gif" class="loading-icon">
-        </div>
-        <textarea class="form-control" rows="5" name="testimonials" ng-model="testimonials" required></textarea>
-        <button type="submit" class="btn btn-primary btn-post btn-pink">Send</button>
-        <a class="invite-link" data-target="#modal-invite" data-toggle="modal">Invite your friends to write testimonial<span class="icon-bubble"></span></a>
-
-    </form>
-    {% else %}
-
-    <a class="btn btn-primary btn-pink btn-post btn-no-bg" data-target="#modal-login" data-toggle="modal" ng-clock ng-show="organization.get_display_name">Write a testimonial <span class="icon-bubble"></span></a>
-
-    <a href="" class="btn btn-primary btn-pink btn-invite btn-no-bg" data-target="#modal-login" data-toggle="modal">Invite your friends <span class="icon-mail2"></span></a>
-
-    {% endif %}
-
-    <div ng-controller="BasicPartyListController" ng-init="init('/api/v1/party_testify_party/', { dst: organization_id, limit: 6, status: 1, offset: 0}, '', 'src', ['data', 'can_edit', 'id'])" class="block block-testimonial">
-        <h2 class="block-title">Testimonials</h2>
-    
-        <div ng-show="!is_loading && party_list.length == 0">Become the first to write a testimonial for {[{ organization.get_display_name }]}.</div>
-
-        <ul class="item-list event-list">
-            <li ng-repeat="party in party_list" class="item testimonial-item" ng-clock>
-                <div ng-include="'testimonials_list.html'"></div>
-            </li>
-        </ul>
-
-        <a class="loadmore-wrapper" ng-click="load_more()" ng-class="load_more_class()" ng-class="should_show_list_class()">
-            <span ng-hide="is_loading" class="loadmore">Load more</span>
-            <img ng-show="is_loading" ng-src="/static/images/loading.gif" class="loading-icon" >
-        </a>
-    </div><!-- End Block News -->
-
-</div>
-{% endif %}
 
 <!-- End block Happening -->
 
@@ -735,60 +955,215 @@
 
 <div ng-class="tab_list_active_class(1) || tab_list_active_class(3) || tab_list_active_class(4) || tab_active_class(5)">
 
+    <div class="block block-sidebar block-company-profile row _mb-30">
+        <div class="">
+            <div class="block-inner col-xs-12 border">
 
-    <!-- Block Topic -->
-    <div class="block block-sidebar block-topic" ng-if="organization.topics.length" id="block-topic-list">
-        <h2 class="block-title">{% trans "Focus" %}</h2>
+                <h2 class="block-title text-center text-uppercase">{% trans "Company Profile" %}</h2>
+                
+                <div class="row _mb-15">
+                    <div class="col-xs-12 d-flex justify-around flex-wrap">
+                        <div ng-if="organization.date_of_establishment" ng-cloak>
+                            <div class="text-center company-profile-item -founded">
+                                <div class="_fw-bold">{[{ organization.date_of_establishment || '-' | date:'M/yyyy' }]}</div>
+                                <span class="text-uppercase ">Founded</span>
+                            </div>
+                        </div>
+                        <div ng-if="organization.get_type_of_organization == 'startup'" ng-cloak>
+                            <div class="text-center company-profile-item -stage">
+                                <div class="_mb-0" ng-if="organization.stage_of_participants">
+                                    <div class="stage-item _mb-0 d-inline" ng-repeat="item in organization.stage_of_participants" ng-class="{'last':$last}"><span class="_fw-bold">{[{ item.title }]}</span></div>
+                                </div>
+                                <div ng-if="!organization.stage_of_participants.length"><span class="_fw-bold">-</span></div>
+                                <span class="text-uppercase">Stage</span>
+                            </div>
+                        </div>
+                        <div ng-if="organization.get_type_of_organization == 'investor'" ng-cloak>
+                            <div class="text-center company-profile-item -employees">
+                                <div class="_fw-bold">{[{ (organization.extra_information|toJSON).number_of_employees || '-' }]}</div>
+                                <span class="text-uppercase">Employees</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Block Funding Type -->
+                <div class="block block-sidebar block-topic" ng-if="organization.funding_type.length" id="block-funding_type">
+                    <hr class="_mt-10 _mb-10" />
+                    <span class="_fs-15 text-uppercase">{% trans "Funding Type" %}</span>
+                    <div class="block-content">
+                        <ul class="list-unstyled list-topic">
+                            <li ng-repeat="item in organization.funding_type" class="item">
+                                <span class="topics m2m-tag" ng-clock>
+                                    <a ng-href="/{[{ organization.get_type_of_organization }]}/browse/#?funding_type__permalink={[{ item.permalink }]}">
+                                        {[{ item.title }]}
+                                    </a>
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+                </div><!-- End Block Received Investment From -->
+                
+                <hr class="_mt-10 _mb-10" />
+
+                <div class="website _mb-5" ng-if="organization.homepage_url" ng-cloak>
+                    <div class="_mr-15"><icon class="iconfont icon-globe"></icon></div>
+                    <div><a href="{[{ organization.homepage_url }]}" class="homepage" target="_blank" ng-cloak>{[{ organization.homepage_url }]}</a></div>
+                </div>
+
+                <div class="location" ng-if="organization.location_of_organizations_headquarters" ng-cloak>
+                    <div class="_mr-15"><icon class="glyphicon glyphicon-map-marker"></icon></div>
+                    <div>{[{ organization.location_of_organizations_headquarters }]}</div>
+                </div>
+
+                <div ng-if="organization.other_channel" class="website d-flex flex-row flex-nowrap _mt-15">
+                    <div class="_mr-15"><icon class="glyphicon glyphicon-option-vertical"></icon></div>
+                    <div>
+                        <ul class="list-unstyled _mt-0">
+                            <li ng-repeat="item in organization.other_channel.split('\n')">
+                                <a href="{[{ item }]}" target="_blank">{[{ item }]}</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="block-social" ng-cloak>
+                    <hr class="_mt-10 _mb-10" />
+                    <div class="outlink">
+                        <ul class="social list-unstyled _mt-0 _mb-0">
+                            <li ng-if="organization.facebook_url"><a href="{[{ organization.facebook_url }]}" class="icon-social icon-facebook" target="_blank"></a></li>
+                            <li ng-if="!organization.facebook_url"><span class="icon-social icon-facebook no-link"></span></li>
+        
+                            <li ng-if="organization.twitter_url"><a href="{[{ organization.twitter_url }]}" class="icon-social icon-twitter" target="_blank"></a></li>
+                            <li ng-if="!organization.twitter_url"><span class="icon-social icon-twitter no-link"></span></li>
+        
+                            <li ng-if="organization.linkedin_url"><a href="{[{ organization.linkedin_url }]}" class="icon-social icon-linkedin" target="_blank"></a></li>
+                            <li ng-if="!organization.linkedin_url"><span class="icon-social icon-linkedin no-link"></span></li>
+        
+                            <li ng-if="organization.instagram_url"><a href="{[{ organization.instagram_url }]}" class="icon-social icon-instagram" target="_blank"></a></li>
+                            <li ng-if="!organization.instagram_url"><span class="icon-social icon-instagram no-link"></span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Block Vertical aka Focus Sectors -->
+    <div class="block block-sidebar block-topic" ng-if="organization.focus_sector.length" id="block-focus_sector-list">
+        <h2 class="block-title">{% trans "Verticals" %}</h2>
         <div class="block-content">
-            <ul class="list-unstyled list-topic" ng-class="{'field-expand-able': !organization.topicsExpland && organization.topicsHeight>240 }" report-my-height height="organization.topicsHeight">
-                <li ng-repeat="topic in organization.topics" class="item" ng-class="{'level-{[{topic.level}]}' : 1}">
+            <ul class="list-unstyled list-topic">
+                <li ng-repeat="item in organization.focus_sector" class="item">
                     <span class="topics m2m-tag" ng-clock>
-                        <a ng-href="/{[{ organization.organization_primary_role.permalink }]}/browse/#?topics__permalink={[{ topic.permalink }]}">{[{ topic.title }]}</a>
+                        <a ng-href="/{[{ organization.get_type_of_organization }]}/browse/#?focus_sector__permalink={[{ item.permalink }]}">{[{ item.title }]}</a>
                     </span>
                 </li>
             </ul>
-
-            <a class="field-expand-link" ng-click="organization.topicsExpland=true" ng-if="!organization.topicsExpland && organization.topicsHeight>240">{% trans "expand" %} <span class="caret"></span></a>
-
         </div>
         <hr class="horizon-line" />
-    </div><!-- End Block Topic -->
+    </div><!-- End Block Vertical aka Focus Sectors -->
 
-    <div class="block block-sidebar block-topic" ng-if="organization.product_launch" id="block-funding">
-        <h2 class="block-title">{% trans "Product Launch" %}</h2>
+    <!-- Block Investor Types -->
+    <div class="block block-sidebar block-topic" ng-if="organization.investor_type" id="block-investor_type-list">
+        <h2 class="block-title">{% trans "Investor Type" %}</h2>
         <div class="block-content">
             <ul class="list-unstyled list-topic">
                 <li class="item">
                     <span class="topics m2m-tag" ng-clock>
-                        <a ng-href="/{[{ organization.organization_primary_role.permalink }]}/browse/#?product_launch__permalink={[{ organization.product_launch.permalink }]}">{[{ organization.product_launch.title }]}</a>
+                        <a ng-href="/{[{ organization.get_type_of_organization }]}/browse/#?investor_type__permalink={[{ organization.investor_type.permalink }]}">{[{ organization.investor_type.title }]}</a>
                     </span>
                 </li>
             </ul>
-
         </div>
         <hr class="horizon-line" />
-    </div><!-- End Block Topic -->
+    </div><!-- End Block Investor Types -->
 
-    <!-- Block Topic -->
-    <div class="block block-sidebar block-topic" ng-if="organization.funding" id="block-funding">
-        <h2 class="block-title">{% trans "Funding" %}</h2>
+    <!-- Block Organization Types -->
+    <div class="block block-sidebar block-topic" ng-if="organization.organization_types.length" id="block-organization_types-list">
+        <h2 class="block-title">{% trans "Organization Types" %}</h2>
         <div class="block-content">
             <ul class="list-unstyled list-topic">
-                <li class="item">
+                <li ng-repeat="item in organization.organization_types" class="item">
                     <span class="topics m2m-tag" ng-clock>
-                        <a ng-href="/{[{ organization.organization_primary_role.permalink }]}/browse/#?funding__permalink={[{ organization.funding.permalink }]}"><b>{% trans "Funded" %}</b> {[{ organization.funding.title }]}</a>
+                        <a ng-href="/{[{ organization.get_type_of_organization }]}/browse/#?organization_types__permalink={[{ item.permalink }]}">{[{ item.title }]}</a>
                     </span>
                 </li>
-                <li class="item" ng-if="organization.request_funding">
+            </ul>
+        </div>
+        <hr class="horizon-line" />
+    </div><!-- End Block Organization Types -->
+
+    <!-- Block Focus Industry -->
+    <div class="block block-sidebar block-topic" ng-if="organization.focus_industry.length" id="block-focus_industry-list">
+        <h2 class="block-title">{% trans "Focus Industry" %}</h2>
+        <div class="block-content">
+            <ul class="list-unstyled list-topic">
+                <li ng-repeat="item in organization.focus_industry" class="item">
                     <span class="topics m2m-tag" ng-clock>
-                        <a ng-href="/{[{ organization.organization_primary_role.permalink }]}/browse/#?request_funding__permalink={[{ organization.request_funding.permalink }]}"><b>{% trans "Request Funding" %}</b> {[{ organization.request_funding.title }]}</a>
+                        <a ng-href="/{[{ organization.get_type_of_organization }]}/browse/#?focus_industry__permalink={[{ item.permalink }]}">{[{ item.title }]}</a>
+                    </span>
+                </li>
+            </ul>
+        </div>
+        <hr class="horizon-line" />
+    </div><!-- End Block Focus Industry -->
+
+    <!-- Block Received Investment from -->
+    <div class="block block-sidebar block-topic" ng-if="organization.financial_source.length" id="block-financial_source">
+        <h2 class="block-title">{% trans "Received Investment from" %}</h2>
+        <div class="block-content">
+            <ul class="list-unstyled list-topic">
+                <li ng-repeat="item in organization.financial_source" class="item">
+                    <span class="topics m2m-tag" ng-clock>
+                        <a ng-href="/{[{ organization.get_type_of_organization }]}/browse/#?financial_source__permalink={[{ item.permalink }]}">
+                            {[{ (item.title == 'Other' && organization.other_financial_source) || item.title }]}
+                        </a>
                     </span>
                 </li>
             </ul>
 
         </div>
         <hr class="horizon-line" />
-    </div><!-- End Block Topic -->
+    </div><!-- End Block Received Investment from -->
+
+    {% comment %}
+    <!-- Block : Assistance Required (aka Type of need) -->
+    <div class="block block-sidebar block-topic" ng-if="organization.assistance_organization.length" id="block-assistance_organization">
+        <h2 class="block-title">{% trans "Assistance Required" %}</h2>
+        <div class="block-content">
+            <ul class="list-unstyled list-topic">
+                <li ng-repeat="item in organization.assistance_organization" class="item">
+                    <span class="topics m2m-tag" ng-clock>
+                        <a ng-href="/{[{ organization.get_type_of_organization }]}/browse/#?assistance_organization__permalink={[{ item.assistance.permalink }]}" class="link-tooltip" data-toggle="tooltip" data-placement="left" title="{[{ item.description }]}">
+                            {[{ item.assistance.title }]}
+                        </a>
+                    </span>
+                </li>
+            </ul>
+        </div>
+        <hr class="horizon-line" />
+    </div><!-- End Block : Assistance Required -->
+    {% endcomment %}
+
+    <!-- Block Funding Type -->
+    <div class="block block-sidebar block-topic" ng-if="organization.program && organization.program.investment_stage_type.length" id="block-investment_stage_type">
+        <h2 class="block-title">{% trans "Stage" %}</h2>
+        <div class="block-content">
+            <ul class="list-unstyled list-topic">
+                <li ng-repeat="item in organization.program.investment_stage_type" class="item">
+                    <span class="topics m2m-tag" ng-clock>
+                        <a ng-href="/{[{ organization.get_type_of_organization }]}/browse/#?investment_stage_type__permalink={[{ item.permalink }]}">
+                            {[{ item.title }]}
+                        </a>
+                    </span>
+                </li>
+            </ul>
+
+        </div>
+        <hr class="horizon-line" />
+    </div><!-- End Block Received Investment From -->
 
     <!-- Block Happening -->
     <div class="block block-sidebar block-happening happening-se-detail" ng-controller="BasicPartyListController" ng-init="init('/api/v1/happening/', {limit: 2, offset: 0, unpublished: true, receiver_or_actor: organization_id})" ng-show="party_list.length > 0">
@@ -799,264 +1174,30 @@
                 </li>
             </ul>
             <a class="loadmore-wrapper clear" ng-click="selected_tab(3)" ng-class="load_more_class()">
-                <span ng-hide="is_loading" class="loadmore">{% trans "See All" %}</span>
+                <span ng-hide="is_loading" class="btn-startup btn-startup--third">{% trans "See All" %}</span>
             </a>
         </div>
         <hr class="horizon-line" />
     </div><!-- End Block Job -->
 
 
-    <!-- Block Type of Needs -->
-    <div ng-if="organization.type_of_needs.length && (organization.type_of_organization == organization.TYPE_SOCIAL_ENTERPRISE || organization.type_of_organization == organization.TYPE_STARTUP)" class="block block-sidebar block-topic">
-        <h2 class="block-title">{% trans "Type of Needs" %}</h2>
-        <div class="block-content">
-            <!-- Todo Show by not hard code
-            <ul class="item-list bullet" >
-                <li ng-repeat="type_of_need in organization.type_of_needs" class="item" >
-                    <h3 class="title">{[{ type_of_need.title }]}</h3>
-                </li>
-            </ul>
-            -->
-            <div class="type-of-type-of-need" ng-show="financial_list.length">{% trans "Financial" %}</div>
-            <ul class="list-unstyled list-topic" >
-                <li ng-repeat="type_of_need in financial_list" class="item" >
-                    <span class="topics m2m-tag">
-                        <a ng-href="/{[{ organization.organization_primary_role.permalink }]}/browse/#?type_of_needs__permalink={[{ type_of_need.permalink }]}" ng-clock>{[{ type_of_need.title }]}</a>
-                    </span>
-                </li>
-            </ul>
-            <div class="type-of-type-of-need" ng-show="type_of_needs_incubation.length">{% trans "Incubation" %}</div>
-            <ul class="list-unstyled list-topic">
-                <li ng-repeat="type_of_need in type_of_needs_incubation" class="item" >
-                    <span class="topics m2m-tag">
-                        <a ng-href="/{[{ organization.organization_primary_role.permalink }]}/browse/#?type_of_needs__permalink={[{ type_of_need.permalink }]}" ng-clock>{[{ type_of_need.title }]}</a>
-                    </span>
-                </li>
-            </ul>
-            <div class="type-of-type-of-need" ng-show="none_financial_list">{% trans "Advisory/Consulting" %}</div>
-            <ul class="list-unstyled list-topic" >
-                <li ng-repeat="type_of_need in none_financial_list" class="item" >
-                    <span class="topics m2m-tag">
-                        <a ng-href="/{[{ organization.organization_primary_role.permalink }]}/browse/#?type_of_needs__permalink={[{ type_of_need.permalink }]}" ng-clock>{[{ type_of_need.title }]}</a>
-                    </span>
-                </li>
-            </ul>
-            <div class="type-of-type-of-need" ng-show="type_of_needs_networking.length">{% trans "Networking" %}</div>
-            <ul class="list-unstyled list-topic" >
-                <li ng-repeat="type_of_need in type_of_needs_networking" class="item" >
-                    <span class="topics m2m-tag">
-                        <a ng-href="/{[{ organization.organization_primary_role.permalink }]}/browse/#?type_of_needs__permalink={[{ type_of_need.permalink }]}" ng-clock>{[{ type_of_need.title }]}</a>
-                    </span>
-                </li>
-            </ul>
-        </div>
-        <hr class="horizon-line"/>
-    </div><!-- End Block Need -->
-
-    <!-- Block Type of Supports -->
-    <div ng-if="organization.type_of_supports.length && organization.type_of_organization == organization.TYPE_SUPPORTING_ORGANIZATION" class="block block-sidebar block-static">
-        <h2 class="block-title">{% trans "Type of Supports/Investment" %}  </h2>
-        <div class="block-content">
-            <ul class="list-unstyled list-topic">
-                <li ng-repeat="type_of_support in organization.type_of_supports" class="item">
-                    <span class="topics m2m-tag">
-                        <a ng-href="/{[{ organization.organization_primary_role.permalink }]}/browse/#?type_of_supports__permalink={[{ type_of_support.permalink }]}" ng-clock>{[{ type_of_support.title }]}</a>
-                    </span>
-                </li>
-            </ul>
-        </div>
-        <hr class="horizon-line"/>
-    </div><!-- End Block Country -->
-    <div ng-if="organization.organization_types.length && organization.type_of_organization == organization.TYPE_SUPPORTING_ORGANIZATION" class="block block-sidebar block-static">
-        <h2 class="block-title">{% trans "Organization Type" %}</h2>
-        <div class="block-content">
-            <ul class="list-unstyled list-topic">
-                <li ng-repeat="organization_type in organization.organization_types" class="item">
-                    <span class="topics m2m-tag">
-                        <a ng-href="/supporter/browse/#?organization_types__permalink={[{ organization_type.permalink }]}" ng-clock>{[{ organization_type.title }]}</a>
-                    </span>
-                </li>
-            </ul>
-        </div>
-        <hr class="horizon-line"/>
-    </div><!-- End Block Country -->
-    <div ng-if="organization.investor_types.length && organization.type_of_organization == organization.TYPE_SUPPORTING_ORGANIZATION" class="block block-sidebar block-static">
-        <h2 class="block-title">{% trans "Investor Type" %}</h2>
-        <div class="block-content">
-            <ul class="list-unstyled list-topic">
-                <li ng-repeat="investor_type in organization.investor_types" class="item">
-                    <span class="topics m2m-tag">
-                        <a ng-href="/investor/browse/#?investor_types__permalink={[{ investor_type.permalink }]}" ng-clock>{[{ investor_type.title }]}</a>
-                    </span>
-                </li>
-            </ul>
-        </div>
-        <hr class="horizon-line"/>
-    </div><!-- End Block Country -->
-
-    {% if not HIDE_COUNTRY %}
-    <!-- Block Country -->
-    <div ng-if="organization.country" class="block block-sidebar block-static">
-        <h2 class="block-title">Country</h2>
-        <div class="block-content">
-            <ul class="item-list bullet">
-                <li class="item">
-                    <h3 class="title" ng-clock>{[{ organization.country.title }]}</h3>
-                </li>
-            </ul>
-        </div>
-        <hr class="horizon-line"/>
-    </div><!-- End Block Country -->
-    {% endif %}
-
     <!-- Block Job -->
     <div id="job" class="block block-sidebar block-job -sidebar job-se-detail" ng-controller="BasicPartyListController" ng-init="init('/api/v1/job/', {limit: 10, offset: 0, organization_jobs: organization_id})" ng-show="party_list.length > 0">
         <div class="block-content">
-            <h2 class="block-title">Job</h2>
+            <h2 class="block-title">Jobs</h2>
             <ul class="item-list ">
                 <li class="item item-job" ng-repeat="job in party_list" ng-include="'job_list.html'">
                 </li>
             </ul>
-            <a class="loadmore-wrapper" ng-click="load_more()" ng-class="load_more_class()">            
-                <span ng-hide="is_loading" class="loadmore">Load more</span>
+            <a class="loadmore-wrapper" ng-click="load_more()" ng-class="load_more_class()">
+                <span ng-hide="is_loading" class="btn-startup btn-startup--third">{% trans 'Load more' %}</span>
                 <img ng-show="is_loading" ng-src="/static/images/loading.gif" class="loading-icon" >
             </a>
         </div>
     </div><!-- End Block Job -->
-
-    {% if not HIDE_TESTIMONIAL %}
-    <!-- Block Testiminial -->
-    <div ng-controller="BasicPartyListController" ng-init="init('/api/v1/party_testify_party/', { dst: organization_id, limit: 1, status: 1 }, '', 'src', ['data'])" class="block block-sidebar block-testimonial" ng-class="should_show_list_class()">
-        <h2 class="block-title">Testimonials</h2>
-        <img ng-show="is_loading && party_list.length == 0" ng-src="/static/images/loading.gif" class="loading-icon">
-        
-        <div ng-show="!is_loading && party_list.length == 0">No testimonials</div>
-
-        <div ng-repeat="party in party_list" class="" ng-clock ng-include="'testimonials_list.html'"></div>
-        <a class="viewall" ng-click="selected_tab(6)" href="##testimonials" ng-show="party_list.length != 0">View all</a>
-    </div><!-- End Block Testiminial -->
-    {% endif %}
 
 </div><!-- End Block Testimonial -->
 
-<div ng-class="tab_active_class(6)">
-
-    <!-- Block Topic -->
-    <div ng-if="organization.topics.length" id="block-topic-list" class="block block-sidebar block-static">
-        <h2 class="block-title">Focus</h2>
-        <div class="block-content">
-            <ul class="item-list bullet">
-                <li ng-repeat="topic in organization.topics" class="item" ng-class="{'level-{[{topic.level}]}' : 1}">
-                    <h3 class="title">{[{ topic.title }]}</h3>
-                </li>
-            </ul>
-        </div>
-        <hr class="horizon-line"/>
-    </div><!-- End Block Topic -->
-
-
-    <!-- Block Type of Needs -->
-    <div ng-if="organization.type_of_needs.length && (organization.type_of_organization == organization.TYPE_SOCIAL_ENTERPRISE || organization.type_of_organization == organization.TYPE_STARTUP)" class="block block-sidebar block-static">
-        <h2 class="block-title">Type of Needs</h2>
-        <div class="block-content">
-            <!-- Todo Show by not hard code
-            <ul class="item-list bullet" >
-                <li ng-repeat="type_of_need in organization.type_of_needs" class="item" >
-                    <h3 class="title">{[{ type_of_need.title }]}</h3>
-                </li>
-            </ul>
-            -->
-            <div class="type-of-type-of-need" ng-show="financial_list.length">Financial</div>
-            <ul class="item-list bullet" >
-                <li ng-repeat="type_of_need_financial in financial_list" class="item" >
-                    <h3 class="title">{[{ type_of_need_financial.title }]}</h3>
-                </li>
-            </ul>
-            <div class="type-of-type-of-need" ng-show="none_financial_list">Non-financial</div>
-            <ul class="item-list bullet" >
-                <li ng-repeat="type_of_need_none_financial in none_financial_list" class="item" >
-                    <h3 class="title">{[{ type_of_need_none_financial.title }]}</h3>
-                </li>
-            </ul>
-        </div>
-        <hr class="horizon-line"/>
-    </div><!-- End Block Need -->
-
-
-    <!-- Block Type of Supports -->
-    <div ng-if="organization.type_of_supports.length && organization.type_of_organization == organization.TYPE_SUPPORTING_ORGANIZATION" class="block block-sidebar block-static">
-        <h2 class="block-title">Type of Supports</h2>
-        <div class="block-content">
-            <ul class="item-list bullet">
-                <li ng-repeat="type_of_support in organization.type_of_supports" class="item">
-                    <h3 class="title">{[{ type_of_support.title }]}</h3>
-                </li>
-            </ul>
-        </div>
-        <hr class="horizon-line"/>
-    </div><!-- End Type of Supports -->
-
-    <!-- Block Country -->
-    <div ng-if="organization.country" class="block block-sidebar block-static">
-        <h2 class="block-title">Country</h2>
-        <div class="block-content">
-            <ul class="item-list bullet">
-                <li class="item">
-                    <h3 class="title" ng-clock>{[{ organization.country.title }]}</h3>
-                </li>
-            </ul>
-        </div>
-        <hr class="horizon-line"/>
-    </div><!-- End Block Country -->
-
-
-    <!-- Block Job -->
-    <div class="block block-sidebar block-job job-se-detail" ng-controller="BasicPartyListController" ng-init="init('/api/v1/job/', {limit: 10, offset: 0, organization_jobs: organization_id})" ng-show="party_list.length > 0">
-        <h2 class="block-title">Jobs</h2>
-        <div class="block-content">
-            <ul class="item-list ">
-                <li class="item item-job" ng-repeat="job in party_list" ng-include="'job_list.html'">
-                </li>
-            </ul>
-            <a class="loadmore-wrapper" ng-click="load_more()" ng-class="load_more_class()">            
-                <span ng-hide="is_loading" class="loadmore">Load more</span>
-                <img ng-show="is_loading" ng-src="/static/images/loading.gif" class="loading-icon" >
-            </a>
-        </div>
-        <hr class="horizon-line"/>
-    </div><!-- End Block Job -->
-</div>
-
-<!-- Menu tab description -->
-<!-- tab 2 make tab 3 4 5 fail currentry dont know why -->
-<div ng-class="tab_active_class(2)" class="hidden-xs hidden-sm" id="sidebar-sticky">
-    <div class="block block-sidebar block-field-tab">
-        <ul class="tab-info">
-            <li class="tab-section active" ng-click="selected_full_profile_tab(1)" ng-class="full_profile_tab_list_active_class(1)">
-                <a href="">Section 1 :
-                <span class="title">General Information</span></a>
-            </li>
-            <li class="tab-section" ng-click="selected_full_profile_tab(2)" ng-class="full_profile_tab_list_active_class(2)">
-                <a href="">Section 2 :
-                <span class="title">Products/Services and Their Impacts</span></a>
-            </li>
-            <li class="tab-section" ng-click="selected_full_profile_tab(3)" ng-class="full_profile_tab_list_active_class(3)">
-                <a href="">Section 3 :
-                <span class="title">Finance</span></a>
-            </li>
-            <li class="tab-section" ng-click="selected_full_profile_tab(4)" ng-class="full_profile_tab_list_active_class(4)">
-                <a href="">Section 4 :
-                <span class="title">Team</span></a>
-            </li>
-            <li class="tab-section" ng-click="selected_full_profile_tab(5)" ng-class="full_profile_tab_list_active_class(5)">
-                <a href=""> Section 5 :
-                <span class="title">Investment</span></a>
-            </li>
-        </ul>
-    </div>
-
-</div>
-<!-- End Menu tab description -->
 {% endblock %}
 
 
@@ -1067,22 +1208,26 @@
     <div class="modal-dialog contact-popup base-action-modal">
         <div class="modal-content">
             <div class="modal-header">
-                <button class="close" data-dismiss="modal" type="button"><span>&times;</span><span class="sr-only">Close</span></button>
+                <button class="close" data-dismiss="modal" type="button"><span>&times;</span><span class="sr-only">{%  trans 'Close' %}</span></button>
                 <h2 class="modal-title" id="model-contact-label" >{% trans 'Contact' %}</h2>
             </div>
             <div class="modal-body">
 
                 <ul class="list-mini no-bullet item-list -contact">
                     <li class="item"><div class="field-label">{% trans "Name of representative" %}</div>{[{ organization.name_of_representative }]}</li>
-                    <li class="item"><div class="field-label">{% trans "Email of Contact Person" %}</div>{[{ organization.email_of_contact_person }]}</li>
-                    <li class="item"><div class="field-label">{% trans "Phone number" %}</div><span ng-repeat="value in organization.phone_number_of_organizations_headquarters">{[{ value.phone_number }]}<span ng-if="!$last">, </span></span></li>
-                    <li class="item"><div class="field-label">{% trans "Address" %}</div>{[{ organization.location_of_organizations_headquarters }]}</li>
+                    <li class="item"><div class="field-label">{% trans "Email of Contact Person" %}</div>{[{ organization.email_of_contact_person || working_spaces_information['email'] }]}</li>
+                    <li class="item"><div class="field-label">{% trans "Phone number" %}</div>
+                        <span ng-repeat="value in organization.phone_number_of_organizations_headquarters" ng-if="value.phone_number != organization.phone_number_of_contact_person">{[{ value.phone_number }]}<span ng-if="!$last || organization.phone_number_of_contact_person">, </span></span>
+                        <span ng-if="organization.phone_number_of_contact_person">{[{ organization.phone_number_of_contact_person }]}</span>
+                    </li>
+                    <li class="item"><div class="field-label">{% trans "Address" %}</div>{[{ organization.location_of_organizations_headquarters || working_spaces_information['address'] }]}</li>
                 </ul>
 
+                {% comment %}
                 {% if user.is_authenticated %}
 
                 <div class="text-center">
-                    <a class="link-sendmsg" data-toggle="collapse" data-target="#collapseMessage" aria-expanded="false" aria-controls="collapseMessage">คลิกที่นี่เพื่อส่งข้อความ</a>
+                    <a href="" class="link-sendmsg" data-toggle="collapse" data-target="#collapseMessage" aria-expanded="false" aria-controls="collapseMessage">{%  trans 'Click to send this message' %}</a>
                 </div>
                 </button>
                 <div class="collapse" id="collapseMessage">
@@ -1115,6 +1260,7 @@
                 <a data-target="#modal-login" data-toggle="modal" ng-cloak> {% trans "Please login before leave a message for" %} {[{ people.get_display_name }]}</a>
 
                 {% endif %}
+                {% endcomment %}
             </div>
 
         </div>
@@ -1158,7 +1304,7 @@
                 </form>
                 {% else %}
 
-                <a data-target="#modal-login" data-toggle="modal" ng-cloak> Please login before leave a message for {[{ people.get_display_name }]}</a>
+                <a data-target="#modal-login" data-toggle="modal" ng-cloak> {%  trans 'Please login before leave a message for' %} {[{ people.get_display_name }]}</a>
 
                 {% endif %}
             </div>

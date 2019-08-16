@@ -1,0 +1,27 @@
+<div class="controls form-group field-name-{{ field.name }}{% if 'data' in field.name %} field-type-date{% endif %}">
+    {% if label %}
+        <label class="field-container control-label {{ label_class }}" for="id_{{ field.name }}">
+            {{ label }} {% if field.is_required %}<span class="asterisk text-danger">*</span>{% endif %}
+        </label>
+    {% else %}
+        <label class="field-container control-label {{ label_class }}" for="id_{{ field.name }}">
+        {{ field.label }} {% if field.is_required %}<span class="asterisk text-danger">*</span>{% endif %}
+        </label>
+    {% endif %}
+    <div class="field-container">
+        <div class="{{ input_class }}">
+        {{ field }}
+        </div>
+
+        {% if field.help  %}
+        <span class="help-block">{{ field.help }}</span>
+        {% endif %}
+
+        {% if field.errors %}
+        <div class="errors alert alert-danger">
+        {{ field.errors }}
+        </div>
+        {% endif %}
+
+    </div>
+</div>

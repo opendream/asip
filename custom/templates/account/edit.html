@@ -1,0 +1,945 @@
+{% extends 'base_single.html' %}
+{% load i18n %}
+{% load staticfiles %}
+{% load common_tags %}
+
+{% block title %}
+    {% trans "Profile Settings" %}
+    <a href="{{ form.inst.get_absolute_url }}" class="btn btn-default btn-xs btn-view"><span class="glyphicon glyphicon-eye-open"></span> View result</a>
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript" src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
+{% endblock %}
+{% block css %}
+
+{% if settings.HIDE_ADVANCE_PROFILE %}
+
+{% endif %}
+
+{% endblock %}
+
+{% block wrapper_class %} --profile-setting{% endblock %}
+
+{% block content_class %} content-smart{% endblock %}
+
+
+{% block breadcrumb %}
+{% endblock %}
+
+
+{% block content %}
+
+<form method="post" class="form-horizontal form-account" role="form" enctype="multipart/form-data" ng-non-bindable>
+    {% csrf_token %}
+    <input type="text" name="prevent_autofill" id="prevent_autofill" value="" style="display:none;" />
+    <input type="password" name="password_fake" id="password_fake" value="" style="display:none;" />
+
+    {% if form.non_field_errors %}
+    <div class="errors alert alert-danger">{{ form.non_field_errors }}</div>
+    {% endif %}
+
+    <div class="controls form-group profile-setting__picture">
+        <label for="id_image" class="col-sm-3 control-label">{% trans "Picture" %}</label>
+        <div class="col-sm-7">
+            {{ form.image }}
+            <span class="help-block">
+                {% trans "Use square image for the best display." %}
+            </span>
+            {% if form.image.errors %}
+            <div class="errors alert alert-danger">{{ form.image.errors }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="controls form-group">
+        <label for="id_username" class="col-sm-3 control-label">{% trans "Username" %} *</label>
+        <div class="col-sm-7">
+            <input id="id_username" name="username" type="text" class="form-control" value="{{ form.username.value|default_if_none:"" }}" required>
+            {% if form.username.errors %}
+            <div class="errors alert alert-danger">{{ form.username.errors }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="controls form-group">
+        <label for="id_email" class="col-sm-3 control-label">{% trans "Email" %} *</label>
+        <div class="col-sm-7">
+            <input id="id_email" name="email" type="email" class="form-control" value="{{ form.email.value|default_if_none:"" }}" required{% if form.email.value %} readonly{% endif %}>
+            {% if form.email.errors %}
+            <div class="errors alert alert-danger">{{ form.email.errors }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="controls form-group{% if reset_password %} has-error has-feedback{% endif %}">
+        <label for="id_password" class="col-sm-3 control-label">{% trans "Password" %}</label>
+
+        {% if not reset_password and not form.password2.errors %}
+        <div class="col-sm-7">
+            <a class="display-link-control" href="#display-password-input">{% trans "click for change your password" %}</a>
+        </div>
+        {% endif %}
+
+        <div class="col-sm-7{% if not reset_password %} display-on-display-password-input-click{% endif %}"{% if not reset_password and  not form.password2.errors %} style="display: none;"{% endif %}>
+            <input id="id_password" name="password" type="password" class="form-control" value=""{% if reset_password %} required{% endif %}>
+            {% if reset_password %}
+            <span class="glyphicon glyphicon-warning-sign form-control-feedback"></span>
+            {% endif %}
+            {% if form.password.errors %}
+            <div class="errors alert alert-danger">{{ form.password.errors }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="controls form-group{% if reset_password %} has-error has-feedback{% endif %}{% if not reset_password %} display-on-display-password-input-click{% endif %}"{% if not reset_password and not form.password2.errors %} style="display: none;"{% endif %}>
+        <label for="id_password2" class="col-sm-3 control-label">{% trans "Confirm password" %}</label>
+        <div class="col-sm-7">
+            <input id="id_password2" name="password2" type="password" class="form-control" value=""{% if reset_password %} required{% endif %}>
+            {% if reset_password %}
+            <span class="glyphicon glyphicon-warning-sign form-control-feedback"></span>
+            {% endif %}
+            {% if form.password2.errors %}
+            <div class="errors alert alert-danger">{{ form.password2.errors }}</div>
+            {% endif %}
+        </div>
+    </div>
+    <div class="controls form-group">
+        <br /><br />
+        <h3 class="col-sm-3 control-label">Information</h3>
+        <hr class="col-sm-7 hidden-xs" />
+        <br /><br class="hidden-xs"/>
+    </div>
+    <div class="controls form-group{% if required_complete_profile %} has-error has-feedback{% endif %}">
+        <label for="id_first_name" class="col-sm-3 control-label">{% trans "First name" %} *</label>
+        <div class="col-sm-7">
+            <input id="id_first_name" name="first_name" type="text" class="form-control" value="{{ form.first_name.value|default_if_none:"" }}">
+            {% if form.first_name.errors %}
+            <div class="errors alert alert-danger">{{ form.first_name.errors }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="controls form-group{% if required_complete_profile %} has-error has-feedback{% endif %}">
+        <label for="id_last_name" class="col-sm-3 control-label">{% trans "Last name" %} *</label>
+        <div class="col-sm-7">
+            <input id="id_last_name" name="last_name" type="text" class="form-control" value="{{ form.last_name.value|default_if_none:"" }}">
+            {% if form.last_name.errors %}
+            <div class="errors alert alert-danger">{{ form.last_name.errors }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+
+    <div class="controls form-group">
+        <label for="id_gender" class="col-sm-3 control-label">{% trans "Gender" %}</label>
+        <div class="col-sm-7 radio">
+            {% for gender in form.gender %}
+                <span class="choice-item">
+                {{ gender.tag }}
+                 <label for="id_gender_{{ gender.index }}">{{ gender.choice_label }}</label>
+                </span>
+            {% endfor %}
+
+            {% if form.gender.errors %}
+            <div class="errors alert alert-danger">{{ form.gender.errors }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+
+    <div class="controls form-group -taxonomy{% if required_complete_profile %} has-error has-feedback{% endif %}">
+        <label for="id_user_roles" class="col-sm-3 control-label">{% trans "Roles" %} *</label>
+        <div class="col-sm-7 checkbox">
+            <ul>
+                {% for user_role in form.user_roles %}
+                <li>
+                    <span class="choice-item permalink-{{ user_role.choice_label|slugify }}">
+                        {{ user_role.tag }}
+                        <label for="id_user_roles_{{ user_role.index }}">{{ user_role.choice_label }}</label>
+                    </span>
+                </li>
+                {% endfor %}
+            </ul>
+
+            {% if form.user_roles.errors %}
+            <div class="errors alert alert-danger">{{ form.user_roles.errors }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+    {# ORGANIZATIONS #}
+
+    <div class="controls form-group -organizations hide">
+        <label for="id_organizations" class="field-container control-label col-sm-3">{% trans "Organizations" %} </label>
+        <div class="field-container-no-overflow field-inline-id_organizations col-sm-7">
+
+            <div class="inline-reference-container">
+                <div class="inline-reference-wrapper">
+
+                    <span class="help-block">
+                        {% trans "Enter organizations name." %}
+                    </span>
+
+                    {{ form.organizations }}
+
+                    {% if form.organizations.errors %}
+                    <div class="errors alert alert-danger">{{ form.organizations.errors }}</div>
+                    {% endif %}
+
+                    <div class="inline-create-link-wrapper">
+                        {% trans "or" %}
+                        <span class="glyphicon glyphicon-plus icostartup icon-plus"></span>
+                        <a href="{% url 'organization_inline_create' %}?_inline=1&no_script=1&_win_name=id_organizations" class="add-another-inline" id="add_id_organizations" target="organizations_inline">
+                            {% trans "Create organization" %}
+                        </a>
+                    </div>
+                </div>
+
+                <div class="add-another-inline-input-list" id="organizations_inline">
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="controls form-group">
+        <label for="id_occupation" class="col-sm-3 control-label">{% trans "Occupation" %}</label>
+        <div class="col-sm-7">
+            <input id="id_occupation" name="occupation" type="text" class="form-control" value="{{ form.occupation.value|default_if_none:"" }}">
+            {% if form.occupation.errors %}
+            <div class="errors alert alert-danger">{{ form.occupation.errors }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="controls form-group">
+        <label for="id_summary" class="col-sm-3 control-label">{% trans "Professional Headline" %}</label>
+        <div class="col-sm-7">
+            {{ form.summary }}
+            <span class="help-block">
+            Summary about your detail in {{ form.summary.field.widget.attrs.maxlength }} characters.
+            </span>
+            {% if form.summary.errors %}
+            <div class="errors alert alert-danger">{{ form.summary.errors }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="controls form-group">
+        <label for="id_description" class="col-sm-3 control-label">{% trans "Description" %}</label>
+        <div class="col-sm-7">
+            {{ form.description }}
+            <span class="help-block">
+            Your detail.
+            </span>
+            {% if form.description.errors %}
+            <div class="errors alert alert-danger">{{ form.description.errors }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+    {# EXTERNAL LINK #}
+    <div class="controls form-group -socialnetwork">
+        <br /><br />
+        <h3 class="col-sm-3 control-label">Social Networks</h3>
+        <hr class="col-sm-7 hidden-xs" />
+        <br /><br class="hidden-xs"/>
+    </div>
+    <div class="controls form-group -socialnetwork">
+        <label for="id_facebook_url" class="col-sm-3 control-label">{% trans "Facebook URL" %}</label>
+        <div class="col-sm-7">
+            <input id="id_facebook_url" name="facebook_url" type="text" class="form-control" value="{{ form.facebook_url.value|default_if_none:"" }}">
+            {% if form.facebook_url.errors %}
+            <div class="errors alert alert-danger">{{ form.facebook_url.errors }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="controls form-group -socialnetwork">
+        <label for="id_twitter_url" class="col-sm-3 control-label">{% trans "Twitter URL" %}</label>
+        <div class="col-sm-7">
+            <input id="id_twitter_url" name="twitter_url" type="text" class="form-control" value="{{ form.twitter_url.value|default_if_none:"" }}">
+            {% if form.twitter_url.errors %}
+            <div class="errors alert alert-danger">{{ form.twitter_url.errors }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="controls form-group -socialnetwork">
+        <label for="id_linkedin_url" class="col-sm-3 control-label">{% trans "Linkedin URL" %}</label>
+        <div class="col-sm-7">
+            <input id="id_linkedin_url" name="linkedin_url" type="text" class="form-control" value="{{ form.linkedin_url.value|default_if_none:"" }}">
+            {% if form.linkedin_url.errors %}
+            <div class="errors alert alert-danger">{{ form.linkedin_url.errors }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="controls form-group -socialnetwork">
+        <label for="id_homepage_url" class="col-sm-3 control-label">{% trans "Homepage URL" %}</label>
+        <div class="col-sm-7">
+            <input id="id_homepage_url" name="homepage_url" type="text" class="form-control" value="{{ form.homepage_url.value|default_if_none:"" }}">
+            {% if form.homepage_url.errors %}
+            <div class="errors alert alert-danger">{{ form.homepage_url.errors }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+    {% with form.job_status.value|do_or_false:form.job_public_status.value|do_or:form.job_position.value|do_or:form.money_salary.value|do_or:form.job_roles.value|do_or:form.job_locations.value|do_or:form.skills.value|do_or:form.job_criteria.value|do_or:form.experiences.value|do_or:form.portfolios.value as open_job %}
+
+    {% comment %}
+    <h3 class="col-sm-12 control-label text-center">
+        <a class="btn btn-primary" role="button" data-toggle="collapse" href="#advance" aria-expanded="false" aria-controls="advance">
+            {% trans "Find the right opportunities" %} ›
+        </a>
+    </h3>
+    <div class="controls form-group -socialnetwork">
+        <br /><br />
+        <h3 class="col-sm-3 control-label">
+            <a class="btn btn-primary" role="button" data-toggle="collapse" href="#advance" aria-expanded="false" aria-controls="advance">
+                {% trans "Find the right opportunities" %} ›
+            </a>
+        </h3>
+        <hr class="col-sm-7 hidden-xs" />
+        <br /><br class="hidden-xs"/>
+    </div>
+    {% endcomment %}
+
+
+    {% if request.GET.advance or open_job %}
+
+    {% else %}
+    <div class="controls form-group">
+        <br /><br class="hidden-xs"/>
+        <h3 class="col-sm-3 control-label">{% trans "Find the right opportunities" %}</h3>
+        <div class="col-sm-7 hidden-xs">
+
+            <hr />
+            
+            {% trans "Your answers determine which jobs we recommend for you and which startups see your profile" %}
+
+            <div class="_mt-15">
+                <a class="btn btn-primary btn-orange" role="button" data-toggle="collapse" href="#advance" aria-expanded="false" aria-controls="advance">
+                    {% trans "Fill/Update job profile" %} <span class="caret caret-down"></span>
+                </a>
+            </div>
+
+        </div>
+        <br /><br class="hidden-xs"/>
+    </div>
+    {% endif %}
+
+    <div id="advance" class="collapse{% if request.GET.advance or open_job %} in{% endif %}">
+
+
+        {# TAXONOMY #}
+        <div class="hide controls form-group -taxonomy">
+            <br />
+            <h3 class="col-sm-3 control-label">Taxonomy</h3>
+            <hr class="col-sm-7 hidden-xs" />
+            <br /><br class="hidden-xs"/>
+        </div>
+
+        <div class="hide controls form-group -taxonomy"{% if HIDE_COUNTRY %} style="display: none;"{% endif %}>
+            <label for="id_country" class="col-sm-3 control-label">{% trans "Country" %}</label>
+            <div class="col-sm-7">
+                {{ form.country }}
+            </div>
+        </div>
+
+        <div class="hide controls form-group -taxonomy">
+            <label for="id_interests" class="col-sm-3 control-label">{% trans "Interests" %}</label>
+            <div class="col-sm-7 checkbox">
+                <ul>
+                    {% for interest in form.interests %}
+                    <li>
+                        <span class="choice-item">
+                            {{ interest.tag }}
+                            <label for="id_interests_{{ interest.index }}">{{ interest.choice_label }}</label>
+                        </span>
+                    </li>
+                    {% endfor %}
+                </ul>
+
+                {% if form.interests.errors %}
+                <div class="errors alert alert-danger">{{ form.interests.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+
+        <div class="controls form-group -job-attachments{% if required_job and not form.attachments.value %} has-error has-feedback{% endif %}">
+            <br /><br />
+
+            <h3 class="col-sm-3 control-label">Job Profile / Contact</h3>
+            <div class="col-sm-7">
+                <hr class="hidden-xs"/>
+                <span class="help-block">
+                    This information will never be shown on your public profile
+                </span>
+            </div>
+            <br /><br class="hidden-xs"/>
+        </div>
+
+        <div class="controls form-group -job-attachments{% if required_job and not form.attachments.value %} has-error has-feedback{% endif %}">
+
+            <label for="id_attachments" class="col-sm-3 control-label">Résumé</label>
+            <div class="col-sm-7">
+                {{ form.attachments }}
+
+                {% if form.attachments.errors %}
+                <div class="errors alert alert-danger">{{ form.attachments.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="controls form-group -job-job-email{% if form.job_email.errors %} has-error has-feedback{% endif %}">
+
+            <label for="id_job_email" class="col-sm-3 control-label">Contact Email</label>
+            <div class="col-sm-7">
+                {{ form.job_email }}
+
+                {% if form.job_email.errors %}
+                <div class="errors alert alert-danger">{{ form.job_email.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="controls form-group -job-job-telephone{% if form.job_telephone.errors %} has-error has-feedback{% endif %}">
+
+            <label for="id_job_telephone" class="col-sm-3 control-label">Phone Number</label>
+            <div class="col-sm-7">
+                {{ form.job_telephone }}
+
+                {% if form.job_telephone.errors %}
+                <div class="errors alert alert-danger">{{ form.job_telephone.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="controls form-group -job-status{% if required_job and not form.job_status.value %} has-error has-feedback{% endif %}">
+            <br /><br />
+            <h3 class="col-sm-3 control-label">Where are you in your job search?</h3>
+            <hr class="col-sm-7 hidden-xs" />
+            <br /><br class="hidden-xs"/>
+        </div>
+
+        <div class="controls form-group -job-status{% if required_job and not form.job_status.value %} has-error has-feedback{% endif %}">
+            <label for="id_job_status" class="col-sm-3 control-label">&nbsp</label>
+            <div class="col-sm-7">
+
+                <ul>
+                {% for status in form.job_status %}
+
+                    <li class="list-stick">
+                        <div class="input-stick">
+                            {{ status.tag }}
+                        </div>
+                         <label for="id_job_status_{{ status.index }}" class="label-stick">{{ status.choice_label|safe }}</label>
+                    </li>
+
+                {% endfor %}
+                </ul>
+
+                <span class="help-block">
+                {{ form.job_status.help_text }}
+                </span>
+                {% if form.job_status.errors %}
+                <div class="errors alert alert-danger">{{ form.job_status.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="controls form-group -money-salary{% if required_job and form.job_public_status.value == None %} has-error has-feedback{% endif %}">
+            <br /><br />
+            <h3 class="col-sm-3 control-label">Do you want startups to see your jobs profile?</h3>
+
+            <div class="col-sm-7">
+                <hr class="hidden-xs"/>
+                <span class="help-block">
+                    This controls whether or not your profile shows up in search results. Your current company will never see that you are looking for a job, no matter what you choose
+                </span>
+            </div>
+            <br /><br class="hidden-xs"/>
+        </div>
+
+        <div class="controls form-group -job-public-status{% if required_job and form.job_public_status.value == None %} has-error has-feedback{% endif %}">
+            <label for="id_job_public_status" class="col-sm-3 control-label">&nbsp</label>
+            <div class="col-sm-7">
+                <ul>
+                {% for status in form.job_public_status %}
+
+                    <li class="list-stick">
+                        <div class="input-stick">
+                            {{ status.tag }}
+                        </div>
+                         <label for="id_job_public_status_{{ status.index }}" class="label-stick">{{ status.choice_label|safe }}</label>
+                    </li>
+
+                {% endfor %}
+                </ul>
+
+                <span class="help-block">
+                {{ form.job_public_status.help_text }}
+                </span>
+                {% if form.job_public_status.errors %}
+                <div class="errors alert alert-danger">{{ form.job_public_status.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="controls form-group -money-salary{% if required_job and not form.job_position.value %} has-error has-feedback{% endif %}">
+            <br /><br />
+            <h3 class="col-sm-3 control-label">What type of job are you interested in?</h3>
+
+            <div class="col-sm-7">
+                <hr class="hidden-xs"/>
+                <span class="help-block">
+                    Choose just one for now. You can change this or add more types later
+                </span>
+            </div>
+            <br /><br class="hidden-xs"/>
+        </div>
+
+        <div class="controls form-group -job-position{% if required_job and not form.job_position.value %} has-error has-feedback{% endif %}">
+            <label for="id_job_position" class="col-sm-3 control-label">&nbsp</label>
+            <div class="col-sm-7">
+                <ul>
+                {% for status in form.job_position %}
+
+                    <li class="list-stick">
+                        <div class="input-stick">
+                            {{ status.tag }}
+                        </div>
+                         <label for="id_job_position_{{ status.index }}" class="label-stick">{{ status.choice_label|safe }}</label>
+                    </li>
+
+                {% endfor %}
+                </ul>
+
+                <span class="help-block">
+                {{ form.job_position.help_text }}
+                </span>
+                {% if form.job_position.errors %}
+                <div class="errors alert alert-danger">{{ form.job_position.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="controls form-group -money-salary{% if required_job and not form.money_salary.value %} has-error has-feedback{% endif %}">
+            <br /><br />
+            <h3 class="col-sm-3 control-label">What is your desired salary?</h3>
+
+            <div class="col-sm-7">
+                <hr class="hidden-xs"/>
+                <span class="help-block">
+                    This information will never be shown on your public profile
+                </span>
+            </div>
+            <br /><br class="hidden-xs"/>
+        </div>
+
+        <div class="controls form-group -money-salary{% if required_job and not form.money_salary.value %} has-error has-feedback{% endif %}">
+            <label for="id_money_salary" class="col-sm-3 control-label">&nbsp</label>
+            <div class="col-sm-7">
+                <div class="field-money">
+                    {{ form.money_salary}}
+                </div>
+                <span class="help-block">
+                {{ form.money_salary.help_text }}
+                </span>
+                {% if form.money_salary.errors %}
+                <div class="errors alert alert-danger">{{ form.money_salary.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="controls form-group -job-roles{% if required_job and not form.job_roles.value %} has-error has-feedback{% endif %}">
+            <br /><br />
+            <h3 class="col-sm-3 control-label">What kind of role are you looking for?</h3>
+            <div class="col-sm-7">
+                <hr class="hidden-xs"/>
+                <span class="help-block">
+                    Tip: You can select more than one
+                </span>
+            </div>
+            <br /><br class="hidden-xs"/>
+        </div>
+
+        <div class="controls form-group -job-roles{% if required_job and not form.job_roles.value %} has-error has-feedback{% endif %}">
+            <label for="id_job_roles" class="col-sm-3 control-label">&nbsp</label>
+            <div class="col-sm-7 checkbox">
+                <ul>
+                    {% for job_role in form.job_roles %}
+                    <li>
+                        <span class="choice-item">
+                            {{ job_role.tag }}
+                            <label for="id_job_roles_{{ job_role.index }}">{{ job_role.choice_label }}</label>
+                        </span>
+                    </li>
+                    {% endfor %}
+                </ul>
+
+                {% if form.job_roles.errors %}
+                <div class="errors alert alert-danger">{{ form.job_roles.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="controls form-group -skill">
+            <label for="id_skills" class="col-sm-3 control-label">{% trans "Skills" %}</label>
+            <div class="col-sm-7">
+                <span class="help-block">
+                    {% trans "Separate by comma, space, tab or enter" %}<br/>
+                    Ex: golang, php, python, illustrator, sketch, microsoft word, microsoft excel
+                </span>
+                {{ form.skills}}
+                {% if form.skills.errors %}
+                <div class="errors alert alert-danger">{{ form.skills.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+
+
+        <div class="controls form-group -job-locations{% if required_job and not form.job_locations.value %} has-error has-feedback{% endif %}">
+            <br /><br />
+            <h3 class="col-sm-3 control-label">What locations do you want to work in?</h3>
+            <div class="col-sm-7">
+                <hr class="hidden-xs"/>
+                <span class="help-block">
+                </span>
+            </div>
+            <br /><br class="hidden-xs"/>
+        </div>
+
+        <div class="controls form-group -job-locations{% if required_job and not form.job_locations.value %} has-error has-feedback{% endif %}">
+            <label for="id_job_locations" class="col-sm-3 control-label">&nbsp</label>
+            <div class="col-sm-7 checkbox">
+                <ul>
+                    {% for job_location in form.job_locations %}
+                    <li>
+                        <span class="choice-item">
+                            {{ job_location.tag }}
+                            <label for="id_job_locations_{{ job_location.index }}">{{ job_location.choice_label }}</label>
+                        </span>
+                    </li>
+                    {% endfor %}
+                </ul>
+
+                {% if form.job_locations.errors %}
+                <div class="errors alert alert-danger">{{ form.job_locations.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+
+        <div class="controls form-group -job-criteria{% if required_job and not form.job_criteria.value %} has-error has-feedback{% endif %}">
+            <br /><br />
+            <h3 class="col-sm-3 control-label">Describe what you are looking for in your next job</h3>
+
+            <div class="col-sm-7">
+                <hr class="hidden-xs"/>
+                <span class="help-block">
+                    Startups tell us this is one of the first things they look at in a profile
+                </span>
+            </div>
+            <br /><br class="hidden-xs"/>
+        </div>
+
+        <div class="controls form-group -job-criteria{% if required_job and not form.job_criteria.value %} has-error has-feedback{% endif %}">
+            <label for="id_job_criteria" class="col-sm-3 control-label">&nbsp</label>
+            <div class="col-sm-7">
+                {{ form.job_criteria }}
+                <div class="help-block">
+                    <ul>
+                        <li>Keep it short and direct in {{ form.job_criteria.field.max_length }} characters</li>
+                        <li>Mention any qualities or values that are important to you</li>
+                        <li>Add any technologies or industries that interest you</li>
+                    </ul>
+                </div>
+                {% if form.job_criteria.errors %}
+                <div class="errors alert alert-danger">{{ form.job_criteria.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+
+        {# PORTFOLIOS #}
+        <div class="controls form-group -portfolios">
+            <br /><br />
+            <h3 class="col-sm-3 control-label">Portfolios</h3>
+            <hr class="col-sm-7 hidden-xs" />
+            <br /><br class="hidden-xs"/>
+        </div>
+
+        <div class="controls form-group -portfolios">
+            <label for="id_portfolios" class="col-sm-3 control-label">&nbsp</label>
+            <div class="col-sm-7">
+                {{ form.portfolios }}
+
+                <div class="popup-create-link-wrapper">
+                    <a href="{% url 'portfolio_create' %}?_popup=1" class="autocomplete-add-another" id="add_id_portfolios">
+                        <span class="glyphicon glyphicon-plus"></span>
+                        {% trans "Create portfolio" %}
+                        <!-- <img src="/static/admin/img/icon_addlink.gif" width="10" height="10" alt="{%  trans "Add new" %}"> -->
+                    </a>
+                </div>
+
+                <span class="help-block">
+                    {% trans "Add portfolios to display on your profile." %}
+                </span>
+                {% if form.portfolios.errors %}
+                <div class="errors alert alert-danger">{{ form.portfolios.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+
+        {# experiences #}
+        <div class="controls form-group -experiences">
+            <br /><br />
+            <h3 class="col-sm-3 control-label">Experiences</h3>
+            <hr class="col-sm-7 hidden-xs" />
+            <br /><br class="hidden-xs"/>
+        </div>
+
+        <div class="controls form-group -experiences">
+            <label for="id_experiences" class="col-sm-3 control-label">&nbsp</label>
+            <div class="col-sm-7">
+                {{ form.experiences }}
+
+                <div class="popup-create-link-wrapper">
+                    <a href="{% url 'user_experience_organization_create' %}?_popup=1" class="autocomplete-add-another" id="add_id_experiences">
+                        <span class="glyphicon glyphicon-plus"></span>
+                        {% trans "Create experience" %}
+                        <!-- <img src="/static/admin/img/icon_addlink.gif" width="10" height="10" alt="{%  trans "Add new" %}"> -->
+                    </a>
+                </div>
+
+                <span class="help-block">
+                    {% trans "Add experiences to display on your profile." %}
+                </span>
+                {% if form.experiences.errors %}
+                <div class="errors alert alert-danger">{{ form.experiences.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+
+        <div class="hide controls form-group -notification" id="email-notification-settings">
+            <br /><br />
+            <h3 class="col-sm-3 control-label ">Email notification:</h3>
+            <hr class="col-sm-7 hidden-xs" />
+            <br /><br class="hidden-xs"/>
+        </div>
+
+        <div class="hide controls form-group -notification">
+            <label for="id_notification_allow_email_send" class="col-sm-3 control-label">{% trans "Your account" %}</label>
+            <div class="col-sm-7 checkbox">
+                <ul>
+                    <li>
+                        <span class="choice-item">
+                            {{ form.notification_allow_email_send_organizationhaspeople }}
+                            <label for="notification_allow_email_send_organizationhaspeople" class="col-sm-3 control-label">{% trans "Organization adds you as people in organization." %}</label>
+                        </span>
+                        {% if form.notification_allow_email_send_organizationhaspeople.errors %}
+                        <div class="errors alert alert-danger">{{ form.notification_allow_email_send_organizationhaspeople.errors }}</div>
+                        {% endif %}
+                    </li>
+                    <li>
+                        <span class="choice-item">
+                            {{ form.notification_allow_email_send_partysupportparty }}
+                            <label for="notification_allow_email_send_partysupportparty" class="col-sm-3 control-label">{% trans "Organization [gives support to/is supported by] you." %}</label>
+                        </span>
+                        {% if form.notification_allow_email_send_partysupportparty.errors %}
+                        <div class="errors alert alert-danger">{{ form.notification_allow_email_send_partysupportparty.errors }}</div>
+                        {% endif %}
+                    </li>
+                    <li>
+                        <span class="choice-item">
+                            {{ form.notification_allow_email_send_partyfollowparty}}
+                            <label for="notification_allow_email_send_partyfollowparty" class="col-sm-3 control-label">{% trans "Someone is now following you." %}</label>
+                        </span>
+                        {% if form.notification_allow_email_send_partyfollowparty.errors %}
+                        <div class="errors alert alert-danger">{{ form.notification_allow_email_send_partyfollowparty.errors }}</div>
+                        {% endif %}
+                    </li>
+                    <li>
+                        <span class="choice-item">
+                            {{ form.notification_allow_email_send_partycontactparty}}
+                            <label for="notification_allow_email_send_partycontactparty" class="col-sm-3 control-label">{% trans "Someone sends a message to you." %}</label>
+                        </span>
+                        {% if form.notification_allow_email_send_partycontactparty.errors %}
+                        <div class="errors alert alert-danger">{{ form.notification_allow_email_send_partycontactparty.errors }}</div>
+                        {% endif %}
+                    </li>
+                    <li>
+                        <span class="choice-item">
+                            {{ form.notification_allow_email_send_partytestifyparty }}
+                            <label for="notification_allow_email_send_partytestifyparty" class="col-sm-3 control-label">{% trans "Someone gives testimonial to you." %}</label>
+                        </span>
+                        {% if form.notification_allow_email_send_partytestifyparty.errors %}
+                        <div class="errors alert alert-danger">{{ form.notification_allow_email_send_partytestifyparty.errors }}</div>
+                        {% endif %}
+                    </li>
+                    <li>
+                        <span class="choice-item">
+                            {{ form.notification_allow_email_send_partyinvitetestifyparty }}
+                            <label for="notification_allow_email_send_partyinvitetestifyparty" class="col-sm-3 control-label">{% trans "Someone invites you to give a testimonial." %}</label>
+                        </span>
+                        {% if form.notification_allow_email_send_partyinvitetestifyparty.errors %}
+                        <div class="errors alert alert-danger">{{ form.notification_allow_email_send_partyinvitetestifyparty.errors }}</div>
+                        {% endif %}
+                    </li>
+                    <li>
+                        <span class="choice-item">
+                            {{ form.notification_allow_email_send_partylove }}
+                            <label for="notification_allow_email_send_partylove" class="col-sm-3 control-label">{% trans "Someone loves you." %}</label>
+                        </span>
+                        {% if form.notification_allow_email_send_partylove.errors %}
+                        <div class="errors alert alert-danger">{{ form.notification_allow_email_send_partylove.errors }}</div>
+                        {% endif %}
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+
+
+        <div class="hide controls form-group -notification">
+            <label for="id_notification_allow_email_send" class="col-sm-3 control-label">{% trans "Your organizations" %}</label>
+            <div class="col-sm-7 checkbox">
+                <ul>
+                    <li>
+                        <span class="choice-item">
+                            {{ form.notification_allow_email_send_organization_partypartnerparty}}
+                            <label for="notification_allow_email_send_organization_partypartnerparty" class="col-sm-3 control-label">{% trans "Organization adds your organization as partner." %}</label>
+                        </span>
+                        {% if form.notification_allow_email_send_organization_partypartnerparty.errors %}
+                        <div class="errors alert alert-danger">{{ form.notification_allow_email_send_organization_partypartnerparty.errors }}</div>
+                        {% endif %}
+                    </li>
+                    <li>
+                        <span class="choice-item">
+                            {{ form.notification_allow_email_send_organization_userexperienceorganization }}
+                            <label for="notification_allow_email_send_organization_userexperienceorganization" class="col-sm-3 control-label">{% trans "People now works at your organization." %}</label>
+                        </span>
+                        {% if form.notification_allow_email_send_organization_userexperienceorganization.errors %}
+                        <div class="errors alert alert-danger">{{ form.notification_allow_email_send_organization_userexperienceorganization.errors }}</div>
+                        {% endif %}
+                    </li>
+                    <li>
+                        <span class="choice-item">
+                            {{ form.notification_allow_email_send_organization_partysupportparty}}
+                            <label for="notification_allow_email_send_organization_partysupportparty" class="col-sm-3 control-label">{% trans "Someone [gives support to/is supported by] your organization." %}</label>
+                        </span>
+                        {% if form.notification_allow_email_send_organization_partysupportparty.errors %}
+                        <div class="errors alert alert-danger">{{ form.notification_allow_email_send_organization_partysupportparty.errors }}</div>
+                        {% endif %}
+                    </li>
+                    <li>
+                        <span class="choice-item">
+                            {{ form.notification_allow_email_send_organization_partyfollowparty }}
+                            <label for="notification_allow_email_send_organization_partyfollowparty" class="col-sm-3 control-label">{% trans "Someone is now following your organization." %}</label>
+                        </span>
+                        {% if form.notification_allow_email_send_organization_partyfollowparty.errors %}
+                        <div class="errors alert alert-danger">{{ form.notification_allow_email_send_organization_partyfollowparty.errors }}</div>
+                        {% endif %}
+
+                    </li>
+                    <li>
+                        <span class="choice-item">
+                            {{ form.notification_allow_email_send_organization_partycontactparty }}
+                            <label for="notification_allow_email_send_organization_partycontactparty" class="col-sm-3 control-label">{% trans "Someone sends a message to your organization." %}</label>
+                        </span>
+                        {% if form.notification_allow_email_send_organization_partycontactparty.errors %}
+                        <div class="errors alert alert-danger">{{ form.notification_allow_email_send_organization_partycontactparty.errors }}</div>
+                        {% endif %}
+                    </li>
+                    <li>
+                        <span class="choice-item">
+                            {{ form.notification_allow_email_send_organization_partytestifyparty }}
+                            <label for="notification_allow_email_send_organization_partytestifyparty" class="col-sm-3 control-label">{% trans "Someone gives testimonial to your organization." %}</label>
+                        </span>
+                        {% if form.notification_allow_email_send_organization_partytestifyparty.errors %}
+                        <div class="errors alert alert-danger">{{ form.notification_allow_email_send_organization_partytestifyparty.errors }}</div>
+                        {% endif %}
+                    </li>
+                    <li>
+                        <span class="choice-item">
+                            {{ form.notification_allow_email_send_organization_organizationparticipate }}
+                            <label for="notification_allow_email_send_organization_organizationparticipate" class="col-sm-3 control-label">{% trans "Someone has participated with your program." %}</label>
+                        </span>
+                        {% if form.notification_allow_email_send_organization_organizationparticipate.errors %}
+                        <div class="errors alert alert-danger">{{ form.notification_allow_email_send_organization_organizationparticipate.errors }}</div>
+                        {% endif %}
+                    </li>
+                    <li>
+                        <span class="choice-item">
+                            {{ form.notification_allow_email_send_organization_partyinvitetestifyparty }}
+                            <label for="notification_allow_email_send_organization_partyinvitetestifyparty" class="col-sm-3 control-label">{% trans "Someone invites your organization to give a testimonial." %}</label>
+                        </span>
+                        {% if form.notification_allow_email_send_organization_partyinvitetestifyparty.errors %}
+                        <div class="errors alert alert-danger">{{ form.notification_allow_email_send_organization_partyinvitetestifyparty.errors }}</div>
+                        {% endif %}
+                    </li>
+                    <li>
+                        <span class="choice-item">
+                            {{ form.notification_allow_email_send_organization_partylove }}
+                            <label for="notification_allow_email_send_organization_partylove" class="col-sm-3 control-label">{% trans "Someone loves your organization." %}</label>
+                        </span>
+                        {% if form.notification_allow_email_send_organization_partylove.errors %}
+                        <div class="errors alert alert-danger">{{ form.notification_allow_email_send_organization_partylove.errors }}</div>
+                        {% endif %}
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+
+        <div class="hide controls form-group -notification">
+            <label for="id_notification_allow_email_send" class="col-sm-3 control-label">{% trans "Your Following" %}</label>
+            <div class="col-sm-7 checkbox">
+                <ul>
+                    <li>
+                        <span class="choice-item">
+                            {{ form.notification_allow_email_send_from_follow }}
+                            <label for="notification_allow_email_send_from_follow" class="col-sm-3 control-label">{% trans "Happening" %}</label>
+                        </span>
+                        <span class="help-block">
+                        Latest updates from people and organizations that you're following
+                        </span>
+                        {% if form.notification_allow_email_send_from_follow.errors %}
+                        <div class="errors alert alert-danger">{{ form.notification_allow_email_send_from_follow.errors }}</div>
+                        {% endif %}
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+
+
+    </div>
+
+    {% endwith %}
+
+    <br/>
+    <div class="controls form-group group-action">
+        <div class="col-sm-offset-3 col-sm-7 form-action">
+            <button class="btn btn-primary btn-orange" type="submit">{% trans "Save changes" %}</button>
+            <a href="{% url 'home' %}" class="btn btn-default btn-cancel">{% trans "Cancel" %}</a>
+        </div>
+
+        {% if not form.is_new and user.is_staff %}
+        <a class="btn btn-md btn-delete" href="{% url 'presentation_delete' 'account' 'User' form.inst.id %}">
+            <span class="glyphicon glyphicon-remove icostartup icon-delete"></span>
+            {% trans "Delete" %}
+        </a>
+        {% endif %}
+
+    </div>
+</form>
+{% endblock %}

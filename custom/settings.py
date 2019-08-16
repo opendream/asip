@@ -8,7 +8,7 @@ from django.utils.translation import ugettext_lazy as _
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 CUSTOM_INSTALLED_APPS = (
-    #'custom',
+    # 'custom',
 )
 CUSTOM_TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'custom/templates'),
@@ -29,35 +29,41 @@ DATABASES = {
 
 LANGUAGES = (
     ('en', 'English'),
-    ('th', 'Thai'),
 )
 LANGUAGE_CODE = 'en'
-MODELTRANSLATION_LANGUAGES = ('th', 'en')
-MODELTRANSLATION_DEFAULT_LANGUAGE = 'en'
+
+LOCALE_PATHS = (
+    os.path.join(BASE_DIR, 'custom/locale'),
+)
 
 SEARCH_INDEX_NAME = 'startup'
 
 STATIC_URL = '/static/'
 
-SITE_NAME = 'new.set.or.th'
-SITE_SLOGAN = "New Economic Warrior (NEW)'s platform"
-DEFAULT_FROM_EMAIL = 'New Economic Warrior <no-reply@new.set.or.th>'
-SITE_URL = 'https://new.set.or.th'
-SITE_LOGO_URL = '%simages/logo-startup.png' % STATIC_URL
-SITE_FAVICON_URL = '%simages/favicon-startup.png' % STATIC_URL
+SITE_NAME = 'www.startupthailand.org'
+SITE_SLOGAN = "Startup Thailand"
+DEFAULT_FROM_EMAIL = 'Startup Thailand <no-reply@startupthailand.org>'
+SITE_URL = 'https://ecosystem.startupthailand.org'
+SITE_LOGO_URL = '%simages/logo-startup2018.png' % STATIC_URL
+SITE_FAVICON_URL = '%simages/favicon-startup2018.png' % STATIC_URL
 
-GOOGLE_ANALYTICS_KEY = 'TODO: read from settings_local.py'
+BASE_FRONT_URL = 'https://www.startupthailand.org'
+
+GOOGLE_ANALYTICS_KEY = 'UA-119100273-2'
 
 MAIN_DESCRIPTION = 'custom share description here'
 
 ENABLE_SOCIAL_ENTERPRISE = False
 ENABLE_STARTUP = True
+ENABLE_PROGRAM = True
 ENABLE_SUMMARY = False
+ENABLE_ARTICLE = False
+DISPLAY_UNPUBLISHED_HAPPENING = False
+
 CURRENCY = 'THB'
 CURRENCY_SHORT = '฿'
 THANK_AFTER_CREATE = True
 
-ALLOWED_CREATE_ORGANIZATION_WITHOUT_APPROVAL = True
 DEFAULT_TYPE_RECEIVER = 'startup'
 DEFAULT_COUNTRY = 6
 HIDE_COUNTRY = True
@@ -84,5 +90,5 @@ def feature_enable():
 
 
 
-from filter import FILTER
+from filter2018 import FILTER
 from point import POINT

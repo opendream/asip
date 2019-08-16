@@ -1,0 +1,87 @@
+{% load i18n %}
+
+<tr class="batch_section1_form batch-{% if forloop.last %}total{% else %}{{ i }}{% endif %}">
+  <td style="font-size: 13px; font-weight: bold;">
+    <div class="title" style="width: 50%;">{% if forloop.last %}{% trans 'Total' %}{% else %}{% trans 'Batch' %} {{ i|add:1 }}{% endif %}</div>
+    <div class="controls form-group hidden">
+      <label for="id_{{ prefix }}-{{ i }}-title" class="col-sm-4 control-label">{% trans "Title" %}</label>
+      <div class="col-sm-8">
+        <input id="id_{{ prefix }}-{{ i }}-title" name="{{ prefix }}-{{ i }}-title" type="text"
+          class="form-control" placeholder="" value="batch-{{ i|add:1 }}" readonly>
+      </div>
+    </div>
+  </td>
+  <td class="depend-on-investment_stage_type depend-on-investment_stage_type-id-1">
+    <div class="controls form-group">
+      <label for="id_{{ prefix }}-{{ i }}-amount_pre_seed_stage" class="col-sm-4 control-label hidden">{% trans "Pre-seed" %}</label>
+      <div class="">
+        <input id="id_{{ prefix }}-{{ i }}-amount_pre_seed_stage" name="{{ prefix }}-{{ i }}-amount_pre_seed_stage" type="text"
+          class="form-control" placeholder="" value="{{ form.amount_pre_seed_stage.value|default_if_none:"" }}">
+      </div>
+    </div>
+  </td>
+  <td class="depend-on-investment_stage_type depend-on-investment_stage_type-id-2">
+    <div class="controls form-group">
+      <label for="id_{{ prefix }}-{{ i }}-amount_seed_stage" class="col-sm-4 control-label hidden">{% trans "Seed" %}</label>
+      <div class="">
+        <input id="id_{{ prefix }}-{{ i }}-amount_seed_stage" name="{{ prefix }}-{{ i }}-amount_seed_stage" type="text"
+          class="form-control" placeholder="" value="{{ form.amount_seed_stage.value|default_if_none:"" }}">
+      </div>
+    </div>
+  </td>
+  <td class="depend-on-investment_stage_type depend-on-investment_stage_type-id-3">
+    <div class="controls form-group">
+      <label for="id_{{ prefix }}-{{ i }}-amount_pre_series_a_stage" class="col-sm-4 control-label hidden">{% trans "Pre-series A" %}</label>
+      <div class="">
+        <input id="id_{{ prefix }}-{{ i }}-amount_pre_series_a_stage" name="{{ prefix }}-{{ i }}-amount_pre_series_a_stage" type="text"
+          class="form-control" placeholder="" value="{{ form.amount_pre_series_a_stage.value|default_if_none:"" }}">
+      </div>
+    </div>
+  </td>
+  <td class="depend-on-investment_stage_type depend-on-investment_stage_type-id-4">
+    <div class="controls form-group">
+      <label for="id_{{ prefix }}-{{ i }}-amount_series_a_stage" class="col-sm-4 control-label hidden">{% trans "Series A" %}</label>
+      <div class="">
+        <input id="id_{{ prefix }}-{{ i }}-amount_series_a_stage" name="{{ prefix }}-{{ i }}-amount_series_a_stage" type="text"
+          class="form-control" placeholder="" value="{{ form.amount_series_a_stage.value|default_if_none:"" }}">
+      </div>
+    </div>
+  </td>
+  <td class="depend-on-investment_stage_type depend-on-investment_stage_type-id-5">
+    <div class="controls form-group">
+      <label for="id_{{ prefix }}-{{ i }}-amount_series_b_stage" class="col-sm-4 control-label hidden">{% trans "Series B" %}</label>
+      <div class="">
+        <input id="id_{{ prefix }}-{{ i }}-amount_series_b_stage" name="{{ prefix }}-{{ i }}-amount_series_b_stage" type="text"
+          class="form-control" placeholder="" value="{{ form.amount_series_b_stage.value|default_if_none:"" }}">
+      </div>
+    </div>
+  </td>
+  <td class="depend-on-investment_stage_type depend-on-investment_stage_type-id-6">
+    <div class="controls form-group">
+      <label for="id_{{ prefix }}-{{ i }}-amount_series_c_stage" class="col-sm-4 control-label hidden">{% trans "Series C" %}</label>
+      <div class="">
+        <input id="id_{{ prefix }}-{{ i }}-amount_series_c_stage" name="{{ prefix }}-{{ i }}-amount_series_c_stage" type="text"
+          class="form-control" placeholder="" value="{{ form.amount_series_c_stage.value|default_if_none:"" }}">
+      </div>
+    </div>
+  </td>
+  <td class="depend-on-specific_stage">
+    <div class="controls form-group">
+      <label for="id_{{ prefix }}-{{ i }}-amount_specific_stage" class="col-sm-4 control-label hidden">{% trans "Specific" %}</label>
+      <div class="">
+        <input id="id_{{ prefix }}-{{ i }}-amount_specific_stage" name="{{ prefix }}-{{ i }}-amount_specific_stage" type="text"
+          class="form-control" placeholder="" value="{{ form.amount_specific_stage.value|default_if_none:"" }}">
+      </div>
+    </div>
+  </td>
+  <td class="">
+    <div class="controls form-group">
+      <label for="id_{{ prefix }}-{{ i }}-amount_total_stage" class="col-sm-4 control-label hidden">{% trans "Total" %}</label>
+      <div class="">
+        <input id="id_{{ prefix }}-{{ i }}-amount_total_stage" name="{{ prefix }}-{{ i }}-amount_total_stage" type="text"
+          class="form-control" placeholder="" value="{{ form.amount_total_stage.value|default_if_none:"" }}">
+      </div>
+    </div>
+  </td>
+
+</tr>

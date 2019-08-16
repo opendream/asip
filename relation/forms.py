@@ -5,7 +5,8 @@ from account.models import User
 
 from common.constants import SUMMARY_MAX_LENGTH
 
-from common.forms import CommonForm, BetterSelectDateWidget
+from common.forms import CommonForm, BetterSelectDateWidget, EnglishCharField
+from djmoney.forms import MoneyField
 import files_widget
 from organization.models import Organization
 from party.models import Party
@@ -24,10 +25,10 @@ class ExperienceEditForm(CommonForm):
         )
     )
 
-    title = forms.CharField(max_length=255, widget=forms.TextInput(attrs={'placeholder': 'CEO, Lead Developer, etc.'}))
-    description = forms.CharField(required=False, widget=forms.Textarea(attrs={'rows': 2, 'maxlength': SUMMARY_MAX_LENGTH, 'placeholder': 'What did you do? What were your accomplishments?'}))
+    title = EnglishCharField(max_length=255, widget=forms.TextInput(attrs={'placeholder': 'CEO, Lead Developer, etc.'}))
+    description = EnglishCharField(required=False, widget=forms.Textarea(attrs={'rows': 2, 'maxlength': SUMMARY_MAX_LENGTH, 'placeholder': 'What did you do? What were your accomplishments?'}))
 
-    start_date = forms.DateField(required=False, widget=BetterSelectDateWidget(
+    start_date = forms.DateField(required=True, widget=BetterSelectDateWidget(
         empty_label=('Year', 'Month', 'Day'),
         ignore_day=True,
         attrs={'class': 'form-control'}
@@ -39,11 +40,12 @@ class ExperienceEditForm(CommonForm):
     ))
 
     def clean_end_date(self):
-        start_date = self.cleaned_data['start_date']
+        start_date = self.cleaned_data.get('start_date')
         end_date = self.cleaned_data['end_date']
 
-        if start_date and end_date and start_date > end_date:
+        if not start_date or (start_date and end_date and start_date > end_date):
             raise forms.ValidationError('The end date must be greater than the start date.')
+
 
         return end_date
 
@@ -59,11 +61,12 @@ class ReceivedFundingEditForm(CommonForm):
         )
     )
 
-    amount = forms.DecimalField()
+    #amount = forms.DecimalField()
+    money_amount = MoneyField(required=True, max_digits=19, decimal_places=2)
 
-    title = forms.CharField(required=False, max_length=255, widget=forms.TextInput(attrs={'placeholder': ''}))
+    title = EnglishCharField(required=False, max_length=255, widget=forms.TextInput(attrs={'placeholder': ''}))
 
-    date = forms.DateField(required=False, widget=BetterSelectDateWidget(
+    date = forms.DateField(required=True, widget=BetterSelectDateWidget(
         empty_label=('Year', 'Month', 'Day'),
         attrs={'class': 'form-control'}
     ))
@@ -79,5 +82,5 @@ class InviteTestifyEditForm(CommonForm):
         )
     )
 
-    message = forms.CharField(required=False, widget=forms.Textarea(attrs={'rows': 2, 'placeholder': 'Your invites message'}))
+    message = EnglishCharField(required=False, widget=forms.Textarea(attrs={'rows': 2, 'placeholder': 'Your invites message'}))
 

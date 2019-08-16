@@ -63,8 +63,8 @@
 
 <div class="block block-share">
     <h2 class="block-title">{% trans 'Share this' %}:</h2>
-    <a class="share-btn share-fb" href="#" facebook-share name="{[{ news.title }]}" picture="{[{ news.get_thumbnail }]}" description="{[{ news.get_summary }]}" ><span class="icon icon-facebook"></span>Facebook</a>
-    <a class="share-btn share-tw" twitter-share href="http://twitter.com/share" ><span class="icon icon-twitter"></span>Twitter</a>
+    <a class="share-btn share-fb" href="#" facebook-share name="{[{ news.title }]}" picture="{[{ news.get_thumbnail }]}" description="{[{ news.get_summary }]}" ><span class="icon icon-facebook"></span>{% trans 'Facebook' %}</a>
+    <a class="share-btn share-tw" twitter-share href="http://twitter.com/share" ><span class="icon icon-twitter"></span>{% trans 'Twitter' %}</a>
 </div>
 
 <!--         <div  ng-controller="BasicPartyListController" ng-init="init('/api/v1/news', { limit: 4, article_category: article_category })" class="block block-sidebar block-news-other no-border" ng-show="current_page_party_list.length > 0">
@@ -111,7 +111,7 @@
 <div class="article-wrapper">
     {% if user.is_authenticated %}
     <a ng-if="news.can_edit" ng-href="/article/{[{ news_id }]}/edit/" class="btn btn-default btn-xs pull-right ico-edit">
-      <span class="glyphicon glyphicon-edit"></span> Edit
+      <span class="glyphicon glyphicon-edit"></span> {% trans 'Edit' %}
     </a>
     {% endif %}
     <div class="content">

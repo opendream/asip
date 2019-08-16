@@ -141,11 +141,13 @@
 }
 #id_portfolios-autocomplete,
 #id_jobs-autocomplete,
+#id_programs-autocomplete,
 #id_experiences-autocomplete,
 #id_received_fundings-autocomplete,
 #id_gived_fundings-autocomplete,
 #id_received_investings-autocomplete,
-#id_gived_investings-autocomplete {
+#id_gived_investings-autocomplete,
+#id_in_the_news-autocomplete {
     display: none !important;
 }
 
@@ -321,18 +323,18 @@ textarea:-moz-placeholder{
 .range-input-item-left {
     width: 50%;
     float: left;
-    margin-right: -20px;
+    margin-right: -40px;
 }
 .range-input-item-left .range-input-item-inner {
-    padding-right: 20px;
+    padding-right: 40px;
 }
 .range-input-item-right {
     width: 50%;
     float: left;
-    margin-left: -20px;
+    margin-left: -30px;
 }
 .range-input-item-right .range-input-item-inner {
-    padding-left: 20px;
+    padding-left: 30px;
 }
 .range-input-dash {
     float: left;
@@ -833,12 +835,17 @@ h1.meta-summary {
 }
 
 .form-account .has-error,
-.form-account .has-error a{
+.form-account .has-error a,
+.form-account .has-error small {
     color: rgb(169, 68, 66) !important;
 }
 
 .form-account .has-error .checkbox ul,
-.form-account .has-error .inline-reference-container {
+.form-account .has-error .inline-reference-container,
+.form-account .has-error input,
+.form-account .has-error select,
+.form-account .has-error hr,
+.form-account .has-error textarea {
     border-color: rgb(169, 68, 66);
 }
 
@@ -899,4 +906,381 @@ h1.meta-summary {
 
 .news-item .date, .block-detail-news .date, .block-news-other .date {
     display: none;
+}
+
+.filter-group ul.dropdown-menu {
+    min-width: 100%;
+    width: auto;
+}
+
+.btn-view {
+    margin-left: 10px;
+}
+
+.block-primary,
+.nav-party.primary-tab {
+    margin-left: -15px;
+    margin-right: -15px;
+}
+@media (min-width: 992px) {
+    .startup-cover-wrapper {
+        margin: 0;
+    }
+    .block-primary,
+    .nav-party.primary-tab {
+        margin-left: 0;
+        margin-right: 0;
+    }
+}
+
+.startup-cover {
+    width: 100%;
+    padding-top: 37.18%;
+    background-size: cover;
+    background-position: center center;
+    background-image: url("http://via.placeholder.com/1170x435");
+}
+
+.field-money {
+    position: relative;
+}
+.field-money input {
+    padding-right: 80px;
+}
+.field-money select {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 7px;
+}
+
+.range-input-item-inner .field-money input {
+    padding-right: 10px;
+}
+#id_money_salary_min_1 {
+    display: none;
+}
+
+#id_money_salary_max_1 {
+    right: -90px;
+}
+
+
+.stickem-container {
+  position: relative;
+}
+
+.stickit {
+	/*margin-left: 660px;*/
+	position: fixed;
+	top: 0;
+    z-index: 1;
+}
+
+.stickit-end {
+	bottom: 40px;
+	position: fixed;
+	right: 0;
+}
+
+@media (min-width: 768px) {
+    .point-form > div.stickit {
+        position: fixed !important;
+        margin-top: 20px;
+    }
+    .point-form > div.stickit-end {
+    	bottom: 0px;
+        position: absolute !important;
+        left: 0;
+    }
+
+    .stickem-container .content-focus {
+        float: right;
+    }
+}
+
+@media (min-width: 768px) {
+    .point-form > div.stickem {
+        width: 192px !important;
+    }
+}
+
+@media (min-width: 993px) {
+    .point-form > div.stickem {
+        width: 250px !important;
+    }
+}
+
+@media (max-width: 992px) {
+    .point-form {
+        max-width: 768px;
+        margin-left: auto;
+        margin-right: auto;
+        float: none;
+        overflow: hidden;
+    }
+}
+
+@media (min-width: 1200px) {
+    .point-form > div.stickem {
+        width: 300px !important;
+    }
+}
+
+.-form-org .banner.-fix-full-width {
+    margin: 0;
+}
+
+.multi-char-widget {
+    margin-bottom: 10px;
+}
+
+body #yourlabs_overlay {
+    position: fixed;
+    opacity: .9;
+}
+
+.autocomplete-add-another-frame {
+    position: fixed;
+    border: none;
+    top: 50%;
+    left: 50%;
+    width: 80%;
+    height: 80%;
+    max-width: 1200px;
+    z-index: 99999999;
+    transform: translate(-50%, -50%);
+}
+
+body.overlay-enable {
+    overflow: hidden;
+}
+.request-popup  .wrapper {
+    background: white;
+}
+
+.batch_section1_form .title,
+.participant-stick-width {
+    white-space: nowrap;
+}
+
+.request-popup .form-sidebar-container .page-title {
+    color: #000000;
+    background-color: #bbbbbb;
+    padding: 20px;
+}
+
+.request-popup .form-sidebar-container .content-class {
+    margin-top: -20px;
+}
+
+.btn-not-you-wrapper {
+    text-align: center;
+}
+
+.not-you-link {
+    text-decoration: underline;
+}
+
+.participate_form .required-approval {
+    top: auto;
+    right: auto;
+}
+
+.autocomplete-light-widget .required-approval {
+    top: auto;
+    bottom: 8px;
+}
+
+.description-data {
+    color: #333;
+}
+
+.list-view .description-data {
+    font-weight: bold;
+}
+
+.topics .tooltip .tooltip-inner {
+    max-width: 200px;
+    padding: 3px 8px;
+    color: #fff;
+    text-align: left;
+    border-radius: 4px;
+    border: none 0;
+    background-color: #000;
+    white-space: pre;
+}
+
+.table-center th, .table-center td {
+    text-align: center;
+}
+
+.choice-item-wrapper {
+    display: block;
+    margin-left: 66px;
+    float: left;
+}
+
+.choice-item-wrapper > span {
+    display: block;
+}
+
+.list-stick {
+    clear: both;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+.input-stick {
+    float: left;
+    display: block;
+}
+.label-stick {
+    float: left;
+    display: block;
+    margin-left: -40px;
+}
+.choice-description {
+    font-weight: normal;
+    color: #555;
+}
+
+.help-block ul {
+    padding-left: 20px;
+}
+
+.help-block ul li {
+    list-style-type: disc;
+}
+
+.range-wrapper {
+    padding: 10px;
+    border-bottom: solid 1px #eee;
+    margin-bottom: 0;
+}
+.filter-range-slice-wrapper {
+    /*padding: 10px;*/
+}
+.filter-range-info-wrapper {
+    overflow: hidden;
+    /*padding: 2px;*/
+}
+/* .filter-group .btn-group:hover .dropdown-menu ,
+.filter-group .dropdown:hover .dropdown-menu {
+  display: block;
+} */
+
+
+.custom-slider.rzslider .rz-pointer {
+  background-color: #D92F78;
+}
+
+.custom-slider.rzslider .rz-bar {
+  /*background: #ffe4d1;*/
+}
+.custom-slider.rzslider .rz-selection {
+  background: #D92F78;
+}
+
+.custom-slider.rzslider .rz-limit {
+  color: #D92F78;
+}
+
+.custom-slider.rzslider .rz-tick.rz-selected {
+  background: #D92F78;
+}
+
+.custom-slider.rzslider .rz-pointer.rz-active:after {
+  background-color: #00658E;
+}
+
+
+
+.dropdown-submenu {
+    position: relative;
+}
+
+.dropdown-submenu>.dropdown-menu {
+    top: 0;
+    left: 100%;
+    margin-top: -6px;
+    margin-left: -1px;
+}
+
+.dropdown-submenu:hover>.dropdown-menu {
+    display: block;
+}
+
+.dropdown-submenu>a:after {
+    display: block;
+    content: " ";
+    float: right;
+    width: 0;
+    height: 0;
+    border-color: transparent;
+    border-style: solid;
+    border-width: 5px 0 5px 5px;
+    border-left-color: #ccc;
+    margin-top: 5px;
+    margin-right: -10px;
+}
+
+.dropdown-submenu:hover>a:after {
+    border-left-color: #fff;
+}
+
+.dropdown-submenu.pull-left {
+    float: none;
+}
+
+.dropdown-submenu.pull-left>.dropdown-menu {
+    left: -100%;
+    margin-left: 10px;
+}
+
+.color-lightgray {
+    color: #a6a6a6;
+}
+
+.color-gray {
+    color: #808080;
+}
+
+.organization-attachment-form-wrapper .files-widget-dropbox .message {
+    display: none !important;
+}
+
+.tab-pane .organization-attachment-form-wrapper .controls {
+    margin-bottom: 10px;
+}
+
+.field-name-attachments_other_attached_documents label {
+    display: none;
+}
+
+.organization-attachment-form-wrapper .attachment-item-wrapper {
+    display: none;
+}
+
+.attachment-startup-wrapper #attachments_incorporation_registration_certificate-wrapper,
+.attachment-startup-wrapper #attachments_biography_consisting_of_major_achievements_of_management_levels-wrapper,
+.attachment-startup-wrapper #attachments_list_of_organizational_or_program_partners-wrapper,
+.attachment-startup-wrapper #attachments_other_attached_documents_text-wrapper,
+.attachment-startup-wrapper #attachments_other_attached_documents-wrapper,
+
+.attachment-investor-wrapper #attachments_incorporation_registration_certificate-wrapper,
+.attachment-investor-wrapper #attachments_financial_statement-wrapper,
+.attachment-investor-wrapper #attachments_investment_portfolio-wrapper,
+.attachment-investor-wrapper #attachments_other_attached_documents_text-wrapper,
+.attachment-investor-wrapper #attachments_other_attached_documents-wrapper,
+
+.attachment-program-wrapper #attachments_summary_of_the_activities_of_the_program-wrapper,
+.attachment-program-wrapper #attachments_long_term_sustainable_revenue_model-wrapper,
+.attachment-program-wrapper #attachments_resumes_or_portfolio_of_mentors_coaches_speaker_and_trainers-wrapper,
+.attachment-program-wrapper #attachments_program_plans_in_the_future-wrapper,
+.attachment-program-wrapper #attachments_list_of_notable_startup_team_alumni-wrapper,
+.attachment-program-wrapper #attachments_list_of_organization_or_program_partners-wrapper,
+.attachment-program-wrapper #attachments_other_attached_documents_text-wrapper,
+.attachment-program-wrapper #attachments_other_attached_documents-wrapper
+{
+    display: block;
 }

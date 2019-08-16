@@ -1,0 +1,26 @@
+@media print {
+  form.point-form {
+
+    .tab-pane input[type="text"],
+    .tab-pane input[type="email"],
+    .tab-pane input[type="number"],
+    .tab-pane select,
+    .tab-pane textarea {
+      height: auto;
+      border: none;
+      padding: 0;
+      border-bottom: 1px dotted #999999;
+    }
+
+    .tab-pane input[type="text"]:focus,
+    .tab-pane input[type="email"]:focus,
+    .tab-pane input[type="number"]:focus,
+    .tab-pane select:focus,
+    .tab-pane textarea:focus {
+      height: auto;
+      border: none;
+      border-bottom: 1px dotted #999999;
+    }
+    
+  }
+}

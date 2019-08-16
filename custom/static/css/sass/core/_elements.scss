@@ -1,7 +1,7 @@
 /* -------------------------------------- *\
 **  Organize Detail
 **  Contents
-**  
+**
 **  1. Font base
 **  2. Font heading
 **  3. Font size
@@ -32,10 +32,10 @@ h5 { font-size: 15px; }
 a {
     color: $font-link-color;
     cursor: pointer;
-    &:hover, 
-    &:focus, 
-    &:active, 
-    &.active { 
+    &:hover,
+    &:focus,
+    &:active,
+    &.active {
         color: $font-link-color;
     }
 }
@@ -67,7 +67,7 @@ dd, dt {
     font-family: $kanit-regular;
 }
 
-table thead { 
+table thead {
     background-color: #EFEFEF;
 }
 

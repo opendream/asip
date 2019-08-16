@@ -1,0 +1,71 @@
+/*----------------------------------
+Component : Startup List
+----------------------------------*/
+.startup-list {
+  margin-bottom: 0.4em;
+
+  // Layout
+  &__header {
+    padding: 10px;
+    margin-bottom: 1em;
+    font-size: .8em;
+    color: #8E8E8E;
+    background-color: #EFEFEF;
+  }
+  &__body {}
+
+  // Elements
+  &__activities { margin: 0; }
+  &__time {
+    display: block;
+    font-size: 0.8em;
+    line-height: 22px;
+
+    @media (min-width: $md) {
+      display: inline;
+      float: right;
+    }
+  }
+  &__item {
+    display: flex;
+    display: flexbox;
+    flex-wrap: nowrap;
+    align-items: center;
+  }
+  &__logo {
+    width: 70px;
+    margin: 0 1em 0 0;
+
+    @media (min-width: $md) {
+      margin: 0 1.5em 0 0;
+    }
+  }
+  &__info {
+    margin: 0;
+  }
+
+  &__name {
+    margin: 0;
+    font-size: 1em;
+    line-height: 1.2em;
+    font-family: $TH-font-body;
+    font-weight: 400;
+
+    a {
+      color: #000;
+    }
+
+    @media (min-width: $md) {
+      font-size: 1.2em;
+    }
+  }
+  &__slogan {
+    margin: 0;
+    font-size: .8em;
+  }
+}
+
+
+/*----------------------------------
+Example of HTML
+----------------------------------*/

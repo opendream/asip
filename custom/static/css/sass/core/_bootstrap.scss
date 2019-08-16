@@ -1,0 +1,18 @@
+.col-sm-8.-notification {
+  @media (min-width: 992px) {
+    width: 66.66666667%;
+  }
+  @media (min-width: 768px) {
+    width: 66.66666667%;
+  }
+  width: 100%;
+}
+.col-sm-push-4.-notification {
+  @media (min-width: 992px) {
+    left: 16.66666667%;
+  }
+  @media (min-width: 768px) {
+    left: 16.66666667%;
+  }
+  left: auto;
+}

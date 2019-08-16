@@ -77,7 +77,7 @@
             <a href="{% if form.is_new %}{% url 'home' %}{% else %}.{% endif %}" class="btn btn-default btn-cancel">{% trans "Cancel" %}</a>
             {%  endif %}
             {% if request_popup %}
-            <a onclick="window.close()" class="btn btn-default btn-cancel">{% trans "Cancel" %}</a>
+            <a onclick="parent.dismissAddAnotherPopup({name: '{{ request.GET.winName }}'})" class="btn btn-default btn-cancel">{% trans "Cancel" %}</a>
             {%  endif %}
         </div>
 

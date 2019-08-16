@@ -48,11 +48,11 @@
 
 <div class="controls form-group">
     <label for="id_image" class="field-container control-label">{% trans "Picture" %}</label>
+    <span class="help-block">
+        {% trans "Use square image for the best display." %}
+    </span>
     <div class="field-container">
         {{ form.image }}
-        <span class="help-block">
-            {% trans "Use images that are at least 370 x 280 pixels and 1.3:1 image ratio for the best display." %}
-        </span>
         {% if form.image.errors %}
         <div class="errors alert alert-danger">{{ form.image.errors }}</div>
         {% endif %}

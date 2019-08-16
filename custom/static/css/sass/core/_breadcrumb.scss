@@ -5,10 +5,11 @@
 }
 .breadcrumb {
     .link-breadcrumb {
-        font-family: $kanit-light;
+        // font-family: $kanit-light;
         display: inline-block;
         padding: 0;
-    } 
+        font-size: 18px;
+    }
 }
 
 
@@ -20,7 +21,9 @@
 \* -------------------------------------- */
 
 .link-breadcrumb {
-    color: $font-link-content !important;
+    // color: $font-link-content !important;
+    color: #000 !important;
+
     font-size: 16px;
     @media (max-width: 768px) {
         margin-bottom: 10px;
@@ -32,9 +35,14 @@
 }
 
 .link-breadcrumb:before {
-    font-family: 'icostartup';
-    content: "\e903";
-    padding-right: 12px;
+    // font-family: 'icostartup';
+    content: "";
+    margin-right: 10px;
     position: relative;
     top: 2px;
+    background: url('../../images/left-arrow.png') top left no-repeat;
+    background-size: 13px 16px;
+    display: inline-block;
+    width: 13px;
+    height: 16px;
 }

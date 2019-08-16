@@ -1,0 +1,3908 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-04-11 07:45+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: account/forms.py:58
+msgid "Please, enter correct email/username and password."
+msgstr "กรุณา ใส่ข้อมูล อีเมล/ชื่อบัญขีผู้ใช้ และ รหัสผ่าน ให้ถูกต้อง"
+
+#: account/forms.py:60
+msgid "This account not activated."
+msgstr "บัญขีผู้ใช้นี้ยังไม่ถูกอนุญาตให้ใช้งานได้"
+
+#: account/forms.py:77 organization/forms.py:533 organization/forms.py:589
+#: organization/forms.py:604 templates/account/edit.html:63
+#: templates/account/inline_invite_form.html:19
+#: templates/cms/event/form.html:245
+#: templates/organization/program/form.html:202
+#: templates/organization/program/form.html:318
+#: templates/organization/program/form.html:629
+#: templates/organization/program/mentor_form.html:23
+#: templates/organization/program/staff_form.html:23
+msgid "Email"
+msgstr "อีเมล"
+
+#: account/forms.py:151
+msgid "Your email address is not registered."
+msgstr "อีเมลของคุณยังไม่ได้ทำการลงทะเบียน"
+
+#: account/forms.py:173 account/forms.py:384
+msgid "This email is already in use."
+msgstr "อีเมลนี้ถูกใช้ไปแล้ว"
+
+#: account/forms.py:206 account/forms.py:397
+msgid ""
+"Ensure this email prefix(characters before @) has at most 30 characters "
+msgstr "แน่ใจว่าส่วนหน้าของอีเมล(อักขระก่อนหน้าเครื่องหมาย @) ไม่ยาวเกิน 30 ตัว"
+
+#: account/forms.py:300
+#, fuzzy
+#| msgid "Type for search organizations by name"
+msgid "Type for search organization by name."
+msgstr "พิมพ์เพื่อค้นหาองค์กร โดยชื่อ"
+
+#: account/forms.py:308
+msgid "Type for search portfolios by title"
+msgstr "พิมพ์เพื่อค้นหาผลงาน โดยหัวข้อ"
+
+#: account/forms.py:322 organization/forms.py:175 organization/forms.py:189
+msgid "Type to search organizations by name."
+msgstr "พิมพ์เพื่อค้นหาองค์กร โดยชื่อ"
+
+#: account/forms.py:335 cms/forms.py:39 organization/forms.py:182
+#: organization/forms.py:196 organization/forms.py:203
+msgid "Type to search organizations or people by name."
+msgstr "พิมพ์เพื่อค้นหาองค์กร หรือบุคคล โดยชื่อ"
+
+#: account/forms.py:359
+msgid "Password mismatch."
+msgstr "รหัสผ่านทั้งคู่ไม่ตรงกัน"
+
+#: account/forms.py:367
+#, fuzzy
+#| msgid "This email is already in use."
+msgid "This field is required."
+msgstr "อีเมลนี้ถูกใช้ไปแล้ว"
+
+#: account/functions.py:16 organization/functions.py:19
+#: organization/functions.py:31 organization/functions.py:44
+#: organization/functions.py:61 party/functions.py:32 relation/functions.py:18
+#: relation/functions.py:59 templates/cms/event/form.html:61
+#: templates/cms/news/form.html:60 templates/forum/_form.html:37
+#: templates/organization/form.html:363
+msgid "edit"
+msgstr "แก้ไข"
+
+#: account/models.py:39 organization/models.py:68
+msgid "Male"
+msgstr ""
+
+#: account/models.py:40 organization/models.py:69
+msgid "Female"
+msgstr ""
+
+#: account/models.py:117
+msgid "username"
+msgstr "ชื่อบัญชีผู้ใช้"
+
+#: account/models.py:118
+msgid ""
+"Required 30 characters or fewer. Letters, numbers and @/./+/-/_ characters"
+msgstr "อักขระต้องไม่เกิน 30 ตัว และต้องเป็นตัวอักษร ตัวเลข หรือ เครื่องหมาย /./+/-/_"
+
+#: account/models.py:120
+msgid "Enter a valid username."
+msgstr "ใส่ข้อมูลอีเมลให้ถูกต้อง"
+
+#: account/models.py:124
+msgid "email address"
+msgstr "อีเมล"
+
+#: account/models.py:155
+msgid "staff status"
+msgstr "สถานะผู้ดูแลระบบ"
+
+#: account/models.py:156
+msgid "Designates whether the user can log into this admin site."
+msgstr "เป็นการกำหนดให้ผู้ใช้คนนี้สามารถเข้าสู่ระบบในส่วนของผู้ดูแลระบบได้"
+
+#: account/models.py:158
+msgid "active"
+msgstr "เปิดใช้งาน"
+
+#: account/models.py:159
+msgid ""
+"Designates whether this user should be treated as active. Unselect this "
+"instead of deleting accounts."
+msgstr "เป็นการกำหนดให้ผู้ใช้คนนี้ใช้ถูกงานได้ และสามารถไม่เลือกข้อนี้แทนการลบบัญชีผู้ใช้ได้"
+
+#: account/models.py:162
+#, fuzzy
+#| msgid "staff status"
+msgid "editor status"
+msgstr "สถานะผู้ดูแลระบบ"
+
+#: account/models.py:164
+msgid "date joined"
+msgstr "วันที่เข้าร่วมเป็นสมาชิก"
+
+#: account/models.py:179 templates/organization/form.html:107
+msgid "People"
+msgstr "บุคลากร"
+
+#: account/models.py:225
+msgid "App ID"
+msgstr ""
+
+#: account/models.py:227
+msgid "Site URI"
+msgstr ""
+
+#: account/models.py:227
+msgid "Exclude http or https, for development allow localhost"
+msgstr ""
+
+#: account/models.py:229 templates/organization/form.html:378
+msgid "Logo"
+msgstr "โลโก"
+
+#: account/views.py:370
+#, python-format
+msgid ""
+"Your account profile have been updated. View your profile page <a href=\"%s"
+"\">here</a>"
+msgstr ""
+"ข้อมูลบัญชีผู้ใช้งานของคุณได้ถูกปรับปรุงแล้ว ดูหน้าบัญชีผู้ใช้งานของคุณ <a href=\"%s\">ที่นี่</a>"
+
+#: account/views.py:471
+msgid "Please, change your password"
+msgstr "กรุณาเปลี่ยนรหัสผ่านของคุณ"
+
+#: account/views.py:497 account/views.py:566
+msgid "The email invitation has been send."
+msgstr "อีเมลการเชิญชวนได้ถูกส่งออกไปแล้ว"
+
+#: account/views.py:551
+msgid "Password reset"
+msgstr "ตั้งค่ารหัสผ่านใหม่"
+
+#: account/views.py:609 account/views.py:640
+msgid "The email register has been send please check your email."
+msgstr "อีเมลการสมัครสมาชิกได้ถูกส่งไปแล้ว กรุณตรวจสอบอีเมลของคุณ"
+
+#: account/views.py:627
+msgid "You are logged in."
+msgstr ""
+
+#: cms/forms.py:26
+msgid "Title in 512 characters"
+msgstr "ชื่อเรื่องใน 512 ตัวอักษร"
+
+#: cms/forms.py:61 cms/forms.py:82 organization/forms.py:296
+#: templates/account/edit.html:248 templates/cms/event/form.html:259
+#: templates/organization/form.html:724
+msgid "Facebook URL"
+msgstr "Facebook URL"
+
+#: cms/forms.py:62 cms/forms.py:83 organization/forms.py:297
+#: templates/account/edit.html:258 templates/cms/event/form.html:272
+#: templates/organization/form.html:734
+msgid "Twitter URL"
+msgstr "Twitter URL"
+
+#: cms/forms.py:63 cms/forms.py:84 organization/forms.py:299
+#: templates/account/edit.html:278 templates/cms/event/form.html:285
+#: templates/organization/form.html:754
+msgid "Homepage URL"
+msgstr "Homepage URL"
+
+#: cms/models.py:86
+msgid "News"
+msgstr "ข่าว"
+
+#: cms/models.py:87
+msgid "Knowledge & Tools"
+msgstr "ความรู้ และเครื่องมือ"
+
+#: common/constants.py:13 common/constants.py:19
+msgid "Published"
+msgstr "เผยแพร่"
+
+#: common/constants.py:14
+msgid "Request for Approval"
+msgstr "ทำการขออนุมัติ"
+
+#: common/constants.py:15 common/constants.py:21 organization/models.py:922
+#: organization/models.py:1187
+msgid "Draft"
+msgstr "บันทึกเป็นแบบร่าง"
+
+#: common/constants.py:20 templates/base.html:586
+msgid "Pending for Approval"
+msgstr "รอการอนุมัติ"
+
+#: common/constants.py:39 common/constants.py:40
+msgid "Social Enterprise"
+msgstr "กิจการเพื่อสังคม"
+
+#: common/constants.py:43 common/constants.py:44
+msgid "Startup"
+msgstr "สตาร์ทอัพ"
+
+# msgid "Startup"
+# msgstr "สตาร์ทอัพ"
+#: common/constants.py:47
+msgid "Investors"
+msgstr "ผู้สนับสนุน/นักลงทุน"
+
+#: common/constants.py:50
+#, fuzzy
+#| msgid "Supporter"
+msgid "Supporter"
+msgstr "องค์กรสนับสนุน"
+
+#: common/constants.py:51
+msgid "Investors"
+msgstr "นักลงทุน"
+
+#: common/forms.py:57 common/forms.py:62 common/models.py:162
+msgid "Enter a valid permalink."
+msgstr "ใส่ข้อมูลชื่อลิงก์ให้ถูกต้อง"
+
+#: common/forms.py:59
+msgid ""
+"Required unique 30 characters or fewer. Letters, numbers and ./-/+/@/_ "
+"characters"
+msgstr ""
+"อักขระต้องไม่เกิน 30 ตัว ที่ยังไม่เคยใช้ และต้องเป็นตัวอักษร ตัวเลข หรือ เครื่องหมาย ./-/+/@/_"
+
+#: common/forms.py:63
+msgid ""
+"Required unique 30 characters or fewer. Letters, numbers and ./-/_ characters"
+msgstr ""
+"อักขระต้องไม่เกิน 30 ตัว ที่ยังไม่เคยใช้ และต้องเป็นตัวอักษร ตัวเลข หรือ เครื่องหมาย ./-/_"
+
+#: common/forms.py:78 common/forms.py:283
+#, python-format
+msgid "This %s is already in use."
+msgstr "%s นี้ ถูกใช้ไปแล้ว"
+
+#: common/forms.py:179
+#, python-format
+msgid "(Hidden field %(name)s) %(error)s"
+msgstr "(ฟิลด์ที่ถูกซ่อน %(name)s) %(error)s"
+
+#: common/functions.py:65 common/functions.py:96
+msgid "Complete created"
+msgstr "การสร้างสำเร็จ"
+
+#: common/functions.py:79
+#, python-format
+msgid "New %s have been created."
+msgstr "%s ได้ถูกสร้างใหม่แล้ว"
+
+#: common/functions.py:86 presentation/views.py:162 presentation/views.py:201
+#, python-format
+msgid "Your %s settings have been updated."
+msgstr "การตั้งค่า %s ของคุณได้ถูกบันทึกแล้ว"
+
+#: common/functions.py:108
+#, python-format
+msgid ""
+"New article has been created. View this article <a href=\"%s\">here</a>."
+msgstr "บทความ ได้ถูกสร้างใหม่แล้ว ดู บทความ นั้นได้ <a href=\"%s\">ที่นี่</a>"
+
+#: common/functions.py:112
+#, python-format
+msgid ""
+"Your article settings has been updated. View this article <a href=\"%s"
+"\">here</a>."
+msgstr "การตั้งค่า บทความ ของคุณได้ถูกบันทึกแล้ว ดู บทความ นั้นได้ <a href=\"%s\">ที่นี่</a>"
+
+#: common/functions.py:283 templates/account/login_inline.html:44
+#: templates/account/login_inline.html:47 templates/base.html:461
+msgid "Log in"
+msgstr "เข้าสู่ระบบ"
+
+#: common/models.py:159
+msgid ""
+"Required unique 30 characters or fewer. Letters, numbers and ./@/+/-/_ "
+"characters"
+msgstr ""
+"อักขระต้องไม่เกิน 30 ตัว ที่ยังไม่เคยใช้ และต้องเป็นตัวอักษร ตัวเลข หรือ เครื่องหมาย ./@/+/-/_"
+
+#: common/validators.py:17
+#, fuzzy
+#| msgid "This email is already in use."
+msgid "This permalink is already in use"
+msgstr "อีเมลนี้ถูกใช้ไปแล้ว"
+
+#: files_widget/fields.py:40
+msgid "File"
+msgstr "ไฟล์"
+
+#: files_widget/fields.py:63
+msgid "Files"
+msgstr "ไฟล์"
+
+#: files_widget/fields.py:81 templates/cms/event/form.html:76
+#: templates/cms/news/form.html:120 templates/organization/inline_form.html:42
+msgid "Image"
+msgstr "รูป"
+
+#: files_widget/fields.py:97 templates/party/portfolio/form.html:43
+msgid "Images"
+msgstr "รูป"
+
+#: files_widget/templates/files_widget/files_widget.html:3
+msgid "undo"
+msgstr "ย้อนกลับ"
+
+#: files_widget/templates/files_widget/files_widget.html:7
+#, fuzzy
+#| msgid "Drop multiple images here to upload"
+msgid "Drop multiple files here to upload"
+msgstr "ลาก และวางรูปที่นี่ เพื่ออัพโหลด"
+
+#: files_widget/templates/files_widget/files_widget.html:9
+msgid "Drop multiple images here to upload"
+msgstr "ลาก และวางรูปที่นี่ เพื่ออัพโหลด"
+
+#: files_widget/templates/files_widget/files_widget.html:13
+msgid "Drop an image here to upload"
+msgstr "ลาก และวางรูปที่นี่ เพื่ออัพโหลด"
+
+#: files_widget/templates/files_widget/files_widget.html:41
+msgid "Upload"
+msgstr "อัพโหลด"
+
+#: files_widget/templates/files_widget/files_widget.html:47
+msgid "Library"
+msgstr "Library"
+
+#: files_widget/templates/files_widget/files_widget.html:51
+#: files_widget/templates/files_widget/files_widget.html:53
+msgid "Add by url..."
+msgstr "เพิ่มผ่าน url"
+
+#: files_widget/templates/files_widget/files_widget.html:70
+#, fuzzy
+#| msgid "Images to be removed"
+msgid "Files to be removed"
+msgstr "รูปได้ถูกลบแล้ว"
+
+#: forum/models.py:154
+#, python-format
+msgid "A new post has been added to %sr topic: \"%s\""
+msgstr ""
+
+#: forum/models.py:192
+#, python-format
+msgid "reply %sr post: \"%s\""
+msgstr ""
+
+#: organization/forms.py:38 organization/forms.py:530 organization/forms.py:593
+#: organization/forms.py:601 presentation/tables.py:71
+#: presentation/tables.py:94 templates/organization/form.html:342
+#: templates/organization/inline_form.html:29
+#: templates/organization/program/form.html:117
+#: templates/organization/program/form.html:160
+#: templates/organization/program/form.html:294
+#: templates/organization/program/mentor_form.html:29
+#: templates/organization/program/staff_form.html:29
+msgid "Name"
+msgstr "ชื่อ"
+
+#: organization/forms.py:39 organization/forms.py:554 organization/forms.py:566
+#: templates/cms/event/form.html:40 templates/cms/news/form.html:39
+#: templates/forum/_form.html:16 templates/organization/job/form.html:87
+#: templates/organization/program/batch_form.html:8
+#: templates/organization/program/form.html:300
+#: templates/party/portfolio/form.html:33
+#: templates/relation/experience/form.html:61
+#: templates/relation/received_funding/form.html:74
+msgid "Title"
+msgstr "ชื่อเรื่อง"
+
+#: organization/forms.py:42
+msgid "Phone Number"
+msgstr "เบอร์โทรศัพท์"
+
+#: organization/forms.py:45
+msgid "Address"
+msgstr "ที่อยู่"
+
+#: organization/forms.py:48
+#, fuzzy
+#| msgid "Year of datapoint"
+msgid "Year of Datapoint"
+msgstr "ปีของจุดข้อมูล"
+
+#: organization/forms.py:48
+msgid "Year of datapoint"
+msgstr "ปีของจุดข้อมูล"
+
+#: organization/forms.py:49
+msgid "Value of impact 1"
+msgstr "ค่าของผลกระทบ 1"
+
+#: organization/forms.py:50
+msgid "Value of impact 2"
+msgstr "ค่าของผลกระทบ 2"
+
+#: organization/forms.py:51
+msgid "Value of impact 3"
+msgstr "ค่าของผลกระทบ 3"
+
+#: organization/forms.py:54
+msgid "Investor name, years, amounts"
+msgstr "ชื่อนักลงทุน, ปี, จำนวนเงิน"
+
+#: organization/forms.py:57
+msgid "Donor name, years, amounts"
+msgstr "ชื่อผู้บริจาค, ปี, จำนวนเงิน"
+
+#: organization/forms.py:133 organization/models.py:733
+msgid "Grant"
+msgstr ""
+
+#: organization/forms.py:134 organization/models.py:734
+msgid "Loan"
+msgstr ""
+
+#: organization/forms.py:135 organization/models.py:735
+#, fuzzy
+#| msgid "Equity Range"
+msgid "Equity"
+msgstr "ขอบเขตกรรมสิทธิหุ้นส่วน"
+
+#: organization/forms.py:150 templates/organization/form.html:322
+msgid "What kind of your created ?"
+msgstr "สิ่งที่คุณกำลังจะสร้างคือประเภท ?"
+
+#: organization/forms.py:160 relation/forms.py:78
+msgid "Type to search people by name."
+msgstr "พิมพ์เพื่อค้นหาบุคคล โดยชื่อ"
+
+#: organization/forms.py:168
+msgid "Type for search people by name."
+msgstr "พิมพ์เพื่อค้นหาบุคคล โดยชื่อ"
+
+#: organization/forms.py:211
+msgid "Type for search portfolios by title."
+msgstr "พิมพ์เพื่อค้นหาผลงาน โดยชื่อเรื่อง"
+
+#: organization/forms.py:219 organization/forms.py:335
+#, fuzzy
+#| msgid "Type for search portfolios by title."
+msgid "Type for search programs by title."
+msgstr "พิมพ์เพื่อค้นหาผลงาน โดยชื่อเรื่อง"
+
+#: organization/forms.py:227
+msgid "Type to search jobs by title."
+msgstr "พิมพ์เพื่อค้นหางาน โดยชื่อเรื่อง"
+
+#: organization/forms.py:298 templates/account/edit.html:268
+#: templates/organization/form.html:744
+msgid "Linkedin URL"
+msgstr "Linkedin URL"
+
+#: organization/forms.py:514
+#, fuzzy
+#| msgid "Service"
+msgid "Specify Service"
+msgstr "บริการ"
+
+#: organization/forms.py:531 organization/forms.py:602
+#: templates/organization/program/mentor_form.html:35
+#: templates/organization/program/staff_form.html:35
+#, fuzzy
+#| msgid "Title"
+msgid "Job Title"
+msgstr "ชื่อเรื่อง"
+
+#: organization/forms.py:534
+#, fuzzy
+#| msgid "Phone number"
+msgid "Contact number"
+msgstr "เบอร์โทรศัพท์"
+
+#: organization/forms.py:540
+#, fuzzy
+#| msgid "Type for search supporter by name"
+msgid "Type for search user by email."
+msgstr "พิมพ์เพื่อค้นหาผู้สนับสนุน โดยชื่อ"
+
+#: organization/forms.py:583
+#, fuzzy
+#| msgid "Email Address"
+msgid "Office Address"
+msgstr "อีเมล"
+
+#: organization/forms.py:584 templates/organization/program/form.html:178
+#: templates/organization/program/form.html:605
+msgid "Province"
+msgstr ""
+
+#: organization/forms.py:585 templates/organization/program/form.html:184
+#: templates/organization/program/form.html:611
+msgid "Pin Code"
+msgstr ""
+
+#: organization/forms.py:587 organization/forms.py:605
+#: templates/organization/program/form.html:190
+#: templates/organization/program/form.html:306
+#: templates/organization/program/form.html:617
+msgid "Tel"
+msgstr ""
+
+#: organization/forms.py:588 organization/forms.py:606
+#: templates/organization/program/form.html:196
+#: templates/organization/program/form.html:312
+#: templates/organization/program/form.html:623
+msgid "Mobile"
+msgstr ""
+
+#: organization/forms.py:594
+msgid "Company Registration Number"
+msgstr ""
+
+#: organization/forms.py:596
+msgid "Website"
+msgstr ""
+
+#: organization/forms.py:597 templates/organization/form.html:95
+#: templates/organization/form.html:721
+#: templates/organization/program/form.html:214
+msgid "Social Network"
+msgstr "เครือข่ายสังคมออนไลน์"
+
+#: organization/models.py:51
+#, fuzzy
+#| msgid "Start Date"
+msgid "Report Start Date"
+msgstr "วันที่เริ่ม"
+
+#: organization/models.py:52
+msgid "Start date of the reporting period for this IRIS report."
+msgstr ""
+
+#: organization/models.py:54
+#, fuzzy
+#| msgid "End Date"
+msgid "Report End Date"
+msgstr "วันที่สิ้นสุด"
+
+#: organization/models.py:55
+msgid "End date of the reporting period for this IRIS report."
+msgstr ""
+
+#: organization/models.py:62
+msgid "Year Founded"
+msgstr ""
+
+#: organization/models.py:63
+#, fuzzy
+#| msgid "Insert organization logo."
+msgid "Year the organization was founded."
+msgstr "ใส่รูปโลโกองค์กร"
+
+#: organization/models.py:65
+msgid "Name of representative"
+msgstr "ชื่อผู้ประสานงานติดต่อ"
+
+#: organization/models.py:71
+msgid "Gender of representative"
+msgstr "เพศผู้ประสานงานติดต่อ"
+
+#: organization/models.py:72
+#, fuzzy
+#| msgid "Name of representative"
+msgid "Brief bio of representative"
+msgstr "ชื่อผู้ประสานงานติดต่อ"
+
+#: organization/models.py:75
+#, fuzzy
+#| msgid "Information"
+msgid "Corporation"
+msgstr "ข้อมูลเบื้องต้น"
+
+#: organization/models.py:76
+msgid "Limited Liability Company"
+msgstr ""
+
+#: organization/models.py:77
+msgid "Non-Profit/Foundation/Association"
+msgstr ""
+
+#: organization/models.py:78
+#, fuzzy
+#| msgid "Partners / Clients"
+msgid "Partnership"
+msgstr "พันธมิตร"
+
+#: organization/models.py:79
+msgid "Sole-proprietorship"
+msgstr ""
+
+#: organization/models.py:80
+msgid "Cooperative"
+msgstr ""
+
+#: organization/models.py:81 organization/models.py:748
+#: organization/models.py:1124 organization/models.py:1138
+#: organization/models.py:1177
+msgid "Other"
+msgstr ""
+
+#: organization/models.py:83
+msgid "Legal Structure"
+msgstr ""
+
+#: organization/models.py:84
+#, fuzzy
+#| msgid "Create new organization"
+msgid "Current legal structure of the organization."
+msgstr "สร้าง องค์กรใหม่"
+
+#: organization/models.py:86
+msgid "Location of Organization's Headquarters"
+msgstr "ที่อยู่ของสำนักงานใหญ่"
+
+#: organization/models.py:90
+msgid "Email of Contact Person"
+msgstr "อีเมลของบุคคลที่ใช้ติดต่อ"
+
+#: organization/models.py:96
+#, fuzzy
+#| msgid "Location of Organization's Headquarters"
+msgid "Location of Organization's Operating Facilities"
+msgstr "ที่อยู่ของสำนักงานใหญ่"
+
+#: organization/models.py:98
+#, fuzzy
+#| msgid "People in organization"
+msgid "Name of referring organization"
+msgstr "บุคลากรในองค์กร"
+
+#: organization/models.py:99
+msgid "Contact information of referring organization"
+msgstr ""
+
+#: organization/models.py:101
+msgid "Sector Activities"
+msgstr ""
+
+#: organization/models.py:102
+msgid "Primary sectors impacted by the organization's operations."
+msgstr ""
+
+#: organization/models.py:105
+msgid "Women"
+msgstr ""
+
+#: organization/models.py:106
+msgid "Diabilities"
+msgstr ""
+
+#: organization/models.py:107
+msgid "Children"
+msgstr ""
+
+#: organization/models.py:108
+msgid "Ethnic Minority"
+msgstr ""
+
+#: organization/models.py:109
+msgid "Elderly"
+msgstr ""
+
+#: organization/models.py:110
+msgid "NEET"
+msgstr ""
+
+#: organization/models.py:111
+msgid "Migrant Workers"
+msgstr ""
+
+#: organization/models.py:112
+msgid "Youth"
+msgstr ""
+
+#: organization/models.py:113
+msgid "LGBT"
+msgstr ""
+
+#: organization/models.py:114 organization/models.py:180
+#: organization/models.py:762 organization/models.py:1000
+msgid "Others"
+msgstr ""
+
+#: organization/models.py:116
+msgid "Target Beneficiary"
+msgstr ""
+
+#: organization/models.py:121
+msgid "Mission Statement"
+msgstr ""
+
+#: organization/models.py:122
+#, fuzzy
+#| msgid "Add partners of your organization."
+msgid "Mission statement of the organization."
+msgstr "เพิ่ม พาร์ทเนอร์ในองค์กรของคุณ"
+
+#: organization/models.py:150
+#, fuzzy
+#| msgid "Product/Service"
+msgid "Product/Service Type"
+msgstr "Tech Startup"
+
+#: organization/models.py:151
+msgid "Type of product or service provided by the organization"
+msgstr ""
+
+#: organization/models.py:153
+#, fuzzy
+#| msgid "Product/Service"
+msgid "Product/Service Description"
+msgstr "Tech Startup"
+
+#: organization/models.py:154
+msgid "Description of the product or service."
+msgstr ""
+
+#: organization/models.py:159
+msgid "Definition of unit of measure 1"
+msgstr ""
+
+#: organization/models.py:160
+msgid "Unit of Impact Measurement 1"
+msgstr ""
+
+#: organization/models.py:162
+msgid "Definition of unit of measure 2"
+msgstr ""
+
+#: organization/models.py:163
+msgid "Unit of Impact Measurement 2"
+msgstr ""
+
+#: organization/models.py:165
+msgid "Definition of unit of measure 3"
+msgstr ""
+
+#: organization/models.py:166
+msgid "Unit of Impact Measurement 3"
+msgstr ""
+
+#: organization/models.py:168
+msgid "Measurement Year and Values"
+msgstr ""
+
+#: organization/models.py:173
+msgid "Individuals/Households"
+msgstr ""
+
+#: organization/models.py:174
+#, fuzzy
+#| msgid "Social Enterprise"
+msgid "Microenterprises"
+msgstr "กิจการเพื่อสังคม"
+
+#: organization/models.py:175
+#, fuzzy
+#| msgid "Social Enterprise"
+msgid "Small-to-Medium Enterprises"
+msgstr "กิจการเพื่อสังคม"
+
+#: organization/models.py:176
+#, fuzzy
+#| msgid "Social Enterprise"
+msgid "Large Enterprises"
+msgstr "กิจการเพื่อสังคม"
+
+#: organization/models.py:177
+msgid "Non-profit / Non-Governmental Organization / Foundations"
+msgstr ""
+
+#: organization/models.py:178
+#, fuzzy
+#| msgid "Investment"
+msgid "Government"
+msgstr "การลงทุน"
+
+#: organization/models.py:179
+#, fuzzy
+#| msgid "Supporter"
+msgid "International Organizations"
+msgstr "องค์กรสนับสนุน"
+
+#: organization/models.py:182
+msgid "Client Type"
+msgstr ""
+
+#: organization/models.py:183
+msgid ""
+"Types of entities that are buyers or recipients of the organization's "
+"products and/or services"
+msgstr ""
+
+#: organization/models.py:185
+#, fuzzy
+#| msgid "Contact Information"
+msgid "Client Information"
+msgstr "ข้อมูลติดต่อ"
+
+#: organization/models.py:186
+msgid "Name of major clients, if they are business or government"
+msgstr ""
+
+#: organization/models.py:190
+#, fuzzy
+#| msgid "Location"
+msgid "Client Locations"
+msgstr "สถานที่"
+
+#: organization/models.py:210
+msgid "Top 3 major investors, year and amount"
+msgstr ""
+
+#: organization/models.py:211
+msgid "Top 3 major donors, year and amount"
+msgstr ""
+
+#: organization/models.py:214
+msgid "Under $50K"
+msgstr ""
+
+#: organization/models.py:215
+msgid "$50K-$100K"
+msgstr ""
+
+#: organization/models.py:216
+msgid "$100K-$250K"
+msgstr ""
+
+#: organization/models.py:217
+msgid "$250K-$500K"
+msgstr ""
+
+#: organization/models.py:218
+msgid "$500K-$1MM"
+msgstr ""
+
+#: organization/models.py:219
+msgid "$1MM-$2MM"
+msgstr ""
+
+#: organization/models.py:220
+msgid "$1MM-$5MM"
+msgstr ""
+
+#: organization/models.py:221
+msgid "Over $5MM"
+msgstr ""
+
+#: organization/models.py:223
+msgid "Annual revenue"
+msgstr ""
+
+#: organization/models.py:225
+#, python-format
+msgid "Social Business (Business revenue more than 75% of total revenue)"
+msgstr ""
+
+#: organization/models.py:226
+msgid "Hybird (Business revenue range 25% to 75% of total revenue)"
+msgstr ""
+
+#: organization/models.py:227
+msgid "Charity (Business revenue less than 25%)"
+msgstr ""
+
+#: organization/models.py:229
+msgid "Revenue Model"
+msgstr ""
+
+#: organization/models.py:231
+msgid "Earned Revenue"
+msgstr ""
+
+#: organization/models.py:237
+msgid ""
+"Revenue resulting from all business activities during the reporting period. "
+"Earned revenue is total revenues less \"Contributed Revenue\" (Grants and "
+"Donations)."
+msgstr ""
+
+#: organization/models.py:240
+msgid "Cost of Goods Sold"
+msgstr ""
+
+#: organization/models.py:246
+msgid ""
+"Direct costs attributable to the production of the goods sold by the "
+"organization during the reporting period.  The cost should include all costs "
+"of purchase, costs of conversion, and other direct costs incurred in "
+"producing and selling the organization's"
+msgstr ""
+
+#: organization/models.py:249
+msgid "Gross Profit"
+msgstr ""
+
+#: organization/models.py:255
+msgid ""
+"The organization's residual profit after selling a product or service and "
+"deducting the costs directly associated with its production. Gross Profit is "
+"'Earned Revenue' less 'Cost of Goods Sold'."
+msgstr ""
+
+#: organization/models.py:258
+#, fuzzy
+#| msgid "Years of Experience"
+msgid "Personnel Expense"
+msgstr "ปีของประสบการณ์การทำงาน"
+
+#: organization/models.py:264
+msgid ""
+"Expenses related to personnel, including wages, benefits, trainings, and "
+"payroll taxes incurred by the organization during the reporting period."
+msgstr ""
+
+#: organization/models.py:267
+msgid "Selling, General, and Administration Expense"
+msgstr ""
+
+#: organization/models.py:273
+msgid ""
+"Sum of all direct and indirect selling expenses and all general and "
+"administrative expenses incurred by the organization during the reporting "
+"period."
+msgstr ""
+
+#: organization/models.py:276
+msgid "Operating Expense"
+msgstr ""
+
+#: organization/models.py:282
+msgid ""
+"Expenditures incurred by the organization as a result of performing its "
+"normal business operations. NOTE: For financial services companies this does "
+"not include Financial Expenses or provisions for loan losses (impairment "
+"losses)."
+msgstr ""
+
+#: organization/models.py:285
+msgid "EBITDA"
+msgstr ""
+
+#: organization/models.py:291
+msgid ""
+"Organization's earnings, excluding contributed revenues, before interest, "
+"taxes, depreciation and amortization during the reporting period."
+msgstr ""
+
+#: organization/models.py:294
+#, fuzzy
+#| msgid "Interests"
+msgid "Interest Expense"
+msgstr "ความสนใจ"
+
+#: organization/models.py:300
+msgid ""
+"Interest incurred during the reporting period on all liabilities, including "
+"any client deposit accounts held by the organization, borrowings, "
+"subordinated debt, and other liabilities."
+msgstr ""
+
+#: organization/models.py:303
+msgid "Depreciation and Amortization Expense"
+msgstr ""
+
+#: organization/models.py:309
+msgid ""
+"Value of expenses recorded by the organization during the reporting period "
+"for depreciation and amortization."
+msgstr ""
+
+#: organization/models.py:312
+msgid "Taxes"
+msgstr ""
+
+#: organization/models.py:318
+msgid ""
+"Value of corporate income taxes expensed by the organization during the "
+"reporting period."
+msgstr ""
+
+#: organization/models.py:321
+msgid "Net Income Before Donations"
+msgstr ""
+
+#: organization/models.py:327
+msgid ""
+"Net Income or change in unrestricted net assets resulting from all business "
+"activities during the reporting period, excluding donations. The "
+"organization's net profit before donations."
+msgstr ""
+
+#: organization/models.py:330
+msgid "Contributed Revenue"
+msgstr ""
+
+#: organization/models.py:336
+msgid ""
+"Contributed revenue during the reporting period. Includes both unrestricted "
+"and restricted operating grants and donations and in-kind contributions. "
+"Does NOT include equity grants for capital, grants that are intended for "
+"future operating periods, or gra"
+msgstr ""
+
+#: organization/models.py:339
+msgid "Net Income"
+msgstr ""
+
+#: organization/models.py:345
+msgid ""
+"Net Income or change in unrestricted net assets resulting from all business "
+"activities during the reporting period and all Contributed Revenue. The "
+"organization's net profit."
+msgstr ""
+
+#: organization/models.py:349
+msgid "Current Assets"
+msgstr ""
+
+#: organization/models.py:355
+msgid ""
+"Value, at the end of the reporting period, of all assets that are reasonably "
+"expected to be converted into cash within one year in the normal course of "
+"business. Current assets can include cash, accounts receivable, inventory, "
+"marketable securities, prepa."
+msgstr ""
+
+#: organization/models.py:358
+msgid "Total Value of Loans and Investments"
+msgstr ""
+
+#: organization/models.py:364
+msgid ""
+"Value, at the end of the reporting period, of financial portfolio products "
+"including loans and investments in investees."
+msgstr ""
+
+#: organization/models.py:367
+#, fuzzy
+#| msgid "Financial"
+msgid "Financial Assets"
+msgstr "ด้านการเงิน"
+
+#: organization/models.py:373
+msgid ""
+"Value, at the end of the reporting period, of all assets that represent "
+"debt, equity, and cash assets such as: stocks, bonds, mutual funds, cash, "
+"and cash management accounts.  Values of assets should be based upon fair "
+"market value where efficient second."
+msgstr ""
+
+#: organization/models.py:376
+msgid "Fixed Assets"
+msgstr ""
+
+#: organization/models.py:382
+msgid ""
+"Value, at the end of the reporting period, of all long-term tangible assets  "
+"that are not expected to be converted into cash in the current or upcoming "
+"fiscal year, e.g., buildings, real estate, production equipment, and "
+"furniture. Sometimes called PLANT."
+msgstr ""
+
+#: organization/models.py:385
+msgid "Total Assets"
+msgstr ""
+
+#: organization/models.py:391
+msgid "Value, at the end of the reporting period, of all assets."
+msgstr ""
+
+#: organization/models.py:394
+msgid "Retained Earnings"
+msgstr ""
+
+#: organization/models.py:400
+msgid ""
+"The sum of the organization's profits, cumulative from inception to the end "
+"of the reporting period, not paid out as dividends, but retained by the "
+"company to be reinvested in its core business or to pay debt. Also referred "
+"to as retained capital, accumul."
+msgstr ""
+
+#: organization/models.py:403
+#, fuzzy
+#| msgid "Use Account as"
+msgid "Accounts Payable"
+msgstr "ใช้บัญชีผู้ใช้เป็น"
+
+#: organization/models.py:409
+msgid ""
+"Value, at the end of the reporting period, of all outstanding debts that "
+"must be paid within a given period of time in order to avoid default."
+msgstr ""
+
+#: organization/models.py:412
+msgid "Accounts Receivable"
+msgstr ""
+
+#: organization/models.py:418
+msgid ""
+"Value, at the end of the reporting period, of outstanding debts from clients "
+"who received goods or services on credit."
+msgstr ""
+
+#: organization/models.py:421
+msgid "Current Liabilities"
+msgstr ""
+
+#: organization/models.py:427
+msgid ""
+"Value, at the end of the reporting period, of all liabilities that are "
+"expected to be settled with one year in the normal course of business. "
+"Current liabilities can include accounts payable, lines of credit, or other "
+"short term debts."
+msgstr ""
+
+#: organization/models.py:430
+#, fuzzy
+#| msgid "Financial"
+msgid "Financial Liabilities"
+msgstr "ด้านการเงิน"
+
+#: organization/models.py:436
+msgid ""
+"Value, at the end of the reporting period, of an organization's financial "
+"liabilities. Financial liabilities include all borrowed funds, deposits "
+"held, or other contractual obligations to deliver cash."
+msgstr ""
+
+#: organization/models.py:439
+msgid "Loans Payable"
+msgstr ""
+
+#: organization/models.py:445
+msgid ""
+"The remaining balance, at the end of the reporting period, on all the "
+"organization's outstanding debt obligations carried on the balance sheet."
+msgstr ""
+
+#: organization/models.py:448
+msgid "Total Liabilities"
+msgstr ""
+
+#: organization/models.py:454
+msgid "Value of organization's liabilities at the end of the reporting period."
+msgstr ""
+
+#: organization/models.py:457
+msgid "Equity or Net Assets"
+msgstr ""
+
+#: organization/models.py:463
+msgid ""
+"The residual interest, at the end of the reporting period, in the assets of "
+"the organization after deducting all its liabilities."
+msgstr ""
+
+#: organization/models.py:466
+msgid "Cash and Cash Equivalents- Period Start"
+msgstr ""
+
+#: organization/models.py:472
+msgid ""
+"Value of the organization's cash equivalents at the beginning of the "
+"reporting period."
+msgstr ""
+
+#: organization/models.py:475
+msgid "Cash Flow from Operating Activities"
+msgstr ""
+
+#: organization/models.py:481
+msgid ""
+"Value of cash flows during the reporting period related to operating "
+"activities. Operating activities are the principal revenue-producing "
+"activities of the entity and other activities that are not investing or "
+"financing activities."
+msgstr ""
+
+#: organization/models.py:484
+msgid "Cash Flow from Investing Activities"
+msgstr ""
+
+#: organization/models.py:490
+msgid ""
+"Value of cash flows during the reporting period related to investing "
+"activities by the organization. Investing activities are the acquisition and "
+"disposal of long-term assets and other investments that are not considered "
+"to be cash equivalents."
+msgstr ""
+
+#: organization/models.py:493
+msgid "Cash Flow from Financing Activities"
+msgstr ""
+
+#: organization/models.py:499
+msgid ""
+"Value of cash flows during the reporting period related to financing "
+"activities by the organization. Financing activities are activities that "
+"result in changes in the size and composition of the contributed equity and "
+"borrowings of the organization."
+msgstr ""
+
+#: organization/models.py:502
+#, fuzzy
+#| msgid "Investment"
+msgid "New Investment Capital"
+msgstr "การลงทุน"
+
+#: organization/models.py:508
+msgid ""
+"Value of cash flows from the organization's financing activities (both loans "
+"and investments) during the reporting period."
+msgstr ""
+
+#: organization/models.py:511
+msgid "Net Cash Flow"
+msgstr ""
+
+#: organization/models.py:517
+msgid ""
+"The net cash flow of the organization during the reporting period. Net cash "
+"flow equals inflows less outflows of cash and cash equivalents."
+msgstr ""
+
+#: organization/models.py:520
+msgid "Cash and Cash Equivalents- Period End"
+msgstr ""
+
+#: organization/models.py:526
+msgid ""
+"Value of the organizations cash equivalents at the end of the reporting "
+"period."
+msgstr ""
+
+#: organization/models.py:529
+msgid "Revenue Growth"
+msgstr ""
+
+#: organization/models.py:535
+msgid ""
+"Growth in value of the organization's revenue from one reporting period to "
+"another.Calculation: (Earned Revenue in reporting period 2 - Earned Revenue "
+"in reporting period 1) / Earned Revenue in reporting period 1"
+msgstr ""
+
+#: organization/models.py:538
+msgid "Income Growth"
+msgstr ""
+
+#: organization/models.py:544
+msgid ""
+"Growth in value of the organization's Net income Before Donations from one "
+"reporting period to another.Calculation: (Net Income Before Donations in "
+"reporting period 2 - Net Income Before Donations in reporting period 1) / "
+"Net Income Before Donations"
+msgstr ""
+
+#: organization/models.py:547
+msgid "Gross Margin"
+msgstr ""
+
+#: organization/models.py:553
+msgid ""
+"Percent of earned revenues that the organization retains after incurring the "
+"direct costs associated with producing the goods and services sold by the "
+"company.Calculation: 'Cost of Goods Sold' / 'Earned Revenue'"
+msgstr ""
+
+#: organization/models.py:556
+msgid "Operating Profit Margin"
+msgstr ""
+
+#: organization/models.py:562
+msgid ""
+"Organization's effectiveness at managing costs and turning earned revenues "
+"into income.Calculation: (Net Income Before Donations + Taxes) / Earned "
+"Revenue"
+msgstr ""
+
+#: organization/models.py:565
+msgid "Working Capital"
+msgstr ""
+
+#: organization/models.py:571
+msgid ""
+"Organization's operating liquidity.Calculation: Current Assets - Current "
+"Liabilities"
+msgstr ""
+
+#: organization/models.py:574
+msgid "Return on Assets (ROA)"
+msgstr ""
+
+#: organization/models.py:580
+msgid ""
+"Measurement of how well the organization uses assets to generate returns."
+"Calculation: Net Income Before Donations / Average Total Assets Average "
+"Total Assets: (Total Assets at the beginning of the period + Total Assets at "
+"the end of the period) / 2"
+msgstr ""
+
+#: organization/models.py:583
+msgid "Return on Equity (ROE)"
+msgstr ""
+
+#: organization/models.py:589
+msgid ""
+"Measurement of commercial profitability.Calculation: Net Income Before "
+"Donations / Average Equity or Net Assets Average Equity or Net Assets: "
+"(Average Equity or Net Assets at the beginning of the period + Average "
+"Equity or Net Assets at the end of"
+msgstr ""
+
+#: organization/models.py:592
+msgid "Fixed Costs"
+msgstr ""
+
+#: organization/models.py:598
+msgid "Costs that do not vary based on production or sales levels."
+msgstr ""
+
+#: organization/models.py:601
+#, fuzzy
+#| msgid "Investment"
+msgid "Entrepreneur Investment"
+msgstr "การลงทุน"
+
+#: organization/models.py:607
+msgid ""
+"Value of the equity and/or other financial contribution in the organization "
+"provided by the entrepreneur/s at the time of investment."
+msgstr ""
+
+#: organization/models.py:610
+msgid "Community Service Donations"
+msgstr ""
+
+#: organization/models.py:616
+msgid "Value of all charitable donations made by the organization"
+msgstr ""
+
+#: organization/models.py:619
+msgid "Board of Directors"
+msgstr ""
+
+#: organization/models.py:623
+msgid ""
+"Number of members of organization's Board of Directors or other governing "
+"body, as of the end of the reporting period."
+msgstr ""
+
+#: organization/models.py:626
+msgid "Female Ownership"
+msgstr ""
+
+#: organization/models.py:632
+msgid ""
+"Percentage of the company that is female-owned as of the end of the "
+"reporting period.Calculation: number of total shares owned by females/number "
+"of total shares.Note: Where regional or local laws apply for calculating "
+"ownership by previously excluded"
+msgstr ""
+
+#: organization/models.py:635
+msgid "Financial Statement Review"
+msgstr ""
+
+#: organization/models.py:638
+msgid ""
+"Indicate whether it is the organization's policy to produce financial "
+"statements that are verified annually by a certified accountant."
+msgstr ""
+
+#: organization/models.py:662
+msgid "Full-time Employees"
+msgstr ""
+
+#: organization/models.py:665
+msgid "Number of full-time employees at the end of the reporting period."
+msgstr ""
+
+#: organization/models.py:668
+msgid "Full-time Employees: Female"
+msgstr ""
+
+#: organization/models.py:671
+msgid ""
+"Number of full-time female employees at the end of the reporting period."
+msgstr ""
+
+#: organization/models.py:674
+msgid "Part-time Employees"
+msgstr ""
+
+#: organization/models.py:677
+msgid "Number of part-time employees at the end of the reporting period."
+msgstr ""
+
+#: organization/models.py:680
+msgid "Part-time Employees: Female"
+msgstr ""
+
+#: organization/models.py:683
+msgid ""
+"Number of female part-time employees at the end of the reporting period."
+msgstr ""
+
+#: organization/models.py:686
+msgid "Volunteer Hours Worked"
+msgstr ""
+
+#: organization/models.py:691
+msgid ""
+"Total number of hours worked by volunteers that supported the organization "
+"during the reporting period."
+msgstr ""
+
+#: organization/models.py:694
+msgid "Client Individuals"
+msgstr ""
+
+#: organization/models.py:699
+msgid ""
+"Number of individuals or households who were clients during the reporting "
+"period.For microfinance clients, this refers to active clients.For "
+"healthcare providers, this refers to patients.Note: Organizations tracking "
+"households should report num"
+msgstr ""
+
+#: organization/models.py:702
+#, fuzzy
+#| msgid "Create organization"
+msgid "Client Organizations"
+msgstr "สร้าง องค์กร"
+
+#: organization/models.py:705
+msgid ""
+"Number of businesses or other organizations that were clients during the "
+"reporting period."
+msgstr ""
+
+#: organization/models.py:709
+msgid "Key Officers (Name and title)"
+msgstr ""
+
+#: organization/models.py:737
+msgid "Possible form of financial support"
+msgstr ""
+
+#: organization/models.py:738
+#, fuzzy
+#| msgid "Create a received investment record"
+msgid "Grant, Loan or investment"
+msgstr "สร้าง รายการได้รับการร่วมลงทุน"
+
+#: organization/models.py:740
+msgid "Potential size of investment"
+msgstr ""
+
+#: organization/models.py:741
+#, python-format
+msgid "Potential size of investment in %s"
+msgstr ""
+
+#: organization/models.py:744
+msgid "Land/building"
+msgstr ""
+
+#: organization/models.py:745
+msgid "Equipment"
+msgstr ""
+
+#: organization/models.py:746
+msgid "Human resources development"
+msgstr ""
+
+#: organization/models.py:747
+msgid "Revolving Capital"
+msgstr ""
+
+#: organization/models.py:750
+msgid "Potential use of investment"
+msgstr ""
+
+#: organization/models.py:752
+msgid "Strategy Planning"
+msgstr ""
+
+#: organization/models.py:753
+#, fuzzy
+#| msgid "Management"
+msgid "Financial Management"
+msgstr "การจัดการ"
+
+#: organization/models.py:754
+msgid "PR"
+msgstr ""
+
+#: organization/models.py:755 organization/models.py:995
+msgid "HR"
+msgstr ""
+
+#: organization/models.py:756 organization/models.py:996
+msgid "Legal"
+msgstr ""
+
+#: organization/models.py:757
+msgid "Market Access"
+msgstr ""
+
+#: organization/models.py:758
+#, fuzzy
+#| msgid "Relationship"
+msgid "External Relations"
+msgstr "ความสัมพันธ์"
+
+#: organization/models.py:759
+msgid "Techinical Expertise"
+msgstr ""
+
+#: organization/models.py:760
+#, fuzzy
+#| msgid "Funding"
+msgid "Fundraising"
+msgstr "การได้รับเงินทุน"
+
+#: organization/models.py:761
+#, fuzzy
+#| msgid "Management"
+msgid "Operational Management"
+msgstr "การจัดการ"
+
+#: organization/models.py:764
+msgid "Possible form of non-financial support"
+msgstr ""
+
+#: organization/models.py:765
+msgid ""
+"Strategy, PR, Marketing, Legal, Operation Management, Financial Management"
+msgstr ""
+
+#: organization/models.py:777
+msgid "Product/Service"
+msgstr "Tech Startup"
+
+#: organization/models.py:778
+msgctxt "model_choice"
+msgid "Organization"
+msgstr "Startup"
+
+#: organization/models.py:925
+msgid "Pending"
+msgstr "กำลังอยู่ในการพิจารณา"
+
+#: organization/models.py:933
+msgid "New"
+msgstr "ใหม่"
+
+#: organization/models.py:936
+msgid "Updated"
+msgstr "ปรับปรุงใหม่"
+
+#: organization/models.py:984
+#, fuzzy
+#| msgid "Full Profile"
+msgid "Full Time"
+msgstr "ประวัติฉบับสมบูรณ์"
+
+#: organization/models.py:985
+#, fuzzy
+#| msgid "Content"
+msgid "Contract"
+msgstr "เนื้อหา"
+
+#: organization/models.py:986
+#, fuzzy
+#| msgid "Interests"
+msgid "Internship"
+msgstr "ความสนใจ"
+
+#: organization/models.py:987
+msgid "Cofounder"
+msgstr ""
+
+#: organization/models.py:990
+#, fuzzy
+#| msgid "Administrators"
+msgid "Administration"
+msgstr "ผู้ดูแล"
+
+#: organization/models.py:991
+msgid "Analyst/Scientist"
+msgstr ""
+
+#: organization/models.py:992
+msgid "Designer"
+msgstr ""
+
+#: organization/models.py:993
+msgid "Finance/Accounting"
+msgstr ""
+
+#: organization/models.py:994
+msgid "Hardware Engineer"
+msgstr ""
+
+#: organization/models.py:997 templates/organization/form.html:286
+msgid "Management"
+msgstr "การจัดการ"
+
+#: organization/models.py:998
+msgid "Marketing and PR"
+msgstr ""
+
+#: organization/models.py:999
+#, fuzzy
+#| msgid "Occupation"
+msgid "Operations"
+msgstr "อาชีพ"
+
+#: organization/models.py:1001
+#, fuzzy
+#| msgid "Product Launch"
+msgid "Product Manager"
+msgstr "สถานะผลิตภัณฑ์/บริการ"
+
+#: organization/models.py:1002
+msgid "Sales"
+msgstr ""
+
+#: organization/models.py:1003
+msgid "Software Engineer"
+msgstr ""
+
+#: organization/models.py:1010 presentation/tables.py:95
+#: templates/base.html:550 templates/base.html.py:576
+msgid "Active"
+msgstr "เปิดใช้งาน"
+
+#: organization/models.py:1011
+msgid "Close"
+msgstr ""
+
+#: organization/models.py:1014
+msgid "No"
+msgstr ""
+
+#: organization/models.py:1015
+msgid "Yes"
+msgstr ""
+
+#: organization/models.py:1110 templates/organization/detail.html:725
+msgid "Incubation"
+msgstr "การบ่มเพาะ"
+
+#: organization/models.py:1111
+#, fuzzy
+#| msgid "Occupation"
+msgid "Acceleration"
+msgstr "อาชีพ"
+
+#: organization/models.py:1115
+msgid "HealthTech"
+msgstr ""
+
+#: organization/models.py:1116
+msgid "TravelTech"
+msgstr ""
+
+#: organization/models.py:1117
+msgid "FinTech"
+msgstr ""
+
+#: organization/models.py:1118
+msgid "Business/ServicesTech"
+msgstr ""
+
+#: organization/models.py:1119
+msgid "IndustryTech"
+msgstr ""
+
+#: organization/models.py:1120
+msgid "Property/UrbanTech"
+msgstr ""
+
+#: organization/models.py:1121
+msgid "Gov/EdTech"
+msgstr ""
+
+#: organization/models.py:1122
+msgid "LifestyleTech"
+msgstr ""
+
+#: organization/models.py:1123
+msgid "AgTech/FoodTech"
+msgstr ""
+
+#: organization/models.py:1128
+msgid "Next-Generation Automotive"
+msgstr ""
+
+#: organization/models.py:1129
+msgid "Smart Electronics"
+msgstr ""
+
+#: organization/models.py:1130
+msgid "Affluent, Medical and Wellness Tourism"
+msgstr ""
+
+#: organization/models.py:1131
+msgid "Agriculture and Biotechnology"
+msgstr ""
+
+#: organization/models.py:1132
+msgid "Food for the Future"
+msgstr ""
+
+#: organization/models.py:1133
+msgid "Robotics"
+msgstr ""
+
+#: organization/models.py:1134
+msgid "Aviation and Logistics"
+msgstr ""
+
+#: organization/models.py:1135
+msgid "Biofuels and Biochemicals"
+msgstr ""
+
+#: organization/models.py:1136
+msgid "Digital"
+msgstr ""
+
+#: organization/models.py:1137
+msgid "Medical Hub"
+msgstr ""
+
+#: organization/models.py:1142 organization/models.py:1149
+msgid "Idea"
+msgstr ""
+
+#: organization/models.py:1143 organization/models.py:1150
+msgid "Prototype"
+msgstr ""
+
+#: organization/models.py:1144 organization/models.py:1151
+msgid "Launched"
+msgstr ""
+
+#: organization/models.py:1145 organization/models.py:1152
+msgid "Scaled up"
+msgstr ""
+
+#: organization/models.py:1156
+#, fuzzy
+#| msgid "Create a given investment record"
+msgid "Strategic investment"
+msgstr "สร้าง รายการการร่วมลงทุน"
+
+#: organization/models.py:1157
+#, fuzzy
+#| msgid "Investment"
+msgid "Pure investment"
+msgstr "การลงทุน"
+
+#: organization/models.py:1161
+#: templates/organization/program/batch_form.html:14
+msgid "Pre-seed"
+msgstr ""
+
+#: organization/models.py:1162
+#: templates/organization/program/batch_form.html:20
+msgid "Seed"
+msgstr ""
+
+#: organization/models.py:1163
+#: templates/organization/program/batch_form.html:26
+msgid "Pre-series A"
+msgstr ""
+
+#: organization/models.py:1164
+#: templates/organization/program/batch_form.html:32
+msgid "Series A"
+msgstr ""
+
+#: organization/models.py:1165
+#: templates/organization/program/batch_form.html:38
+msgid "Series B"
+msgstr ""
+
+#: organization/models.py:1166
+#: templates/organization/program/batch_form.html:44
+msgid "Series C"
+msgstr ""
+
+#: organization/models.py:1170
+msgid "Incorporation/Registration Certificate"
+msgstr ""
+
+#: organization/models.py:1171
+msgid "Summary of the activities of the program"
+msgstr ""
+
+#: organization/models.py:1172
+msgid "Long-term sustainable revenue model"
+msgstr ""
+
+#: organization/models.py:1173
+msgid ""
+"Minimum 5 resumes or portfolio(consisting of previous achievement) of "
+"mentors, coaches, speaker, and trainers"
+msgstr ""
+
+#: organization/models.py:1174
+msgid "Program plans in the future"
+msgstr ""
+
+#: organization/models.py:1175
+msgid "List of notable startup/team alumni"
+msgstr ""
+
+#: organization/models.py:1176
+#, fuzzy
+#| msgid "Location of Organization's Headquarters"
+msgid "List of organization or program partners"
+msgstr "ที่อยู่ของสำนักงานใหญ่"
+
+#: organization/models.py:1185
+msgid "Submitted"
+msgstr ""
+
+#: organization/models.py:1186
+#, fuzzy
+#| msgid "Edit"
+msgid "Edited"
+msgstr "แก้ไข"
+
+#: organization/models.py:1244
+msgid "Mentor"
+msgstr ""
+
+#: organization/models.py:1245
+msgid "Staff"
+msgstr ""
+
+#: organization/views.py:433
+#, python-format
+msgid "%s is %s."
+msgstr "%s มีสถานะเป็น %s"
+
+#: organization/views.py:439
+msgid "Your submission error. Please, check in tab has the icon"
+msgstr "เกิดข้อผิดพลาดในการสร้างหรือแก้ไขของคุณ กรุณาตรวจสอบแท็บที่มีสัญลักษณ์"
+
+#: party/forms.py:18 templates/party/portfolio/form.html:63
+msgid "Portfolio URL"
+msgstr "URL ของผลงาน"
+
+#: party/models.py:43
+#, python-format
+msgid "%s joins the network"
+msgstr "%s เข้าร่วมเป็นสมาชิก"
+
+#: presentation/tables.py:58
+msgid "Priority"
+msgstr "ลำดับความสำคัญ"
+
+#: presentation/tables.py:60
+msgid "Checkout"
+msgstr "ถอนออก"
+
+#: presentation/tables.py:72
+msgid "Created by"
+msgstr "สร้างโดย"
+
+#: presentation/tables.py:73 templates/organization/form.html:1368
+#: templates/organization/job/form.html:271
+msgid "Status"
+msgstr "สถานะ"
+
+#: presentation/tables.py:74 templates/party/_filter.html:12
+msgid "Created"
+msgstr "วันที่สร้าง"
+
+#: presentation/tables.py:96
+msgid "Date joined"
+msgstr "วันที่เข้าร่วมเป็นสมาชิก"
+
+#: presentation/views.py:47
+#, python-format
+msgid "Your %s have been deleted."
+msgstr "%s ของคุณ ได้ถูกลบแล้ว"
+
+#: presentation/views.py:162
+msgid "list"
+msgstr "รายการ"
+
+#: presentation/views.py:201
+msgid "ordering"
+msgstr "การเรียงลำดับ"
+
+#: presentation/views.py:221
+#, python-format
+msgid "Manage Pending %s"
+msgstr "จัดการ %s ที่กำลังอยู่ในการพิจารณา"
+
+#: presentation/views.py:242 presentation/views.py:274
+#, python-format
+msgid "Choose promote %s"
+msgstr "เลือก %s ที่จะโปรโมท"
+
+#: presentation/views.py:243 presentation/views.py:275
+#, python-format
+msgid "Type for search %s"
+msgstr "พิมพ์เพื่อค้นหา %s"
+
+#: presentation/views.py:255 presentation/views.py:286
+#, python-format
+msgid "Promote %s"
+msgstr "โปรโมท %s"
+
+#: relation/forms.py:22
+msgid "Type for search organizations by name"
+msgstr "พิมพ์เพื่อค้นหาองค์กร โดยชื่อ"
+
+#: relation/forms.py:57
+msgid "Type for search supporter by name"
+msgstr "พิมพ์เพื่อค้นหาผู้สนับสนุน โดยชื่อ"
+
+#: relation/models.py:30
+#, python-format
+msgid "Not implement %s"
+msgstr "ยังไม่ได้ทำให้มีผล %s"
+
+#: relation/models.py:102
+#, python-format
+msgid "adds %s as people in organization"
+msgstr "เพิ่ม %s เป็นบุคคลในองค์กร"
+
+#: relation/models.py:103
+msgid "Add people to organization"
+msgstr "เพิ่ม บุคคลเข้าในองค์กร"
+
+#: relation/models.py:111
+#, python-format
+msgid "add %s as partner"
+msgstr "เพิ่ม %s เป็นพาร์ทเนอร์"
+
+#: relation/models.py:124
+#, python-format
+msgid "gives support to %s"
+msgstr "ให้การสนับสนุนกับ %s"
+
+#: relation/models.py:125
+#, python-format
+msgid "is supported by %s"
+msgstr "ได้รับการสนับสนุนจาก %s"
+
+#: relation/models.py:138
+#, python-format
+msgid "invest in %s"
+msgstr "ร่วมลงทุนใน %s"
+
+#: relation/models.py:139
+#, python-format
+msgid "is invested by %s"
+msgstr "ได้รับการร่วมลงทุนจาก %s"
+
+#: relation/models.py:155
+#, python-format
+msgid "is now following %s"
+msgstr "ได้ติดตาม %s"
+
+#: relation/models.py:156
+msgid "Follow"
+msgstr "ติดตาม"
+
+#: relation/models.py:178
+#, python-format
+msgid "sends a message to %s"
+msgstr "ส่งข้อความถึง %s"
+
+#: relation/models.py:179
+msgid "Active as this organization to see the message"
+msgstr "เปลี่ยนตัวเองเป็นองค์กรนี้ เพื่อดูข้อความ"
+
+#: relation/models.py:181
+#, python-format
+msgid "request more financial information to %s"
+msgstr "ร้องขอข้อมูลทางการเงินเพิ่มเติมกับ %s"
+
+#: relation/models.py:209
+#, python-format
+msgid "gives testimonial to %s"
+msgstr "เขียนข้อความชมเชยให้กับ %s"
+
+#: relation/models.py:210
+msgid "Testimonial"
+msgstr "ข้อความชมเชย"
+
+#: relation/models.py:230
+#, python-format
+msgid "now works at %s"
+msgstr "ทำงานอยู่ที่ %s"
+
+#: relation/models.py:231
+msgid "Experience"
+msgstr "ประวัติการร่วมงาน"
+
+#: relation/models.py:260
+#, python-format
+msgid "receives funding from %s"
+msgstr "ได้รับเงินทุนจาก %s"
+
+#: relation/models.py:261
+#, python-format
+msgid "gives funding to %s"
+msgstr "มอบเงินทุนให้กับ %s"
+
+#: relation/models.py:296
+#, python-format
+msgid "receives investment from %s"
+msgstr "ได้รับการร่วมลงทุนจาก %s"
+
+#: relation/models.py:297
+#, python-format
+msgid "invest to %s"
+msgstr "ร่วมลงทุนกับ %s"
+
+#: relation/models.py:303
+msgid "Receives Investing"
+msgstr "ได้รับการร่วมลงทุน"
+
+#: relation/models.py:304
+msgid "Gives Investing"
+msgstr "ร่วมลงทุน"
+
+#: relation/models.py:318
+#, python-format
+msgid "invites %s gives testimonial to %s"
+msgstr "เชิญชวน %s ให้เขียนข้อความชมเชยให้กับ %s"
+
+#: relation/models.py:322
+msgid "Invite testimonial"
+msgstr "เชิญชวนให้เขียนข้อความชมเชย"
+
+#: relation/models.py:344
+#, python-format
+msgid "loves %s"
+msgstr "ถูกใจ %s"
+
+#: relation/models.py:345
+msgid "Love"
+msgstr "ถูกใจ"
+
+#: relation/models.py:356
+#, python-format
+msgid "add %s in the news"
+msgstr "เพิ่ม %s ลงไปในข่าว"
+
+#: special/models.py:13
+msgid "Banner Image"
+msgstr ""
+
+#: tastypie/authentication.py:483
+#, python-format
+msgid "Invalid access token: %s"
+msgstr ""
+
+#: tastypie/authentication.py:497
+msgid "You are not allowed to access this resource."
+msgstr ""
+
+#: tastypie/authentication.py:499
+msgid "Invalid request parameters."
+msgstr ""
+
+#: templates/account/app.html:46
+msgid "No apps"
+msgstr ""
+
+#: templates/account/app.html:49
+#, fuzzy
+#| msgid "Create job"
+msgid "Create your app"
+msgstr "สร้าง การรับสมัครงาน"
+
+#: templates/account/app_form.html:9 templates/cms/event/form.html:6
+#: templates/cms/event/form.html.py:317 templates/cms/news/form.html:6
+#: templates/cms/news/form.html.py:259 templates/forum/form.html:10
+#: templates/organization/form.html:50 templates/organization/job/form.html:17
+#: templates/organization/program/form.html:40
+#: templates/party/portfolio/form.html:16
+#: templates/relation/experience/form.html:16
+#: templates/relation/received_funding/form.html:16
+msgid "Create"
+msgstr "สร้าง"
+
+#: templates/account/app_form.html:9 templates/base.html:546
+#: templates/base.html.py:570 templates/cms/event/form.html:6
+#: templates/cms/news/form.html:6 templates/forum/_forum_board_detail.html:21
+#: templates/forum/_forum_board_detail.html:75
+#: templates/forum/_forum_detail.html:17 templates/forum/_forum_heading.html:12
+#: templates/forum/_forum_post_detail.html:16
+#: templates/forum/_forum_post_detail.html:52
+#: templates/forum/_forum_topic_detail.html:39
+#: templates/forum/_forum_topic_detail.html:72 templates/forum/form.html:10
+#: templates/organization/form.html:50 templates/organization/job/form.html:17
+#: templates/organization/program/form.html:40
+#: templates/party/portfolio/form.html:16
+#: templates/relation/experience/form.html:16
+#: templates/relation/received_funding/form.html:16
+msgid "Edit"
+msgstr "แก้ไข"
+
+#: templates/account/app_form.html:12 templates/cms/event/form.html:9
+#: templates/cms/news/form.html:9 templates/organization/form.html:307
+#: templates/organization/job/form.html:20
+#: templates/organization/program/form.html:43
+#: templates/party/portfolio/form.html:22
+msgid "View result"
+msgstr "ดูผลลัพธ์"
+
+#: templates/account/app_form.html:48 templates/forum/_form.html:62
+#: templates/organization/job/form.html:288
+#: templates/organization/program/form.html:702
+#: templates/party/portfolio/form.html:75
+#: templates/relation/experience/form.html:106
+#: templates/relation/received_funding/form.html:98
+msgid "Create new"
+msgstr "สร้างใหม่"
+
+#: templates/account/app_form.html:51 templates/account/edit.html:696
+#: templates/cms/event/form.html:317 templates/cms/news/form.html:259
+#: templates/forum/_form.html:65 templates/organization/form.html:1422
+#: templates/organization/inline_form.html:56
+#: templates/organization/job/form.html:288
+#: templates/organization/program/form.html:702
+#: templates/party/portfolio/form.html:75
+#: templates/relation/experience/form.html:106
+#: templates/relation/received_funding/form.html:98
+msgid "Save changes"
+msgstr "บันทึกการแก้ไข"
+
+#: templates/account/app_form.html:54 templates/account/edit.html:697
+#: templates/account/inline_invite_form.html:80
+#: templates/account/login_inline.html:45
+#: templates/account/password_reset_form_inline.html:26
+#: templates/account/register_confirm_invalid.html:49
+#: templates/account/register_inline.html:29 templates/cms/event/form.html:318
+#: templates/cms/news/form.html:260 templates/forum/_form.html:68
+#: templates/manage.html:93 templates/organization/form.html:1423
+#: templates/organization/inline_form.html:57
+#: templates/organization/job/form.html:290
+#: templates/organization/job/form.html:293
+#: templates/organization/program/form.html:704
+#: templates/organization/program/form.html:707
+#: templates/party/portfolio/form.html:77
+#: templates/party/portfolio/form.html:80
+#: templates/relation/experience/form.html:108
+#: templates/relation/experience/form.html:111
+#: templates/relation/received_funding/form.html:100
+#: templates/relation/received_funding/form.html:103
+msgid "Cancel"
+msgstr "ยกเลิก"
+
+#: templates/account/detail.html:473 templates/organization/detail.html:937
+msgid "Message"
+msgstr "ข้อความ"
+
+#: templates/account/edit.html:6
+msgid "Profile Settings"
+msgstr "ตั้งค่าบัญชีผู้ใช้"
+
+#: templates/account/edit.html:40 templates/account/inline_invite_form.html:50
+msgid "Picture"
+msgstr "รูปภาพ"
+
+#: templates/account/edit.html:44 templates/account/inline_invite_form.html:54
+msgid ""
+"Use images that are at least 370 x 280 pixels and 1.3:1 image ratio for the "
+"best display."
+msgstr "รูปที่ดีในการแสดงผล ควรจะมีขนาดไม่เกิน 370 x 280 พิกเซล และอัตราส่วนอยู่ที่ 1.3:1"
+
+#: templates/account/edit.html:53
+msgid "Username"
+msgstr "ชื่อบัญชีผู้ใช้"
+
+#: templates/account/edit.html:73 templates/account/login_inline.html:27
+msgid "Password"
+msgstr "รหัสผ่าน"
+
+#: templates/account/edit.html:77
+msgid "click for change your password"
+msgstr "กดเพื่อเปลี่ยนรหัสผ่านของคุณ"
+
+#: templates/account/edit.html:93
+msgid "Confirm password"
+msgstr "ยืนยันรหัสผ่าน"
+
+#: templates/account/edit.html:111 templates/account/inline_invite_form.html:30
+msgid "First name"
+msgstr "ชื่อ"
+
+#: templates/account/edit.html:121 templates/account/inline_invite_form.html:40
+msgid "Last name"
+msgstr "นามสกุล"
+
+#: templates/account/edit.html:132
+msgid "Gender"
+msgstr "เพศ"
+
+#: templates/account/edit.html:149
+msgid "Roles"
+msgstr "บทบาท"
+
+#: templates/account/edit.html:171
+#, fuzzy
+#| msgid "Organization"
+msgid "Organizations"
+msgstr "องค์กร"
+
+#: templates/account/edit.html:178
+#, fuzzy
+#| msgid "Type to search organizations by name."
+msgid "Enter organizations name."
+msgstr "พิมพ์เพื่อค้นหาองค์กร โดยชื่อ"
+
+#: templates/account/edit.html:188 templates/organization/form.html:816
+#: templates/organization/form.html:856 templates/organization/form.html:896
+#: templates/organization/form.html:959 templates/organization/form.html:1021
+#: templates/organization/form.html:1083 templates/organization/form.html:1341
+#: templates/organization/job/form.html:56
+#: templates/organization/program/form.html:79
+#: templates/organization/program/mentor_form.html:13
+#: templates/organization/program/staff_form.html:13
+#: templates/relation/experience/form.html:39
+#: templates/relation/invite_testify/form.html:23
+#: templates/relation/received_funding/form.html:39
+msgid "or"
+msgstr "หรือ"
+
+#: templates/account/edit.html:191 templates/relation/experience/form.html:42
+msgid "Create organization"
+msgstr "สร้าง องค์กร"
+
+#: templates/account/edit.html:205
+msgid "Occupation"
+msgstr "อาชีพ"
+
+#: templates/account/edit.html:215
+msgid "Professional Headline"
+msgstr "ความชำนาญ หรือทักษะ ที่น่าดึงดูดใจ"
+
+#: templates/account/edit.html:228 templates/organization/form.html:456
+#: templates/organization/job/form.html:107
+#: templates/party/portfolio/form.html:53
+#: templates/relation/experience/form.html:71
+msgid "Description"
+msgstr "รายละเอียด"
+
+#: templates/account/edit.html:291 templates/organization/form.html:236
+msgid "Full Profile"
+msgstr "ประวัติฉบับสมบูรณ์"
+
+#: templates/account/edit.html:297
+msgid ""
+"Add your roles, interests, skills, portfolios, experiences, give support to, "
+"invest to and notification settings"
+msgstr ""
+
+#: templates/account/edit.html:300
+msgid "click here"
+msgstr ""
+
+#: templates/account/edit.html:318 templates/organization/form.html:506
+#: templates/organization/job/form.html:233
+msgid "Country"
+msgstr "ประเทศ"
+
+#: templates/account/edit.html:325
+msgid "Interests"
+msgstr "ความสนใจ"
+
+#: templates/account/edit.html:345 templates/organization/job/form.html:257
+msgid "Skills"
+msgstr "ทักษะความสามารถ"
+
+#: templates/account/edit.html:373 templates/organization/form.html:1162
+msgid "Create portfolio"
+msgstr "สร้างผลงาน"
+
+#: templates/account/edit.html:374 templates/account/edit.html.py:405
+msgid "Add new"
+msgstr "เพิ่มใหม่"
+
+#: templates/account/edit.html:379
+msgid "Add portfolios to display on your profile."
+msgstr "เพิ่ม ผลงาน เพื่อไปแสดงบนหน้าบัญชีผู้ใช้ของคุณ"
+
+#: templates/account/edit.html:404
+msgid "Create experience"
+msgstr "สร้างประวัติการร่วมงาน"
+
+#: templates/account/edit.html:410
+msgid "Add experiences to display on your profile."
+msgstr "เพิ่ม ประวัติการร่วมงาน เพื่อไปแสดงบนหน้าบัญชีผู้ใช้ของคุณ"
+
+#: templates/account/edit.html:430 templates/organization/form.html:941
+msgid "Add organizations who received your support."
+msgstr "เพิ่ม องค์กรที่คุณเคยให้การสนับสนุน"
+
+#: templates/account/edit.html:442
+msgid "Add gives funding records who received your support"
+msgstr "เพิ่ม รายการที่คุณเคยสนับสนุนเงินทุนให้"
+
+#: templates/account/edit.html:449
+msgid "Create Gives Funding"
+msgstr "สร้าง การจัดหาเงินทุน"
+
+#: templates/account/edit.html:454
+msgid "Add gives funding to display on your happening."
+msgstr "เพิ่ม รายการการให้เงินทุน เพื่อไปแสดงบนหน้าสิ่งที่เกิดขึ้นของคุณ"
+
+#: templates/account/edit.html:474
+msgid "Add organizations who received your invest."
+msgstr "เพิ่ม องค์กรที่คุณเคยร่วมลงทุนด้วย"
+
+#: templates/account/edit.html:486
+msgid "Add gives investing records who received your invest"
+msgstr "เพิ่ม รายการที่คุณเคยร่วมลงทุนด้วย"
+
+#: templates/account/edit.html:493
+msgid "Create Gives Investing"
+msgstr "สร้าง การร่วมลงทุน"
+
+#: templates/account/edit.html:498
+msgid "Add gives investing to display on your happening."
+msgstr "เพิ่ม รายการการร่วมลงทุน เพื่อไปแสดงบนหน้าสิ่งที่เกิดขึ้นของคุณ"
+
+#: templates/account/edit.html:515
+msgid "Your account"
+msgstr "บัญชีผู้ใช้ของคุณ"
+
+#: templates/account/edit.html:521
+msgid "Organization adds you as people in organization."
+msgstr "องค์กรเพิ่มคุณเป็นบุคคลในองค์กร"
+
+#: templates/account/edit.html:530
+msgid "Organization [gives support to/is supported by] you."
+msgstr "องค์กร [ให้การสนับสนุนกับ/ได้รับการสนับสนุนจาก] คุณ"
+
+#: templates/account/edit.html:539
+msgid "Someone is now following you."
+msgstr "มีคนติดตามคุณ"
+
+#: templates/account/edit.html:548
+msgid "Someone sends a message to you."
+msgstr "มีคนส่งข้อความถึงคุณ"
+
+#: templates/account/edit.html:557
+msgid "Someone gives testimonial to you."
+msgstr "มีคนเขียนข้อความชมเชยให้กับคุณ"
+
+#: templates/account/edit.html:566
+msgid "Someone invites you to give a testimonial."
+msgstr "มีคนเชิญชวนคุณ ให้เขียนข้อความชมเชยให้"
+
+#: templates/account/edit.html:575
+msgid "Someone loves you."
+msgstr "มีคนถูกใจคุณ"
+
+#: templates/account/edit.html:588
+msgid "Your organizations"
+msgstr "องค์กรของคุณ"
+
+#: templates/account/edit.html:594
+msgid "Organization adds your organization as partner."
+msgstr "องค์กรเพิ่มองค์กรของคุณเป็นพาร์ทเนอร์"
+
+#: templates/account/edit.html:603
+msgid "People now works at your organization."
+msgstr "บุคคลทำงานอยู่ที่องค์กรของคุณ"
+
+#: templates/account/edit.html:612
+msgid "Someone [gives support to/is supported by] your organization."
+msgstr "มีคน [ให้การสนับสนุนกับ/ได้รับการสนับสนุนจาก] องค์กรของคุณ"
+
+#: templates/account/edit.html:621
+msgid "Someone is now following your organization."
+msgstr "มีคนติดตามองค์กรของคุณ"
+
+#: templates/account/edit.html:631
+msgid "Someone sends a message to your organization."
+msgstr "มีคนส่งข้อความถึงองค์กรของคุณ"
+
+#: templates/account/edit.html:640
+msgid "Someone gives testimonial to your organization."
+msgstr "มีคนเขียนข้อความชมเชยให้กับองค์กรของคุณ"
+
+#: templates/account/edit.html:649
+msgid "Someone invites your organization to give a testimonial."
+msgstr "มีคนเชิญชวนองค์กรของคุณ ให้เขียนข้อความชมเชยให้"
+
+#: templates/account/edit.html:658
+msgid "Someone loves your organization."
+msgstr "มีคนถูกใจองค์กรของคุณ"
+
+#: templates/account/edit.html:670
+msgid "Your Following"
+msgstr "การติดตามของคุณ"
+
+#: templates/account/edit.html:676
+msgid "Happening"
+msgstr "สิ่งที่เกิดขึ้น"
+
+#: templates/account/edit.html:703 templates/cms/event/form.html:324
+#: templates/cms/news/form.html:266 templates/organization/form.html:1428
+#: templates/organization/job/form.html:299
+msgid "Delete"
+msgstr "ลบ"
+
+#: templates/account/email/invite_email.html:9
+#: templates/account/email/password_reset_email.html:4
+msgid "Please go to the following page and choose a new password:"
+msgstr "กรุณา ไปยังหน้าข้างล่างนี้ และเปลี่ยนรหัสผ่านใหม่"
+
+#: templates/account/email/invite_email.html:13
+#: templates/account/email/password_reset_email.html:9
+msgid "Your username, in case you've forgotten:"
+msgstr "ชื่อบัญชีผู้ใช้ของคุณ สำหรับไว้ใช้ในกรณีที่คุณลืม"
+
+#: templates/account/email/invite_email.html:15
+#, fuzzy, python-format
+#| msgid "Thanks for using our site!"
+msgid "Thanks for using %(site_slogan)s!"
+msgstr "ขอบคุณสำหรับการใช้บริการกับเว็บไซต์ของเรา"
+
+#: templates/account/email/invite_email.html:17
+#: templates/account/email/password_reset_email.html:13
+#: templates/account/email/register_email.html:11
+#: templates/notification/email.html:12
+#, python-format
+msgid "The %(site_name)s team"
+msgstr "ทีม %(site_name)s"
+
+#: templates/account/email/invite_email_subject.txt:1
+msgid "Invite you to join"
+msgstr "เชิญชวนคุณเข้าร่วมเป็นสมาชิก"
+
+#: templates/account/email/password_reset_email.html:2
+#, python-format
+msgid ""
+"You're receiving this email because you requested a password reset for your "
+"user account at %(site_name)s."
+msgstr ""
+"คุณได้รับอีเมลฉบับนี้ เพราะคุณร้องขอการตั้งค่ารหัสผ่านใหม่กับบัญชีผู้ใช้ของคุณ ที่ %(site_name)s"
+
+#: templates/account/email/password_reset_email.html:7
+#: templates/account/email/register_email.html:7
+#: templates/notification/email.html:9
+msgid ""
+"This link can only be used once to log in and will lead you to a page where "
+"you can set your password."
+msgstr "ลิงก์นี้สามารถใช้เข้าสู่ระบบได้แค่ครั้งเดียวเท่านั้น และจะนำคุณไปยังหน้าตั้งค่ารหัสผ่านใหม่"
+
+#: templates/account/email/password_reset_email.html:11
+msgid "Thanks for using our site!"
+msgstr "ขอบคุณสำหรับการใช้บริการกับเว็บไซต์ของเรา"
+
+#: templates/account/email/password_reset_email_subject.txt:1
+msgid "Reset password on"
+msgstr "ตั้งค่ารหัสผ่านใหม่ที่"
+
+#: templates/account/email/register_email.html:2
+#, python-format
+msgid "Thank you for register with %(site_name)s."
+msgstr "ขอบคุณสำหรับเข้าร่วมเป็นสมาชิกกับ %(site_name)s"
+
+#: templates/account/email/register_email.html:4
+msgid "Please confirm your registration from link:"
+msgstr "กรุณายืนยันการสมัครสมาชิกของคุณจากลิงก์ด้านล่างนี้"
+
+#: templates/account/email/register_email_subject.txt:1
+msgid "User register on"
+msgstr "ผู้ใช้สมัครสมาชิกกับ"
+
+#: templates/account/inline_invite_form.html:21
+msgid "Enter new email address"
+msgstr "ใส่อีเมลใหม่"
+
+#: templates/account/inline_invite_form.html:63
+msgid "Summary/Position"
+msgstr "รายละเอียด/ตำแหน่ง"
+
+#: templates/account/inline_invite_form.html:77
+#: templates/account/inline_invite_form.html:79
+msgid "Invite"
+msgstr "เชิญชวน"
+
+#: templates/account/invite_form.html:11
+msgid "Invite Staff"
+msgstr "เชิญชวนให้เป็นผู้ดูแล"
+
+#: templates/account/login.html:9
+msgid "Please log in"
+msgstr "กรุณาเข้าสู่ระบบ"
+
+#: templates/account/login_error.html:6
+msgid "Login error"
+msgstr "การเข้าสู่ระบบ ผิดพลาด"
+
+#: templates/account/login_inline.html:3 templates/account/login_inline.html:4
+#: templates/account/login_inline.html:7 templates/account/login_inline.html:8
+#: templates/account/register_confirm_invalid.html:24
+#: templates/account/register_confirm_invalid.html:25
+#: templates/account/register_confirm_invalid.html:28
+#: templates/account/register_confirm_invalid.html:29
+#: templates/account/register_inline.html:4
+#: templates/account/register_inline.html:5
+#: templates/account/register_inline.html:8
+#: templates/account/register_inline.html:9
+msgid "Connect with"
+msgstr "เชื่อมต่อกับ"
+
+#: templates/account/login_inline.html:18
+#: templates/account/password_reset_form_inline.html:15
+#: templates/account/register_confirm_invalid.html:38
+#: templates/account/register_inline.html:18
+msgid "Email Address"
+msgstr "อีเมล"
+
+#: templates/account/login_inline.html:19
+msgid "Enter your email address or username"
+msgstr "ใส่อีเมลของคุณ หรือชื่อบัญชีผู้ใช้"
+
+#: templates/account/login_inline.html:36
+#: templates/account/login_inline.html:38
+msgid "Forgot your password ?"
+msgstr "คุณลืมรหัสผ่าน ?"
+
+#: templates/account/login_inline.html:53
+#: templates/account/login_inline.html:55
+msgid "Don't have an account?"
+msgstr "คุณยังไม่ได้สมัครบัญชีผู้ใช้หรือเปล่า?"
+
+#: templates/account/password_reset_done.html:4
+#: templates/account/password_reset_form_inline.html:25
+#: templates/account/password_reset_form_inline.html:28
+msgid "Reset password"
+msgstr "ตั้งค่ารหัสผ่านใหม่"
+
+#: templates/account/password_reset_done.html:15
+msgid ""
+"A message has been sent to your email address containing a link to reset "
+"your password."
+msgstr "ระบบได้ส่งข้อความที่มีลิงก์เพื่อทำการตั้งค่ารหัสผ่านใหม่ไปยังอีเมลของคุณเรียบร้อยแล้ว"
+
+#: templates/account/password_reset_form.html:4 templates/base.html:508
+msgid "Forgot password"
+msgstr "ลืมรหัสผ่าน"
+
+#: templates/account/password_reset_form_inline.html:16
+#: templates/account/register_confirm_invalid.html:39
+#: templates/account/register_inline.html:19
+msgid "Enter your email address"
+msgstr "ใส่อีเมลของคุณ"
+
+#: templates/account/password_reset_form_inline.html:36
+#: templates/account/password_reset_form_inline.html:38
+msgid "‹ Back to log in"
+msgstr "‹ กลับไปเข้าสู่ระบบ"
+
+#: templates/account/register.html:9
+#: templates/account/register_confirm_invalid.html:48
+#: templates/account/register_inline.html:28
+#: templates/account/register_inline.html:31 templates/base.html:485
+msgid "Register"
+msgstr "สมัครสมาชิก"
+
+#: templates/account/register_confirm_invalid.html:9
+#, fuzzy
+#| msgid "Enter a valid permalink."
+msgid "Invalid link"
+msgstr "ใส่ข้อมูลชื่อลิงก์ให้ถูกต้อง"
+
+#: templates/account/register_confirm_invalid.html:19
+#, fuzzy
+#| msgid "Your registration confirmation link would be sent"
+msgid "Your confirmation link can only be used once to log in."
+msgstr "ลิงก์ยืนยันการสมัครสมาชิก"
+
+#: templates/account/register_confirm_invalid.html:20
+#, fuzzy
+#| msgid "The email invitation has been send."
+msgid "The link has been used."
+msgstr "อีเมลการเชิญชวนได้ถูกส่งออกไปแล้ว"
+
+#: templates/account/register_confirm_invalid.html:21
+#, fuzzy
+#| msgid "Your registration confirmation link would be sent"
+msgid "You can resend registration confirmation link again at the form below."
+msgstr "ลิงก์ยืนยันการสมัครสมาชิก"
+
+#: templates/account/register_confirm_invalid.html:51
+#, fuzzy
+#| msgid "Please confirm your registration from link:"
+msgid "Resend confirmation link"
+msgstr "กรุณายืนยันการสมัครสมาชิกของคุณจากลิงก์ด้านล่างนี้"
+
+#: templates/account/register_confirm_invalid.html:56
+#: templates/account/register_inline.html:36
+msgid "Your registration confirmation link would be sent"
+msgstr "ลิงก์ยืนยันการสมัครสมาชิก"
+
+#: templates/account/register_confirm_invalid.html:58
+#: templates/account/register_inline.html:38
+msgid "for filling up your organization information"
+msgstr "สำหรับการกรอกข้อมูลสตาร์ทอัพของคุณ"
+
+#: templates/account/register_confirm_invalid.html:60
+#: templates/account/register_inline.html:40
+msgid "via your given email"
+msgstr "จะถูกส่งไปยังอีเมลที่คุณระบุไว้"
+
+#: templates/account/register_confirm_invalid.html:67
+#: templates/account/register_confirm_invalid.html:69
+#: templates/account/register_inline.html:47
+#: templates/account/register_inline.html:49
+msgid "Have an account?"
+msgstr "คุณมีบัญชีผู้ใช้อยู่แล้วหรือเปล่า"
+
+#: templates/base.html:256
+msgid "View profile"
+msgstr "ดูบัญชีผู้ใช้"
+
+#: templates/base.html:262
+msgid "Use Account as"
+msgstr "ใช้บัญชีผู้ใช้เป็น"
+
+#: templates/base.html:298
+msgid "See All..."
+msgstr "ดูทั้งหมด"
+
+#: templates/base.html:326
+#, fuzzy
+#| msgid "Organization/Product/Service"
+msgid "Organization / Product / Service"
+msgstr "องค์กร/ผลิตภัณฑ์/บริการ"
+
+#: templates/base.html:345 templates/cms/event/form.html:6
+msgid "Event"
+msgstr "กิจกรรม"
+
+#: templates/base.html:356
+msgid "Request log"
+msgstr "บันทึกการร้องขอ"
+
+#: templates/base.html:360
+#, python-format
+msgid "%(display_name)s's request"
+msgstr "การร้องขอของ %(display_name)s"
+
+#: templates/base.html:368
+msgid "Settings"
+msgstr "ตั้งค่า"
+
+#: templates/base.html:369
+msgid "Logout"
+msgstr "ออกจากระบบ"
+
+#: templates/base.html:377
+msgid "Join"
+msgstr "สมัครสมาชิก"
+
+#: templates/base.html:378
+msgid "Login"
+msgstr "เข้าสู่ระบบ"
+
+#: templates/base.html:531
+#, fuzzy
+#| msgid "Your organizations"
+msgid "Your Account and Organizations"
+msgstr "องค์กรของคุณ"
+
+#: templates/base.html:553 templates/base.html.py:579
+msgid "Active as this account"
+msgstr "ใช้เป็นบัญชีผู้ใช้นี้"
+
+#: templates/base.html:636
+msgid "Coming Soon"
+msgstr ""
+
+#: templates/cms/event/form.html:25
+msgid "Add Event"
+msgstr "เพิ่ม กิจกรรม"
+
+#: templates/cms/event/form.html:56 templates/cms/news/form.html:55
+#: templates/forum/_form.html:32 templates/organization/form.html:359
+msgid "Permalink"
+msgstr "ชื่อลิงก์"
+
+#: templates/cms/event/form.html:65 templates/cms/news/form.html:64
+#: templates/forum/_form.html:41
+#, fuzzy, python-format
+#| msgid ""
+#| "This field represent your %(type_of_organization_name)s url in this "
+#| "website."
+msgid "This field represent your %(inst_type)s url in this website."
+msgstr ""
+"ค่านี้จะถูกนำไปทำเป็น url ให้กับ%(type_of_organization_name)sที่คุณกำลังสร้าง "
+"(บนเว็บไซต์ของเรา)"
+
+#: templates/cms/event/form.html:89
+msgid "Location"
+msgstr "สถานที่"
+
+#: templates/cms/event/form.html:101
+msgid "Start date"
+msgstr "วันที่เริ่ม"
+
+#: templates/cms/event/form.html:114
+msgid "End date"
+msgstr "วันที่สิ้นสุด"
+
+#: templates/cms/event/form.html:128
+msgid "Time"
+msgstr "เวลา"
+
+#: templates/cms/event/form.html:142 templates/cms/news/form.html:134
+#: templates/organization/job/form.html:72
+#: templates/organization/program/form.html:95
+#: templates/organization/program/form.html:156
+#: templates/relation/experience/form.html:30
+msgid "Organization"
+msgstr "องค์กร"
+
+#: templates/cms/event/form.html:151 templates/cms/news/form.html:143
+msgid "Summary"
+msgstr "คำโปรย"
+
+#: templates/cms/event/form.html:155 templates/cms/news/form.html:147
+#: templates/organization/form.html:444
+#, python-format
+msgid "Short detail in %(maxlength)s characters"
+msgstr "คำอธิบายสั้นๆใน %(maxlength)s ตัวอักษร"
+
+#: templates/cms/event/form.html:164 templates/cms/news/form.html:156
+msgid "Content"
+msgstr "เนื้อหา"
+
+#: templates/cms/event/form.html:177
+#: templates/organization/program/participants_table.html:7
+msgid "Topic"
+msgstr "หมวดหมู่"
+
+#: templates/cms/event/form.html:197 templates/cms/news/form.html:189
+msgid "Tags"
+msgstr ""
+
+#: templates/cms/event/form.html:211
+msgid "Add organizations/people in the event"
+msgstr "เพิ่ม องค์กร/บุคคล ลงในกิจกรรม"
+
+#: templates/cms/event/form.html:215
+msgid "Enter organizations/people name to display on your event."
+msgstr "ใส่ชื่อ องค์กร/บุคคล เพื่อไปแสดงบนหน้ากิจกรรมของคุณ"
+
+#: templates/cms/event/form.html:226
+msgid "Contact of Event’s Organizer"
+msgstr "ข้อมูลติดต่อ ของผู้จัดงาน"
+
+#: templates/cms/event/form.html:232
+msgid "Phone number"
+msgstr "เบอร์โทรศัพท์"
+
+#: templates/cms/event/form.html:300 templates/cms/news/form.html:243
+msgid "Promote?"
+msgstr "โปรโมท?"
+
+#: templates/cms/event/form.html:304 templates/cms/news/form.html:247
+msgid "Promote to Front Page"
+msgstr "โปรโมทไปยังหน้าแรก"
+
+#: templates/cms/news/form.html:6
+#, fuzzy
+#| msgid "Add Article"
+msgid "Article"
+msgstr "เพิ่ม บทความ"
+
+#: templates/cms/news/form.html:25
+msgid "Add Article"
+msgstr "เพิ่ม บทความ"
+
+#: templates/cms/news/form.html:74
+#, fuzzy
+#| msgid "Category"
+msgid "Old Category"
+msgstr "หมวดหมู่"
+
+#: templates/cms/news/form.html:100
+msgid "Category"
+msgstr "หมวดหมู่"
+
+#: templates/cms/news/form.html:169
+#, fuzzy
+#| msgid "Topic"
+msgid "Topics"
+msgstr "หมวดหมู่"
+
+#: templates/cms/news/form.html:202
+msgid "Source URL"
+msgstr "URL แหล่งที่มา"
+
+#: templates/cms/news/form.html:216
+msgid "Add organizations/people in the article"
+msgstr "เพิ่ม องค์กร/บุคคล ที่เกี่ยวข้องลงในบทความ"
+
+#: templates/cms/news/form.html:220
+msgid "Enter organizations/people name to display on your article."
+msgstr "ใส่ชื่อ องค์กร/บุคคล เพื่อไปแสดงบนหน้าบทความของคุณ"
+
+#: templates/cms/news/form.html:230
+msgid "File Attachment"
+msgstr ""
+
+#: templates/formset.html:42
+msgid "Add more"
+msgstr "เพิ่ม"
+
+#: templates/forum/_forum_board_detail.html:33
+#, fuzzy
+#| msgid "Topic"
+msgid "topics"
+msgstr "หมวดหมู่"
+
+#: templates/forum/_forum_board_detail.html:47
+#: templates/forum/_forum_board_detail.html:113
+#, fuzzy
+#| msgid "Topic"
+msgid "Add Topic"
+msgstr "หมวดหมู่"
+
+#: templates/forum/_forum_board_detail.html:90
+#: templates/forum/_forum_topic_detail.html:24
+msgid "posts"
+msgstr ""
+
+#: templates/forum/_forum_board_detail.html:91
+#: templates/forum/_forum_topic_detail.html:85
+msgid "answers"
+msgstr ""
+
+#: templates/forum/_forum_board_detail.html:92
+#: templates/forum/_forum_topic_detail.html:86
+msgid "reads"
+msgstr ""
+
+#: templates/forum/_forum_board_detail.html:95
+#, fuzzy
+#| msgid "Latest"
+msgid "Latest post at"
+msgstr "ล่าสุด"
+
+#: templates/forum/_forum_board_detail.html:96
+#: templates/forum/_forum_topic_detail.html:93
+#: templates/forum/_forum_topic_detail.html:99
+msgid "by"
+msgstr ""
+
+#: templates/forum/_forum_board_detail.html:109
+msgid "No topics"
+msgstr ""
+
+#: templates/forum/_forum_detail.html:21 templates/forum/_forum_detail.html:48
+#, fuzzy
+#| msgid "Add more"
+msgid "Add Board"
+msgstr "เพิ่ม"
+
+#: templates/forum/_forum_detail.html:44 templates/party/_filter.html:95
+msgid "No results"
+msgstr "ดูผลลัพธ์"
+
+#: templates/forum/_forum_heading.html:16
+#, fuzzy
+#| msgid "Address"
+msgid "Add"
+msgstr "ที่อยู่"
+
+#: templates/forum/_forum_post_detail.html:23
+#, fuzzy
+#| msgid "Post"
+msgid "Post by"
+msgstr "โพสต์"
+
+#: templates/forum/_forum_post_detail.html:23
+#: templates/forum/_forum_post_detail.html:47
+msgid "at"
+msgstr ""
+
+#: templates/forum/_forum_post_detail.html:39
+#, fuzzy
+#| msgid "Files"
+msgid "Repiles"
+msgstr "ไฟล์"
+
+#: templates/forum/_forum_post_detail.html:47
+msgid "Reply by"
+msgstr ""
+
+#: templates/forum/_forum_post_detail.html:77
+msgid "Know someone who can answer?"
+msgstr ""
+
+#: templates/forum/_forum_topic_detail.html:46
+#: templates/forum/_forum_topic_detail.html:117
+#, fuzzy
+#| msgid "Post"
+msgid "Add Post"
+msgstr "โพสต์"
+
+#: templates/forum/_forum_topic_detail.html:92
+msgid "Latest answer at"
+msgstr ""
+
+#: templates/forum/_forum_topic_detail.html:98
+#, fuzzy
+#| msgid "Post"
+msgid "Post at"
+msgstr "โพสต์"
+
+#: templates/forum/_forum_topic_detail.html:113
+msgid "No posts"
+msgstr ""
+
+#: templates/manage.html:32
+msgid "Add to ordering list below"
+msgstr "เพิ่ม ไปยังรายการจัดอันดับด้านล่าง"
+
+#: templates/manage.html:92
+msgid "Save ordering"
+msgstr "บันทึกการจัดอันดับ"
+
+#: templates/ng_snippet.html:136 templates/organization/form.html:1421
+msgid "Next"
+msgstr "ถัดไป"
+
+#: templates/notification/email.html:2
+#, python-format
+msgid "Notification from %(site_name)s."
+msgstr "การแจ้งจาก %(site_name)s"
+
+#: templates/organization/detail.html:683
+msgid "Focus"
+msgstr "หมวดหมู่"
+
+#: templates/organization/detail.html:695
+msgid "Latest"
+msgstr "ล่าสุด"
+
+#: templates/organization/detail.html:702
+msgid "See All"
+msgstr "ดูทั้งหมด"
+
+#: templates/organization/detail.html:710
+msgid "Type of Needs"
+msgstr "ประเภทของความต้องการ"
+
+#: templates/organization/detail.html:719
+msgid "Financial"
+msgstr "ด้านการเงิน"
+
+#: templates/organization/detail.html:731
+msgid "Advisory/Consulting"
+msgstr "การให้คำปรึกษา"
+
+#: templates/organization/detail.html:737
+msgid "Networking"
+msgstr "เครือข่าย"
+
+#: templates/organization/detail.html:749 templates/organization/form.html:643
+msgid "Type of Supports"
+msgstr "ประเภทของการสนับสนุน"
+
+#: templates/organization/detail.html:759
+msgid "Organization Type"
+msgstr "ประเภทองค์กร"
+
+#: templates/organization/detail.html:983
+msgid "Message to Administrator"
+msgstr "ส่งข้อความถึงผู้ดูแล"
+
+#: templates/organization/form.html:27
+msgid "Be a FREE"
+msgstr ""
+
+#: templates/organization/form.html:28
+msgid "member of Thailand Tech Startup Association (TTSA)"
+msgstr ""
+
+#: templates/organization/form.html:61
+#, fuzzy
+#| msgid "Information"
+msgid "Information completeness"
+msgstr "ข้อมูลเบื้องต้น"
+
+#: templates/organization/form.html:81
+msgid "Basic Profile"
+msgstr "ประวัติเบื้องต้น"
+
+#: templates/organization/form.html:84 templates/organization/form.html:312
+msgid "Information"
+msgstr "ข้อมูลเบื้องต้น"
+
+#: templates/organization/form.html:89 templates/organization/form.html:503
+msgid "Taxonomy"
+msgstr "การจัดหมวดหมู่"
+
+#: templates/organization/form.html:102 templates/organization/form.html:768
+#: templates/organization/job/form.html:97
+msgid "Contact Information"
+msgstr "ข้อมูลติดต่อ"
+
+#: templates/organization/form.html:110 templates/organization/form.html:796
+msgid "People in organization"
+msgstr "บุคลากรในองค์กร"
+
+#: templates/organization/form.html:115 templates/organization/form.html:835
+msgid "Partners / Clients"
+msgstr "พันธมิตร"
+
+#: templates/organization/form.html:120 templates/organization/form.html:1126
+msgid "Jobs"
+msgstr "รับสมัครงาน"
+
+#: templates/organization/form.html:127 templates/organization/form.html:139
+msgid "Support"
+msgstr "การสนับสนุน"
+
+#: templates/organization/form.html:127 templates/organization/form.html:141
+#: templates/organization/form.html:277 templates/organization/form.html:1311
+msgid "Investment"
+msgstr "การลงทุน"
+
+#: templates/organization/form.html:132 templates/organization/form.html:876
+msgid "Supported by"
+msgstr "รับการสนับสนุนจาก .."
+
+#: templates/organization/form.html:148
+#, fuzzy
+#| msgid "Organization Type"
+msgid "Organisations Supported"
+msgstr "ประเภทองค์กร"
+
+#: templates/organization/form.html:156 templates/organization/form.html:1001
+msgid "Invested by"
+msgstr "ด้านการร่วมลงทุน"
+
+#: templates/organization/form.html:163
+#, fuzzy
+#| msgid "Organization Type"
+msgid "Organisations Funded"
+msgstr "ประเภทองค์กร"
+
+#: templates/organization/form.html:169
+msgid "Portfolios / Media"
+msgstr "รางวัล/ การออกสื่อ"
+
+#: templates/organization/form.html:172 templates/organization/form.html:1152
+msgid "Portfolios"
+msgstr "รางวัล"
+
+#: templates/organization/form.html:179 templates/organization/form.html:1177
+msgid "Incubation/Acceleration Programs"
+msgstr ""
+
+#: templates/organization/form.html:239 templates/organization/form.html:249
+#: templates/organization/form.html:258 templates/organization/form.html:267
+#: templates/organization/form.html:276
+#, python-format
+msgid "Section %(number)s"
+msgstr "ส่วนที่ %(number)s"
+
+#: templates/organization/form.html:240 templates/organization/form.html:1206
+msgid "General Information"
+msgstr "ข้อมูลทั่วไป"
+
+#: templates/organization/form.html:250 templates/organization/form.html:1228
+msgid "Products/Services and Their Impacts"
+msgstr "ผลิตภัณฑ์/บริการ และการส่งผลกระทบเหล่านั้น"
+
+#: templates/organization/form.html:259 templates/organization/form.html:1289
+msgid "Finance"
+msgstr "การเงิน"
+
+#: templates/organization/form.html:268 templates/organization/form.html:1304
+msgid "Team"
+msgstr "ทีม"
+
+#: templates/organization/form.html:289 templates/organization/form.html:1321
+msgid "Administrators"
+msgstr "ผู้ดูแล"
+
+#: templates/organization/form.html:294 templates/organization/form.html:1365
+msgid "Publishing"
+msgstr "การตีพิมพ์"
+
+#: templates/organization/form.html:343
+msgid "of Product"
+msgstr ""
+
+#: templates/organization/form.html:344
+msgid "of"
+msgstr ""
+
+#: templates/organization/form.html:366
+#, python-format
+msgid ""
+"This field represent your %(type_of_organization_name)s url in this website."
+msgstr ""
+"ค่านี้จะถูกนำไปทำเป็น url ให้กับ%(type_of_organization_name)sที่คุณกำลังสร้าง "
+"(บนเว็บไซต์ของเรา)"
+
+#: templates/organization/form.html:381
+msgid "Insert a logo representing your organization/product/service."
+msgstr "ใส่รูปโลโก องค์กร/ผลิตภัณฑ์/บริการ ของคุณ"
+
+#: templates/organization/form.html:397
+msgid "Primary Role"
+msgstr "บทบาทหลัก"
+
+#: templates/organization/form.html:417
+msgid "Secondary Roles"
+msgstr "บทบาทรอง"
+
+#: templates/organization/form.html:441
+msgid "Slogan"
+msgstr "สโลแกน"
+
+#: templates/organization/form.html:459
+msgid "Explain about your organization/product/service."
+msgstr "อธิบายเกี่ยวกับ องค์กร/ผลิตภัณฑ์/บริการ ของคุณ"
+
+#: templates/organization/form.html:474
+msgid "Screenshots"
+msgstr "รูปตัวอย่าง (Screenshots)"
+
+#: templates/organization/form.html:475 templates/organization/form.html:476
+#, fuzzy
+#| msgid "Incubation"
+msgid "Illustration"
+msgstr "การบ่มเพาะ"
+
+#: templates/organization/form.html:481
+#, fuzzy
+#| msgid "Insert screenshots representing your product."
+msgid "Insert screenshots representing your product/service."
+msgstr "ใส่รูปประกอบ เพื่อนำเสนอ ผลิตภัณฑ์ของคุณ"
+
+#: templates/organization/form.html:484 templates/organization/form.html:487
+#, fuzzy
+#| msgid "Insert a logo representing your organization/product/service."
+msgid "Insert images representing your organization."
+msgstr "ใส่รูปโลโก องค์กร/ผลิตภัณฑ์/บริการ ของคุณ"
+
+#: templates/organization/form.html:516
+#, fuzzy
+#| msgid "Supported by"
+msgid "Supporter Type"
+msgstr "รับการสนับสนุนจาก .."
+
+#: templates/organization/form.html:536
+#, fuzzy
+#| msgid "Investor"
+msgid "Investor Type"
+msgstr "นักลงทุน"
+
+#: templates/organization/form.html:562
+msgid "Product/Service Launch"
+msgstr "สถานะผลิตภัณฑ์/บริการ"
+
+#: templates/organization/form.html:570
+#, fuzzy
+#| msgid "Funding"
+msgid "Funded"
+msgstr "การได้รับเงินทุน"
+
+#: templates/organization/form.html:577
+#, fuzzy
+#| msgid "Request log"
+msgid "Request Funding"
+msgstr "บันทึกการร้องขอ"
+
+#: templates/organization/form.html:586
+msgid "Type of needs"
+msgstr "ประเภทของความต้องการ"
+
+#: templates/organization/form.html:622
+msgid "Focus on"
+msgstr "โฟกัส"
+
+#: templates/organization/form.html:663
+#, fuzzy
+#| msgid "Growth Stage"
+msgid "Investment Growth Stage"
+msgstr "ระยะการเติบโต"
+
+#: templates/organization/form.html:683
+msgid "Deal Size - Minimum"
+msgstr "การลงทุน - ขั้นต่ำสุด"
+
+#: templates/organization/form.html:693
+msgid "Deal Size - Maximum"
+msgstr "การลงทุน - ขั้นสูงสุด"
+
+#: templates/organization/form.html:706
+msgid "Growth Stage"
+msgstr "ระยะการเติบโต"
+
+#: templates/organization/form.html:787
+msgid "Phone number of Organization s Headquarters"
+msgstr "เบอร์โทรศัพท์ของสำนักงานใหญ่"
+
+#: templates/organization/form.html:799
+msgid "Add people who work at your organization."
+msgstr "เพิ่ม บุคลากรที่ทำงานในองค์กรของคุณ"
+
+#: templates/organization/form.html:806
+msgid "Enter person name to display on your organization."
+msgstr "ใส่ชื่อบุคคล เพื่อไปแสดงบนหน้าองค์กรของคุณ"
+
+#: templates/organization/form.html:819
+msgid "Create new person"
+msgstr "สร้างบุคคลใหม่"
+
+#: templates/organization/form.html:838
+msgid "Add partners of your organization."
+msgstr "เพิ่ม พาร์ทเนอร์ในองค์กรของคุณ"
+
+#: templates/organization/form.html:846
+msgid "Enter partners name to display on your organization."
+msgstr "ใส่ชื่อพาร์ทเนอร์ เพื่อไปแสดงบนหน้าองค์กรของคุณ"
+
+#: templates/organization/form.html:859 templates/organization/form.html:899
+#: templates/organization/form.html:962 templates/organization/form.html:1024
+#: templates/organization/form.html:1086
+#: templates/organization/job/form.html:59
+#: templates/organization/program/form.html:82
+#: templates/relation/received_funding/form.html:42
+msgid "Create new organization"
+msgstr "สร้าง องค์กรใหม่"
+
+#: templates/organization/form.html:879
+msgid "Add supporters of your organization"
+msgstr "เพิ่ม ผู้สนับสนุนในองค์กรของคุณ"
+
+#: templates/organization/form.html:886
+msgid "Enter supporter name to display on your organization."
+msgstr "ใส่ชื่อผู้สนับสนุน เพื่อไปแสดงบนหน้าองค์กรของคุณ"
+
+#: templates/organization/form.html:913
+msgid "Add records of received funding"
+msgstr "เพิ่ม รายการที่คุณได้รับการสนับสนุน"
+
+#: templates/organization/form.html:917
+msgid "Received funding record will be displayed on your Happening."
+msgstr "รายการที่ได้รับเงินทุนสนุบสนุน จะไปแสดงบนหน้าสิ่งที่เกิดขึ้นของคุณ"
+
+#: templates/organization/form.html:925
+msgid "Create a received funding record"
+msgstr "สร้าง รายการได้รับเงินทุนสนุบสนุน"
+
+#: templates/organization/form.html:938
+msgid "Give Support to"
+msgstr "ด้านอื่น ๆ"
+
+#: templates/organization/form.html:949
+msgid "Enter recipient name to display on your organization."
+msgstr "ใส่ชื่อผู้รับการลงทุน เพื่อไปแสดงบนหน้าองค์กรของคุณ"
+
+#: templates/organization/form.html:976
+msgid "Add records of funding given to others."
+msgstr "เพิ่ม รายการของการให้เงินทุนสนุบสนุนไปยังองค์กรต่างๆ"
+
+#: templates/organization/form.html:979
+msgid "Given funding record will be displayed on your Happening."
+msgstr "รายการการให้เงินทุนสนุบสนุน จะไปแสดงบนหน้าสิ่งที่เกิดขึ้นของคุณ"
+
+#: templates/organization/form.html:987
+msgid "Create a given funding record"
+msgstr "สร้าง รายการการให้เงินทุนสนุบสนุน"
+
+#: templates/organization/form.html:1004
+msgid "Add investors of your organization"
+msgstr "เพิ่ม นักลงทุนขององค์กรของคุณ"
+
+#: templates/organization/form.html:1011
+msgid "Enter investor name to display on your organization."
+msgstr "ใส่ชื่อนักลงทุน เพื่อไปแสดงบนหน้าองค์กรของคุณ"
+
+#: templates/organization/form.html:1038
+msgid "Add records of investment received"
+msgstr "เพิ่ม รายการได้รับการร่วมลงทุน"
+
+#: templates/organization/form.html:1041 templates/organization/form.html:1105
+msgid "Investment record will be displayed on your Happening."
+msgstr "รายการได้รับการร่วมลงทุน จะไปแสดงบนหน้าสิ่งที่เกิดขึ้นของคุณ"
+
+#: templates/organization/form.html:1049
+msgid "Create a received investment record"
+msgstr "สร้าง รายการได้รับการร่วมลงทุน"
+
+#: templates/organization/form.html:1063
+msgid "Invest to"
+msgstr "ร่วมลงทุนกับ .."
+
+#: templates/organization/form.html:1066
+msgid "Add organizations who received your investment"
+msgstr "เพิ่ม องค์กรที่คุณร่วมลงทุนด้วย"
+
+#: templates/organization/form.html:1073
+msgid "Enter invest recipient name to display on your organization."
+msgstr "ใส่ชื่อผู้รับการลงทุน เพื่อไปแสดงบนหน้าองค์กรของคุณ"
+
+#: templates/organization/form.html:1101
+msgid "Add records of investment given to others"
+msgstr "เพิ่ม รายการการร่วมลงทุนไปยังองค์กรต่างๆ"
+
+#: templates/organization/form.html:1113
+msgid "Create a given investment record"
+msgstr "สร้าง รายการการร่วมลงทุน"
+
+#: templates/organization/form.html:1128
+msgid "Add your jobs"
+msgstr "เพิ่ม การรับสมัครงานของคุณ"
+
+#: templates/organization/form.html:1131
+msgid "Create a job to start recruiting."
+msgstr "สร้าง การสมัครงาน เพื่อเปิดรับสมาชิกใหม่"
+
+#: templates/organization/form.html:1139
+msgid "Create job"
+msgstr "สร้าง การรับสมัครงาน"
+
+#: templates/organization/form.html:1155
+msgid "Add your portfolios"
+msgstr "เพิ่ม ผลงานของคุณ"
+
+#: templates/organization/form.html:1180
+#, fuzzy
+#| msgid "Add your jobs"
+msgid "Add your programs"
+msgstr "เพิ่ม การรับสมัครงานของคุณ"
+
+#: templates/organization/form.html:1188
+#, fuzzy
+#| msgid "Create job"
+msgid "Create Program"
+msgstr "สร้าง การรับสมัครงาน"
+
+#: templates/organization/form.html:1325
+msgid "Add your organization’s administrators."
+msgstr "เพิ่ม ผู้ดูแลองค์กรของคุณ"
+
+#: templates/organization/form.html:1331
+msgid ""
+"Type to search for your admin. This person will be able to represent and "
+"manage your organization on this website."
+msgstr ""
+"พิมพ์เพื่อค้นหาผู้ดูแลของคุณ บุคคลนั้นจะสามารถ ปรับแต่ง และจัดการองค์กรของคุณ บนเว็บไซต์แห่งนี้ได้"
+
+#: templates/organization/form.html:1344
+#: templates/relation/invite_testify/form.html:26
+msgid " Invite by Email"
+msgstr "เชิญชวนทางอีเมล"
+
+#: templates/organization/form.html:1390
+#, fuzzy
+#| msgid "Event"
+msgid "Events"
+msgstr "กิจกรรม"
+
+#: templates/organization/form.html:1422
+msgid "Finish"
+msgstr "สำเร็จ"
+
+#: templates/organization/inline_form.html:11
+msgid "Type of Organization"
+msgstr "ประเภทขององค์กร"
+
+#: templates/organization/inline_form.html:33
+msgid "Organization/Product/Service name."
+msgstr "ชื่อองค์กร/ผลิตภัณฑ์/บริการ"
+
+#: templates/organization/inline_form.html:46
+msgid "Insert organization logo."
+msgstr "ใส่รูปโลโกองค์กร"
+
+#: templates/organization/inline_form.html:56
+msgid "Save new"
+msgstr "บันทึก การสร้างใหม่"
+
+#: templates/organization/inline_form.html:146
+msgid "Delete Item"
+msgstr "ลบรายการ"
+
+#: templates/organization/inline_form.html:147
+msgid "Are you sure you want to delete this item?"
+msgstr "คุณแน่ใจใช่ไหม ว่าคุณต้องการจะลบรายการนี้จริงๆ ?"
+
+#: templates/organization/job/form.html:38
+#: templates/organization/program/form.html:61
+#, fuzzy
+#| msgid "Insert organization logo."
+msgid "Select organization of your job."
+msgstr "ใส่รูปโลโกองค์กร"
+
+#: templates/organization/job/form.html:46
+#: templates/organization/program/form.html:69
+#, fuzzy
+#| msgid "Organization adds you as people in organization."
+msgid "Select organization that your created and administration."
+msgstr "องค์กรเพิ่มคุณเป็นบุคคลในองค์กร"
+
+#: templates/organization/job/form.html:117
+msgid "Role"
+msgstr "บทบาท"
+
+#: templates/organization/job/form.html:128
+msgid "Working Pattern"
+msgstr ""
+
+#: templates/organization/job/form.html:139
+msgid "Salary Range"
+msgstr "ขอบเขตเงินเดือน"
+
+#: templates/organization/job/form.html:171
+msgid "Equity Range"
+msgstr "ขอบเขตกรรมสิทธิหุ้นส่วน"
+
+#: templates/organization/job/form.html:204
+msgid "Remote OK?"
+msgstr "ไม่จำเป็นต้องเข้าสำนักงาน?"
+
+#: templates/organization/job/form.html:220
+msgid "Years of Experience"
+msgstr "ปีของประสบการณ์การทำงาน"
+
+#: templates/organization/job/form.html:244
+msgid "Location Detail"
+msgstr "รายละเอียดสถานที่"
+
+#: templates/organization/job/form.html:248
+msgid "Ex: Bangkok, Chiang Mai"
+msgstr "เช่น กรุงเทพ เชียงใหม่ เป็นต้น"
+
+#: templates/organization/job/form.html:262
+msgid "Separate by comma, space, tab or enter"
+msgstr "แบ่งด้วยเครื่องหมาย ลูกน้ำ เว้นวรรค แท็บ หรือ ขึ้นบรรทัดใหม่"
+
+#: templates/organization/program/form.html:113
+msgid "Part 1: Program General Details"
+msgstr ""
+
+#: templates/organization/program/form.html:127
+#, fuzzy
+#| msgid "Type of Supports"
+msgid "Type of Program"
+msgstr "ประเภทของการสนับสนุน"
+
+#: templates/organization/program/form.html:143
+msgid "Date of Establishment"
+msgstr ""
+
+#: templates/organization/program/form.html:166
+msgid "Company Registration No."
+msgstr ""
+
+#: templates/organization/program/form.html:172
+#, fuzzy
+#| msgid "Email Address"
+msgid "Office Addess"
+msgstr "อีเมล"
+
+#: templates/organization/program/form.html:208
+msgid "Official Website"
+msgstr ""
+
+#: templates/organization/program/form.html:224
+#, fuzzy
+#| msgid "Focus on"
+msgid "Focus Sectors"
+msgstr "โฟกัส"
+
+#: templates/organization/program/form.html:247
+msgid "Focus Industry(10 S-Curve)"
+msgstr ""
+
+#: templates/organization/program/form.html:270
+msgid "Stage of Participants"
+msgstr ""
+
+#: templates/organization/program/form.html:290
+#, fuzzy
+#| msgid "Email of Contact Person"
+msgid "Contact Person"
+msgstr "อีเมลของบุคคลที่ใช้ติดต่อ"
+
+#: templates/organization/program/form.html:330
+msgid "Part 2: Program Personnel"
+msgstr ""
+
+#: templates/organization/program/form.html:333
+#, fuzzy
+#| msgid "Relationship"
+msgid "Mentorships"
+msgstr "ความสัมพันธ์"
+
+#: templates/organization/program/form.html:334
+msgid ""
+"Please provide brief information of main mentors, coaches, speakers and "
+"trainers of the program"
+msgstr ""
+
+#: templates/organization/program/form.html:356
+msgid "Operating Staffs"
+msgstr ""
+
+#: templates/organization/program/form.html:357
+msgid "Please provide brief information of operating staff in the program"
+msgstr ""
+
+#: templates/organization/program/form.html:382
+msgid "Part 3: Financial Support and Investment"
+msgstr ""
+
+#: templates/organization/program/form.html:385
+msgid "Is the organization acting as an investor?"
+msgstr ""
+
+#: templates/organization/program/form.html:401
+msgid "Has the organization ever invited in the participant teams?"
+msgstr ""
+
+#: templates/organization/program/form.html:417
+msgid "If yes, what's the type of investment?"
+msgstr ""
+
+#: templates/organization/program/form.html:433
+msgid "What's the investment stage that the program has been focusting on?"
+msgstr ""
+
+#: templates/organization/program/form.html:450
+msgid "Other stage, Please specify?"
+msgstr ""
+
+#: templates/organization/program/form.html:460
+msgid "Approximate amount of investment in each stage"
+msgstr ""
+
+#: templates/organization/program/form.html:461
+msgid "Note: The amount provided can be an exact number or in range"
+msgstr ""
+
+#: templates/organization/program/form.html:487
+msgid "Has the organozation ever taken equity in participanting teams?"
+msgstr ""
+
+#: templates/organization/program/form.html:503
+msgid ""
+"Does the organozation provide grants or financial supports to the "
+"participanting teams?"
+msgstr ""
+
+#: templates/organization/program/form.html:519
+msgid "If yes, please specify the amount (THB)"
+msgstr ""
+
+#: templates/organization/program/form.html:534
+msgid "Part 4: Participants Detail"
+msgstr ""
+
+#: templates/organization/program/form.html:544
+msgid ""
+"Contract period of engagement with the participant during the program (in "
+"months)"
+msgstr ""
+
+#: templates/organization/program/form.html:560
+msgid "Part 5: Program Facilities"
+msgstr ""
+
+#: templates/organization/program/form.html:563
+msgid ""
+"Does the organozation provide the participant working spaces and facilities "
+"during the program?"
+msgstr ""
+
+#: templates/organization/program/form.html:579
+msgid "Is the working space own by the organization?"
+msgstr ""
+
+#: templates/organization/program/form.html:595
+msgid "If yes, please specify the address of the working space"
+msgstr ""
+
+#: templates/organization/program/form.html:599
+msgid "Addess"
+msgstr ""
+
+#: templates/organization/program/form.html:639
+msgid "Is there any service or facility provided by the program?"
+msgstr ""
+
+#: templates/organization/program/form.html:655
+msgid "If yes, plase specify?"
+msgstr ""
+
+#: templates/organization/program/form.html:666
+msgid ""
+"The program shall provide a brief about itself and include points such as:"
+msgstr ""
+
+#: templates/organization/program/form.html:686
+#, fuzzy
+#| msgid "Upload"
+msgid "Upload files: "
+msgstr "อัพโหลด"
+
+#: templates/organization/program/mentor_form.html:7
+#: templates/organization/program/staff_form.html:7
+#, fuzzy
+#| msgid "Search"
+msgid "Search user"
+msgstr "ค้นหา"
+
+#: templates/organization/program/mentor_form.html:16
+#: templates/organization/program/staff_form.html:16
+#, fuzzy
+#| msgid "Create new person"
+msgid "Create new user"
+msgstr "สร้างบุคคลใหม่"
+
+#: templates/organization/program/mentor_form.html:41
+#: templates/organization/program/staff_form.html:41
+#, fuzzy
+#| msgid "Phone Number"
+msgid "Contact Number"
+msgstr "เบอร์โทรศัพท์"
+
+#: templates/organization/program/mentor_form.html:47
+msgid "Upload files (resume or portfolio): "
+msgstr ""
+
+#: templates/organization/program/participants_table.html:6
+msgid "No."
+msgstr ""
+
+#: templates/organization/program/participants_table.html:17
+#: templates/organization/program/participants_table.html:26
+msgid "Total number of teams applying for the program"
+msgstr ""
+
+#: templates/organization/program/participants_table.html:36
+msgid "Total number of teams accepted for the program"
+msgstr ""
+
+#: templates/organization/program/participants_table.html:45
+msgid "Total number of participants accepted for the program"
+msgstr ""
+
+#: templates/organization/program/participants_table.html:54
+msgid "Total number of team graduted teams for the program"
+msgstr ""
+
+#: templates/organization/program/participants_table.html:63
+msgid "Number of training programs conducted and to be conducted"
+msgstr ""
+
+#: templates/organization/program/participants_table.html:72
+msgid ""
+"Number of events, conferences seminars workshops organized or to be organized"
+msgstr ""
+
+#: templates/organization/program/participants_table.html:81
+msgid "Number of coaches, mentors and speakers in the program"
+msgstr ""
+
+#: templates/organization/program/participants_table.html:90
+msgid "Number of assisting staffs in the program"
+msgstr ""
+
+#: templates/organization/program/participants_table.html:99
+msgid ""
+"Approximated number of new products, innovations or technologies to be "
+"developed and commercialized"
+msgstr ""
+
+#: templates/party/_filter.html:6
+msgid "Filter by"
+msgstr "กรองตาม"
+
+#: templates/party/_filter.html:16
+msgid "This year"
+msgstr "ปียี้"
+
+#: templates/party/_filter.html:17
+msgid "This month"
+msgstr "เดือนนี้"
+
+#: templates/party/_filter.html:18
+msgid "This week"
+msgstr "สัปดาห์นี้"
+
+#: templates/party/_filter.html:37
+#, python-format
+msgid "{[{ result.meta.total_count }]} %(title)s found"
+msgstr "พบ {[{ result.meta.total_count }]} %(title)s"
+
+#: templates/party/_filter.html:42
+msgid "Selected Filters"
+msgstr "ตัวกรองที่เลือก"
+
+#: templates/party/_filter.html:62
+msgid "Company"
+msgstr "บริษัท"
+
+#: templates/relation/experience/form.html:81
+msgid "Start Date"
+msgstr "วันที่เริ่ม"
+
+#: templates/relation/experience/form.html:93
+msgid "End Date"
+msgstr "วันที่สิ้นสุด"
+
+#: templates/relation/invite_testify/form.html:7
+msgid "Invite your friends to write testimonial"
+msgstr "เชิญชวนเพื่อนของคุณให้เขียนข้อความชมเชยให้"
+
+#: templates/relation/invite_testify/form.html:16
+msgid ""
+"Type to search for your friends. This person will be receive invite "
+"notification."
+msgstr "พิมพ์ เพื่อค้นหาเพื่อนของคุณ และเพื่อนของคุณจะรับรู้การเชิญชวนนี้ ผ่านทางระบบแจ้งเตือน"
+
+#: templates/relation/received_funding/form.html:61
+msgid "Amount"
+msgstr "จำนวนเงิน"
+
+#: templates/relation/received_funding/form.html:84
+msgid "Received Date"
+msgstr "วันที่ได้รับ"
+
+msgid "companies"
+msgstr "บริษัท"
+
+msgid "investors"
+msgstr "นักลงทุน"
+
+msgid "organizations"
+msgstr "องค์กร"
+
+msgid "Type"
+msgstr "ประเภท"
+
+msgid "people"
+msgstr "บุคคล"
+
+msgid "Month"
+msgstr "เดือน"
+
+msgid "Year"
+msgstr "ปี"
+
+msgid "Filters"
+msgstr "กรองตาม"
+
+msgid "All"
+msgstr "ทั้งหมด"
+
+msgid "Add event"
+msgstr "เพิ่ม กิจกรรม"
+
+msgid "Add my event"
+msgstr "เพิ่ม กิจกรรมของฉัน"
+
+msgid "Past Events"
+msgstr "กิจกรรมที่ผ่านมา"
+
+msgid "See past events"
+msgstr "ดูกิจกรรมที่ผ่านมา"
+
+msgid "Active and Upcoming Events"
+msgstr "กิจกรรมที่เริ่มแล้ว และกำลังจะมาถึง"
+
+msgid "No result"
+msgstr "ไม่พบผลลัพธ์"
+
+msgid "Upcoming events"
+msgstr "กิจกรรมที่กำลังจะมาถึง"
+
+msgid "View upcoming events"
+msgstr "ดู กิจกรรมที่กำลังจะมาถึง"
+
+msgid "Portfolio"
+msgstr "รางวัล"
+
+msgid "People who has experiences in organization"
+msgstr "บุคคลที่เคยทำงานในองค์กร"
+
+msgid "Browse All"
+msgstr "เลือกดูทั้งหมด"
+
+msgid "Supporters"
+msgstr "ผู้สนับสนุน"
+
+msgid "Warning"
+msgstr "คำเตือน"
+
+msgid ""
+"You're receiving this email because editor invite you to join "
+"%(site_name)s."
+msgstr "คุณได้รับอีเมลฉบับนี้ เพราะผู้ดูแลเชิญชวนคุณเข้าร่วมเป็นสมาชิกกับ %(site_name)s"
+
+msgid "Your Accounts"
+msgstr "บัญชีผู้ใช้ของคุณ"
+
+msgid "Type of supports"
+msgstr "ประเภทของการสนับสนุน"
+
+msgid "Position"
+msgstr "สถานะ"
+
+msgid "New %s have been created. View this %s <a href=\"%s\">here</a>."
+msgstr "%s ได้ถูกสร้างใหม่แล้ว ดู %s นั้นได้ <a href=\"%s\">ที่นี่</a>"
+
+msgid ""
+"Your %s settings have been updated. View this %s <a href=\"%s\">here</a>."
+msgstr "การตั้งค่า %s ของคุณได้ถูกบันทึกแล้ว ดู %s นั้นได้ <a href=\"%s\">ที่นี่</a>"
+
+
+msgid "Organization/Product/Service name"
+msgstr "ชื่อองค์กร/ผลิตภัณฑ์/บริการ"
+
+msgid "Verify Email"
+msgstr "ตรวจสอบอีเมล"
+
+msgid ""
+"Or you can enter an email to invite people to be listed on your "
+"organization."
+msgstr "หรือ คุณสามารถระบุอีเมลเพื่อเชิญชวนบุคคลนั้นเข้ามาเป็นบุคลากรภายในองค์กรของคุณ"

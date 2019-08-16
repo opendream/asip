@@ -205,31 +205,33 @@ def sortable_update(request, Inst, redirect_url_name, redirect_args=[], queue_fo
 
 
 @staff_member_required
-def manage_pending_organization(request, organization_role):
-    organization_role = get_object_or_404(OrganizationRole, permalink=organization_role)
+def manage_pending_organization(request, type_of_organization):
 
     item_list = Organization.objects\
-        .filter(organization_roles=organization_role, status=STATUS_PENDING)\
+        .filter(type_of_organization=type_of_organization, status=STATUS_PENDING)\
         .exclude(status=STATUS_DRAFT)\
         .order_by('created')
+
+    q = request.GET.get('q')
+    if q:
+        item_list = item_list.filter(name__icontains=q.lower())
 
     table = OrganizationTable(item_list)
     RequestConfig(request).configure(table)
 
     return render(request, 'manage.html', {
         'table': table,
-        'page_title': _('Manage Pending %s') % organization_role.title
+        'page_title': _('Manage Pending %s') % type_of_organization.title()
     })
 
 
 @staff_member_required
-def manage_promote_organization(request, organization_role):
+def manage_promote_organization(request, type_of_organization):
 
-    organization_role = get_object_or_404(OrganizationRole, permalink=organization_role)
 
 
     item_list = Organization.objects\
-        .filter(organization_primary_role=organization_role, promote=True) \
+        .filter(type_of_organization=type_of_organization, promote=True) \
         .exclude(status=STATUS_DRAFT)\
         .order_by('-priority', '-created', '-id')
 
@@ -237,22 +239,22 @@ def manage_promote_organization(request, organization_role):
     RequestConfig(request).configure(table)
 
     queue_form_params = {
-        'queryset': Organization.objects.filter(organization_primary_role=organization_role).exclude(Q(status=STATUS_DRAFT)|Q(promote=True)).order_by('name'),
+        'queryset': Organization.objects.filter(type_of_organization=type_of_organization).exclude(Q(status=STATUS_DRAFT)|Q(promote=True)).order_by('name'),
         'autocomplete': OrganizationAutocomplete,
-        'label': _('Choose promote %s') % organization_role.title.lower(),
-        'placeholder': _('Type for search %s') % organization_role.title.lower(),
+        'label': _('Choose promote %s') % type_of_organization.lower(),
+        'placeholder': _('Type for search %s') % type_of_organization.lower(),
     }
     queue_form = QueueForm(**queue_form_params)
 
     if request.method == 'POST':
-        return sortable_update(request, Organization, 'manage_promote_organization', redirect_args=[organization_role.permalink], queue_form_params=queue_form_params)
+        return sortable_update(request, Organization, 'manage_promote_organization', redirect_args=[type_of_organization], queue_form_params=queue_form_params)
 
 
     return render(request, 'manage.html', {
         'queue_form': queue_form,
         'sortable': True,
         'table': table,
-        'page_title': _('Promote %s') % organization_role.title
+        'page_title': _('Promote %s') % type_of_organization
     })
 
 

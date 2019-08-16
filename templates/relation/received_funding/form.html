@@ -27,7 +27,7 @@
 
     <div class="controls form-group">
 
-        <label for="id_dst" class="field-container control-label col-sm-3">{{ party_label }} *</label>
+        <label for="id_dst" class="field-container control-label col-sm-3">Name of the financial source *</label>
         <div class="field-container-no-overflow field-inline-id_dst col-sm-7">
 
             <div class="inline-reference-container">
@@ -38,8 +38,8 @@
                     <div class="inline-create-link-wrapper">
                         {% trans "or" %}
                         <span class="glyphicon glyphicon-plus icostartup icon-plus"></span>
-                        <a href="{% url 'organization_inline_create' %}?_inline=1" class="add-another-inline" id="add_id_dst" target="dst_inline">
-                            {% trans "Create new organization" %}
+                        <a href="{% url 'organization_inline_create' %}?_inline=1&type_of_organization={% if request.GET.winName == 'id_gived_fundings' %}startup{% else %}investor{% endif %}&required_contact=1&is_mockup=1" class="add-another-inline" id="add_id_dst" target="dst_inline">
+                            {% trans "Create mockup financial organization" %}
                         </a>
                     </div>
                 </div>
@@ -58,20 +58,7 @@
     </div>
 
     <div class="controls form-group">
-        <label for="id_amount" class="col-sm-3 control-label">{% trans "Amount" %} *</label>
-        <div class="col-sm-7">
-            <input id="id_amount" name="amount" type="number" class="form-control" placeholder="" value="{{ form.amount.value|default_if_none:"" }}" required>
-            <div class="help-block">
-            Enter decimal value in {{ settings.CURRENCY }} (Do not use a comma).
-            </div>
-            {% if form.amount.errors %}
-            <div class="errors alert alert-danger">{{ form.amount.errors }}</div>
-            {% endif %}
-        </div>
-    </div>
-
-    <div class="controls form-group">
-        <label for="id_title" class="col-sm-3 control-label">{% trans "Title" %}</label>
+        <label for="id_title" class="col-sm-3 control-label">{% trans "Type of Investment" %}</label>
         <div class="col-sm-7">
             <input id="id_title" name="title" type="text" class="form-control" placeholder="" value="{{ form.title.value|default_if_none:"" }}">
             {% if form.title.errors %}
@@ -81,7 +68,23 @@
     </div>
 
     <div class="controls form-group">
-        <label for="id_date" class="col-sm-3 control-label">{% trans "Received Date" %}</label>
+        <label for="id_money_amount" class="col-sm-3 control-label">{% trans "Total Amount" %} *</label>
+        <div class="col-sm-7">
+            <div class="field-money">
+                {{ form.money_amount }}
+            </div>
+            <div class="help-block">
+            Enter decimal value (Do not use a comma).
+            </div>
+            {% if form.money_amount.errors %}
+            <div class="errors alert alert-danger">{{ form.money_amount.errors }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+
+    <div class="controls form-group">
+        <label for="id_date" class="col-sm-3 control-label">{% trans "Date Received" %} *</label>
         <div class="col-sm-7">
             <div class="data-field-wrapper">
                 {{ form.date }}
@@ -100,7 +103,7 @@
             <a href="{% if form.is_new %}{% url 'home' %}{% else %}.{% endif %}" class="btn btn-default btn-cancel">{% trans "Cancel" %}</a>
             {%  endif %}
             {% if request_popup %}
-            <a onclick="window.close()" class="btn btn-default btn-cancel">{% trans "Cancel" %}</a>
+            <a onclick="parent.dismissAddAnotherPopup({name: '{{ request.GET.winName }}'})" class="btn btn-default btn-cancel">{% trans "Cancel" %}</a>
             {%  endif %}
         </div>
 

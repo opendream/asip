@@ -22,11 +22,11 @@
                     <a ng-if="party.get_status == notification_status.active" ng-href="{[{ party.absolute_url }]}">{[{ party.get_display_name}]}</a>
                     <span ng-if="party.get_status != notification_status.active">{[{ party.get_display_name}]}</span>
                 </h3>
-                <div class="country">{[{ party.country.title }]}</div>
                 <div class="description" ng-bind-html="party.get_summary"></div>
+                <div class="description description-data" ng-if="party.data" ng-bind-html="party.data"></div>
             </div>
             <div class="follow-section">
-                <div love-button party="party"></div>
+                <div love-button party="party" content_type="party.inst_type"></div>
                 <div follow-button party="party"></div>
             </div>
         </div>
@@ -38,11 +38,7 @@
 
 <script type='text/ng-template' id="template_party_item_style_text_list.html">
     <h3 class="title" ng-if="party.get_status == notification_status.active"> <a ng-href="{[{ party.absolute_url }]}">{[{ party.get_display_name }]}</a>
-    <h3 class="title" ng-if="party.get_status != notification_status.active"> {[{ party.get_display_name }]}
-        <span class="country" ng-show="party.country.title">
-            {[{party.country.title | dashText }]}
-        </span>
-    </h3>
+    <h3 class="title" ng-if="party.get_status != notification_status.active"> {[{ party.get_display_name }]}</h3>
     <div class="description" ng-bind-html="party.get_summary">
     </div>
     <div ng-class="{'required-approval':party.REQUIRED_APPROVAL, 'approval':(party.status || party.approval_status) == notification_status.active}" ng-if="party.REQUIRED_APPROVAL && (party.status || party.approval_status) == notification_status.active">
@@ -60,11 +56,7 @@
             </span>
         </div>
         <div class="group-info" >
-            <h3 class="title"> <a ng-href="{[{ party.absolute_url }]}">{[{ party.get_display_name }]}</a>
-                <span class="country" ng-show="party.country.title">
-                    {[{party.country.title | dashText }]}
-                </span>
-            </h3>
+            <h3 class="title"> <a ng-href="{[{ party.absolute_url }]}">{[{ party.get_display_name }]}</a></h3>
             <div class="description" ng-bind-html="party.get_summary">
             </div>
         </div>
@@ -73,7 +65,7 @@
 
 <script type='text/ng-template' id="template_party_item_style_default_2.html">
     <div class="thumbnail">
-        <a ng-href="##portfolio-{[{ party.id }]}" data-target="#portfolio-popup" ng-click="open_modal_portfolio(party, $first, $last && !$scope.can_load_more)"> 
+        <a ng-href="##portfolio-{[{ party.id }]}" data-target="#portfolio-popup" ng-click="open_modal_portfolio(party, $first, $last && !$scope.can_load_more)">
             <img ng-src="{[{party.get_thumbnails[0]}]}"/>
         </a>
     </div>
@@ -99,8 +91,8 @@
                 <a ng-if="party.get_status == notification_status.active" ng-href="{[{ party.absolute_url }]}">{[{ party.get_display_name }]}</a>
                 <strong ng-if="party.get_status != notification_status.active" class="pending">{[{party.get_display_name}]}</strong>
             </h3>
-            <p class="description" ng-bind-html="party.get_summary">
-            </p>
+            <p class="description" ng-bind-html="party.get_summary"></p>
+            <p class="description description-data" ng-if="party.data" ng-bind-html="party.data"></p>
             <div ng-class="{'required-approval':party.REQUIRED_APPROVAL, 'approval':(party.status || party.approval_status) == notification_status.active}" ng-if="party.REQUIRED_APPROVAL && (party.status || party.approval_status) == notification_status.active">
                 Approved
             </div>
@@ -150,8 +142,8 @@
                                 </div>
                             </div>
                         </div>
-                        
-                    </div>   
+
+                    </div>
 
                     <!-- Controls -->
                     <div class="carousel-control">
@@ -163,10 +155,10 @@
                         <span class="icostartup icon-right"></span>
                         <span class="sr-only">{% trans "Next" %}</span>
                         </a>
-                    </div>    
+                    </div>
                 </div>
             </div>
-        </div>    
+        </div>
     </div>
 </script>
 
@@ -185,7 +177,6 @@
               </a>
               <span ng-if="party.get_status != notification_status.active">{[{ party.get_display_name }]}</span>
           </h3>
-          <div class="country">{[{ party.country.title }]}</div>
           <div class="description" ng-bind-html="party.get_summary">
           </div>
         </div>
@@ -193,6 +184,29 @@
             <div love-button party="party"></div>
             <div follow-button party="party"></div>
         </div>
+    </div>
+</script> 
+
+
+<script type='text/ng-template' id="template_in_the_news.html">
+    <div class="list-view -news">
+
+        <div class="small-logo pull-left thumbnail -org" ng-if="party.get_thumbnail">
+            <span>
+                <a target="_blank" ng-href="{[{ party.url }]}" title="{[{ party.title }]}">
+                    <img ng-src="{[{ party.get_thumbnail }]}" alt="{[{ party.title }]}">
+                </a>
+            </span>
+        </div>
+
+        <div class="group-info">
+            <h3 class="title">
+                <a target="_blank" ng-href="{[{ party.url }]}">{[{ party.title || party.url}]}</a>
+            </h3>
+            <p class="description description-data" ng-if="party.date">on {[{ party.date | dateFormText:"d MMMM, yyyy" }]}</p>
+            <p ng-if="party.description" class="description" ng-bind-html="party.description"></p>
+        </div>
+
     </div>
 </script>
 
@@ -468,7 +482,7 @@
         <span class="text-action" ng-clock>{[{party.total_follower}]}</span>
     </a>
 </div>
- 
+
 </script>
 
 <script type='text/ng-template' id="follow_compact_button.html">
@@ -488,7 +502,7 @@
 <script type='text/ng-template' id="follow_text_button.html">
 
     <div class="btn-follow-wrapper" ng-class="is_loading_class()">
-        <a ng-class="is_follow_class()" class="btn btn-primary btn-follow btn-default" ng-click="follow()" href="" ng-mouseenter="mouse_enter()" ng-mouseleave="mouse_leave()" title="{[{title}]}" >
+        <a ng-class="is_follow_class()" class="btn-startup btn-startup--third" ng-click="follow()" href="" ng-mouseenter="mouse_enter()" ng-mouseleave="mouse_leave()" title="{[{title}]}" >
             <span class="text-action" ng-clock>{[{title || '&nbsp'}]}</span>
         </a>
     </div>
@@ -507,7 +521,7 @@
     </a>
     <a href="" title="love{[{party.total_love > 1 ? 's' : ''}]} {[{party.total_love}]}" class="text-action" ng-click="modal_list()" ng-clock>{[{party.total_love}]}</a>
 </div>
- 
+
 </script>
 
 <script type='text/ng-template' id="love_compact_button.html">
@@ -548,7 +562,7 @@
                 <div class="modal-body">
                     <ul class="item-list followers-list">
                     <li ng-repeat="party in party_list" class="followers-item listview-item item {[{ party.inst_type }]}-image">
-                        
+
                         <div class="list-view">
                             <div class="small-logo pull-left thumbnail">
                                 <span>
@@ -556,15 +570,8 @@
                                 </span>
                             </div>
                             <div class="group-info" >
-                                 <h3><a href="{[{ party.absolute_url }]}">{[{ party.get_display_name }]}</a></h3>
+                                <h3><a href="{[{ party.absolute_url }]}">{[{ party.get_display_name }]}</a></h3>
                                 <div class="description">{[{ party.get_summary }]}</div>
-                                {% if not HIDE_COUNTRY %}
-                                <ul ng-if="party.country" class="country-list item-list item-list-inline">
-                                    <li class="country-item item" ng-cloak>
-                                        <span class="country">{[{ party.country.title }]}</span>
-                                    </li>
-                                </ul>
-                                {%  endif %}
                             </div>
                             <div follow-button party="party" template="follow_text_button.html"></div>
                         </div>
@@ -594,7 +601,6 @@
             {[{party.get_display_name}]}
         </a>
         <span ng-if="party.get_status != notification_status.active" class="title">{[{party.get_display_name}]}</span>
-        <div class="info" ng-if="party.country.title"><span class="organization" ng-clock>{[{party.country.title}]}</div>
         <a ng-clock ng-if="party.can_edit" class="btn btn-md btn-delete" href="/delete/relation/PartyTestifyParty/{[{ party.id }]}/?next=.##testimonials" data-original-title="" title="">
             <span class="glyphicon glyphicon-remove icostartup icon-delete"></span>
             Delete
@@ -602,7 +608,7 @@
 
     </div>
 </div>
- 
+
 </script>
 
 <!-- *********************************************** -->
@@ -621,13 +627,13 @@
             <div class="col-sm-6">
                 <div class="message-truncate-wrapper">
                     <span class="message-body -truncate" ng-bind-html="party.data | nlToBr"></span>
-                    <a class="readmore" 
-                        role="button" 
-                        data-toggle="collapse" 
-                        ng-href="#collapse-{[{ party.id }]}" 
-                        aria-expanded="false" 
+                    <a class="readmore"
+                        role="button"
+                        data-toggle="collapse"
+                        ng-href="#collapse-{[{ party.id }]}"
+                        aria-expanded="false"
                         aria-controls="collapse-{[{ party.id }]}"
-                        ng-show="!party.status" 
+                        ng-show="!party.status"
                         ng-click="http_to_api_with_party({
                             api: '/api/v1/party_contact_party/'+party.id+'/',
                             party: party,
@@ -667,11 +673,11 @@
             <div class="col-sm-6">
                 <div class="message-truncate-wrapper">
                     <span class="message-body -truncate" ng-bind-html="party.data | nlToBr"></span>
-                    <a class="readmore" 
-                        role="button" 
-                        data-toggle="collapse" 
-                        ng-href="#collapse-{[{ party.id }]}" 
-                        aria-expanded="false" 
+                    <a class="readmore"
+                        role="button"
+                        data-toggle="collapse"
+                        ng-href="#collapse-{[{ party.id }]}"
+                        aria-expanded="false"
                         aria-controls="collapse-{[{ party.id }]}">
                         Read more
                     </a>
@@ -747,29 +753,28 @@
                     <div class="description ng-binding" ng-if="party.actor.get_summary" ng-bind-html="party.actor.get_summary"></div>
                 </div>
             </div>
-            <div class="-fullwidth" love-button party="party" content_type="notification"></div>
+            <div class="-fullwidth" love-button party="party" content_type="'notification'"></div>
         </div>
     </div>
 </script>
 
 
 <script type='text/ng-template' id="happening_list_action.html">
-
-    <div class="col-xs-12 box-wrapper clear">
-        <div class="box-happening">
-            <div class="happening-header">
-                <div class="happening-title pull-left" ng-bind-html="party.get_simple_html_display | sanitize"></div>
-                <div class="date pull-right">{[{ party.created | timeago }]}</div>
-            </div>
-            <div ng-class="{'required-approval':party.REQUIRED_APPROVAL, 'approval':party.approval_status == notification_status.active}" ng-if="party.REQUIRED_APPROVAL && party.approval_status == notification_status.active">
-                Approved
-            </div>
-            <div class="testimonial-text" ng-if="party.data">
-                <p ng-bind-html="party.data"></p>
-            </div>
-            <div class="-fullwidth" love-button party="party" content_type="notification"></div>
-        </div>
-    </div>
+  <div class="box-wrapper clear">
+      <div class="box-happening">
+          <div class="happening-header">
+              <div class="happening-title pull-left" ng-bind-html="party.get_simple_html_display | sanitize"></div>
+              <div class="date pull-right">{[{ party.created | timeago }]}</div>
+          </div>
+          <div ng-class="{'required-approval':party.REQUIRED_APPROVAL, 'approval':party.approval_status == notification_status.active}" ng-if="party.REQUIRED_APPROVAL && party.approval_status == notification_status.active">
+              Approved
+          </div>
+          <div class="testimonial-text" ng-if="party.data">
+              <p ng-bind-html="party.data"></p>
+          </div>
+          <div class="-fullwidth" love-button party="party" content_type="'notification'"></div>
+      </div>
+  </div>
 </script>
 
 <!-- *********************************************** -->
@@ -787,25 +792,31 @@
             </div>
         </div>
         <div class="media-body">
-            <div class="post-time pull-right hidden-xs">
-                {[{(party.jobs | maxDateIn:"created" ) | timeago}]}
-            </div>
-            <h4 class="title">
-                <a ng-if="party.status == 1" ng-href="{[{party.absolute_url}]}" title="{[{party.get_display_name}]}">{[{party.get_display_name}]}</a>
-                <strong class="pending" ng-if="party.status != 1">{[{party.get_display_name}]} (pending)</strong>
-            </h4>
-            <span class="place">
-                {[{ party.location }]}
-            </span>
-            <div class="block-list-orgjob block-job">
-                <ul class="item-list">
-                    <li class="item item-job" ng-include="'job_list.html'" ng-repeat="job in party.jobs">
-                        
-                    </li>
-                </ul>
-            </div>
-            <div class="post-time visible-xs">
-                {[{(party.jobs | maxDateIn:"created" ) | timeago}]}
+            <div class="row">
+                <div class="block-job-wrapper col-sm-10 col-xs-12">
+                    <h3 class="title">
+                        <a ng-if="party.status == 1" ng-href="{[{party.absolute_url}]}" title="{[{party.get_display_name}]}">{[{party.get_display_name}]}</a>
+                        <strong class="pending" ng-if="party.status != 1">{[{party.get_display_name}]} (pending)</strong>
+                    </h3>
+                    <span class="place">
+                        {[{ party.location }]}
+                    </span>
+                    <div class="block-list-orgjob block-job">
+                        <ul class="item-list">
+                            <li class="item item-job" ng-include="'job_list.html'" ng-repeat="job in party.jobs">
+        
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="post-time visible-xs">
+                        {[{(party.jobs | maxDateIn:"created" ) | timeago}]}
+                    </div>
+                </div>
+                <div class="col-sm-2 col-xs-12 hidden-xs">
+                    <div class="post-time text-right">
+                        {[{(party.jobs | maxDateIn:"created" ) | timeago}]}
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -813,14 +824,8 @@
 
 
 <script type="text/ng-template" id="job_list.html">
-    <h3 class="title"><a ng-href="{[{job.absolute_url}]}" title="{[{job.title}]}" ng-bind="job.title"></a></h3>
-    <div class="description -job">
-        <span class="job-type job-list-detail"> {[{job.get_position_display}]}</span>
-        <span class="job-role job-list-detail"> {[{job.get_role_display}]}</span>
-        <span ng-if="job.salary_min || job.salary_max" class="job-salary_min_max job-list-detail">
-            {[{job.salary_min | currency:"{{ settings.CURRENCY_SHORT }}"}]} <span ng-if="job.salary_max">-</span> {[{job.salary_max | currency:"{{ settings.CURRENCY_SHORT }}" }]}
-        </span>
-    </div>
+    <h4 class="title"><a ng-href="{[{job.absolute_url}]}" title="{[{job.title}]}" ng-bind="job.title"></a></h4>
+    <div ng-if="job.get_summary" class="description -job" style="white-space: pre-line;">{[{ job.get_summary }]}</div>
 </script>
 
 <script type="text/ng-template" id="job_front_list.html">

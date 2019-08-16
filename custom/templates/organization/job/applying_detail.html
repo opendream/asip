@@ -1,0 +1,341 @@
+{% extends 'base_sidebar_left.html' %}
+{% load i18n %}
+{% load static %}
+
+{% load thumbnail files_widget_tags %}
+
+{% block title %}{{ instance.get_display_name }}{% endblock %}
+{% block description %}{{ instance.description|striptags }}{% endblock %}
+{% block image %}{% spaceless %}
+    {% if instance.image.url %}
+        {% thumbnail instance.image|unquote '260x260' upscale=True padding=20 format=instance.image|thumbnail_format as thumb %}
+            {{ thumb.url }}
+        {% endthumbnail %}
+    {% endif %}
+{% endspaceless %}{% endblock %}
+
+{% block title_class %} hidden{% endblock %}
+
+{% block breadcrumb %}
+    <a href="{% url 'job_applying_list' %}" class="link-breadcrumb hidden-xs">Applying Jobs</a>
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript">
+        var apply_id = {{ apply_id }};
+</script>
+{% endblock %}
+{% block main_extra %} ng-clock ng-controller="JobApplyingDetailController"{% endblock %}
+
+
+{% block sidebar %}
+    <div class="block block-job-detail hidden-xs">
+        <div class="media">
+            <h2 class="title" ng-clock>
+                <a ng-href="{[{ job.absolute_url }]}">{[{job.title}]}</a>
+            </h2>
+            <div class="media-left">
+                <div class="thumbnail small-logo -sqr90">
+                    <span>
+                            <a ng-if="organization.get_status == notification_status.active" ng-href="{[{organization.absolute_url}]}" title="{[{organization.get_display_name}]}">
+                                    <img ng-src="{[{organization.get_thumbnail}]}" />
+                            </a>
+                            <img ng-if="organization.get_status != notification_status.active" ng-src="{[{organization.get_thumbnail}]}" />
+                    </span>
+                </div>
+            </div>
+            <div class="media-body">
+                    <h4 class="title">
+                        <a ng-if="organization.get_status == notification_status.active" ng-href="{[{organization.absolute_url}]}" title="{[{organization.get_display_name}]}">{[{organization.get_display_name}]}</a>
+                        <strong class="pending" ng-if="organization.get_status != notification_status.active">{[{organization.get_display_name}]} (pending)</strong>
+                    </h4>
+                    <div class="description" ng-bind-html="organization.get_summary | sanitize"></div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block content %}
+    <a href="{% url 'job_applying_list' %}" class="link-breadcrumb hidden-sm hidden-md hidden-lg">Applying Jobs</a>
+
+    <div class="block block-job-detail hidden-sm hidden-md hidden-lg">
+        <div class="media">
+            <h2 class="title" ng-clock>
+                <a ng-href="{[{ job.absolute_url }]}">{[{job.title}]}</a>
+            </h2>
+            <div class="media-left">
+                <div class="thumbnail small-logo -sqr90">
+                    <span>
+                            <a ng-if="organization.get_status == notification_status.active" ng-href="{[{organization.absolute_url}]}" title="{[{organization.get_display_name}]}">
+                                    <img ng-src="{[{organization.get_thumbnail}]}" />
+                            </a>
+                            <img ng-if="organization.get_status != notification_status.active" ng-src="{[{organization.get_thumbnail}]}" />
+                    </span>
+                </div>
+            </div>
+            <div class="media-body">
+                    <h4 class="title">
+                        <a ng-if="organization.get_status == notification_status.active" ng-href="{[{organization.absolute_url}]}" title="{[{organization.get_display_name}]}">{[{organization.get_display_name}]}</a>
+                        <span ng-if="organization.get_status != notification_status.active">{[{organization.get_display_name}]} (pending)</span>
+                    </h4>
+                    <div class="description" ng-bind-html="organization.get_summary | sanitize"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="article-wrapper">
+        <div class="block about-job">
+
+            <div class="media">
+                <div class="media-left">
+                    <div class="thumbnail small-logo -sqr90">
+                        <span>
+                            <a ng-href="{[{src.absolute_url}]}" title="{[{src.get_display_name}]}">
+                                <img ng-src="{[{src.get_thumbnail}]}" />
+                            </a>
+                        </span>
+                    </div>
+                </div>
+                <div class="media-body">
+                        <h4 class="title">
+                            <a ng-href="{[{src.absolute_url}]}" title="{[{src.get_display_name}]}">{[{src.get_display_name}]}</a>
+                        </h4>
+                        <div class="description" ng-bind-html="src.get_summary | sanitize"></div>
+                </div>
+            </div>
+
+        </div>
+        <div class="block job-detail">
+            <hr />
+            <div class="block-content">
+
+                 <!-- Position -->
+                <div class="detail-wrapper" ng-if="src.job_criteria">
+                    <div class="title-detail">Job Criteria</div>
+                    <div class="detail">
+                        {[{ src.job_criteria }]}
+                    </div>
+                </div>
+
+{#                <!-- Roles -->#}
+{#                <div class="detail-wrapper" ng-if="src.job_roles && src.job_roles.length > 0">#}
+{#                    <div class="title-detail">Roles</div>#}
+{#                    <div class="detail">#}
+{#                        <ul class="item-list item-list-inline">#}
+{#                            <li ng-repeat="role in src.job_roles">#}
+{#                                {[{ role.title }]}#}
+{#                            </li>#}
+{#                        </ul>#}
+{#                    </div>#}
+{#                </div>#}
+{##}
+{##}
+{#                <!-- Location -->#}
+{#                <div class="detail-wrapper" ng-if="src.locations && src.locations.length > 0">#}
+{#                    <div class="title-detail">Locations</div>#}
+{#                    <div class="detail">#}
+{#                        <ul class="item-list item-list-inline">#}
+{#                            <li ng-repeat="location in src.locations">#}
+{#                                {[{ location.title }]}#}
+{#                            </li>#}
+{#                        </ul>#}
+{#                    </div>#}
+{#                </div>#}
+
+                <!-- Skill -->
+                <div class="detail-wrapper" ng-if="src.skills">
+                    <div class="title-detail">Skills</div>
+                    <div class="detail">
+                        {[{ src.skills }]}
+                    </div>
+                </div>
+
+                <div class="detail-wrapper" ng-if="job_applying.message">
+                    <div class="title-detail">Note</div>
+                    <div class="detail" style="white-space: pre-line;">{[{ job_applying.message }]}</div>
+                </div>
+
+                <div class="detail-wrapper" ng-if="src.attachments">
+                    <div class="title-detail">Resume</div>
+                    <div class="detail">
+                        <ul class="item-list item-list-inline">
+                            <li ng-repeat="attachment in src.attachments.split('\n')">
+                                <a href="/media/{[{ attachment }]}">{[{ attachment.split('/')[attachment.split('/').length-1] }]}</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="detail-wrapper" ng-if="src.job_email || src.job_telephone">
+                    <div class="title-detail">Contact</div>
+                    <div class="detail">
+                        <div ng-if="src.job_email" class="row">
+                            <div class="col-sm-2">Email</div><div class="col-sm-10">{[{ src.job_email }]}</div>
+                        </div>
+                        <div ng-if="src.job_telephone" class="row">
+                            <div class="col-sm-2">Telephone</div><div class="col-sm-10">{[{ src.job_telephone }]}</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="post-time text-right" ng-cloak>
+            Applied {[{ job_applying.created | timeago }]}
+        </div>
+
+    </div>
+
+
+{% endblock %}
+
+{% block modal %}
+<div class="modal fade" id="modal-apply" tabindex="-1">
+    <div class="modal-dialog base-action-modal">
+        <div class="modal-content">
+                <button class="close" data-dismiss="modal" type=
+                "button"><span>&times;</span><span class=
+                "sr-only">Close</span></button>
+
+            <div class="modal-body">
+
+
+                <div class="row">
+                    <div class="col-sm-2">
+                        <div class="thumbnail">
+                            <br/>
+                            <span>
+                                <a ng-if="organization.get_status == notification_status.active" ng-href="{[{organization.absolute_url}]}" title="{[{organization.get_display_name}]}">
+                                        <img ng-src="{[{organization.get_thumbnail}]}" />
+                                </a>
+                                <img ng-if="organization.get_status != notification_status.active" ng-src="{[{organization.get_thumbnail}]}" />
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-sm-10">
+                        <h4 class="title">
+                            Apply to {[{organization.get_display_name}]}
+                        </h4>
+                        <div class="description" ng-bind-html="organization.get_summary | sanitize"></div>
+                    </div>
+                </div>
+
+                <hr />
+
+                <div class="row">
+                    <div class="col-sm-2">
+                        Profile
+                    </div>
+                    <div class="col-sm-10">
+                        <div class="primary-info">
+                            <div class="small-logo pull-left thumbnail">
+                                <span>
+                                    <img src="{{ user.get_thumbnail_in_primary }}" />
+                                </span>
+                            </div>
+                            <div class="pull-left">
+                                <div>
+                                    <strong>
+                                        {{ user.get_display_name }}
+                                    </strong>
+                                </div>
+                                <div>
+                                    <small class="color-gray">{{ user.get_summary }}</small>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <hr />
+
+                <div class="row">
+                    <div class="col-sm-2">
+                        Position
+                    </div>
+                    <div class="col-sm-10">
+
+                        <div>
+                            <strong>
+                                {[{ job.title }]}
+                            </strong>
+                        </div>
+                        <div>
+                            <small class="color-gray">{[{ job.get_summary }]}</small>
+                        </div>
+
+                        <br/>
+
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <small class="color-lightgray">Experience</small>
+                            </div>
+                            <div class="col-sm-9">
+                                <small class="color-gray">{[{ job.years_of_experience || 0 }]}+</small>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <small class="color-lightgray">Skills</small>
+                            </div>
+                            <div class="col-sm-9">
+                                <small class="color-gray">{[{ job.skills }]}</small>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <small class="color-lightgray">Contact</small>
+                            </div>
+                            <div class="col-sm-9">
+                                <small class="color-gray" ng-bind-html="job.contact_information | sanitize"></small>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <hr />
+
+                <div class="row">
+                    <div class="col-sm-2">
+                        Contact
+                    </div>
+                    <div class="col-sm-10">
+                        <small class="color-gray" ng-bind-html="job.contact_information | sanitize">
+                        </small>
+                    </div>
+                </div>
+
+                <hr />
+
+                <div>
+                    <form action="{% url 'job_apply' %}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="job" value="{[{ job.id }]}" />
+                        <div class="controls form-group">
+                            <div class="field-container">
+                                <textarea name="message" rows="4" maxlength="1000" class="form-control" placeholder="(optional) Write a note to {[{ organization.get_display_name }]} What excites you about {[{ organization.get_display_name }]}? Why would you be a good fit?"></textarea>
+                                <div class="help-block">
+                                    Please write your letter of intent here in 1000 characters
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="controls form-group group-action">
+                            <div class="form-action">
+                                <button class="btn btn-primary btn-orange btn-submit" type="submit">{% trans "Send Application" %}</button>
+                                <a class="btn btn-default btn-cancel" data-dismiss="modal">{% trans "Cancel" %}</a>
+                            </div>
+                    </form>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

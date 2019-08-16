@@ -1,0 +1,102 @@
+{% extends 'base_single.html' %}
+{% load forum_tags %}
+{% load common_tags %}
+
+
+{% block wrapper_class %} -chiangmaiandco -landingpage {% endblock %}
+{% block content_class %} -chiangmaiandco {% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="/static/special/chiangmaiandco/css/chiangmaiandco.css">
+{% endblock %}
+
+{% block title %}Curate Chiang Mai tech & startup community by locals{% endblock %}
+{% block title_class %} text-center hidden {% endblock %}
+
+{% block content %}
+
+    <div class="section-feature -chiangmaiandco">
+        <div class="container text-center">
+            <h1 class="title sr-only">Curate Chiang Mai tech & startup community by locals</h1>
+            <img src="/static/special/chiangmaiandco/images/chiangmaiandco-logo.jpg" alt="" width="439" height="89" title="Curate Chiang Mai tech & startup community by locals" alt="Curate Chiang Mai tech & startup community by locals" class="img-responsive">
+            <div class="detail-wrapper text-uppercase">
+                <p>Share, Learn & Grow Together</p>
+                <div class="date color-pink">
+                    July 21 <sup class="font-clearsans-light">st</sup> - 22<sup class="font-clearsans-light">nd</sup> ,2019
+                </div>
+            </div>
+            <div class="place-wrapper">
+                <!-- <p class="place">Mochar Riady Building, NUS Business School</p> -->
+                <div class="country font-bebas color-pink"><span class="glyphicon glyphicon-map-marker"></span> Chiang Mai</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-feature -detail">
+        <div class="container">
+            <p class="text-center">
+                <br />
+                Chiangmai&Co project is to shape Chiangmai's startup ecosystem and help Chiangmai tech to have more visibility.
+            </p>
+
+            <div class="text-center">
+                <h3 class="text-center font-clearsans-light" style="display: inline-block;">
+                    {% if user.is_authenticated %}
+                    {% if user.specials|filter:'permalink=chiangmaiandco' %}
+                    <a class="font-bebas text-uppercase title btn btn-outline -pink">- Joined -</a>
+                    {% else %}
+                    <a class="font-bebas text-uppercase title btn btn-outline -pink" href="{% url 'account_edit' %}?special=chiangmaiandco##organization">- Register -</a>
+                    {% endif %}
+                    {% else %}
+                    <a class="font-bebas text-uppercase title btn btn-outline -pink" href="{% url 'account_edit' %}?special=chiangmaiandco">- Register -</a>
+                    {% endif %}
+                </h3>
+            </div>
+
+        </div>
+    </div>
+
+
+    {% if people %}
+    <div class="section-people">
+        <br /><br /><br />
+        <div class="container">
+            <h2 class="block-title text-center">People</h2>
+            </br>
+            <div class="no-bullet row">
+                {% for item in people %}
+                <div class="col-xs-4 col-sm-3">
+                    <a href="{{ item.get_absolute_url }}" style="position: absolute">
+                        <img width="40" height="40" src="{{ item.get_thumbnail_in_primary }}" alt="{{ item.get_display_name }}"/>
+
+                    </a>
+                    &nbsp;
+                    <a href="{{ item.get_absolute_url }}" style="margin-top: -17px; display: inherit;">
+                        <span style="font-family: 'clear_sansregular'; font-size: 16px; display: inline-block; width: 100%; padding-left: 55px;" class="truncate">{{ item.get_display_name }}</span>
+                    </a>
+                    <br/><br/><br/>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+
+    {% for role, items in organizations %}
+    <div class="section-present text-center">
+        <div class="container">
+            <h2 class="block-title">{{ role }}</h2>
+            <ul class="no-bullet">
+                {% for item in items %}
+                <li><a href="{{ item.get_absolute_url }}"><img src="{{ item.get_thumbnail_in_primary }}" alt="{{ item.get_display_name }}"/></a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    {% endfor %}
+
+
+
+
+{% endblock %}

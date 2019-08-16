@@ -1,0 +1,38 @@
+@media print {
+  .print-inline {
+    display: inline-block;
+    margin-right: 15px;
+    margin-bottom: 5px !important;
+
+    > .control-label,
+    > div.field-container,
+    > select.form-control {
+      display: inline-block;
+      vertical-align: middle;
+    }
+    > .control-label {
+      margin-right: 8px;
+      margin-bottom: 0;
+
+      &:after {
+        content: ":";
+      }
+    }
+    > div.field-container,
+    > select.form-control {
+      display: inline-block;
+      font-weight: bold;
+    }
+
+    .select-date-wrapper,
+    select.form-control {
+      // width: 120px;
+    }
+  }
+
+  .virtual-textarea {
+    font-size: 13px;
+    padding: 16px;
+    border: 1px solid #000000;
+  }
+}

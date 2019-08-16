@@ -22,10 +22,18 @@
     .follow-section { padding: 10px 25px;}
 }
 
-.hover-action .item {
-    .title {
-        font-weight: 100;
-        margin-top: 10px;
+.hover-action {
+    .item {
+        .title {
+            font-weight: 100;
+            margin-top: 10px;
+        }
+    }
+
+    &.block-people {
+        .item .title {
+            font-weight: 500;
+        }
     }
 }
 
@@ -37,7 +45,7 @@
             .body-overflow-auto {
                 border-color: #ccc;
             }
-        }   
+        }
     }
     .party-item .body-overflow-auto {
         height: auto;
@@ -45,13 +53,13 @@
     }
     .hover-action .item-list .party-item {
         margin-bottom: 10px;
-        padding-bottom: 0;
+        padding-bottom: 10px;
     }
     .hover-action {
         .follow-section {
             opacity: 0;
             visibility: none;
-            @include transition(opacity 0.7s ease);
+            // @include transition(opacity 0.7s ease);
             left: 10px;
             right: 10px;
             z-index: 2;
@@ -64,13 +72,13 @@
     .block-col-3.hover-action {
         .love, .follow { float: none;}
     }
-    .hover-action .party-item { 
+    .hover-action .party-item {
         position: relative;
         max-width: 190px;
-        @include transition(opacity 0.5s ease);
+        // @include transition(opacity 0.5s ease);
     }
     .hover-action .party-item:before {
-        @include transition(all 0.7s ease);
+        // @include transition(all 0.7s ease);
         content: '\00a0';
         display: block;
         height: 100%;
@@ -84,9 +92,12 @@
         padding-bottom: 15px;
         border: 1px solid #e5e5e5;
         border-radius:7px;
+        /*
         box-shadow: 1px 1px 1px 2px #eee;
-        @include box-sizing(content-box);
+        // @include box-sizing(content-box);
         opacity: 0;
+        */
+        box-shadow: 1px 1px 1px 2px #EEEEEE;
     }
 
     .hover-action .party-item:hover {
@@ -103,7 +114,6 @@
 }
 
 .block-col-3.hover-action {
-    .item { max-width: 180px;}
     .grid-view-thumbnail { min-width: initial;}
     .item .thumbnail { min-height: initial;}
     .user-image img {
@@ -114,9 +124,34 @@
 }
 
 .description-wrapper {
-    .body-overflow-auto { 
+    .body-overflow-auto {
         overflow-y: auto;
         height: auto !important;
+    }
+}
+
+.block-col-3.hover-action {
+    .people-list {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        @media (min-width: 480px) and (max-width: 769px) {
+            margin: 0 -10px;
+        }
+        @media (min-width: 770px) {
+            align-items: start;
+        }
+    }
+
+    .item {
+        max-width: 100%;
+        width: 100%;
+        @media (min-width: 770px) {
+            max-width: 33.3333%;
+        }
+        @media (min-width: 526px) and (max-width: 769px) {
+            max-width: 50%;
+        }
     }
 }
 
@@ -130,23 +165,20 @@
     .people-item > div{
         border: 1px solid #ccc;
         border-radius: 5px;
+        height: 100%;
     }
-    .hover-action .thumbnail { margin: 10px 10px 0;}
+    .hover-action .thumbnail { 
+        margin: 10px 10px 0;
+    }
     .description-wrapper {
-        // border: 1px solid #ccc;
         padding: 0 10px;
         border-top: 0;
-    }
-    .block-col-3.hover-action .item {
-        max-width: 200px;
-        width: 100%;
     }
 }
 
 @media (min-width: 480px) and (max-width: 769px) {
     .hover-action .item-list .party-item {
         padding: 0 10px;
-        // margin-bottom: 20px;
         margin: 0 0 20px;
         width: 100%;
         .follow-section {
@@ -156,7 +188,7 @@
         .item-inner { background-color: #fff; border-radius: 5px;}
         .grid-view-thumbnail { min-width: initial;}
         // .thumbnail { height: 90px; min-height: 90px;}
-        .thumbnail img { 
+        .thumbnail img {
             max-width: 100px;
             max-height: 90px;
             width: auto;
@@ -196,7 +228,7 @@
 }
 
 // Take Action Module: On grid list
-.hover-action .is-me { 
+.hover-action .is-me {
     border-color: transparent;
     // height: 48px;
 }

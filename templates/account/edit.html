@@ -38,11 +38,11 @@
 
     <div class="controls form-group">
         <label for="id_image" class="col-sm-3 control-label">{% trans "Picture" %}</label>
+        <span class="help-block">
+            {% trans "Use square image for the best display." %}
+        </span>
         <div class="col-sm-7">
             {{ form.image }}
-            <span class="help-block">
-                {% trans "Use images that are at least 370 x 280 pixels and 1.3:1 image ratio for the best display." %}
-            </span>
             {% if form.image.errors %}
             <div class="errors alert alert-danger">{{ form.image.errors }}</div>
             {% endif %}
@@ -641,6 +641,15 @@
                         </span>
                         {% if form.notification_allow_email_send_organization_partytestifyparty.errors %}
                         <div class="errors alert alert-danger">{{ form.notification_allow_email_send_organization_partytestifyparty.errors }}</div>
+                        {% endif %}
+                    </li>
+                    <li>
+                        <span class="choice-item">
+                            {{ form.notification_allow_email_send_organization_organizationparticipate }}
+                            <label for="notification_allow_email_send_organization_organizationparticipate" class="col-sm-3 control-label">{% trans "Someone has participated with your program." %}</label>
+                        </span>
+                        {% if form.notification_allow_email_send_organization_organizationparticipate.errors %}
+                        <div class="errors alert alert-danger">{{ form.notification_allow_email_send_organization_organizationparticipate.errors }}</div>
                         {% endif %}
                     </li>
                     <li>

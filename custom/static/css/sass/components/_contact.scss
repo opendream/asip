@@ -4,16 +4,19 @@
 
 .base-action-modal {
     .modal-title {
-        @extend .kanit-extralight;
-        font-size: 30px;
+        font-family: "league_gothic";
+        font-size: 32px;
+        font-family: "league_gothic";
+        font-weight: 400;
+        text-transform: uppercase;
     }
-    .modal-header { 
+    .modal-header {
         padding: 35px 30px 15px;
     }
-    .modal-body { 
-        padding: 15px 30px;
+    .modal-body {
+        padding: 15px 30px 30px;
         min-height: 250px;
-    }   
+    }
     .listview-item { margin: 0 0 30px;}
     .modal-content {
       border-radius: 0;
@@ -37,7 +40,7 @@
     font-size: 18px;
     margin-bottom: 15px;
     padding-left: 20px;
-    border-left: 3px solid #F9B94C;
+    border-left: 3px solid #D92F78;
   }
   .item .field-label {
     @extend .font-default;
@@ -67,5 +70,5 @@
 
 .content-editor {
   padding-left: 20px;
-  border-left: 3px solid #F9B94C;
+  border-left: 3px solid #D92F78;
 }

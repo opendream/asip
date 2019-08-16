@@ -6,13 +6,13 @@
 }
 
 .role-filter .dropdown-menu a {
-    &:hover, &:focus, &:active, &.active { 
-        background-color: $btn-pink-color; 
+    &:hover, &:focus, &:active, &.active {
+        background-color: $btn-pink-color;
         color: #fff;
     }
 }
 
-.role-filter .dropdown-menu li.active a { 
+.role-filter .dropdown-menu li.active a {
     background-color: $btn-pink-color;
     color: #fff;
 }
@@ -57,7 +57,11 @@ ul.dropdown-menu {
 .help-block { font-size: 13px;}
 .btn-primary, .btn-default {
     border: 0;
-    font-family: $kanit-regular;
+    // font-family: Kanit;
+    // font-family: $kanit-regular;
+    border-radius: 0 !important;
+    font-family: "Source Sans Pro", sans-serif !important;
+    font-weight: bold !important;
 }
 
 .btn {
@@ -72,28 +76,38 @@ ul.dropdown-menu {
 }
 
 .btn-primary {
-    background-color: $btn-yellow;
-    color: #333;
+    // background-color: $btn-yellow;
+    background-color: #414042;
+    color: #fff;
     padding: 8px 20px;
     &:hover, &:focus, &:active, &.active,
-    &:active:hover, &:active:focus, 
-    &:active:active, &:active.active { background-color: $btn-yellow-hover; color: #333;}
+    &:active:hover, &:active:focus,
+    &:active:active, &:active.active {
+      // background-color: $btn-yellow-hover;
+      background-color: #343335;
+      color: #fff;
+    }
 }
 
 .btn-outline {
-    font-family: $kanit-regular;
+    // font-family: $kanit-regular;
     padding: 7px 25px;
     display: inline-block;
     text-align: center;
     border-radius: 5px;
-    border: 1px solid $main-color;
+    // border: 1px solid $main-color;
+    border: 1px solid #979797;
     font-size: 15px;
+    color: #0470B3;
     background-color: transparent;
+
     &:hover,
     &:focus,
     &:active {
         text-decoration: none;
-        background-color: $main-color;
+        background-color: #f7f7f7;
+        // background-color: $main-color;
+        cursor: pointer;
     }
     &.-border {
         border-width: 2px;
@@ -112,11 +126,12 @@ ul.dropdown-menu {
 }
 
 .btn-facebook {
-    font-family: $kanit-regular;
+    // font-family: $kanit-regular;
+    font-family: Kanit;
     background-color: $btn-facebook-color;
     padding: 10px 30px 10px 10px;
     color: #fff;
-    &:hover, &:focus, &:active { 
+    &:hover, &:focus, &:active {
         background-color: $btn-facebook-color-hover !important;
         color: #fff !important;
         .icon-facebook {
@@ -130,7 +145,7 @@ ul.dropdown-menu {
         position: relative;
         width: 24px;
         height: 24px;
-        top: 1px;
+        top: 4px;
         margin-right: 6px;
       border-radius: 3px;
         &:hover, &:focus, &:active {
@@ -147,7 +162,8 @@ ul.dropdown-menu {
 }
 
 .btn-linkedin {
-    font-family: $kanit-regular;
+    // font-family: $kanit-regular;
+    font-family: Kanit;
     background-color: $btn-linkedin-color;
     padding: 10px 30px 10px 10px;
     color: #fff;
@@ -165,7 +181,7 @@ ul.dropdown-menu {
         position: relative;
         width: 24px;
         height: 24px;
-        top: 1px;
+        top: 4px;
         margin-right: 6px;
       border-radius: 3px;
         &:hover, &:focus, &:active {
@@ -187,10 +203,25 @@ ul.dropdown-menu {
     margin-right: 10px;
     min-width: 185px;
     &:hover, &:focus, &:active, &.active, &:active:focus {
-        background-color: $btn-yellow-hover;
-        color: #333;
+        // background-color: $btn-yellow-hover;
+        background-color: #343335;
+        color: #fff;
     }
 
+}
+
+.btn-primary.btn-orange.btn-request {
+    background-color: #F23686;
+    &:hover {
+        background-color: darken(#F23686, 20%);
+    }
+}
+.btn-default.btn-draft {
+    background-color: #D1D8E0;
+    margin-right: 10px;
+    &:hover {
+        background-color: darken(#D1D8E0, 20%);
+    }
 }
 
 .btn-cancel {
@@ -202,7 +233,7 @@ ul.dropdown-menu {
 .btn-grey {
     background-color: $btn-cancel-color;
     border-radius: 0;
-    &:hover, &:focus, &:active, &.active { 
+    &:hover, &:focus, &:active, &.active {
         background-color: $btn-cancel-color-hover;
         box-shadow: none;
     }
@@ -211,7 +242,7 @@ ul.dropdown-menu {
 .btn-green {
     background-color: #A4D06E;
     border-radius: 0;
-    &:hover, &:focus, &:active, &.active { 
+    &:hover, &:focus, &:active, &.active {
         background-color: #61AC5A;
         box-shadow: none;
     }
@@ -220,7 +251,7 @@ ul.dropdown-menu {
 .btn-pink {
     background-color: $btn-pink-color;
     border-radius: 0;
-    &:hover, &:focus, &:active, &.active { 
+    &:hover, &:focus, &:active, &.active {
         background-color: $btn-pink-color-hover;
         box-shadow: none;
     }
@@ -229,7 +260,7 @@ ul.dropdown-menu {
 .btn-red {
     background-color: #D83030;
     border-radius: 0;
-    &:hover, &:focus, &:active, &.active { 
+    &:hover, &:focus, &:active, &.active {
         background-color: #D83030;
         box-shadow: none;
     }
@@ -240,7 +271,7 @@ ul.dropdown-menu {
     background-color: transparent;
     color: #b5b5b5;
     border: 1px solid #e0e0e0;
-    &:hover, &:focus, &:active, &.active { 
+    &:hover, &:focus, &:active, &.active {
         box-shadow: none;
         border-color: #e0e0e0;
     }
@@ -249,21 +280,21 @@ ul.dropdown-menu {
 .btn-transparent.btn-verify {
     float: left;
     border-right: 0;
-    &:hover, &:focus, &:active, &.active { 
+    &:hover, &:focus, &:active, &.active {
         background-color: #83B869;
         color: #fff;
     }
 }
 
 .btn-transparent.btn-reject {
-    &:hover, &:focus, &:active, &.active { 
+    &:hover, &:focus, &:active, &.active {
         background-color: #ea4858;
         color: #fff;
     }
 }
 
-.btn-post { 
-    min-width: 85px; 
+.btn-post {
+    min-width: 85px;
     padding: 10px 0;
     margin-top: 20px;
 }
@@ -272,12 +303,12 @@ ul.dropdown-menu {
     @extend .btn-outline;
     background-color: transparent;
     min-width: 120px;
-    &:hover, &:active, &.active { 
+    &:hover, &:active, &.active {
         background-color: $btn-yellow;
         color: #333;
         border: 1px solid $color-yellow;
     }
-    &:focus, &:active:focus { 
+    &:focus, &:active:focus {
         background-color: #fff;
         border: 1px solid $color-yellow;
         outline: none;
@@ -341,8 +372,8 @@ ul.dropdown-menu {
 
 .controls textarea { height: auto; resize: none;}
 
-.form-control[disabled], 
-.form-control[readonly], 
+.form-control[disabled],
+.form-control[readonly],
 fieldset[disabled] .form-control {
     cursor: not-allowed;
     background-color: #EEE;
@@ -360,6 +391,16 @@ fieldset[disabled] .form-control {
 .select-date-wrapper select {
     @extend .form-control;
 }
+
+
+
+
+
+/******************************\
+    Override File Upload Widget
+
+    original css file: ROOT/files_widget/static/files_widget/css/widgets.css
+\******************************/
 .files-widget-dropbox { border: 0 !important;}
 .files-widget-dropbox .message  {
     padding: 40px 0;
@@ -368,7 +409,7 @@ fieldset[disabled] .form-control {
     margin: 10px 30px 0px 0 !important;
 }
 
-#image-dropbox { 
+#image-dropbox {
     .buttons img {
         width: auto;
     }
@@ -378,6 +419,48 @@ fieldset[disabled] .form-control {
     input { height: auto; cursor: pointer;}
     a { cursor: pointer;}
 }
+.files-widget-dropbox .image-holder > img.thumbnail {
+    width: 100%;
+    margin-bottom: 0 !important;
+}
+// .upload-cover-image .image-holder {
+//     width: 100%;
+// }
+
+// user-profile-settings
+// URL: people/xxxx/edit/
+.profile-setting__picture,
+.hide-file-name {
+    .file-name {
+        display: none;
+    }
+}
+
+// file deleted
+.files-widget-deleted .deleted-file {
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    // justify-content: flex-start;
+    justify-content: stretch;
+    align-items: center;
+
+    .icon {
+        width: 100%;
+    }
+    .name {
+        font-size: 0.8em;
+        white-space: normal !important;
+        line-height: 1.42857143;
+    }
+    .undo {
+        .btn {
+            margin-left: 0.5em;
+        }
+    }
+}
+
+/******************************/
 
 .controls .prettycheckbox, .controls .prettyradio {
     label {
@@ -421,15 +504,23 @@ fieldset[disabled] .form-control {
 // SIGN IN popup form
 .signin-popup, .base-popup, .signin-form-wrapper {
     max-width: 500px;
-    .modal-title { font-family: $kanit-light;}
+    .modal-title {
+      font-size: 34px;
+      font-family: "league_gothic";
+      font-weight: 400;
+      text-transform: uppercase;
+    }
     .modal-content { padding: 15px 40px 10px; min-height: 300px;}
     .modal-header {
-        margin-bottom: 10px; 
+        // margin-bottom: 10px;
         padding: 15px;
     }
-    .modal-body { margin-top: 20px; padding: 15px;}
+    .modal-body {
+      // margin-top: 20px;
+      padding: 15px;
+    }
     .modal-footer { text-align: center;}
-    .btn-wrapper { 
+    .btn-wrapper {
         text-align: center;
         margin: 35px 0 20px;
     }
@@ -483,7 +574,7 @@ fieldset[disabled] .form-control {
         background-color: #fff;
         width: 100%;
     }
-    .select { 
+    .select {
         max-width: 157px;
         margin: 0 1em 1em 0;
     }
@@ -542,8 +633,8 @@ fieldset[disabled] .form-control {
 }
 
 .filter-selector {
-    .dropdown-toggle { 
-        font-size: 14px; 
+    .dropdown-toggle {
+        font-size: 14px;
         width: 100%;
         height: 45px;
         min-width: initial;
@@ -579,8 +670,8 @@ fieldset[disabled] .form-control {
     .nav-tabs.nav-justified > li {
         border-bottom: 1px solid #e5e5e5;
     }
-    .nav-tabs.nav-justified > li > a, 
-    .nav-tabs.nav-justified > .active > a{ 
+    .nav-tabs.nav-justified > li > a,
+    .nav-tabs.nav-justified > .active > a{
         border: 0;
         background-color: transparent;
         &:hover, &:focus, &:active, &.active {
@@ -610,15 +701,15 @@ fieldset[disabled] .form-control {
 }
 
 @media (max-width: $screen-smartph-max) {
-    .search-wrapper { 
-        width: auto; 
+    .search-wrapper {
+        width: auto;
         padding: 0;
         .nav-tabs.nav-justified > li {
             border-bottom: 1px solid #e5e5e5;
         }
         .nav-tabs.nav-justified > li > a { color: #777; display: block;}
-        .nav-tabs.nav-justified > li > a, 
-        .nav-tabs.nav-justified > .active > a{ 
+        .nav-tabs.nav-justified > li > a,
+        .nav-tabs.nav-justified > .active > a{
             border-bottom: 0;
             &:hover, &:focus, &:active, &.active {
                 border-bottom: 0;
@@ -630,11 +721,11 @@ fieldset[disabled] .form-control {
 }
 
 // Search form
-.role-filter { 
+.role-filter {
     width: 25%;
     float: left;
-    @include box-sizing(border-box);
-} 
+    // @include box-sizing(border-box);
+}
 
 @media (max-width: 640px) {
     .role-filter {
@@ -672,7 +763,7 @@ fieldset[disabled] .form-control {
 
 .role-input-wrapper {
     border: 1px solid #ccc;
-    .text-input { 
+    .text-input {
         width: 68%;
         border: 0;
         color: #333;
@@ -744,8 +835,8 @@ fieldset[disabled] .form-control {
     background-color: #fafafa;
     border: 1px solid #e8e8e8;
 }
-.nav-stacked > li.active a { 
-    background-color: #e4e4e4; 
+.nav-stacked > li.active a {
+    background-color: #e4e4e4;
     color: $font-body-color;
     &:hover, &:focus, &:active, &.active { background-color: #e4e4e4; color: $font-body-color;}
 }
@@ -753,8 +844,8 @@ fieldset[disabled] .form-control {
     &:hover, &:focus, &:active, &.active { background-color: #e4e4e4; color: $font-body-color;}
 }
 .nav-stacked > li + li { margin-top: 0;}
-.inst-status { 
-    background-color: #fafafa; 
+.inst-status {
+    background-color: #fafafa;
     overflow: hidden;
     border: 1px solid #e8e8e8;
 }
@@ -830,7 +921,7 @@ fieldset[disabled] .form-control {
 // form select fix height
 #id_sector_activities, #id_productservice_type { max-height: 420px;}
 
-#organization-section1, 
+#organization-section1,
 #organization-section2,
 #organization-section3,
 #organization-section4,
@@ -847,7 +938,7 @@ fieldset[disabled] .form-control {
     label { margin-bottom: 20px;}
 }
 
-// Pretty Checkbox 
+// Pretty Checkbox
 .prettycheckbox, .prettyradio {
     position: relative;
     padding-left: 30px !important;
@@ -859,9 +950,14 @@ fieldset[disabled] .form-control {
 }
 
 // Experience add
+.deck {
+    display: block;
+}
 .autocomplete-light-widget .deck [data-value] .remove {
     position: absolute;
+    top: 50%;
     left: 10px;
+    margin-top: -11px;
     opacity: 0.7;
     &:hover {
         background-position: 0 3px !important;
@@ -870,7 +966,18 @@ fieldset[disabled] .form-control {
 }
 
 .experience-reference-wrapper {
-    font-family: $kanit-regular;
+    display: inline-block;
+    margin-left: 10px;
+    .reference-span {
+    }
+    
+}
+.autocomplete-light-widget .deck > span[data-value] .reference-span {
+    margin-left: 0 !important;
+    &.job-title {
+        font-family: $kanit-regular;
+        display: block;
+    }
 }
 
 .autocomplete-light-widget {
@@ -887,11 +994,27 @@ fieldset[disabled] .form-control {
 
 #id_experiences-deck {
     .reference-wrapper img {
-        border: 1px solid #ccc; 
+        border: 1px solid #ccc;
         width: 40px;
-        float: left;
-    }   
-} 
+    }
+}
+
+#edit_id_portfolios,
+#edit_id_experiences {
+    opacity: 0;
+    background-color: #FFFFFF;
+    box-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+    border-radius: 3px;
+    padding: 3px 5px;
+}
+.autocomplete-light-widget .deck [data-value]:hover {
+    
+    #edit_id_experiences {
+        opacity: 1;
+    }
+}
+
+/*****/
 
 .inline-create-link-wrapper {
     margin-top: 10px;
@@ -899,11 +1022,11 @@ fieldset[disabled] .form-control {
 
 .yourlabs-autocomplete {
     img {
-        border: 1px solid #ccc;     
+        border: 1px solid #ccc;
     }
 }
-.yourlabs-autocomplete .choice, 
-.yourlabs-autocomplete [data-value], 
+.yourlabs-autocomplete .choice,
+.yourlabs-autocomplete [data-value],
 .yourlabs-autocomplete em {
     overflow: hidden;
 }
@@ -965,7 +1088,7 @@ fieldset[disabled] .form-control {
 
 .ui-sortable-helper tr { background-color: #fff;}
 
-// Section3 Finance Section 
+// Section3 Finance Section
 #organization-section3 {
     #id_top_3_major_investors_year_and_amount, #id_top_3_major_donors_year_and_amount {
         .input-wrapper {
@@ -1024,7 +1147,13 @@ fieldset[disabled] .form-control {
 }
 
 .-content-form-small {
-    .page-title { margin: 10px 0 20px;}
+    .page-title {
+      margin: 10px 0 20px;
+      font-size: 34px;
+      font-family: "league_gothic";
+      font-weight: 400;
+      text-transform: uppercase;
+    }
     .form-signin { margin-top: 20px;}
     .form-signin { margin-top: 20px;}
     .link-footer { margin-top: 20px;}
@@ -1044,6 +1173,36 @@ fieldset[disabled] .form-control {
     padding: 0 10px 10px;
 }
 
+.form-group .checkbox.-resize > ul {
+    padding: 10px;
+    max-height: none;
+    > li {
+        margin-bottom: 0;
+        input {
+            margin-top: 4px;
+        }
+        label {
+            line-height: 24px;
+            display: inline;
+        }
+    }
+}
+
+.form-group .checkbox.--display-flex > ul {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding-top: 10px;
+    > li {
+        width: 180px;
+        input {
+            margin-top: 1px;
+        }
+        label {
+            line-height: 22px;
+        }
+    }
+}
 
 
 
@@ -1065,7 +1224,7 @@ fieldset[disabled] .form-control {
     overflow: visible !important;
     @media (max-width: 420px) {
         margin-bottom: 10px;
-    }       
+    }
 }
 .fake-files-input, .add-by-url-button {
     @extend .btn-form;
@@ -1096,4 +1255,161 @@ fieldset[disabled] .form-control {
             margin-bottom: 5px;
         }
     }
+}
+
+.form-horizontal {
+  label.control-label {
+    font-weight: normal;
+    font-size: 16px;
+  }
+}
+
+.form-horizontal {
+    h3.control-label {
+      font-size: 30px;
+      font-family: "league_gothic";
+      font-weight: 400;
+      text-transform: uppercase;
+    }
+}
+
+
+
+
+
+/* -------------------------------- *\
+        Check box display flex
+\* -------------------------------- */
+.point-form .checkbox ul.d-flex {
+    display: -webkit-flex;
+    display: -moz-flex;
+    display: -ms-flex;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    > li {
+        width: 33.3333%;
+    }
+}
+
+
+
+
+
+/* -------------------------------- *\
+        Key Persons
+\* -------------------------------- */
+.ref-wrapper {
+    vertical-align: middle;
+    display: inline-block;
+    padding: 8px;
+    > .ref-label {
+        display: block;
+        font-size: 13px;
+        color: #A5A5A5;
+    }
+}
+.people-reference-wrapper {
+    > span {
+        display: flex;
+        width: 100%;
+        justify-content: flex-start;
+        align-items: flex-start;
+        flex-direction: row;
+    }
+    > span > .ref-wrapper {
+        width: 25%;
+        word-wrap: break-word;
+    }
+}
+#organization-admins .people-reference-wrapper {
+    display: flex;
+    align-items: center;
+    .reference-span {
+        margin-right: 8px;
+    }
+}
+
+
+
+
+
+/* -------------------------------- *\
+        Style for field.html
+\* -------------------------------- */
+.field-name-office_type {
+    .field-container {
+        > ul {
+            margin: 0;
+            overflow: hidden;
+            input {
+                margin-top: 1px;
+                margin-right: 5px;
+            }
+            label {
+                line-height: 24px;
+            }
+        }
+        > ul > li {
+            float: left;
+            margin-right: 20px;
+            label {
+                padding-left: 0;
+            }
+        }
+    }
+}
+
+
+
+
+
+/* -------------------------------- *\
+        Description upload image field
+\* -------------------------------- */
+.description-upload-image {
+    display: flex; 
+    flex-direction: row; 
+    justify-content: space-between;
+    align-items: start;
+    margin-bottom: 30px;
+    .left {
+        flex-grow: 1;
+        margin-right: 10%;
+        @media (min-width: 768px) {
+            margin-right: 15%;
+        }
+    }
+    .left .files-widget-dropbox {
+        overflow: hidden;
+        .message {
+            margin-top: 0 !important;
+            margin-bottom: 0 !important;
+        }
+    }
+    .left .controls {
+        margin-bottom: 0;
+    }
+    .right {
+        padding: 15px;
+        background-color: #f8f8f8;
+        border-radius: 5px;
+    }
+}
+
+
+
+
+
+/* -------------------------------- *\
+    Achievement form reminder text
+\* -------------------------------- */
+.achievement-reminder {
+    padding: 15px;
+    font-size: 0.85em;
+    font-weight: bold;
+    color: red;
+    margin-bottom: 5px;
+    background-color: rgba(255, 0, 0, 0.04);
 }

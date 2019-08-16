@@ -41,6 +41,7 @@ class Party(CommonTrashModel, CommonModel, CachedModel):
 
     NOTIFICATION_CHECK_CRAZY_CREATED = False
     NOTIFICATION_VERB_DISPLAY = _('%s joins the network')
+    NOTIFICATION_VERB_DISPLAY_EMAIL = _('%s has been published')
 
     def get_inst(self):
 
@@ -55,6 +56,25 @@ class Party(CommonTrashModel, CommonModel, CachedModel):
 
                 self.inst = self.organization
                 self.inst_type = 'organization'
+
+            return self.inst
+
+        return self
+
+    def get_deep_inst(self):
+
+        if self.id and not hasattr(self, 'party_ptr'):
+            try:
+                self.inst = self.user
+                self.inst_type = 'user'
+            except:
+
+                try:
+                    self.inst = self.organization.program
+                    self.inst_type = 'program'
+                except:
+                    self.inst = self.organization
+                    self.inst_type = 'organization'
 
             return self.inst
 
@@ -100,13 +120,17 @@ class Party(CommonTrashModel, CommonModel, CachedModel):
         inst = self.get_inst()
         return inst and ((hasattr(inst, 'status') and inst.status) or (hasattr(inst, 'is_active') and inst.is_active))
 
+    def is_program(self):
+        inst = self.get_inst()
+        return inst and hasattr(inst, 'program')
+
     def is_following(self, logged_in_party):
         return bool(self.follow_dst.filter(src=logged_in_party, status=STATUS_PUBLISHED).distinct().count())
 
     def is_love(self, logged_in_party):
         return bool(PartyLove.objects.filter(
             src=logged_in_party,
-            dst_content_type=ContentType.objects.get_for_model(Party),
+            dst_content_type=ContentType.objects.get_for_model(self.__class__),
             dst_id=self.id,
             status=STATUS_PUBLISHED
         ).count())
@@ -116,7 +140,7 @@ class Party(CommonTrashModel, CommonModel, CachedModel):
         if not self.id:
             return False
 
-        content_type = ContentType.objects.get_for_model(self.__class__)
+        content_type = ContentType.objects.get_for_model(self.get_deep_inst().__class__)
 
         if not field_names or ('total_follower' in field_names):
             self.store_total_follower = PartyFollowParty.objects.filter(dst=self, status=STATUS_PUBLISHED).count()
@@ -129,6 +153,7 @@ class Party(CommonTrashModel, CommonModel, CachedModel):
                 dst_content_type=content_type,
                 dst_id=self.id,
                 status=STATUS_PUBLISHED).count()
+            print 'self.store_total_love', content_type, self.store_total_love
 
         if not field_names or ('total_testify' in field_names):
             self.store_total_testify = PartyTestifyParty.objects.filter(dst=self, status=STATUS_PUBLISHED).count()

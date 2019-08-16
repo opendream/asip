@@ -25,6 +25,7 @@
     </div>
 </div>
 
+
 <div class="controls form-group">
     <label for="id_name" class="field-container control-label">{% trans "Name" %} *</label>
     <div class="field-container">
@@ -40,11 +41,11 @@
 
 <div class="controls form-group">
     <label for="id_image" class="field-container control-label">{% trans "Image" %}</label>
-    <div class="field-container">
+    <span class="help-block xxx">
+        {% trans "Insert organization's logo." %}
+    </span>
+    <div class="field-container xxx">
         {{ form.image }}
-        <span class="help-block">
-        {% trans "Insert organization logo." %}
-        </span>
         {% if form.image.errors %}
         <div class="errors alert alert-danger">{{ form.image.errors }}</div>
         {% endif %}

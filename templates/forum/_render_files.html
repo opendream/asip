@@ -2,7 +2,6 @@
 
 {% for path_to_file in files.splitlines %}{% spaceless %}
     <div class="preview" data-image-path="{{ path_to_file }}">
-
         <span class="image-holder">
             {% if path_to_file|is_image %}
             <a href="/media/{{ path_to_file }}" target="_blank">
@@ -14,5 +13,6 @@
             </a>
             {% endif %}
         </span>
+        <span class="file-name"> {{ path_to_file|filename_from_path }} </span>
     </div>
 {% endspaceless %}{% endfor %}

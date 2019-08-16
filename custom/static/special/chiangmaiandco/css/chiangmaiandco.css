@@ -1,0 +1,398 @@
+.color-pink {
+  color: #E9726F; }
+
+/*------------------------------------*
+		Hidden general Event board
+*------------------------------------*/
+.block-forum-detail .forum-code-chiangmaiandco > h3 {
+  display: none; }
+
+/*------------------------------------*
+			Section Themes
+*------------------------------------*/
+.section-theme {
+  background-color: #F5F5F5; }
+  .section-theme > .container {
+    padding: 40px 85px; }
+  .section-theme p {
+    font-size: 18px;
+    max-width: 650px;
+    margin: 10px auto 0; }
+
+.list-theme {
+  text-align: center;
+  margin-top: 50px; }
+  .list-theme > li {
+    display: inline-block;
+    width: 32%;
+    text-align: center;
+    margin-bottom: 5px; }
+    @media (max-width: 767px) {
+      .list-theme > li {
+        width: 100%; } }
+  .list-theme .title {
+    font-size: 22px; }
+
+/*------------------------------------*
+		Clean panel style & Overide
+*------------------------------------*/
+.section-forum [class^="col-"] {
+  width: auto;
+  float: none;
+  padding: 0; }
+.section-forum .row {
+  margin: 0; }
+.section-forum .panel {
+  border: 0;
+  padding: 0;
+  box-shadow: none; }
+.section-forum .panel-heading {
+  background: none;
+  border-bottom: 0;
+  padding: 0; }
+  .section-forum .panel-heading .meta-summary {
+    display: none; }
+.section-forum .panel li {
+  padding: 0; }
+.section-forum .forum-topic-prefix {
+  display: block;
+  font-size: 24px;
+  color: #E9726F;
+  width: 100%;
+  text-align: center;
+  margin-bottom: 20px; }
+.section-forum .forum-topic-prefix ~ a {
+  font-size: 18px;
+  line-height: 24px; }
+.section-forum p {
+  font-size: 16px;
+  color: #383F49; }
+.section-forum .meta-summary {
+  font-size: 13px;
+  float: none !important; }
+.section-forum .meta-summary-first, .section-forum .meta-summary-second {
+  text-align: left; }
+.section-forum .block-forum-detail .panel-body {
+  padding: 0;
+  border-bottom: 0;
+  backgrond-color: transparent; }
+
+/*------------------------------------*
+			Section Agenda
+*------------------------------------*/
+.board-code-events {
+  overflow: hidden; }
+  .board-code-events .panel-heading {
+    margin-bottom: 20px; }
+
+.block-forum-detail.block-events {
+  overflow: hidden;
+  margin-bottom: 0; }
+  .block-forum-detail.block-events .panel-heading h3 {
+    width: 100%;
+    text-align: center; }
+  .block-forum-detail.block-events .panel ul > li {
+    width: 31%;
+    float: left;
+    border: 1px solid #ccc;
+    margin: 1%;
+    text-align: center;
+    padding: 20px 20px 10px;
+    min-height: 200px; }
+    @media (max-width: 767px) {
+      .block-forum-detail.block-events .panel ul > li {
+        width: 100%;
+        min-height: initial;
+        margin: 1% 0; } }
+    .block-forum-detail.block-events .panel ul > li:last-child {
+      display: flex;
+      display: -webkit-flex;
+      display: -ms-flex;
+      align-items: center;
+      -webkit-align-items: center;
+      -ms-align-items: center;
+      justify-content: center;
+      -webkit-justify-content: center;
+      -ms-justify-content: center; }
+    .block-forum-detail.block-events .panel ul > li h4.hover-edit {
+      font-size: 18px; }
+  .block-forum-detail.block-events .meta-summary {
+    margin: 20px 0 10px; }
+  .block-forum-detail.block-events .meta-summary-first, .block-forum-detail.block-events .meta-summary-second {
+    text-align: center; }
+
+/*------------------------------------*
+			Bulletin Board
+*------------------------------------*/
+.block-forum-detail > .forum-code-chiangmaiandco {
+  text-align: center; }
+
+.forum-code-chiangmaiandco {
+  position: relative; }
+  .forum-code-chiangmaiandco > h3 {
+    display: inline-block;
+    background-color: #fff;
+    margin: 0 auto;
+    padding: 0 20px !important;
+    position: relative; }
+  .forum-code-chiangmaiandco h3 {
+    padding: 0; }
+  .forum-code-chiangmaiandco h4 {
+    font-family: 'clear_sansregular'; }
+  .forum-code-chiangmaiandco .panel-heading h3 {
+    font-size: 24px !important;
+    margin-bottom: 15px; }
+  .forum-code-chiangmaiandco .panel {
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 0; }
+    .forum-code-chiangmaiandco .panel.board-code-general-discussion, .forum-code-chiangmaiandco .panel.board-code-events {
+      border: 0;
+      padding: 0; }
+
+.block-forum-detail .panel li {
+  border: 0; }
+
+.board-code-sectors {
+  width: 98%;
+  margin: 0 13px; }
+  @media (max-width: 767px) {
+    .board-code-sectors {
+      width: 100%;
+      margin: 0; } }
+
+.board-code-country-based {
+  width: 60%; }
+  @media (max-width: 767px) {
+    .board-code-country-based {
+      width: 100%; } }
+
+.board-code-country-based, .board-code-sectors {
+  float: left; }
+
+/*------------------------------------*
+			Country Base
+*------------------------------------*/
+.board-code-country-based {
+  text-align: left; }
+  .board-code-country-based h3[class^="col-"], .board-code-country-based h3 {
+    width: auto;
+    float: none;
+    padding: 0; }
+  .board-code-country-based ul li {
+    width: 50%;
+    float: left; }
+  .board-code-country-based ul li:nth-child(2n+1) {
+    clear: both; }
+
+/*------------------------------------*
+			Sectors
+*------------------------------------*/
+.board-code-sectors {
+  text-align: left; }
+
+/*------------------------------------*
+			General Discussion
+*------------------------------------*/
+.board-code-general-discussion,
+.board-code-events {
+  overflow: hidden;
+  clear: both;
+  margin: 2em 0 3em 0;
+  width: 100%;
+  float: left; }
+  .board-code-general-discussion h3,
+  .board-code-events h3 {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 2em; }
+  .board-code-general-discussion ul,
+  .board-code-events ul {
+    width: 100%;
+    margin: 0 auto;
+    text-align: center; }
+  .board-code-general-discussion ul > li,
+  .board-code-events ul > li {
+    width: 31%;
+    display: inline-block;
+    text-align: center;
+    border: 1px solid #ddd !important;
+    padding: 10px !important;
+    min-height: 105px; }
+    @media (max-width: 767px) {
+      .board-code-general-discussion ul > li,
+      .board-code-events ul > li {
+        width: 100%; } }
+  .board-code-general-discussion ul > li > .row,
+  .board-code-events ul > li > .row {
+    display: inline-block;
+    text-align: left;
+    padding: 0 20px; }
+    @media (max-width: 767px) {
+      .board-code-general-discussion ul > li > .row,
+      .board-code-events ul > li > .row {
+        text-align: center; } }
+  .board-code-general-discussion .panel-heading,
+  .board-code-events .panel-heading {
+    margin-bottom: 20px; }
+  .board-code-general-discussion .list-unstyled,
+  .board-code-events .list-unstyled {
+    display: flex;
+    -webkit-display: flex;
+    align-items: flex-start;
+    -webkit-align-items: flex-start;
+    justify-content: space-around;
+    -webkit-justify-content: space-around;
+    min-height: 80px; }
+    @media (max-width: 767px) {
+      .board-code-general-discussion .list-unstyled,
+      .board-code-events .list-unstyled {
+        flex-direction: column;
+        -webkit-flex-direction: column;
+        -ms-flex-direction: column; } }
+
+.board-code-sectors li {
+  width: 33%;
+  float: left;
+  margin: 10px 0; }
+  @media (max-width: 767px) {
+    .board-code-sectors li {
+      width: 50%;
+      padding-right: 20px !important; } }
+  @media (max-width: 510px) {
+    .board-code-sectors li {
+      width: 100%;
+      padding-right: 20px !important; } }
+
+.board-code-sectors h3 {
+  text-align: center;
+  width: 100%; }
+
+/*------------------------------------*
+	Override Layout chiangmaiandco Page
+*------------------------------------*/
+.wrapper.-chiangmaiandco .main-content {
+  background: none;
+  padding: 0;
+  margin: 0;
+  width: 100%; }
+
+/*------------------------------------*
+		Block Title Style
+*------------------------------------*/
+.block-title, .block-forum-detail.block-events .panel-heading h3, .forum-code-chiangmaiandco > h3, .forum-code-chiangmaiandco .panel-heading h3 {
+  font-family: 'bebas_regular';
+  font-size: 32px;
+  letter-spacing: 1px; }
+
+/*------------------------------------*
+		Background Feature Section
+*------------------------------------*/
+.section-feature {
+  background-color: #363D45;
+  background-image: url(../images/gp-feature.png);
+  background-repeat: no-repeat;
+  background-position: center 0;
+  background-size: cover;
+  height: 397px;
+  width: 100%;
+  color: #fff; }
+  .section-feature.-detail {
+    background-image: url(../images/img-feature.png);
+    height: auto;
+    padding: 40px 0; }
+
+/*------------------------------------*
+			Section Feature
+*------------------------------------*/
+.section-feature {
+  display: flex;
+  display: -webkit-flex;
+  display: -ms-flex;
+  align-items: center;
+  -webkit-align-items: center;
+  -ms-align-items: center; }
+  .section-feature .title, .section-feature .date {
+    font-family: 'bebas_regular'; }
+  .section-feature .date {
+    font-size: 30px; }
+  .section-feature sup {
+    font-size: 16px;
+    text-transform: none;
+    position: relative;
+    top: -18px; }
+  .section-feature .detail-wrapper {
+    padding: 20px 0 25px;
+    margin-bottom: 0; }
+    .section-feature .detail-wrapper:after {
+      content: '\00a0';
+      height: 1px;
+      width: 250px;
+      background-color: #fff;
+      margin: 20px auto 0;
+      display: block; }
+  .section-feature .place {
+    font-size: 16px; }
+  .section-feature .country {
+    font-size: 32px; }
+    .section-feature .country .glyphicon {
+      font-size: 28px; }
+
+.section-feature.-chiangmaiandco img {
+  display: inline-block;
+  margin-bottom: 15px; }
+
+.section-feature.-detail .title {
+  letter-spacing: 1px;
+  font-size: 32px;
+  display: block;
+  margin-top: 15px; }
+.section-feature.-detail p {
+  max-width: 650px;
+  margin: 0 auto 20px;
+  font-size: 18px; }
+.section-feature.-detail h3 {
+  margin-top: 50px; }
+
+/*------------------------------------*
+			Button outline
+*------------------------------------*/
+.btn-outline {
+  background-color: transparent;
+  border: 2px solid #ccc;
+  color: #333;
+  font-size: 24px;
+  letter-spacing: 1px;
+  padding: 10px 40px;
+  margin: 0 10px 10px;
+  border-radius: 8px;
+  min-width: 240px; }
+
+.btn-outline.-pink {
+  border-color: #E9726F;
+  color: #E9726F; }
+  .btn-outline.-pink:hover {
+    background-color: #E9726F;
+    color: #fff; }
+
+/*------------------------------------*
+			Presented By
+*------------------------------------*/
+.section-present {
+  margin: 0 0 2em;
+  padding: 1em 0 4em; }
+  .section-present:before {
+    content: '\00a0';
+    height: 1px;
+    width: 250px;
+    background-color: #ccc;
+    display: block;
+    margin: 0 auto 2em; }
+  .section-present .block-title, .section-present .block-forum-detail.block-events .panel-heading h3, .block-forum-detail.block-events .panel-heading .section-present h3, .section-present .forum-code-chiangmaiandco > h3, .section-present .forum-code-chiangmaiandco .panel-heading h3, .forum-code-chiangmaiandco .panel-heading .section-present h3 {
+    font-size: 24px; }
+  .section-present ul > li {
+    display: inline-block;
+    margin: 0 30px 30px;
+    text-align: center; }
+
+/*# sourceMappingURL=chiangmaiandco.css.map */

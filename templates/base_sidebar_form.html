@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load common_tags %}
 
 {% block base_content %}
 {% if messages %}
@@ -14,20 +15,25 @@
     </div>
 {% endif %}
 
-<div class="wrapper">
+<div class="wrapper {% block wrapper_class %}{% endblock %}">
+
+    {% if not request_popup %}
+    <div class="banner -fix-full-width" style="background-image: url('/static/images/bg-{{ type_of_organization }}@2x.png'); height: 350px; position: absolute; width: 100%; top: 0; z-index: -1;"></div>
+    {% endif %}
+
     <div class="container main-content bg-white form-sidebar-container">
 
         <div class="content-class{% block content_class %}{% endblock %}">
 
             <div class="row{% block title_class %}{% endblock %}">
-                <h1 class="col-sm-12 col-xs-12 page-title">{% block title %}{% endblock %}</h1>
+                <h1 class="col-sm-12 col-xs-12 page-title _white">{% block title %}{% endblock %}</h1>
             </div>
             <div class="row">
                 <div class="col-md-12">
                     {% block primary %}{% endblock %}
                 </div>
             </div>
-            <div class="row">
+            <div class="row form-sidebar-wrapper">
 
                 <form method="post" role="form" enctype="multipart/form-data" ng-non-bindable novalidate="true" class="{% block form_class %}{% endblock %}">
                     <div class="col-md-3 col-sm-3 col-xs-3 tab-form sidebar-left{% block sidebar_class %}{% endblock %}">

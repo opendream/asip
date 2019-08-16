@@ -1,0 +1,49 @@
+@media print {
+  .files-widget-dropbox .image-holder {
+    margin-right: 12px !important;
+  }
+  .files-widget .image-holder {
+    border: 0 !important;
+  }
+  .attachment-item-wrapper {
+    .files-widget-dropbox .preview {
+      display: none !important;
+    }
+    .file-link.hide {
+      display: block !important;
+    }
+
+    .col-xs-2.col-sm-1 {
+      width: auto;
+    }
+
+    .files-widget-dropbox .image-holder {
+      .thumbnail {
+        display: none !important;
+      }
+      .buttons {
+        position: relative;
+        top: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 1 !important;
+        .enlarge-button {
+          display: block;
+          margin: 0;
+          position: relative;
+          &:before {
+            content: "Download file ";
+            text-decoration: underline;
+          }
+          img {
+            vertical-align: middle;
+          }
+        }
+        .remove-button {
+          display: none !important;
+        }
+      }
+    }
+  }
+}

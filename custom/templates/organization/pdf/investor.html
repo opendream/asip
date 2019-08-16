@@ -1,0 +1,327 @@
+{% extends 'base_pdf.html' %}
+
+{% load static %}
+{% load common_tags %}
+{% load organization_tags %}
+
+{% block content %}
+<div id="top">
+    <h1 class="heading1">
+        Application for Investors from National Innovation Agency(NIA)
+    </h1>
+</div>
+
+<div class="section1">
+    <h3 class="title underline">Part1: General Details</h3>
+    <div class="content">
+        <div class="description">
+            <span class="text-label">Name of Investors</span><span>{{ organization.name }}</span>
+            <span class="text-label">Investment Type</span><span></span>
+
+            <span class="text-label">Deal Size</span>
+            <span class="text-label">Minimum (USD/THB)</span><span></span>
+            <span class="text-label"> Maximum (USD/THB)</span><span></span>
+
+            <span class="text-label">Specialty</span>
+            <span class="text-hint">(Up to 5 specialties)</span>
+            <span></span>
+
+        </div>
+
+        <div class="table">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th col="1">The Program Focus</th>
+                    </tr>
+                    <tr>
+                        <th>Focus Sectors</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="table">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th col="2">Social Media Channel</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Homepage URL</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Facebook URL</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Twitter URL</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>LinkedIn URL</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Other Channels</td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="logo">
+            <span class="text-label">Profile Image (if any)</span>
+            <span class="text-hint">Insert a profile image. <br/>
+            The image could be your photo or a logo representing your investment. <br/>
+            Image uploads are limited 2MB.
+            </span>
+        </div>
+
+        <div class="description">
+            <span class="text-label">Description</span>
+            <span class="text-hint">Explain overview of your biography. (Maximum 500 words)</span>
+
+        </div>
+
+        <div class="description">
+            <span class="text-label">Contact Person</span>
+        </div>
+
+    </div>
+</div>
+
+<div class="section2">
+    <h3 class="title underline">Part2: Angel General Details</h3>
+    <div class="content">
+        <div class="description">
+            <span class="text-label">Name (First/Middle/Last)</span><span></span>
+            <span class="text-label">Gender</span><span></span>
+            <span class="text-label">Preferred Name</span><span></span>
+            <span class="text-label">Nationality</span><span></span>
+            <span class="text-label">Country of Birth</span><span></span>
+            <span class="text-label">Date of Birth (dd/mm/yy)</span><span></span>
+            <span class="text-label">Age</span><span></span>
+            <span class="text-label">Passport No. or National ID</span><span></span>
+            <span class="text-label">Issued at</span><span></span>
+            <span class="text-label">Date of Issue</span><span></span>
+            <span class="text-label">Expiry Date</span><span></span>
+        </div>
+        <div class="description">
+            <span class="text-label">Residential Address </span><span></span>
+        </div>
+    </div>
+</div>
+
+<div class="section3">
+    <h3 class="title underline">Part3: Angel: Financial Support and Investment: Funding Details</h3>
+    <div class="content">
+        <div class="description">
+            <span class="text-label">Funded Organization Name</span><span></span>
+        </div>
+
+        <div class="table">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th col="4">Funding Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="table">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th col="6">Funding Round</th>
+                    </tr>
+                    <tr>
+                        <th col="3">Announced Date</th>
+                        <th col="3">Closed on Date</th>
+                    </tr>
+                    <tr>
+                        <th>Year</th>
+                        <th>Month</th>
+                        <th>Day</th>
+                        <th>Year</th>
+                        <th>Month</th>
+                        <th>Day</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="description">
+            <span class="text-label">Money Raise</span>
+            <span class="text-label">Amount</span><span></span>
+            <span class="text-label">Currency</span><span> (THB/USD)</span>
+
+            <span class="text-label">Target Funding</span>
+            <span class="text-label">Amount</span><span></span>
+            <span class="text-label">Currency</span><span> (THB/USD)</span>
+
+            <span class="text-label">Pre-Money Valuation</span>
+            <span class="text-label">Amount</span><span></span>
+            <span class="text-label">Currency</span><span> (THB/USD)</span>
+        </div>
+
+        <div class="description">
+            <span class="text-label">Detail of investor </span>
+            <span class="text-label">Is the angel acting as a Lead Investor in this funded organization?</span><span></span>
+            <span class="text-label">If yes, please specify amount of money invested</span>
+            <span class="text-label">Amount</span><span></span>
+            <span class="text-label">Currency</span><span> (THB/USD)</span>
+            <span class="text-label">Has the angel ever taken equity in the funded organization?</span><span></span>
+        </div>
+    </div>
+</div>
+
+<div class="section4">
+    <h3 class="title underline">Part2: Venture Capitalist/Cooperate Venture Capital General Details</h3>
+    <div class="content">
+        <div class="description">
+            <span class="text-label">Name of The Organization</span><span></span>
+            <span class="text-label">Company Registration No.</span><span></span>
+            <span class="text-label">Preferred Name (also known as)</span><span></span>
+            <span class="text-label">Date of Establishment (yy/mm/dd)</span><span></span>
+        </div>
+        <div class="description">
+            <span class="text-label">Office Address</span><span></span>
+            <span class="text-label">Organization Email</span><span></span>
+            <span class="text-label">Number of Employees</span><span></span>
+            <span class="text-label">Contact Person</span><span></span>
+        </div>
+    </div>
+</div>
+
+<div class="section5">
+    <h3 class="title underline">Part3: Venture Capitalist/Cooperate Venture Capital: Funding Details</h3>
+    <div class="content">
+        <div class="description">
+            <span class="text-label">Funded Organization Name</span><span></span>
+        </div>
+
+        <div class="table">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th col="4">Funding Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="table">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th col="6">Funding Round</th>
+                    </tr>
+                    <tr>
+                        <th col="3">Announced Date</th>
+                        <th col="3">Closed on Date</th>
+                    </tr>
+                    <tr>
+                        <th>Year</th>
+                        <th>Month</th>
+                        <th>Day</th>
+                        <th>Year</th>
+                        <th>Month</th>
+                        <th>Day</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="description">
+            <span class="text-label">Money Raise</span>
+            <span class="text-label">Amount</span><span></span>
+            <span class="text-label">Currency</span><span> (THB/USD)</span>
+
+            <span class="text-label">Target Funding</span>
+            <span class="text-label">Amount</span><span></span>
+            <span class="text-label">Currency</span><span> (THB/USD)</span>
+
+            <span class="text-label">Pre-Money Valuation</span>
+            <span class="text-label">Amount</span><span></span>
+            <span class="text-label">Currency</span><span> (THB/USD)</span>
+        </div>
+
+        <div class="description">
+            <span class="text-label">Detail of investor </span>
+            <span class="text-label">Is the angel acting as a Lead Investor in this funded organization?</span><span></span>
+            <span class="text-label">If yes, please specify amount of money invested</span>
+            <span class="text-label">Amount</span><span></span>
+            <span class="text-label">Currency</span><span> (THB/USD)</span>
+            <span class="text-label">Has the angel ever taken equity in the funded organization?</span><span></span>
+        </div>
+    </div>
+</div>
+
+<div class="section6">
+    <h3 class="title underline"></h3>
+    <div class="content">
+        <div class="description">
+            <span class="text-label">Required attached documents</span>
+            <span class="text-hint">The program shall provide a brief about itself and include points such as:</span>
+            <span></span>
+        </div>
+    </div>
+</div>
+
+<div class="section-summary">
+    <span></span>
+    <span class="text-label">
+        I hereby certify that the information and the evidence provided above is true and complete in all respects.
+        If there are any false statements which are considered perjury, I will agree to be subject to an applicable any criminal persecution.
+    </span>
+    <span class="text-right">
+        <span>(Signature)…………………………………. Applicant</span> <br/>
+        <span>(………………………………………………………………)</span>
+    </span>
+</div>
+{% endblock %}

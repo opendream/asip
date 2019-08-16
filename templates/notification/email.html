@@ -3,12 +3,14 @@
 
 {{ body }}
 
-{% if settings_url %}
+{% if False and settings_url %}
 You can settings email notification on link below.
 {{ settings_url }}
 {% trans "This link can only be used once to log in and will lead you to a page where you can set your password." %}
 {% endif %}
-
+<a href="{{ notification_url }}">
+    {% blocktrans %}See all your notification here{% endblocktrans %}
+</a>
 {% blocktrans %}The {{ site_name }} team{% endblocktrans %}
 
 {% endautoescape %}

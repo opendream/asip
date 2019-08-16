@@ -121,7 +121,7 @@ def received_funding_create(request, instance=None):
 
             instance.title = form.cleaned_data['title']
             instance.date = form.cleaned_data['date']
-            instance.amount = form.cleaned_data['amount']
+            instance.money_amount = form.cleaned_data['money_amount']
 
             instance.save()
 
@@ -147,7 +147,7 @@ def received_funding_create(request, instance=None):
         initial = {
             'title': instance.title,
             'date': instance.date,
-            'amount': instance.amount
+            'money_amount': instance.money_amount
         }
 
         if instance.id:

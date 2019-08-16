@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Django settings for asip project.
 
@@ -9,6 +10,7 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 """
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+from decimal import Decimal
 import os, sys
 from django.utils.translation import ugettext_lazy as _
 
@@ -23,7 +25,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'TODO: read from settings_local.py'
+SECRET_KEY = 't$k!qevcjm$3^3vf83=umj+p13j67l66#f*g)na5=t&b#06q+x'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -60,6 +62,9 @@ INSTALLED_APPS = (
     'tagging',
     'import_export',
     'djcelery',
+    'wkhtmltopdf',
+    'djmoney',
+    'rangefilter',
 
     # Project
     'presentation',
@@ -78,11 +83,11 @@ INSTALLED_APPS = (
     'forum',
 
     # Log
-    'opbeat.contrib.django',
+    # 'opbeat.contrib.django',
 )
 
 MIDDLEWARE_CLASSES = (
-    'opbeat.contrib.django.middleware.OpbeatAPMMiddleware',
+    # 'opbeat.contrib.django.middleware.OpbeatAPMMiddleware',
 
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -97,6 +102,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
+    'django.middleware.locale.LocaleMiddleware',
     'party.middleware.PartyMiddleware',
 
     #'common.middleware.CrawlerChecker',
@@ -156,11 +162,14 @@ LANGUAGE_CODE = 'en'
 #MODELTRANSLATION_LANGUAGES = ('en')
 #MODELTRANSLATION_DEFAULT_LANGUAGE = 'en'
 
+CURRENCIES = ('THB', 'USD')
+CURRENCY_CHOICES = [('USD', 'USD'), ('THB', 'THB')]
+
 TIME_ZONE = 'UTC'
 
-USE_I18N = True
+USE_I18N = False
 
-USE_L10N = True
+USE_L10N = False
 
 USE_TZ = True
 
@@ -219,6 +228,7 @@ CKEDITOR_CONFIGS = {
         'removePlugins': 'resize',
         'extraPlugins': 'autogrow,mediaembed',
         'forcePasteAsPlainText': True,
+        'autoGrow_onStartup': True,
     },
     'minimal': {
         'toolbar': [
@@ -232,6 +242,7 @@ CKEDITOR_CONFIGS = {
         'removePlugins': 'resize',
         'extraPlugins': 'autogrow',
         'forcePasteAsPlainText': True,
+        'autoGrow_onStartup': True,
     },
     'bold': {
         'toolbar': [
@@ -243,6 +254,7 @@ CKEDITOR_CONFIGS = {
         'removePlugins': 'resize',
         'extraPlugins': 'autogrow',
         'forcePasteAsPlainText': True,
+        'autoGrow_onStartup': True,
     },
 }
 
@@ -378,6 +390,8 @@ SITE_LOGO_URL = '%simages/impactconnect-logo.png' % STATIC_URL
 SITE_FAVICON_URL = '%simages/favicon.png' % STATIC_URL
 SITE_LOGO_BUTTON_URL = '%simages/logo-button@2x.png' % STATIC_URL
 
+BASE_FRONT_URL = SITE_URL
+
 MULTIPLE_COUNTRY = False
 
 GOOGLE_ANALYTICS_KEY = ''
@@ -390,19 +404,20 @@ SOCIAL_AUTH_RAISE_EXCEPTIONS = False
 SOCIAL_AUTH_SESSION_EXPIRATION = False
 SOCIAL_AUTH_UUID_LENGTH = 22
 
-FACEBOOK_APP_ID = 'TODO: read from settings_local.py'
-FACEBOOK_API_SECRET = 'TODO: read from settings_local.py'
+FACEBOOK_APP_ID = '445472018940505'
+FACEBOOK_API_SECRET = '55bdd2f3c977a370255a5713af4121e2'
 FACEBOOK_EXTENDED_PERMISSIONS = ['email']
+FACEBOOK_PROFILE_EXTRA_PARAMS = {'fields': 'id,name,email,first_name,last_name,gender,link'}
 FACEBOOK_EXTRA_DATA = [
-    ('first_name-name', 'first_name'),
+    ('first_name', 'first_name'),
     ('last_name', 'last_name'),
     ('gender', 'gender'),
-    ('link', 'facebook_url')
+    ('link', 'link'),
 ]
 
 LINKEDIN_SCOPE = ['r_basicprofile', 'r_emailaddress']
-LINKEDIN_CONSUMER_KEY = 'TODO: read from settings_local.py'
-LINKEDIN_CONSUMER_SECRET = 'TODO: read from settings_local.py'
+LINKEDIN_CONSUMER_KEY = '75r4dzj45hj0f5'
+LINKEDIN_CONSUMER_SECRET = '2RZxuTiHrgg6mQyS'
 LINKEDIN_EXTRA_FIELD_SELECTORS = ['email-address', 'headline', 'industry', 'summary', 'public-profile-url', 'location', 'picture-url', 'picture-urls::(original)', 'positions']
 LINKEDIN_EXTRA_DATA = [
     ('first-name', 'first_name'),
@@ -427,7 +442,7 @@ FACEBOOK_PAGE_ACCESS_TOKEN = ''
 #TWITTER_CONSUMER_SECRET      = ''
 
 
-LOGIN_URL = '/account/login/'
+LOGIN_URL = '/account/register/'
 LOGIN_REDIRECT_URL = '/'
 LOGIN_ERROR_URL = '/account/error/'
 
@@ -459,6 +474,10 @@ TASTYPIE_DEFAULT_FORMATS = ['json']
 
 OWNER_URL_VIEWS = ['organization_detail', 'page_detail']
 
+BYPASS_KEY = 'please-override-me'
+
+USD_TO_THB_RATE = Decimal(32.98)
+
 # OVERRIDE SETTINGS ###########################################################
 try:
     import custom
@@ -470,7 +489,7 @@ CUSTOM_INSTALLED_APPS = ()
 CUSTOM_TEMPLATE_DIRS = ()
 CUSTOM_STATICFILES_DIRS = ()
 
-LANDING_PAGE_ENABLED = False
+LANDING_PAGE_ENABLED = True
 
 CURRENCY = 'USD'
 CURRENCY_SHORT = '$'
@@ -491,7 +510,15 @@ LIST_PAGE_REDIRECT = 'organization_role_list'
 
 ENABLE_SOCIAL_ENTERPRISE = True
 ENABLE_STARTUP = False
+ENABLE_PROGRAM = False
+
 ENABLE_SUMMARY = True
+ENABLE_ARTICLE = True
+
+try:
+    from api.settings import *
+except ImportError:
+    pass
 
 try:
     from custom.settings import *

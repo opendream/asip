@@ -1,18 +1,14 @@
 #!/bin/sh
 python manage.py migrate
-python manage.py collectstatic
+python manage.py collectstatic --noinput
 python manage.py compress
-#python manage.py thumbnail clear
-#rm -r media/cache
-#python manage.py rebuild_index
-#chmod -R 777 media/whoosh_index
+
 sudo service uwsgi restart
 sudo service nginx restart
-#sudo service redis-server restart
-#sudo redis-cli FLUSHALL
+
 ps auxww | grep 'celery' | awk '{print $2}' | xargs kill -9
 ps auxww | grep 'celery worker' | awk '{print $2}' | xargs kill -9
-ps auxww | grep 'celerybeat' | awk '{print $2}' | xargs kill -9
-rm celeryd.pid
+#ps auxww | grep 'celerybeat' | awk '{print $2}' | xargs kill -9
+#rm celeryd.pid
 export C_FORCE_ROOT="true"
-python manage.py celeryd_detach -l info -f /web/startup/logs/celeryd.log
+python manage.py celeryd_detach -l info -f /var/www/ecosystem.startupthailand.org/logs/celeryd.log

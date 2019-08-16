@@ -26,8 +26,8 @@ urlpatterns = patterns('presentation.views',
 
     # Staff
     url(r'^manage/$', 'manage', name='manage'),
-    url(r'^manage/pending-organization/(?P<organization_role>[A-Za-z0-9-_.]+)/$', 'manage_pending_organization', name='manage_pending_organization'),
-    url(r'^manage/promote-organization/(?P<organization_role>[A-Za-z0-9-_.]+)/$', 'manage_promote_organization', name='manage_promote_organization'),
+    url(r'^manage/pending-organization/(?P<type_of_organization>[A-Za-z0-9-_.]+)/$', 'manage_pending_organization', name='manage_pending_organization'),
+    url(r'^manage/promote-organization/(?P<type_of_organization>[A-Za-z0-9-_.]+)/$', 'manage_promote_organization', name='manage_promote_organization'),
 
     #url(r'^manage/organization/(?P<type_of_organization>[A-Za-z0-9-_.]+)/$', 'manage_porganization', name='manage_organization'),
     url(r'^manage/promote-people/$', 'manage_promote_people', name='manage_promote_people'),

@@ -84,7 +84,7 @@
             {% trans "Information" %}
         </a>
     </li>
-    <li class="require{% if form.type_of_needs.errors or form.topics.errors or form.type_of_supports.errors or form.country.errors or form.organization_types.errors or form.investor_types.errors or form.product_launch.errors or form.funding.errors or form.request_funding.errors or form.deal_size_start.errors or form.deal_size_end.errors %} errors{% endif %}">
+    <li class="require{% if form.type_of_needs.errors or form.topics.errors or form.type_of_supports.errors or form.country.errors or form.organization_types.errors or form.investor_types.errors or form.product_launch.errors or form.funding.errors or form.request_funding.errors or form.money_deal_size_start.errors or form.deal_size_end.errors %} errors{% endif %}">
         <a href="#organization-taxonomy" tabindex="-1" role="tab" data-toggle="tab">
             {% trans "Taxonomy" %}
         </a>
@@ -172,6 +172,14 @@
             {% trans "Portfolios" %}
         </a>
     </li>
+
+    {% if form.inst.id %}
+    <li class="show-submit-button{% if form.programs.errors %} errors{% endif %}">
+        <a href="#organization-programs" tabindex="-1" role="tab" data-toggle="tab">
+            {% trans "Incubation/Acceleration Programs" %}
+        </a>
+    </li>
+    {% endif %}
 
     {% comment %}
     <li class="nav-header disabled"><hr /><a>{% trans "Relationship" %}</a></li>
@@ -671,12 +679,12 @@
         </div>
 
         <div class="controls form-group depend-on-role depend-on-role-id-3">
-            <label for="id_deal_size_start" class="field-container control-label">{% trans "Deal Size - Minimum" %}</label>
+            <label for="id_money_deal_size_start" class="field-container control-label">{% trans "Deal Size - Minimum" %}</label>
             <div class="field-container field-has-suffix">
-                {{ form.deal_size_start }}
+                {{ form.money_deal_size_start }}
                 <span class="field-suffix">{{ CURRENCY }}</span>
-                {% if form.deal_size_start.errors %}
-                <div class="errors alert alert-danger">{{ form.deal_size_start.errors }}</div>
+                {% if form.money_deal_size_start.errors %}
+                <div class="errors alert alert-danger">{{ form.money_deal_size_start.errors }}</div>
                 {% endif %}
             </div>
         </div>
@@ -1151,6 +1159,32 @@
                     <span class="glyphicon glyphicon-plus icostartup icon-plus"></span>
                     <a href="{% url 'portfolio_create' %}?_popup=1" class="autocomplete-add-another" id="add_id_portfolios">
                         {% trans "Create portfolio" %}
+                    </a>
+                </div>
+
+                <span class="help-block">
+                </span>
+                {% if form.portfolios.errors %}
+                <div class="errors alert alert-danger">{{ form.portfolios.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+
+    <div class="tab-pane" id="organization-programs">
+        <h2 class="tab-title">{% trans "Incubation/Acceleration Programs" %}</h2>
+
+        <div class="controls form-group">
+            <label for="id_programs" class="field-container control-label">{% trans "Add your programs" %}</label>
+            <div class="field-container">
+
+                {{ form.programs }}
+
+                <div class="popup-create-link-wrapper">
+                    <span class="glyphicon glyphicon-plus icostartup icon-plus"></span>
+                    <a href="{% url 'program_create' form.inst.id|default_if_none:0 %}?_popup=1" class="autocomplete-add-another" id="add_id_programs">
+                        {% trans "Create Program" %}
                     </a>
                 </div>
 

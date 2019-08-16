@@ -1,1 +1,13 @@
-.hotfix-hidden { display: none !important;}
+.hotfix-hidden,
+/* .create-link-investor,
+.create-link-supporter,
+.create-link-program, */
+.create-link-job,
+/* .btn-view, */
+.breadcrumb {
+    display: none !important;
+}
+
+.hotfix-children-hidden:after {
+    display: none !important;
+}

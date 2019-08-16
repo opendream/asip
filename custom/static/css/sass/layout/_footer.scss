@@ -1,0 +1,57 @@
+/*----------------------------------
+Footer
+----------------------------------*/
+.footer {
+  padding: 50px 0;
+  background-color: #000;
+}
+
+.address {
+  color: #fff;
+  font: bold .9em / 1.5em $EN-font-body;
+
+  &__dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    margin: 0 8px;
+    border-radius: 8px;
+    background-color: #656E73;
+  }
+  &__copyright {
+    color: #5E686A;
+    font-weight: 300;
+  }
+
+}
+
+.contact {
+  &__title {
+    display: block;
+    max-width: 200px;
+    margin: 2em auto 1em;
+    padding: 5px;
+    font: 1.1em / 1.1em $EN-font-heading;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #fff;
+    background-color: #121413;
+  }
+  &__link {
+    display: block;
+    margin: 5px 0;
+    color: #5E686A;
+    font: 300 0.8em / 1.5em $TH-font-body;
+
+    &:hover { color: #fff; }
+
+    @media (min-width: $lg) {
+      display: inline;
+      padding: 0 20px;
+    }
+  }
+}
+
+.contact__social {
+    margin-bottom: 1em;
+}

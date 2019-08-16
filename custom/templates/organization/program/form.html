@@ -1,0 +1,1500 @@
+{% extends 'base_sidebar_form.html' %}
+{% load i18n %}
+{% load staticfiles %}
+{% load common_tags %}
+
+{% block js %}
+<script type="text/javascript" src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
+{% endblock %}
+
+{% block wrapper_class %} -form-org {% endblock %}
+
+{% block css %}
+
+{% endblock %}
+
+{% block form_class %}dirty-check point-form stickem-container{% endblock %}
+{% block sidebar_class %} stick-in-parent stickem{% endblock %}
+
+{% block ttsa_header %}
+<!-- <div class="block-front -wrapper -event -ttsa _form hidden">
+    <div class="container wrapper">
+
+        <div class="block-discover-startup">
+            <div class="row">
+                <div class="col-sm-8 col-md-9 static-content">
+                    <div class="vertical-middle">
+                        <h2 class="kanit-regular">{% trans "Be a FREE" %}</h2>
+                        <h2 class="kanit-extralight">{% trans "member of Thailand Tech Startup Association (TTSA)" %}</h2>
+                        <p>
+                            TTSA'a members will receive email update and participate some association events.
+                        </p>
+                        <p>
+                            กรอกข้อมูลพร้อมรับสิทธิ์ในการสมัครเป็นสมาชิกสมาคมการค้าเพื่อส่งเสริมผู้ประกอบการเทคโนโลยีรายใหม่ (Thailand Tech Startup Association) เพื่อรับข่าวสารความเคลื่อนไหวที่น่าสนใจจากสมาคม
+                        </p>
+                        <p>
+                            With NEW, you’ll get online access to data on more than <strong>{{ total_startup }}</strong> startups, often months—or even years—before they appear in other databases.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-4">
+                    <img ng-src="/static/images/ttsa-logo.jpg" alt="TTSA logo" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->
+{% endblock %}
+
+{% block title %}
+
+{% if form.is_new %}
+    {% trans "Create" %} Program
+{% else %}
+    <span class="hide-print">{% trans "Edit" %} </span>{{ form.inst.name }} <span class="header-status header-status-{{ form.inst.status }}">{{ form.inst.get_status_display }}</span>
+{% endif %}
+
+{% endblock %}
+
+{% block main_loading %}show{% endblock %}
+
+{% block sidebar %}
+
+{% if settings.POINT %}
+<div class="organization-percent-point hide">
+    <h4 class="title text-center">
+        {% trans "Information completeness" %}
+        <a href="#" data-toggle="tooltip" data-html="true" data-placement="auto" title="Point description" class="link-tooltip point-tooltip">
+            <span class="glyphicon glyphicon-question-sign">
+            </span>
+        </a>
+
+    </h4>
+    <div class="progress">
+        <span class="percent" style="width: {{ form.inst.point }}%"></span>
+    </div>
+    <div class="text-percent text-center">
+        {{ form.inst.point }}%
+    </div>
+    <!-- Generated markup by the plugin -->
+</div>
+{% endif %}
+
+
+<ul class="nav nav-pills nav-stacked">
+
+    <li class="nav-header disabled"><a>#1 {% trans "General Details" %}</a></li>
+    <li class="active{% if form.permalink.errors or form.name.errors or form.program_type.errors or form.date_of_establishment.errors %} errors{% endif %}">
+        <a href="#organization-information" tabindex="-1" role="tab" data-toggle="tab">
+            {% trans "Information" %} <span class="asterisk text-danger">*</span>
+        </a>
+    </li>
+
+    <li class="{% if request_popup and not organization %} hide{% endif %}{% if form.organization.errors %} errors{% endif %}">
+        <a href="#organization-owner" tabindex="-1" role="tab" data-toggle="tab">
+            {% trans "Organization's Program" %} <span class="asterisk text-danger">*</span>
+        </a>
+    </li>
+
+    <li class="{% if form.focus_sector.errors or form.other_focus_sector.errors or form.focus_industry.errors or form.other_focus_industry.errors %} errors{% endif %}">
+        <a href="#organization-focus" tabindex="-1" role="tab" data-toggle="tab">
+            {% trans "Focus" %} <span class="asterisk text-danger">*</span>
+        </a>
+    </li>
+
+    <li class="{% if form.facebook_url.errors or form.twitter_url.errors or form.linkedin_url.errors or form.homepage_url.errors or form.instagram_url.errors or form.other_channel.errors %} errors{% endif %}">
+        <a href="#organization-social-network" tabindex="-1" role="tab" data-toggle="tab">
+            {% trans "Social Media Channel (optional)" %}
+        </a>
+    </li>
+
+    <li class="{% if form.image.errors or form.cover_image.errors or form.description.errors %} errors{% endif %}">
+        <a href="#organization-description" tabindex="-1" role="tab" data-toggle="tab">
+            {% trans "Description" %} <span class="asterisk text-danger">*</span>
+        </a>
+    </li>
+
+    <li class="{% if organization_section1_form.name_of_representative.errors or organization_section1_form.title_of_contact_person.errors or organization_section1_form.email_of_contact_person.errors or organization_section1_form.phone_number_of_contact_person.errors %} errors{% endif %}">
+        <a href="#organization-contact-information" tabindex="-1" role="tab" data-toggle="tab">
+            {% trans "Contact Person" %} <span class="asterisk text-danger">*</span>
+        </a>
+    </li>
+
+    <li class="{% if form.mentor.errors %} errors{% endif %}">
+        <a href="#organization-mentor" tabindex="-1" role="tab" data-toggle="tab">
+            {% trans "Mentorships" %}
+        </a>
+    </li>
+
+    <li class="{% if participant_organization_formset.errors|any %} errors{% endif %}">
+        <a href="#organization-participate" tabindex="-1" role="tab" data-toggle="tab">
+            {% trans "Startup Participate (optional)" %}
+        </a>
+    </li>
+
+    <li class="nav-header disabled"><hr /><a>#2 {% trans "Achievement" %}</a></li>
+
+    <li class="{% if form.is_partner.errors or form.partners.errors %} errors{% endif %}">
+        <a href="#organization-partner-client" tabindex="-1" role="tab" data-toggle="tab">
+            {% trans "Partners" %} <span class="asterisk text-danger">*</span>
+        </a>
+    </li>
+
+    <li class="nav-header disabled"><hr /><a>#3 {% trans "SMART Visa" %}</a></li>
+
+    <li class="{% if form.is_register_to_nia.errors %} errors{% endif %}">
+        <a href="#organization-register" tabindex="-1" role="tab" data-toggle="tab">
+            {% trans "Registration" %}
+        </a>
+    </li>
+    <li class="is-yes-depend-on-is_register_to_nia{% if form.mentor.errors %} errors{% endif %}">
+        <a href="#organization-mentor" tabindex="-1" role="tab" data-toggle="tab">
+            {% trans "Mentorships" %} <span class="asterisk text-danger">*</span>
+        </a>
+    </li>
+    <li class="is-yes-depend-on-is_register_to_nia{% if form.staff.errors %} errors{% endif %}">
+        <a href="#organization-staff" tabindex="-1" role="tab" data-toggle="tab">
+            {% trans "Operating Staff" %} <span class="asterisk text-danger">*</span>
+        </a>
+    </li>
+
+    <li class="is-yes-depend-on-is_register_to_nia{% if form.is_acting_as_an_investor.errors or form.has_invited_in_participants_team.errors or form.investment_type.errors %} errors{% endif %}">
+        <a href="#organization-supported" tabindex="-1" role="tab" data-toggle="tab">
+            {% trans "Investment" %} <span class="asterisk text-danger">*</span>
+        </a>
+    </li>
+    <li class="is-yes-depend-on-is_register_to_nia{% if form.investment_stage_type.errors or batch_section1_formset.errors|any %} errors{% endif %}">
+        <a href="#organization-funding" tabindex="-1" role="tab" data-toggle="tab">
+            {% trans "Stage" %} <span class="asterisk text-danger">*</span>
+        </a>
+    </li>
+    <li class="is-yes-depend-on-is_register_to_nia{% if form.has_taken_equity_in_participating_team.errors or form.does_provide_financial_supports.errors or form.amount_of_financial_supports.errors %} errors{% endif %}">
+        <a href="#organization-equity-grant" tabindex="-1" role="tab" data-toggle="tab">
+            {% trans "Equity / Grant" %} <span class="asterisk text-danger">*</span>
+        </a>
+    </li>
+    <li class="is-yes-depend-on-is_register_to_nia{% if batch_section2_formset.errors|any or form.period_of_engagement.errors %} errors{% endif %}">
+        <a href="#organization-participants" tabindex="-1" role="tab" data-toggle="tab">
+            {% trans "Participants Details" %} <span class="asterisk text-danger">*</span>
+        </a>
+    </li>
+    <li class="is-yes-depend-on-is_register_to_nia{% if form.does_provide_working_spaces.errors or form.is_own_working_space.errors or form.does_provide_service_and_facility.errors or form.specify_service.errors or working_form.address.errors or working_form.tel.errors or working_form.email.errors %} errors{% endif %}">
+        <a href="#organization-facilities" tabindex="-1" role="tab" data-toggle="tab">
+            {% trans "Facilities" %} <span class="asterisk text-danger">*</span>
+        </a>
+    </li>
+    <li class="is-yes-depend-on-is_register_to_nia{% if organization_attachment_form.errors %} errors{% endif %}">
+        <a href="#organization-attachment" tabindex="-1" role="tab" data-toggle="tab">
+            {% trans "Attachments" %} <span class="asterisk text-danger">*</span>
+        </a>
+    </li>
+
+    {# management #}
+    <li class="nav-header disabled"><hr /><a>{% trans "Management" %}</a></li>
+    <li class="{% if form.admins.errors %} errors{% endif %}">
+        <a href="#organization-admins" tabindex="-1" role="tab" data-toggle="tab">
+            {% trans "Administrators" %}
+        </a>
+    </li>
+    {% if user.is_staff or ALLOWED_CREATE_ORGANIZATION_WITHOUT_APPROVAL %}
+    <li{% if form.status.errors %} class="errors"{% endif %}>
+        <a href="#organization-publishing" tabindex="-1" role="tab" data-toggle="tab">
+            {% trans "Publishing" %}
+        </a>
+    </li>
+    {% endif %}
+</ul>
+
+{% endblock %}
+
+
+{% block content %}
+<div class="tab-content" id="tab_content">
+    {% if not form.is_new and not request_popup %}
+    <a href="{% url 'organization_detail' form.inst.permalink %}" class="btn btn-default btn-xs btn-view hide-print">
+        <span class="glyphicon glyphicon-eye-open"></span> {% trans "View result" %}
+    </a>
+    {% if user.is_staff or ALLOWED_CREATE_ORGANIZATION_WITHOUT_APPROVAL %}
+    <a href="{% url 'organization_pdf' form.inst.id %}" class="btn btn-default btn-xs btn-view hide-print">
+        <span class="glyphicon glyphicon-download-alt"></span> {% trans "PDF version" %}
+    </a>
+    {% endif %}
+    {% endif %}
+
+    <a href="{% static 'startupthailand-guide-program.pdf' %}" class="btn btn-default btn-xs btn-view hide-print" target="_blank">Download Manual</a>
+
+    <h2 class="show-print form-part-heading">Part#1: General Details</h2>
+
+    <div class="tab-pane active in" id="organization-information">
+
+        <h2 class="tab-title">{% trans "Information" %}</h2>
+
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+        <div class="errors alert alert-danger">{{ form.non_field_errors }}</div>
+        {% endif %}
+
+
+
+        <input type="hidden" value="1" name="organization_primary_role" />
+        <input type="hidden" value="1" name="organization_roles" />
+        <input type="hidden" name="type_of_organization" value="{{ type_of_organization }}">
+
+        <div class="controls form-group">
+            <label for="id_name" class="field-container control-label">
+                {% trans "Name of The Program" %} <span class="asterisk text-danger">*</span>
+            </label>
+            <div class="field-container">
+                <span id="generate-permalink">
+                    {{ form.name }}
+                </span>
+
+                {% if form.name.errors %}
+                <div class="errors alert alert-danger">{{ form.name.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="controls form-group permalink-inline">
+            <label for="id_permalink" class="field-container control-label">{% trans "Permalink" %} <span class="label-required-ico">*</span></label>
+            <div class="field-container ">
+
+                <span id="id_permalink_readonly" class="form-control">{{ form.permalink.value|default_if_none:'' }}</span>
+                <a id="edit-permalink" href="#id_permalink">{% trans "edit" %}</a>
+
+                <span class="help-block">
+                    {% blocktrans with type_of_organization_name=type_of_organization_name %}This field represent your {{ type_of_organization_name }} url in this website.{% endblocktrans %}<br />
+                    {{ form.permalink.help_text }}
+                </span>
+                <input id="id_permalink" name="permalink" type="text" class="form-control" value="{{ form.permalink.value|default_if_none:'' }}">
+
+                {% if form.permalink.errors %}
+                <div class="errors alert alert-danger">{{ form.permalink.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="controls form-group print-inline print-width-full">
+            <label for="id_program_type" class="field-container control-label">{% trans "Type of Program" %} <span class="asterisk text-danger">*</span></label>
+            <div class="field-container">
+                {% for choice in form.program_type %}
+                    <span class="choice-item">
+                        {{ choice.tag }}
+                        <label for="id_program_type_{{ choice.index }}">{{ choice.choice_label }}</label>
+                    </span>
+                {% endfor %}
+
+                {% if form.program_type.errors %}
+                <div class="errors alert alert-danger">{{ form.program_type.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="controls form-group print-inline">
+            <label for="id_date_of_establishment" class="field-container control-label">{% trans "Date of Establishment" %} <span class="asterisk text-danger">*</span></label>
+            <div class="field-container">
+                <div class="clearfix">
+                    {{ form.date_of_establishment }}
+                </div>
+                <span class="help-block">
+                {{ form.date_of_establishment.help_text }}
+                </span>
+                {% if form.date_of_establishment.errors %}
+                <div class="errors alert alert-danger">{{ form.date_of_establishment.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+
+    <div class="tab-pane" id="organization-owner">
+        <h2 class="tab-title">{% trans "Organization's program" %}</h2>
+        {% if not request_popup %}
+        <div class="controls form-group">
+            <label for="id_organization" class="field-container control-label hide-print">{% trans "Select organization of your program." %}</label>
+
+            <div class="field-container-no-overflow field-inline-id_organization">
+
+                <div class="inline-reference-container">
+                    <div class="inline-reference-wrapper">
+
+                        <span class="help-block">
+                            {% trans "Select supporter that your created and administration." %} <span class="asterisk text-danger">*</span>
+                        </span>
+
+                        {{ form.organization }}
+
+                        {% if form.organization.errors %}
+                        <div class="errors alert alert-danger">{{ form.organization.errors }}</div>
+                        {% endif %}
+
+                        <div class="inline-create-link-wrapper">
+                            {% trans "or" %}
+                            <a href="{% url 'organization_inline_create' %}?_inline=1&no_script=1&_win_name=id_organization&return_get_display_name=1&type_of_organization=supporter&force_type_of_organization=1&required_address=1&required_contact=1" class="add-another-inline" id="add_id_organization" target="organization_inline">
+                                <span class="glyphicon glyphicon-plus"></span>
+                                {% trans "Create new supporter organization" %}
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="add-another-inline-input-list" id="organization_inline">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="controls form-group">
+            <label class="field-container control-label">{% trans "Organization" %}</label>
+            <div class="field-container owner-detail-wrapper">
+                {% if organization %}
+                <span class="owner-img">
+                    <img src="{{ organization.get_thumbnail_in_primary }}" alt="{{ organization.get_display_name }}"/>
+                </span>
+                <span class="owner-title">
+                    {{ organization.get_display_name }}
+                </span>
+                {% else %}
+                <span class="owner-title">
+                    Your organization
+                </span>
+                {% endif %}
+            </div>
+            <div class="hide">{{ form.organization }}</div>
+        </div>
+        <br/>
+
+        {% endif %}
+
+    </div>
+
+    <div class="tab-pane print-break-avoid print-break-after" id="organization-focus">
+        <h2 class="tab-title">{% trans "Focus" %}</h2>
+
+        <div class="controls form-group">
+            <label for="id_focus_sector" class="col-sm-3 control-label">{% trans "Focus Sectors" %} <span class="asterisk text-danger">*</span></label>
+            <div class="checkbox col-sm-9">
+                <ul>
+                    {% for choice in form.focus_sector %}
+                    <li>
+                        <span class="choice-item">
+                            {{ choice.tag }}
+                            <label for="id_focus_sector_{{ choice.index }}">{{ choice.choice_label }}</label>
+                        </span>
+                        {% if choice.choice_label == 'Other' %}<span class="other-field">
+                            <input id="id_other_focus_sector" name="other_focus_sector"  type="text"  class="form-control" value="{{ form.other_focus_sector.value|default_if_none:"" }}" /></span>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                </ul>
+
+                {% if form.focus_sector.errors %}
+                <div class="errors alert alert-danger">{{ form.focus_sector.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="controls form-group">
+            <label for="id_focus_industry" class="col-sm-3 control-label">{% trans "Focus Industry(10 S-Curve)" %} <span class="asterisk text-danger">*</span></label>
+            <div class="checkbox col-sm-9">
+                <ul>
+                    {% for choice in form.focus_industry %}
+                    <li>
+                        <span class="choice-item">
+                            {{ choice.tag }}
+                            <label for="id_focus_industry_{{ choice.index }}">{{ choice.choice_label }}</label>
+                        </span>
+                        {% if choice.choice_label == 'Other' %}<span class="other-field">
+                            <input id="id_other_focus_industry" name="other_focus_industry"  type="text"  class="form-control" value="{{ form.other_focus_industry.value|default_if_none:"" }}" /></span>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                </ul>
+
+                {% if form.focus_industry.errors %}
+                <div class="errors alert alert-danger">{{ form.focus_industry.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+
+    <div class="tab-pane print-break-avoid print-break-before print-break-after" id="organization-social-network">
+
+        <h2 class="tab-title">{% trans "Social Media Channel" %}</h2>
+
+        <div class="controls form-group">
+            <label for="id_homepage_url" class="field-container control-label">{% trans "Homepage URL" %}</label>
+            <div class="field-container">
+                <input id="id_homepage_url" name="homepage_url" type="text" class="form-control" value="{{ form.homepage_url.value|default_if_none:"" }}">
+                {% if form.homepage_url.errors %}
+                <div class="errors alert alert-danger">{{ form.homepage_url.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="controls form-group">
+            <label for="id_facebook_url" class="field-container control-label">{% trans "Facebook URL" %}</label>
+            <div class="field-container">
+                <input id="id_facebook_url" name="facebook_url" type="text" class="form-control" value="{{ form.facebook_url.value|default_if_none:"" }}">
+                {% if form.facebook_url.errors %}
+                <div class="errors alert alert-danger">{{ form.facebook_url.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="controls form-group">
+            <label for="id_twitter_url" class="field-container control-label">{% trans "Twitter URL" %}</label>
+            <div class="field-container">
+                <input id="id_twitter_url" name="twitter_url" type="text" class="form-control" value="{{ form.twitter_url.value|default_if_none:"" }}">
+                {% if form.twitter_url.errors %}
+                <div class="errors alert alert-danger">{{ form.twitter_url.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="controls form-group">
+            <label for="id_linkedin_url" class="field-container control-label">{% trans "Linkedin URL" %}</label>
+            <div class="field-container">
+                <input id="id_linkedin_url" name="linkedin_url" type="text" class="form-control" value="{{ form.linkedin_url.value|default_if_none:"" }}">
+                {% if form.linkedin_url.errors %}
+                <div class="errors alert alert-danger">{{ form.linkedin_url.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="controls form-group">
+            <label for="id_instagram_url" class="field-container control-label">{% trans "Instagram URL" %}</label>
+            <div class="field-container">
+                <input id="id_instagram_url" name="instagram_url" type="text" class="form-control" value="{{ form.instagram_url.value|default_if_none:"" }}">
+                {% if form.instagram_url.errors %}
+                <div class="errors alert alert-danger">{{ form.instagram_url.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="controls form-group">
+            <label for="id_other_channel" class="field-container control-label">{% trans "Other Channel" %}</label>
+            <p class="help-block">Please enter only URL. One URL per line. <br/>Ex: https://example.com</p>
+            <div class="field-container">
+                <textarea id="id_other_channel" name="other_channel" type="text" class="form-control" value="">{{ form.other_channel.value|default_if_none:"" }}</textarea>
+                {% if form.other_channel.errors %}
+                <div class="errors alert alert-danger">{{ form.other_channel.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-pane print-break-avoid print-break-before print-break-after" id="organization-description">
+
+        <h2 class="tab-title">{% trans "Description" %}</h2>
+
+        <div class="controls form-group hide-file-name">
+            <label for="id_image" class="field-container control-label print-title">{% trans "Logo" %}</label>
+            <div class="field-container">
+                <div class="description-upload-image">
+                    <div class="left">
+                        <span class="help-block">{% trans "Insert a square logo representing your organization/product/service." %}</span>
+
+                        {{ form.image }}
+
+                        {% if form.image.errors %}
+                        <div class="errors alert alert-danger">{{ form.image.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="right">
+                        <span class="help-block">Logo Image display example</span>
+                        <img style="width: 250px;" class="img-responsive" src="{% static 'images/logo-help.png' %}" alt="log help">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls form-group upload-cover-image hide-file-name hide-print">
+            <label for="id_image" class="field-container control-label print-title">{% trans "Cover Image" %}</label>
+            <div class="field-container">
+                <div class="description-upload-image">
+                    <div class="left">
+                        <span class="help-block">{% trans "Upload a cover image (recomended size width:height ~ 1170:435 px)" %}</span>
+
+                        {{ form.cover_image }}
+
+                        {% if form.cover_image.errors %}
+                        <div class="errors alert alert-danger">{{ form.cover_image.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="right">
+                        <span class="help-block">Cover Image display example</span>
+                        <img style="width: 250px;" class="img-responsive" src="{% static 'images/cover-help.png' %}" alt="log help">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls form-group">
+            <label for="id_description" class="field-container control-label">{% trans "Description" %} <span class="asterisk text-danger">*</span></label>
+            <div class="field-container">
+                <span class="help-block">
+                {% trans "Explain about your organization/product/service." %}
+                </span>
+
+                {% vary_print form.description %}
+
+                {% if form.description.errors %}
+                <div class="errors alert alert-danger">{{ form.description.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+
+    <div class="tab-pane print-break-avoid print-break-before print-break-after" id="organization-contact-information">
+
+        <h2 class="tab-title">{% trans "Contact Information" %}</h2>
+
+        <div class="dev-hidden">
+            {% for field in organization_section1_form %}
+
+            {% if field.name != 'name_of_representative' and field.name != 'email_of_contact_person' and field.name != 'location_of_organizations_headquarters' %}
+            {% include 'field.html' %}
+            {% endif %}
+
+            {% if field.name == 'email_of_contact_person' %}
+            {% render_formset location_of_organizations_operating_facilities_formset 'location_of_organizations_operating_facilities' "Location of Organization's Operating Facilities" %}
+            {% endif %}
+
+            {% endfor %}
+        </div>
+
+        <div>
+            {% include 'field.html' with field=organization_section1_form.name_of_representative label='Contact Person' %}
+            {% include 'field.html' with field=organization_section1_form.title_of_contact_person %}
+            {% include 'field.html' with field=organization_section1_form.email_of_contact_person %}
+            {% include 'field.html' with field=organization_section1_form.phone_number_of_contact_person %}
+        </div>
+
+    </div>
+
+    <div class="tab-pane print-break-avoid print-break-before print-break-after" id="organization-mentor">
+        <h2 class="tab-title">{% trans "Mentorships" %}</h2>
+
+        <div class="controls form-group">
+
+            <div class="help-block">
+                <em>
+                    Note: ***Each mentor is required to attach resume or portfolio consisting of previous achievement<br />
+                    Supplementary sheets may be attached if additional space is required.
+                </em>
+            </div>
+
+            <label for="id_mentor" class="field-container control-label">{% trans "Add mentor who work at your program." %}</label>
+
+            <div class="field-container-no-overflow field-inline-id_mentor">
+
+                <div class="inline-reference-container">
+                    <div class="inline-reference-wrapper">
+                        <span class="help-block">
+                           {% trans "Please provide brief information of main mentors, coaches, speakers, and trainers of the program." %}
+                        </span>
+
+                        {{ form.mentor }}
+
+                        {% if form.mentor.errors %}
+                        <div class="errors alert alert-danger">{{ form.mentor.errors }}</div>
+                        {% endif %}
+
+                        <div class="inline-create-link-wrapper">
+                            <span class="glyphicon glyphicon-plus icostartup icon-plus"></span>
+                            <a href="{% url 'staff_inline_invitation' %}?_inline=1&no_script=1&field_id=id_mentor&create=1" class="add-another-inline" id="add_id_mentor" target="id_mentor_inline">
+                                {% trans "Create new mentor" %}
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="add-another-inline-input-list" id="id_mentor_inline">
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="tab-pane print-break-avoid print-break-after" id="organization-participate">
+        <h2 class="tab-title">{% trans "Startup Participated" %}</h2>
+
+        <label>
+            Please specify the startup that participated in the program.
+        </label>
+
+        <div class="controls form-group">
+            <div class="field-container">
+                <div class="row">
+                    {{ participant_organization_formset.management_form }}
+                    {% for participant_form in participant_organization_formset.forms %}
+
+                    <div class="col-sm-12 participate_form">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div id="id_{{ participant_form.prefix }}-participate_form">
+
+                                    {% if participant_form.status.value == STATUS_PUBLISHED %}
+                                    <div class="required-approval approval">Approved</div>
+                                    {% elif participant_form.status.value == STATUS_REJECTED %}
+                                    <div class="required-approval reject">Rejected</div>
+                                    {% endif %}
+
+                                    <div class="field-container-no-overflow field-inline-id_{{ participant_form.prefix }}-organization">
+
+                                        <div class="controls form-group row _mb-0">
+                                            <label class="text-right col-sm-5 control-label _lh-40 _mb-0">{% trans "Startup" %}</label>
+
+                                            <div class="col-sm-7">
+                                                <div class="inline-reference-container">
+                                                    <div class="inline-reference-wrapper">
+
+                                                        {{ participant_form.organization }}
+
+                                                        {% if participant_form.organization.errors %}
+                                                        <div class="errors alert alert-danger">{{ participant_form.organization.errors }}</div>
+                                                        {% endif %}
+
+                                                        <div class="inline-create-link-wrapper hide-print">
+                                                            <span class="glyphicon glyphicon-plus icostartup icon-plus"></span>
+                                                            <a href="{% url 'organization_inline_create' %}?_inline=1&no_script=1&_win_name=id_{{ participant_form.prefix }}-organization&create=1&required_contact=1&is_mockup=1" class="add-another-inline" id="add_id_{{ participant_form.prefix }}-organization" target="id_{{ participant_form.prefix }}-organization_form_inline">
+                                                                {% trans "Create mockup startup" %}
+                                                            </a>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="add-another-inline-input-list" id="id_{{ participant_form.prefix }}-organization_form_inline">
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="controls form-group row _mb-0">
+                                        <label for="id_{{ participant_form.prefix }}-month" class="text-right col-sm-5 control-label _lh-40 _mb-0">{% trans "Period of the program(in month)" %}</label>
+                                        <div class="col-sm-7">
+                                            {{ participant_form.month }}
+                                        </div>
+                                    </div>
+
+                                    {{ participant_form.id }}
+                                    {{ participant_form.status }}
+
+                                    <div class="controls form-group row _mb-0 hide-print">
+                                        <label for="id_{{ participant_form.prefix }}-DELETE" class="text-right col-sm-5 control-label _lh-40 _mb-0">{{ participant_form.DELETE.label }}?</label>
+                                        <div class="col-sm-7">
+                                            <div style="margin-top: 5px;">{{ participant_form.DELETE }}</div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="controls form-group hide-print">
+                    <div class="field-container row">
+                         <a id="add_program" type="button" class="col-sm-12 btn btn-default">
+                            <span class="glyphicon glyphicon-plus icostartup icon-plus"></span> Add Startup Participated
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    
+    <h2 class="show-print form-part-heading print-break-avoid print-break-before">Part#2: Achievement</h2>
+
+    <div class="tab-pane print-break-avoid print-break-after" id="organization-partner-client">
+        <h2 class="tab-title">{% trans "Partners" %}</h2>
+
+        <div class="controls form-group">
+            <label for="id_is_partner" class="field-container control-label show-label">
+                {% trans "Is this program in a collaboration with a partner" %}
+            </label>
+            <div class="field-container">
+                {% for choice in form.is_partner %}
+                    <span class="choice-item is-yes-depend">
+                        {{ choice.tag }}
+                        <label for="id_is_partner_{{ choice.index }}">{{ choice.choice_label }}</label>
+                    </span>
+                {% endfor %}
+
+                {% if form.is_partner.errors %}
+                <div class="errors alert alert-danger">{{ form.is_partner.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="controls form-group is-yes-depend-on-is_partner">
+            <label for="id_partners" class="field-container control-label">{% trans "Add partners of your program." %}</label>
+
+            <div class="field-container-no-overflow field-inline-id_partners">
+
+                <div class="inline-reference-container">
+                    <div class="inline-reference-wrapper">
+
+                        <span class="help-block">
+                            {% trans "Enter partners name to display on your program." %}
+                        </span>
+
+                        {{ form.partners }}
+
+                        {% if form.partners.errors %}
+                        <div class="errors alert alert-danger">{{ form.partners.errors }}</div>
+                        {% endif %}
+
+                        <div class="inline-create-link-wrapper">
+                            {% trans "or" %}
+                            <span class="glyphicon glyphicon-plus icostartup icon-plus"></span>
+                            <a href="{% url 'organization_inline_create' %}?_inline=1&no_script=1&_win_name=id_partners&required_address=1&required_contact=1&type_of_organization=supporter&is_mockup=1" class="add-another-inline" id="add_id_partners" target="partners_inline">
+                                {% trans "Create mockup partner organization" %}
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="add-another-inline-input-list" id="partners_inline">
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <h2 class="show-print form-part-heading print-break-avoid print-break-before">Part#3: SMART Visa</h2>
+
+    <div class="tab-pane print-break-avoid print-break-after" id="organization-register">
+        <h2 class="tab-title">{% trans "SMART Visa" %}</h2>
+
+        <div class="controls form-group">
+            <label for="id_is_register_to_nia" class="field-container control-label">
+                {% trans "Would you like to register for a smart visa." %}
+            </label>
+            <div class="field-container">
+                {% for choice in form.is_register_to_nia %}
+                    <span class="choice-item is-yes-depend">
+                        {{ choice.tag }}
+                        <label for="id_is_register_to_nia_{{ choice.index }}">{{ choice.choice_label }}</label>
+                    </span>
+                {% endfor %}
+
+                {% if form.is_register_to_nia.errors %}
+                <div class="errors alert alert-danger">{{ form.is_register_to_nia.errors }}</div>
+                {% endif %}
+            </div>
+            <div>
+                <em><small>If yes, please continue to complete next part below</small></em>
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-pane" id="organization-staff">
+        <h2 class="tab-title">{% trans "Operating Staff" %}</h2>
+
+        <div class="controls form-group">
+
+            <div class="help-block">
+                <em>
+                    Note: Supplementary sheets may be attached if additional space is required.
+                </em>
+            </div>
+
+            <label for="id_staff" class="field-container control-label hide-print">{% trans "Add staff who work at your organization." %}</label>
+
+            <div class="field-container-no-overflow field-inline-id_staff">
+
+                <div class="inline-reference-container">
+                    <div class="inline-reference-wrapper">
+                        <span class="help-block hide-print">
+                            {% trans "Please provide brief information of main operating staffs in your organization." %}
+                        </span>
+
+                        {{ form.staff }}
+
+                        {% if form.staff.errors %}
+                        <div class="errors alert alert-danger">{{ form.staff.errors }}</div>
+                        {% endif %}
+
+                        <div class="inline-create-link-wrapper">
+                            <span class="glyphicon glyphicon-plus icostartup icon-plus"></span>
+                            <a href="{% url 'staff_inline_invitation' %}?_inline=1&no_script=1&field_id=id_staff&create=1" class="add-another-inline" id="add_id_staff" target="staffs_inline">
+                                {% trans "Create new staff" %}
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="add-another-inline-input-list" id="staffs_inline">
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="tab-pane print-break-avoid print-break-before print-break-after" id="organization-supported">
+        <h2 class="tab-title">{% trans "Invesment information" %}</h2>
+        <div class="controls form-group">
+            <label for="id_is_acting_as_an_investor" class="field-container control-label">{% trans "Is the organization acting as an investor?" %} <span class="asterisk text-danger">*</span></label>
+            <div class="field-container">
+                {% for choice in form.is_acting_as_an_investor %}
+                    <span class="choice-item">
+                        {{ choice.tag }}
+                        <label for="id_is_acting_as_an_investor_{{ choice.index }}">{{ choice.choice_label }}</label>
+                    </span>
+                {% endfor %}
+
+                {% if form.is_acting_as_an_investor.errors %}
+                <div class="errors alert alert-danger">{{ form.is_acting_as_an_investor.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="controls form-group">
+            <label for="id_has_invited_in_participants_team" class="field-container control-label">{% trans "Has the organization ever invited in the participant teams?" %} <span class="asterisk text-danger">*</span></label>
+            <div class="field-container">
+                {% for choice in form.has_invited_in_participants_team %}
+                    <span class="choice-item is-yes-depend">
+                        {{ choice.tag }}
+                        <label for="id_has_invited_in_participants_team_{{ choice.index }}">{{ choice.choice_label }}</label>
+                    </span>
+                {% endfor %}
+
+                {% if form.has_invited_in_participants_team.errors %}
+                <div class="errors alert alert-danger">{{ form.has_invited_in_participants_team.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="controls form-group is-yes-depend-on-has_invited_in_participants_team">
+            <label for="id_investment_type" class="field-container control-label">{% trans "If yes, what's the type of investment?" %} <span class="asterisk text-danger">*</span></label>
+            <div class="field-container">
+                {% for choice in form.investment_type %}
+                    <span class="choice-item">
+                        {{ choice.tag }}
+                        <label for="id_investment_type_{{ choice.index }}">{{ choice.choice_label }}</label>
+                    </span>
+                {% endfor %}
+
+                {% if form.investment_type.errors %}
+                <div class="errors alert alert-danger">{{ form.investment_type.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+    
+    </div>
+
+    <div class="tab-pane print-break-avoid print-break-before print-break-after" id="organization-funding">
+        <h2 class="tab-title">{% trans "Stage" %}</h2>
+        <div class="controls form-group">
+            <label for="id_investment_type" class="field-container control-label">{% trans "What's the investment stage that the program has been focusting on?" %} <span class="asterisk text-danger">*</span></label>
+            <div class="checkbox field-container">
+                <ul>
+                {% for choice in form.investment_stage_type %}
+                    <li>
+                        <span class="choice-item">
+                            {{ choice.tag }}
+                            <label for="id_investment_stage_type_{{ choice.index }}">
+                                {{ choice.choice_label }}
+                                {% if choice.choice_label == 'Other' %}
+                                , please specify
+                                {% endif %}
+                            </label>
+                        </span>
+                        {% if choice.choice_label == 'Other' %}
+                            <span class="other-field">
+                                <input id="id_specific_stage" name="specific_stage" maxlength="500" type="text"  class="form-control" value="{{ form.specific_stage.value|default_if_none:"" }}" />
+                            </span>
+                            {% endif %}
+                    </li>
+                {% endfor %}
+                </ul>
+                {% if form.investment_stage_type.errors %}
+                <div class="errors alert alert-danger">{{ form.investment_stage_type.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="controls form-group">
+            <label for="id_investment_stage" class="field-container">
+                {% trans "Approximate amount of investment in each stage" %} (THB) <span class="asterisk text-danger">*</span>
+            </label>
+            <div class="help-block">
+                <em>{% trans "Note: The amount provided can be an exact number or in range" %}</em>
+            </div>
+
+            <div class="checkbox field-container">
+                {{ batch_section1_formset.management_form }}
+
+                <table class="table table-bordered table-investment_stage_type">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            {% for choice in form.investment_stage_type %}
+                            {% if choice.choice_label != 'Other' %}
+                            <th class="depend-on-investment_stage_type depend-on-investment_stage_type-id-{{ choice.choice_value }}">{{ choice.choice_label }}</th>
+                            {% endif %}
+                            {% endfor %}
+                            <th class="depend-on-specific_stage depend-on-specific_stage-render"></th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for batch_section1_form in batch_section1_formset.forms %}
+                        {% include "organization/program/batch_form.html" with prefix=batch_section1_formset.prefix i=forloop.counter0 form=batch_section1_form formset=batch_section1_formset %}
+                        {% endfor %}
+                        <tr>
+                            <td colspan="8">
+                                <a id="add_specify_batch" type="button" class="col-sm-12 btn btn-default">
+                                    <span class="glyphicon glyphicon-plus icostartup icon-plus"></span> Add Batch
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                {% if batch_section1_formset.errors|any %}
+                <div class="errors alert alert-danger">{{ batch_section1_formset.errors.0|default:'This field is required.' }}</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="tab-pane print-break-avoid print-break-before print-break-after" id="organization-equity-grant">
+
+        <h2 class="tab-title">{% trans "Equity / Grant" %}</h2>
+
+        <div class="controls form-group">
+            <label for="id_has_taken_equity_in_participating_team" class="field-container control-label">{% trans "Has the organization ever taken equity in participanting teams?" %} <span class="asterisk text-danger">*</span></label>
+            <div class="field-container">
+                {% for choice in form.has_taken_equity_in_participating_team %}
+                    <span class="choice-item">
+                        {{ choice.tag }}
+                        <label for="id_has_taken_equity_in_participating_team_{{ choice.index }}">{{ choice.choice_label }}</label>
+                    </span>
+                {% endfor %}
+
+                {% if form.has_taken_equity_in_participating_team.errors %}
+                <div class="errors alert alert-danger">{{ form.has_taken_equity_in_participating_team.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="controls form-group">
+            <label for="id_does_provide_financial_supports" class="field-container control-label">{% trans "Does the organozation provide grants or financial supports to the participanting teams?" %} <span class="asterisk text-danger">*</span></label>
+            <div class="field-container">
+                {% for choice in form.does_provide_financial_supports %}
+                    <span class="choice-item is-yes-depend">
+                        {{ choice.tag }}
+                        <label for="id_does_provide_financial_supports_{{ choice.index }}">{{ choice.choice_label }}</label>
+                    </span>
+                {% endfor %}
+
+                {% if form.does_provide_financial_supports.errors %}
+                <div class="errors alert alert-danger">{{ form.does_provide_financial_supports.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="controls form-group is-yes-depend-on-does_provide_financial_supports">
+            <label for="id_amount_of_financial_supports" class="field-container control-label">{% trans "If yes, please specify the amount (THB)" %} <span class="asterisk text-danger">*</span></label>
+            <div class="field-container">
+                <div class="help-block">
+                    {% trans "The amount provided can be in range" %}
+                </div>
+                <input id="id_amount_of_financial_supports" name="amount_of_financial_supports" type="text" class="form-control" placeholder="" value="{{ form.amount_of_financial_supports.value|default_if_none:"" }}">
+                {% if form.amount_of_financial_supports.errors %}
+                <div class="errors alert alert-danger">{{ form.amount_of_financial_supports.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+
+    <br class="show-print" />
+
+    <div class="tab-pane print-break-avoid print-break-before print-break-after" id="organization-participants">
+        <h2 class="tab-title">{% trans "Participants information" %}</h2>
+        <label>{% trans "Participants Detail" %} <span class="asterisk text-danger">*</span></label>
+        <div class="help-block">
+            <em>Detail of teams or startups participating in the previous batches to be participated in the future batches</em>
+        </div>
+        {% if batch_section2_formset.errors|any %}
+        <div class="errors alert alert-danger">This field is required</div>
+        {% endif %}
+        <div class="controls form-group">
+            <div class="col-sm-12">
+                {{ batch_section2_formset.management_form }}
+                {% include "organization/program/participants_table.html" with form=batch_section2_formset %}
+            </div>
+        </div>
+
+        <div class="controls form-group print-inline">
+            <label for="id_period_of_engagement" class="field-container control-label">{% trans "Contract period of engagement with the participant during the program (in months)" %} <span class="asterisk text-danger">*</span></label>
+            <div class="field-container">
+                <div class="help-block">
+                    Enter decimal value in months.
+                </div>
+                <input id="id_period_of_engagement" name="period_of_engagement" type="number" class="form-control" placeholder="" value="{{ form.period_of_engagement.value|default_if_none:"" }}">
+
+                {% if form.period_of_engagement.errors %}
+                <div class="errors alert alert-danger">{{ form.period_of_engagement.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <br class="show-print" />
+
+    <div class="tab-pane print-break-avoid print-break-before" id="organization-facilities">
+        <h2 class="tab-title">{% trans "Facilities" %}</h2>
+        <div class="controls form-group">
+            <label for="id_does_provide_working_spaces" class="field-container control-label">{% trans "Does the organization provide the participant working spaces and facilities during the program?" %} <span class="asterisk text-danger">*</span></label>
+            <div class="field-container">
+                {% for choice in form.does_provide_working_spaces %}
+                    <span class="choice-item is-yes-depend">
+                        {{ choice.tag }}
+                        <label for="id_does_provide_working_spaces_{{ choice.index }}">{{ choice.choice_label }}</label>
+                    </span>
+                {% endfor %}
+
+                {% if form.does_provide_working_spaces.errors %}
+                <div class="errors alert alert-danger">{{ form.does_provide_working_spaces.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="controls form-group is-yes-depend-on-does_provide_working_spaces">
+            <label for="id_working" class="field-container control-label">{% trans "If yes, please specify the address of the working space" %} <span class="asterisk text-danger">*</span></label>
+            <div class="field-container">
+                <div class="working-panel panel panel-default ">
+                    <div class="panel-body">
+                        <div class="controls form-group">
+                            <label for="id_working_form_address" class="col-sm-3 control-label">{% trans "Addess" %} <span class="asterisk text-danger">*</span></label>
+                            <div class="col-sm-9">
+                                <textarea id="id_working_form-address" name="working_form-address"  class="form-control" >{{ working_form.address.value|default_if_none:"" }}</textarea>
+                            </div>
+                            {% if working_form.address.errors %}
+                            <div class="col-sm-3"> </div>
+                            <div class="col-sm-9">
+                                <div class="errors alert alert-danger">{{ working_form.address.errors }}</div>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="controls form-group">
+                            <label for="id_working_form-tel" class="col-sm-3 control-label">{% trans "Tel" %} <span class="asterisk text-danger">*</span></label>
+                            <div class="col-sm-9">
+                                <input id="id_working_form-tel" name="working_form-tel" type="text" class="form-control" value="{{ working_form.tel.value|default_if_none:"" }}">
+                            </div>
+                            {% if working_form.tel.errors %}
+                            <div class="col-sm-3"> </div>
+                            <div class="col-sm-9">
+                                <div class="errors alert alert-danger">{{ working_form.tel.errors }}</div>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="controls form-group">
+                            <label for="id_working_form-email" class="col-sm-3 control-label">{% trans "Email" %} <span class="asterisk text-danger">*</span></label>
+                            <div class="col-sm-9">
+                                <input id="id_working_form-email" name="working_form-email" type="text" class="form-control" value="{{ working_form.email.value|default_if_none:"" }}">
+                            </div>
+                            {% if working_form.email.errors %}
+                            <div class="col-sm-3"> </div>
+                            <div class="col-sm-9">
+                                <div class="errors alert alert-danger">{{ working_form.email.errors }}</div>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls form-group">
+            <label for="id_is_own_working_space" class="field-container control-label">{% trans "Is the working space own by the organization?" %} <span class="asterisk text-danger">*</span></label>
+            <div class="field-container">
+                {% for choice in form.is_own_working_space %}
+                    <span class="choice-item">
+                        {{ choice.tag }}
+                        <label for="id_is_own_working_space_{{ choice.index }}">{{ choice.choice_label }}</label>
+                    </span>
+                {% endfor %}
+
+                {% if form.is_own_working_space.errors %}
+                <div class="errors alert alert-danger">{{ form.is_own_working_space.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="controls form-group">
+            <label for="id_does_provide_service_and_facility" class="field-container control-label">{% trans "Is there any service or facility provided by the program?" %} <span class="asterisk text-danger">*</span></label>
+            <div class="field-container">
+                {% for choice in form.does_provide_service_and_facility %}
+                    <span class="choice-item is-yes-depend">
+                        {{ choice.tag }}
+                        <label for="id_does_provide_service_and_facility_{{ choice.index }}">{{ choice.choice_label }}</label>
+                    </span>
+                {% endfor %}
+
+                {% if form.does_provide_service_and_facility.errors %}
+                <div class="errors alert alert-danger">{{ form.does_provide_service_and_facility.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="controls form-group is-yes-depend-on-does_provide_service_and_facility">
+            <label class="field-container control-label">{% trans "If yes, plase specify?" %} <span class="asterisk text-danger">*</span></label>
+            <div class="field-container">
+                {{ form.specify_service }}
+            </div>
+
+             {% if form.specify_service.errors %}
+             <div class="errors alert alert-danger">{{ form.specify_service.errors }}</div>
+             {% endif %}
+
+        </div>
+    </div>
+
+
+    <div class="tab-pane print-break-avoid print-break-before" id="organization-attachment">
+        <h2 class="tab-title">{% trans "Attachments" %}</h2>
+        <label class="field-container control-label">{% trans "The program shall provide a brief about itself and include points such as:" %}</label>
+        <br /><br />
+        <div class="organization-attachment-form-wrapper attachment-{{ type_of_organization }}-wrapper">
+            {% for field in organization_attachment_form %}
+            <div class="row attachment-item-wrapper" id="{{ field.name }}-wrapper">
+                <div class="col-xs-2 col-sm-1 is-yes-depend">
+                    {% if field.label %}
+                    <input type="checkbox" name="check-{{ field.name }}" value="True" {% if field.value and field.value|any %}checked="checked"{% endif %}/>
+                    {% endif %}
+                </div>
+                {% if forloop.last %}
+                <div class="col-xs-10 col-sm-11">{% include 'field.html'  with input_class='is-yes-depend-on-check-attachments_other_attached_documents_text' %}</div>
+                {% else %}
+                <div class="col-xs-10 col-sm-11">{% include 'field.html' with input_class='is-yes-depend-on-check-'|add:field.name %}</div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+
+    </div>
+
+    {# Management #}
+    <div class="tab-pane hide-print" id="organization-admins">
+
+        <h2 class="tab-title">{% trans "Administrators" %}</h2>
+
+        <div class="controls form-group">
+
+            <label for="id_admins" class="field-container control-label">{% trans "Add your organization’s administrators." %}</label>
+            <div class="field-container-no-overflow field-inline-id_admins">
+
+                <div class="inline-reference-container">
+                    <div class="inline-reference-wrapper">
+                        <span class="help-block">
+                            {% trans "Type to search for your admin. This person will be able to represent and manage your organization on this website." %}
+                        </span>
+                        {{ form.admins }}
+
+
+                        {% if form.admins.errors %}
+                        <div class="errors alert alert-danger">{{ form.admins.errors }}</div>
+                        {% endif %}
+
+                        <div class="inline-create-link-wrapper">
+                            {% trans "or" %}
+                            <span class="glyphicon glyphicon-plus icostartup icon-plus"></span>
+                            <a href="{% url 'account_inline_invite' %}?_inline=1&manage=1{% if form.inst.id %}&title={{ form.inst.name }}&next={% url 'organization_edit' form.inst.id %}{% endif %}" class="add-another-inline" id="add_id_admins" target="admins_inline">
+                                {% trans " Invite by Email" %}
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="add-another-inline-input-list" id="admins_inline">
+
+                    </div>
+                </div>
+
+                {% if form.dst.errors %}
+                <div class="errors alert alert-danger">{{ form.dst.errors }}</div>
+                {% endif %}
+
+
+            </div>
+        </div>
+
+    </div>
+
+    <div class="tab-pane form-publishing hide-print" id="organization-publishing">
+        <h2 class="tab-title">{% trans "Publishing" %}</h2>
+
+        <div class="controls form-group row">
+            <label for="id_status" class="col-sm-2 control-label">{% trans "Status" %}</label>
+            <div class="col-sm-10">
+                <ul>
+                {% for status in form.status %}
+                    <li>
+                        {% if status.choice_value != STATUS_PUBLISHED|slugify or form.inst.published or user.is_staff or ALLOWED_CREATE_ORGANIZATION_WITHOUT_APPROVAL %}
+                        <span class="choice-item">
+                            {{ status.tag }}
+                             <label for="id_status_{{ status.index }}">{{ status.choice_label }}</label>
+                        </span>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+                </ul>
+                {% if form.status.errors %}
+                <div class="errors alert alert-danger">{{ form.status.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+{% include 'organization/submit_buttons.html' with pending_to_publish=organization.is_publish %}
+
+
+<input type="hidden" name="control_permalink" value="1"/>
+<input type="hidden" name="prevent_scroll_reload" value="1"/>
+<input type="hidden" name="is_new" value="{% if form.is_new %}1{% else %}0{% endif %}"/>
+
+{% endblock %}
+
+{% block js_body %}
+    <script>
+    setTimeout(function () {
+
+        $('#add_specify_service').click(function() {
+            var html = " <li>" +
+                "<div class=\"controls form-group\">" +
+                "<div class=\"col-sm-10\">" +
+                "<input name=\"specify_service\" type=\"text\" class=\"form-control\" value=\"\">" +
+                "</div>" +
+                "<div class=\"col-sm-2\">" +
+                "<a class=\"remove_specify_service\" type=\"button\" class=\"btn btn-default\" " +
+                "onclick =\"this.parentNode.parentNode.parentNode.remove()\">" +
+                "<span class=\"glyphicon glyphicon-remove icostartup icon-delete\"></span>" +
+                "</a>" +
+                "</div>" +
+                "</div></li>";
+
+            $('#add_specify_service_list').append(html)
+        });
+
+        $('#add_specify_mentor').click(function() {
+            var total = $('#id_' + 'mentor_formset' + '-TOTAL_FORMS').val();
+            var html = mentor_form_html;
+            html = html.replace(/mentor_formset\-[0-9]+/g, 'mentor_formset-'+total);
+            html = '<div class="col-sm-12 mentor_form">' + html + '</div>';
+
+            $(this).parent().parent().parent().before(html);
+            $('#id_mentor_formset-'+total+'-user').parent().find('span.remove').click();
+            $('#id_' + 'mentor_formset' + '-TOTAL_FORMS').val(parseInt(total)+1);
+
+            $(this).parent().parent().parent().parent().find('.user-selection select').change(function () {
+                userSelectionChange(this)
+            });
+
+            $(this).parent().parent().parent().parent().find('.add-user').click(function () {
+                addUserChange(this)
+            });
+
+        });
+
+        $('#add_specify_staff').click(function() {
+            var total = $('#id_' + 'staff_formset' + '-TOTAL_FORMS').val();
+            var html = staff_form_html;
+            html = html.replace(/staff_formset\-[0-9]+/g, 'staff_formset-'+total);
+            html = '<div class="col-sm-12 staff_form">' + html + '</div>';
+
+            $(this).parent().parent().parent().before(html);
+            $('#id_staff_formset-'+total+'-user').parent().find('span.remove').click();
+            $('#id_' + 'staff_formset' + '-TOTAL_FORMS').val(parseInt(total)+1);
+
+            $(this).parent().parent().parent().parent().find('.user-selection select').change(function () {
+                userSelectionChange(this)
+            });
+
+            $(this).parent().parent().parent().parent().find('.add-user').click(function () {
+                addUserChange(this)
+            });
+        });
+
+        update_participants = function () {
+            for (var i=0; i<=5; i++) {
+                if ($('.batch_section1_form.batch-' + i).length == 0) {
+                    $('.depend-on-batch_section1_form.depend-on-batch_section1_form-class-batch-' + i).hide().addClass('hide')
+                } else {
+                    $('.depend-on-batch_section1_form.depend-on-batch_section1_form-class-batch-' + i).show().removeClass('hide')
+                }
+            }
+        }
+
+        $('#add_specify_batch').click(function() {
+            var total = $('#id_' + 'batch_section1_formset' + '-TOTAL_FORMS').val();
+            var html = $('.batch_section1_form').first().html();
+            html = html.replace(/batch\-[0-9]+/g, 'batch-'+parseInt(total));
+            html = html.replace(/batch_section1_formset\-[0-9]+/g, 'batch_section1_formset-'+(parseInt(total)-1));
+
+            html = html.replace(/<div class=\"title\" style="width: 50%;">(.*?)+<\/div>/g, '<div class="title" style="width: 50%;">Batch '+ parseInt(total) +'</div>');
+            html = '<tr class="batch_section1_form batch-'+(parseInt(total)-1)+'">' + html + '</tr>';
+
+            $(this).parent().parent().prev().before(html);
+            $(".batch-"+total).find('input[type=number]').val("");
+            $('#id_' + 'batch_section1_formset' + '-TOTAL_FORMS').val(parseInt(total)+1);
+
+            // Total
+            $("input", $('.batch_section1_form').last()).each(function(){
+                $(this).attr("value", $(this).val());
+            });
+            html = $('.batch_section1_form').last().html();
+            html = html.replace(/batch\-[0-9]+/g, 'batch-'+(parseInt(total)+1));
+            html = html.replace(/batch_section1_formset\-[0-9]+/g, 'batch_section1_formset-'+(parseInt(total)));
+
+            html = '<tr class="batch_section1_form batch-total">' + html + '</tr>';
+
+            $(this).parent().parent().prev().replaceWith(html);
+
+            if ($('.batch_section1_form').length >= $('input[name=batch_section1_formset-MAX_NUM_FORMS]').val()) {
+                $(this).parents('tr').remove();
+            }
+            update_participants();
+        });
+        if ($('.batch_section1_form').length >= $('input[name=batch_section1_formset-MAX_NUM_FORMS]').val()) {
+            $('#add_specify_batch').parents('tr').remove();
+        }
+        update_participants();
+
+        $('#id_other_focus_sector').keyup(function () {
+            if ($(this).val() !=  "") {
+                $('input[name="focus_sector"][type="checkbox"]').last().prop('checked', true)
+            }
+        });
+
+        $('#id_other_focus_industry').keyup(function () {
+            if ($(this).val() !=  "") {
+                $('input[name="focus_industry"][type="checkbox"]').last().prop('checked', true)
+            }
+        });
+
+        function userSelectionChange(self) {
+            var id = $(self).attr('id');
+
+            var disabled = $('#' + id.replace('user', 'user-information')).hasClass('hidden');
+            $('#' + id.replace('user', 'add')).html(!disabled? 'Create new user': 'Cancel');
+
+            if ($(self).val() == null) {
+                $('#' + id.replace('user', 'user-information')).addClass('hidden');
+                $('#' + id.replace('user', 'icon_plus')).removeClass('hidden');
+                $('#' + id.replace('user', 'name')).val("");
+                $('#' + id.replace('user', 'email')).val("");
+                $('#' + id.replace('user', 'add')).parent().removeClass('hidden');
+
+                $('#' + id.replace('user', 'email')).parent().parent().removeClass('hidden');
+            } else {
+                $('#' + id.replace('user', 'user-information')).removeClass('hidden');
+                $('#' + id.replace('user', 'icon_plus')).addClass('hidden');
+                $('#' + id.replace('user', 'name')).val($('#' + id + '-deck').find('.name-span').html());
+                $('#' + id.replace('user', 'email')).val($('#' + id + '-deck').find('.email-span').html());
+                $('#' + id.replace('user', 'add')).parent().addClass('hidden');
+
+                $('#' + id.replace('user', 'email')).parent().parent().addClass('hidden');
+            }
+        }
+
+        function addUserChange(self) {
+            var id = $(self).attr('id').replace('-add', '');
+            var disabled = !$('#' + id +'-user-information').hasClass('hidden');
+
+            $(self).html(disabled? 'Create new user': 'Cancel');
+            $('#'+ id +'-user-autocomplete').prop('disabled', !disabled);
+
+            if (disabled) {
+                $('#' + id +'-user-information').addClass('hidden');
+                $('#' + id +'-icon_plus').removeClass('hidden');
+            } else {
+                $('#' + id +'-user-information').removeClass('hidden');
+                $('#' + id +'-icon_plus').addClass('hidden');
+            }
+
+            $('#' + id.replace('user', 'email')).parent().parent().removeClass('hidden');
+        }
+
+        $('.user-selection select').change(function () {
+            userSelectionChange(this)
+        });
+
+        $('.add-user').click(function () {
+            addUserChange(this)
+        });
+
+        var mentor_form_html = $('.mentor_form').last().html();
+        var staff_form_html = $('.staff_form').last().html();
+
+        jQuery('#id_mentor-autocomplete').addClass('hide');
+        jQuery('#id_staff-autocomplete').addClass('hide');
+
+        var select_organization_map = {};
+
+        jQuery('#id_organization option').each(function () {
+            var s = jQuery(this).html().split('|||');
+            if (s[1]) {
+                select_organization_map[jQuery(this).val()] = parseInt(s[1]);
+                jQuery(this).html(s[0]);
+            }
+        });
+        jQuery('#id_organization').change(function () {
+            if (select_organization_map[jQuery(this).val()] == 1) {
+                jQuery('.btn-request.btn-primary').val(1).html('Publish').removeClass('btn-orange').addClass('btn-green');
+            } else {
+                jQuery('.btn-request.btn-primary').val(-1).html('Submit for Approval').removeClass('btn-green').addClass('btn-orange');
+            }
+        })
+        jQuery('#id_organization').change();
+
+
+
+        // Participate
+        var participate_form_html = jQuery('.participate_form').last().html();
+
+        jQuery('#add_program').click(function () {
+            var total = jQuery('#id_' + 'participant_organization' + '-TOTAL_FORMS').val();
+            var html = participate_form_html;
+
+            html = html.replace(/participant_organization\-[0-9]+/g, 'participant_organization-'+total).replace('data-widget-ready', '');
+            html = '<div class="col-sm-12 participate_form">' + html + '</div>';
+
+            jQuery('.participate_form').last().after(html);
+            jQuery('#id_' + 'participant_organization' + '-TOTAL_FORMS').val(parseInt(total)+1);
+            $('#id_participant_organization-' + total + '-id').val('');
+            $('#id_participant_organization-' + total + '-status').val('');
+
+        });
+
+        if (window.location.hash) {
+            $('a[href=#' + window.location.hash.replace('#/', '')+ ']').trigger('click');
+        }
+
+
+    }, 1000);
+
+    </script>
+{% endblock %}

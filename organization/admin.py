@@ -1,7 +1,8 @@
 import json
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
-from import_export import fields
+from import_export import fields, widgets
+from import_export.formats import base_formats
 
 from django.contrib import admin
 from organization.models import Organization
@@ -21,9 +22,9 @@ class OrganizationResource(resources.ModelResource):
         model = Organization
         fields = (
             # information
-            'id', 'name', 'permalink', 'name_of_representative', 'location_of_organizations_headquarters', 'phone_number_of_organizations_headquarters',
+            'id', 'code', 'name', 'company_registration_number', 'permalink', 'name_of_representative', 'location_of_organizations_headquarters', 'phone_number_of_organizations_headquarters',
             # taxonomy
-            'kind', 'product_launch__title', 'funding__title', 'request_funding__title',
+            'kind', 'focus_sector', 'product_launch__title', 'funding__title', 'request_funding__title',
             # statistic
             'total_follower', 'total_following', 'total_love', 'total_views',
             'created', 'last_visit_date',
@@ -35,7 +36,10 @@ class OrganizationResource(resources.ModelResource):
         export_order = fields
 
     def dehydrate_phone_number_of_organizations_headquarters(self, obj):
-       return ', '.join([item['phone_number'] for item in obj.phone_number_of_organizations_headquarters])
+        return ','.join([item['phone_number'] for item in obj.phone_number_of_organizations_headquarters]) + ' '
+
+    def dehydrate_focus_sector(self, obj):
+        return ', '.join([item.title for item in obj.focus_sector.all()])
 
     def dehydrate_total_follower(self, obj):
         return obj.total_follower
@@ -51,13 +55,20 @@ class OrganizationResource(resources.ModelResource):
 
     def dehydrate_last_visit_date(self, obj):
         return obj.last_visit_date
+    
+    def dehydrate_company_registration_number(self, obj):
+        return " %s" % (obj.company_registration_number or '')
 
 
 
 class OrganizationAdmin(ImportExportModelAdmin):
     resource_class = OrganizationResource
 
-    list_filter = ('type_of_organization', 'organization_primary_role', 'organization_roles', 'organization_types', 'investor_types', 'status', 'is_deleted')
+    # list_filter = ('type_of_organization', 'status', 'organization_primary_role', 'organization_roles', 'organization_types', 'investor_types', 'is_deleted')
+
+    list_display = ('id', 'code', 'name', 'company_registration_number', 'type_of_organization', 'get_focus_sector', 'created', 'status')
+    list_filter = ('type_of_organization', 'status', 'organization_types', 'investor_types', 'focus_sector', 'is_deleted')
+    search_fields = ('name', 'created_by__email')
 
     def get_queryset(self, request):
         qs = Organization.objects.all()
@@ -66,6 +77,16 @@ class OrganizationAdmin(ImportExportModelAdmin):
         if ordering:
             qs = qs.order_by(*ordering)
         return qs
+
+    def get_focus_sector(self, obj):
+        return ", ".join([item.title for item in obj.focus_sector.all()])
+
+    def get_export_formats(self):
+        formats = (
+            base_formats.CSV,
+            base_formats.XLSX,
+        )
+        return [f for f in formats if f().can_export()]
 
 admin.site.register(Organization, OrganizationAdmin)
 

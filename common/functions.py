@@ -1,3 +1,4 @@
+from decimal import Decimal
 import random
 import shutil
 import bleach
@@ -7,6 +8,7 @@ from django.contrib.admin.forms import AdminAuthenticationForm
 from django.contrib.auth import REDIRECT_FIELD_NAME, login
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.core.urlresolvers import reverse
+from django.core.validators import RegexValidator
 from django.forms import formsets
 from django.template import loader, Context
 from django.utils import six
@@ -287,8 +289,13 @@ def staff_required(request):
     }
     return login(request, **defaults)
 
-def instance_set_permalink(instance, title, field_name='permalink'):
+def instance_set_permalink(instance, title, field_name='permalink', prefix=''):
+    from organization.models import Program, Organization
+
     ModelClass = instance.__class__
+
+    if prefix:
+        title = prefix + '-' + title
 
     origin_permalink = slugify(title)
 
@@ -297,7 +304,12 @@ def instance_set_permalink(instance, title, field_name='permalink'):
 
     permalink = origin_permalink
 
-    latest = type(instance).objects.filter(**{'%s__startswith' % field_name: '%s-' % origin_permalink}).order_by(field_name)
+    if type(instance) is Program:
+        QueryClass = Organization
+    else:
+        QueryClass = type(instance)
+
+    latest = QueryClass.objects.filter(**{'%s__startswith' % field_name: '%s-' % origin_permalink}).order_by(field_name)
 
     increment_number = 1
 
@@ -326,6 +338,8 @@ def generate_year_range(prev_years=30, choices=False, required=False, empty_labe
     this_year = datetime.date.today().year
     if next_years:
         this_year += next_years
+    else:
+        this_year += 1
     years = range(this_year - prev_years, this_year)
     years.reverse()
 
@@ -418,11 +432,6 @@ class PermanentTokenGenerator(PasswordResetTokenGenerator):
         hash = salted_hmac(key_salt, value).hexdigest()[::2]
         return "%s-%s" % (ts_b36, hash)
 
-
-
-
-
-
 def rget(data, key, default=None):
 
     value = data
@@ -433,3 +442,20 @@ def rget(data, key, default=None):
             return default
 
     return value
+
+
+english_validator = RegexValidator(r'''^[a-zA-Z0-9\t\r\n`\-=~!@#$%^&*()_+[\]{}\\|:;'\",./<>? ]*$''', 'Only english language are allowed.')
+
+
+def convert_money(value, currency):
+    if value is None:
+        return value
+
+    if ('%s' % value.currency) == currency.upper():
+        return value.amount
+
+    rate = settings.USD_TO_THB_RATE
+    if currency.upper() == 'USD':
+        rate = Decimal(1.0)/rate
+
+    return value.amount*rate

@@ -4,6 +4,7 @@ import re
 from django.conf import settings
 
 from django.core.files import File
+from django.db import IntegrityError
 from social_auth.backends.contrib.linkedin import LinkedinBackend
 from social_auth.backends.facebook import FacebookBackend
 from social_auth.backends.pipeline.user import _ignore_field
@@ -71,7 +72,6 @@ def map_extra_data(backend, details, response):
 
     extra_data = None
 
-
     if isinstance(backend, LinkedinBackend):
         extra_data = settings.LINKEDIN_EXTRA_DATA
     elif isinstance(backend, FacebookBackend):
@@ -90,7 +90,7 @@ def map_extra_data(backend, details, response):
         try:
             #details['country'] = Country.objects.get(title__iexact=details.get('country'))
             details['country'] = Country.objects.extra(
-                where=["UPPER(%s) SIMILAR TO UPPER(CONCAT('%%', title_en, '%%'))"],
+                where=["UPPER(%s) SIMILAR TO UPPER(CONCAT('%%', title, '%%'))"],
                 params=(
                     details.get('country'),
                 ),
@@ -129,3 +129,4 @@ def update_user_details(backend, details, response, user=None, is_new=False, *ar
 
     if changed or is_deleted:
         user.save()
+

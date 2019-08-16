@@ -1,0 +1,20 @@
+.manage-page {
+  padding: 30px;
+  .page-title {
+    margin-top: 0;
+  }
+  thead th {
+    font-size: 14px;
+    font-weight: bold;
+  }
+  tbody .pdf > a {
+    display: block;
+    width: 24px;
+    height: 24px;
+    overflow: hidden;
+    text-indent: -999em;
+    background: url("../images/icons/ico-download.png") transparent no-repeat center;
+    background-size: 24px 24px;
+  }
+}
+

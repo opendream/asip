@@ -10,3 +10,4 @@
 .sass-cache
 tmp
 static/css/stylesheets/styles.css.map
+dump.rdb

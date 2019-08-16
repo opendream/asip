@@ -38,8 +38,8 @@
                     <div class="inline-create-link-wrapper">
                         {% trans "or" %}
                         <span class="glyphicon glyphicon-plus icostartup icon-plus"></span>
-                        <a href="{% url 'organization_inline_create' %}?_inline=1" class="add-another-inline" id="add_id_dst" target="dst_inline">
-                            {% trans "Create organization" %}
+                        <a href="{% url 'organization_inline_create' %}?_inline=1&is_mockup=1" class="add-another-inline" id="add_id_dst" target="dst_inline">
+                            {% trans "Create mockup organization" %}
                         </a>
                     </div>
                 </div>
@@ -78,7 +78,7 @@
     </div>
 
     <div class="controls form-group">
-        <label for="id_start_date" class="col-sm-3 control-label">{% trans "Start Date" %}</label>
+        <label for="id_start_date" class="col-sm-3 control-label">{% trans "Start Date" %} *</label>
         <div class="col-sm-7">
             <div class="data-field-wrapper">
                 {{ form.start_date }}
@@ -108,7 +108,7 @@
             <a href="{% if form.is_new %}{% url 'home' %}{% else %}.{% endif %}" class="btn btn-default btn-cancel">{% trans "Cancel" %}</a>
             {%  endif %}
             {% if request_popup %}
-            <a onclick="window.close()" class="btn btn-default btn-cancel">{% trans "Cancel" %}</a>
+            <a onclick="parent.dismissAddAnotherPopup({name: '{{ request.GET.winName }}'})" class="btn btn-default btn-cancel">{% trans "Cancel" %}</a>
             {%  endif %}
         </div>
 

@@ -26,54 +26,47 @@
     <div class="row">
         <div class="col-sm-10 col-sm-offset-2">
             <div class="block-sidebar block-search-filter">
+
                 <ul class="list-item no-bullet -search">
                     <li class="item">
-                        <a ng-class="{active: !filtersMap.content_type && !filtersMap.organization_roles}" ng-click="clearFilters(['content_type', 'organization_roles']); submit();">{% trans "All Results" %}</a>
+                        <a ng-class="{active: !filtersMap.content_type && !filtersMap.type_of_organization}" ng-click="clearFilters(['content_type', 'type_of_organization']); submit();">{% trans "All Results" %}</a>
                     </li>
                     <li class="item">
-                        <a ng-class="{active: filtersMap.organization_roles.permalink == 'organization_roles=startup'}"
-                           ng-init="initFilter('organization_roles', {permalink: 'startup', title: '{% trans "Startup" %}'})"
-                           ng-click="clearFilters(['content_type']); addFilter('organization_roles', 'startup');"
+                        <a ng-class="{active: filtersMap.type_of_organization.permalink == 'type_of_organization=startup'}"
+                           ng-init="initFilter('type_of_organization', {permalink: 'startup', title: '{% trans "Startup" %}'})"
+                           ng-click="clearFilters(['content_type']); addFilter('type_of_organization', 'startup');"
                         >
                             {% trans "Startup" %}
                         </a>
                     </li>
                     <li class="item">
-                        <a ng-class="{active: filtersMap.organization_roles.permalink == 'organization_roles=investor'}"
-                           ng-init="initFilter('organization_roles', {permalink: 'investor', title: '{% trans "Investor" %}'})"
-                           ng-click="clearFilters(['content_type']); addFilter('organization_roles', 'investor');"
+                        <a ng-class="{active: filtersMap.type_of_organization.permalink == 'type_of_organization=investor'}"
+                           ng-init="initFilter('type_of_organization', {permalink: 'investor', title: '{% trans "Investor" %}'})"
+                           ng-click="clearFilters(['content_type']); addFilter('type_of_organization', 'investor');"
                         >
                             {% trans "Investor" %}
                         </a>
                     </li>
                     <li class="item">
-                        <a ng-class="{active: filtersMap.organization_roles.permalink == 'organization_roles=supporter'}"
-                           ng-init="initFilter('organization_roles', {permalink: 'supporter', title: '{% trans "Supporting Organization" %}'})"
-                           ng-click="clearFilters(['content_type']); addFilter('organization_roles', 'supporter');"
+                        <a ng-class="{active: filtersMap.type_of_organization.permalink == 'type_of_organization=supporter'}"
+                           ng-init="initFilter('type_of_organization', {permalink: 'supporter', title: '{% trans "Supporter" %}'})"
+                           ng-click="clearFilters(['content_type']); addFilter('type_of_organization', 'supporter');"
                         >
-                            {% trans "Supporting Organization" %}
+                            {% trans "Supporter" %}
                         </a>
                     </li>
                     <li class="item">
                         <a ng-class="{active: filtersMap.content_type.permalink == 'content_type=User'}"
                            ng-init="initFilter('content_type', {permalink: 'User', title: '{% trans "People" %}'})"
-                           ng-click="clearFilters(['organization_roles']); addFilter('content_type', 'User');"
+                           ng-click="clearFilters(['type_of_organization']); addFilter('content_type', 'User');"
                         >
                             {% trans "People" %}
                         </a>
                     </li>
                     <li class="item">
-                        <a ng-class="{active: filtersMap.content_type.permalink == 'content_type=News'}"
-                           ng-init="initFilter('content_type', {permalink: 'News', title: '{% trans "News" %}'})"
-                           ng-click="clearFilters(['organization_roles']); addFilter('content_type', 'News');"
-                        >
-                            {% trans "News" %}
-                        </a>
-                    </li>
-                    <li class="item">
                         <a ng-class="{active: filtersMap.content_type.permalink == 'content_type=Job'}"
                            ng-init="initFilter('content_type', {permalink: 'Job', title: '{% trans "Job" %}'})"
-                           ng-click="clearFilters(['organization_roles']); addFilter('content_type', 'Job');"
+                           ng-click="clearFilters(['type_of_organization']); addFilter('content_type', 'Job');"
                         >
                             {% trans "Job" %}
                         </a>

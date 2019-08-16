@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import re
 import tagging
 
@@ -14,16 +15,20 @@ from django.utils.translation import ugettext_lazy as _
 from common.constants import SUMMARY_MAX_LENGTH
 from common.functions import instance_get_thumbnail
 from common.models import PriorityModel, CommonTrashModel
+from djmoney.models.fields import MoneyField
 import files_widget
 
 from django.conf import settings
 from organization.models import Organization, USER_MODEL
 from party.models import Party
-from relation.models import PartyContactParty, PartyTestifyParty, PartyLove
+from relation.models import PartyContactParty, PartyTestifyParty, PartyLove, UserApplyJob
 from tagging_autocomplete_tagit.models import TagAutocompleteTagItField
+from taxonomy.models import JobRole, Location
 
 
 class AbstractPeopleField(models.Model):
+
+
     image = files_widget.ImageField(null=True, blank=True)
 
     # Internal
@@ -36,19 +41,65 @@ class AbstractPeopleField(models.Model):
 
     # Taxonomy
     GENDER_CHOICES = (
-        ('M', 'Male'),
-        ('F', 'Female'),
+        ('M', _('Male')),
+        ('F', _('Female')),
+        ('N', _('Prefer not to say')),
     )
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES,blank=True)
     interests = models.ManyToManyField('taxonomy.Topic', null=True, blank=True, related_name='interests')
     user_roles = models.ManyToManyField('taxonomy.UserRole', null=True, blank=True, related_name='user_roles')
-    skills = TagAutocompleteTagItField(max_tags=False, null=True, blank=True)
 
     # External
     facebook_url = models.URLField(max_length=255, null=True, blank=True)
     twitter_url = models.URLField(max_length=255, null=True, blank=True)
     linkedin_url = models.URLField(max_length=255, null=True, blank=True)
     homepage_url = models.URLField(max_length=255, null=True, blank=True)
+
+
+    # Job
+    JOB_STATUS_CHOICES = (
+        ('starting', 'Starting to look'),
+        ('actively', 'Actively interviewing'),
+        ('open', 'Open to offers'),
+        ('closed', 'Closed to offers')
+    )
+
+    FULL_JOB_STATUS_CHOICES = (
+        ('starting', '<span class="choice-item-wrapper"><span class="choice-text">Starting to look</span><span class="choice-description"><small>You’re in the initial steps of looking for a new role.</small></span></span>'),
+        ('actively', '<span class="choice-item-wrapper"><span class="choice-text">Actively interviewing</span><span class="choice-description"><small>You’re actively looking for new work and ready to interview.</small></span></span>'),
+        ('open', '<span class="choice-item-wrapper"><span class="choice-text">Open to offers</span><span class="choice-description"><small>You’re not looking but open to hear about new opportunities.</small></span></span>'),
+        ('closed', '<span class="choice-item-wrapper"><span class="choice-text">Closed to offers</span><span class="choice-description"><small>You’re not looking and don’t want to hear about new opportunities.</small></span></span>')
+    )
+
+    JOB_POSITION_CHOICES = (
+        ('full-time', _('Full-time Employee')),
+        ('contract', _('Contractor')),
+        ('internship', _('Intern')),
+        ('cofounder', _('Co-founder'))
+    )
+
+    FULL_JOB_POSITION_CHOICES = (
+        ('full-time', '<span class="choice-item-wrapper"><span class="choice-text">Full-time Employee</span></span>'),
+        ('contract', '<span class="choice-item-wrapper"><span class="choice-text">Contractor</span></span>'),
+        ('internship', '<span class="choice-item-wrapper"><span class="choice-text">Intern</span></span>'),
+        ('cofounder', '<span class="choice-item-wrapper"><span class="choice-text">Co-founder</span></span>')
+    )
+
+    job_status = models.CharField( null=True, blank=True, max_length=128, choices=JOB_STATUS_CHOICES)
+    job_public_status = models.NullBooleanField( null=True, blank=True)
+
+    job_position = models.CharField(null=True, blank=True, max_length=128, choices=JOB_POSITION_CHOICES)
+    #job_remote = models.NullBooleanField(null=True, blank=True)
+    money_salary = MoneyField(null=True, blank=True, max_digits=19, decimal_places=2, default_currency='THB')
+    #job_primary_role = models.ForeignKey(JobRole, null=True, blank=True, related_name='user_job_primary_role')
+    job_roles = models.ManyToManyField(JobRole, null=True, blank=True, related_name='user_job_roles')
+    skills = TagAutocompleteTagItField(max_tags=False, null=True, blank=True)
+    job_locations = models.ManyToManyField(Location, null=True, blank=True)
+    job_criteria = models.TextField(null=True, blank=True)
+
+    job_email = models.EmailField(verbose_name=_('job email address'), max_length=255, null=True, blank=True)
+    job_telephone = models.CharField(verbose_name=_('job telephone'), max_length=255, null=True, blank=True)
+    attachments = files_widget.XFilesField(null=True, blank=True)
 
     class Meta:
         abstract = True
@@ -114,7 +165,7 @@ class User(AbstractPeopleField, Party, AbstractBaseUser, PermissionsMixin, Prior
 
     inst_type = 'user'
 
-    username = models.CharField(_('username'), max_length=30, unique=True,
+    username = models.CharField(_('username'), max_length=255, unique=True,
         help_text=_('Required 30 characters or fewer. Letters, numbers and @/./+/-/_ characters'),
         validators=[
             validators.RegexValidator(re.compile('^[\w.@+-]+$'), _('Enter a valid username.'), 'invalid')
@@ -142,6 +193,7 @@ class User(AbstractPeopleField, Party, AbstractBaseUser, PermissionsMixin, Prior
     notification_allow_email_send_organization_partyfollowparty = models.NullBooleanField(null=True, blank=True, default=True)
     notification_allow_email_send_organization_partycontactparty = models.NullBooleanField(null=True, blank=True, default=True)
     notification_allow_email_send_organization_partytestifyparty = models.NullBooleanField(null=True, blank=True, default=True)
+    notification_allow_email_send_organization_organizationparticipate = models.NullBooleanField(null=True, blank=True, default=True)
     notification_allow_email_send_organization_partylove = models.NullBooleanField(null=True, blank=True, default=True)
     notification_allow_email_send_organization_partyinvitetestifyparty = models.NullBooleanField(null=True, blank=True, default=True)
 
@@ -209,9 +261,18 @@ class User(AbstractPeopleField, Party, AbstractBaseUser, PermissionsMixin, Prior
         elif hasattr(instance, 'organization_jobs'):
             editable = editable or bool(instance.organization_jobs.all()[0].admins.filter(id=self.id).count())
 
-        if instance.__class__ in [PartyContactParty, PartyTestifyParty]:
+        from notification.models import Notification
+
+        admins = list(request.user.admins.all().values_list('id', flat=True))
+
+        # print admins
+        # print instance.dst.id
+
+        if instance.__class__ in [PartyContactParty, PartyTestifyParty, UserApplyJob]:
             # TODO: check only update status
-            editable = editable or (instance.dst.id == request.logged_in_party.id) or (instance.src.id == request.logged_in_party.id)
+            editable = editable or (instance.dst.id == request.logged_in_party.id) or (instance.src.id == request.logged_in_party.id) or (instance.dst.id in admins) or (instance.src.id in admins)
+        elif instance.__class__ in [Notification]:
+            editable = editable or (instance.receiver.id == request.logged_in_party.id) or (instance.receiver.id == request.logged_in_party.id)
 
         return editable
 
@@ -222,11 +283,11 @@ class AppConnect(CommonTrashModel):
 
     created_by = models.ForeignKey(USER_MODEL, related_name='apps')
 
-    app_id = models.CharField(max_length=255, verbose_name="App ID", null=True, blank=True)
+    app_id = models.CharField(max_length=255, verbose_name=_("App ID"), null=True, blank=True)
     name = models.CharField(max_length=255)
-    site_uri = models.CharField(max_length=512, verbose_name="Site URI", help_text="Exclude http or https, for development allow localhost")
+    site_uri = models.CharField(max_length=512, verbose_name=_("Site URI"), help_text=_("Exclude http or https, for development allow localhost"))
     description = models.CharField(max_length=512, null=True, blank=True)
-    image = files_widget.ImageField(null=True, blank=True, verbose_name="Logo")
+    image = files_widget.ImageField(null=True, blank=True, verbose_name=_("Logo"))
 
 
     def get_absolute_url(self):

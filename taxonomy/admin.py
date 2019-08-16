@@ -11,7 +11,7 @@ class TopicResource(resources.ModelResource):
     class Meta:
         model = Topic
         fields = (
-            'id', 'permalink', 'title_th', 'title_en', 'parent', 'priority'
+            'id', 'permalink', 'title', 'parent', 'priority'
         )
 
 class TopicAdmin(MPTTModelAdmin, ImportExportModelAdmin):
@@ -65,3 +65,56 @@ admin.site.register(InvestorType, InvestorTypeAdmin)
 class ArticleCategoryAdmin(MPTTModelAdmin):
     pass
 admin.site.register(ArticleCategory, ArticleCategoryAdmin)
+
+############## New For 2018 ######################
+class ProgramTypeAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(ProgramType, ProgramTypeAdmin)
+
+class TypeOfOfficeAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(TypeOfOffice, TypeOfOfficeAdmin)
+
+class TypeOfFocusSectorAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(TypeOfFocusSector, TypeOfFocusSectorAdmin)
+
+class TypeOfFocusIndustryAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(TypeOfFocusIndustry, TypeOfFocusIndustryAdmin)
+
+class TypeOfStageOfParticipantAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(TypeOfStageOfParticipant, TypeOfStageOfParticipantAdmin)
+
+class TypeOfInvestmentAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(TypeOfInvestment, TypeOfInvestmentAdmin)
+
+class TypeOfInvestmentStageAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(TypeOfInvestmentStage, TypeOfInvestmentStageAdmin)
+
+class TypeOfFundingAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(TypeOfFunding, TypeOfFundingAdmin)
+
+class TypeOfBatchAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(TypeOfBatch, TypeOfBatchAdmin)
+
+class TypeOfAssistantshipAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(TypeOfAssistantship, TypeOfAssistantshipAdmin)
+
+class TypeOfAttachmentAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(TypeOfAttachment, TypeOfAttachmentAdmin)
+
+class JobRoleAdmin(MPTTModelAdmin):
+    pass
+admin.site.register(JobRole, JobRoleAdmin)
+
+class LocationAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(Location, LocationAdmin)

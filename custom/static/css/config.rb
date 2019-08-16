@@ -10,6 +10,7 @@ sass_dir = "sass"
 images_dir = "images"
 javascripts_dir = "javascripts"
 generated_images_dir = images_dir + "/generated"
+sourcemap = true
 #http_images_path = ""
 
 # You can select your preferred output style here (can be overridden via the command line):
@@ -19,7 +20,7 @@ generated_images_dir = images_dir + "/generated"
 relative_assets = true
 
 # To disable debugging comments that display the original location of your selectors. Uncomment:
- line_comments = true
+line_comments = true
 
 
 # If you prefer the indented syntax, you might want to regenerate this

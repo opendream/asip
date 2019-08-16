@@ -21,7 +21,6 @@ class BaseTaxonomy(CommonTrashModel, AbstractPermalink):
     def __unicode__(self):
         return self.title
 
-
     def get_absolute_url(self):
         if not self.permalink:
             return ''
@@ -65,6 +64,44 @@ class OrganizationFunding(BaseTaxonomy):
 class OrganizationGrowthStage(BaseTaxonomy):
     pass
 
+
+############## New For 2018 ######################
+class ProgramType(BaseTaxonomy):
+    pass
+
+class TypeOfOffice(BaseTaxonomy):
+    pass
+
+class TypeOfFocusSector(BaseTaxonomy):
+    pass
+
+class TypeOfFocusIndustry(BaseTaxonomy):
+    pass
+
+class TypeOfStageOfParticipant(BaseTaxonomy):
+    pass
+
+class TypeOfInvestment(BaseTaxonomy):
+    pass
+
+class TypeOfInvestmentStage(BaseTaxonomy):
+    pass
+
+class TypeOfFunding(BaseTaxonomy):
+    pass
+
+class TypeOfBatch(BaseTaxonomy):
+    pass
+
+class TypeOfFinancialSource(BaseTaxonomy):
+    pass
+
+class TypeOfAssistantship(BaseTaxonomy):
+    pass
+
+class TypeOfAttachment(BaseTaxonomy):
+    attachment_for = models.CharField(max_length=255, null=True, blank=True)
+    pass
 # ======================================
 # People
 # ======================================
@@ -93,3 +130,15 @@ class ArticleCategory(MPTTModel, BaseTaxonomy):
 
     class MPTTMeta:
         order_insertion_by = ['-priority', 'title']
+
+
+
+# ======================================
+# Job
+# ======================================
+class JobRole(MPTTModel, BaseTaxonomy):
+
+    parent = TreeForeignKey('self', null=True, blank=True, related_name='children')
+
+class Location(BaseTaxonomy):
+    pass

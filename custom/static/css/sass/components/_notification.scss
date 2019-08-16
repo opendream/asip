@@ -15,14 +15,14 @@
     padding: 20px 0;
     .icon {
         position: absolute;
-        padding-top: 25px;
-        top: -8px;
-        left: 20px;
+        top: 50%;
+        left: 10px;
         font-size: 21px;
+        margin-top: -12px;
     }
     .date {
         font-size: 12px;
-        display: inline;
+        display: block;
     }
     .date:before {
         content: '\2014\00a0';
@@ -36,8 +36,7 @@
     .notification-item {
         padding: 10px 0;
         .icon  {
-            top: -17px;
-            left: 10px;
+            left: 5px;
         }
     }
 }
@@ -51,8 +50,9 @@
 
 .btn-approve-wrapper {
     position: absolute;
-    right: 20px;
-    top: 18px;
+    right: 0;
+    top: 50%;
+    margin-top: -17.5px;
     .btn { font-size: 12px;}
 }
 
@@ -62,8 +62,8 @@
         &:before { content: none;}
     }
     .btn-approve-wrapper {
-        position: static;
-        margin: 10px 0 10px 60px;
+        position: relative;
+        margin: 10px 0 10px 45px;
     }
     .notification-item-inner {
         padding: 0 0 0px 45px;

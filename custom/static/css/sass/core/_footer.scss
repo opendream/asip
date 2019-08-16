@@ -5,6 +5,7 @@
     position: relative;
     z-index: 0;
     font-size: 14px;
+
     .country-list {
         -ms-column-count: 3;
         -moz-column-count: 3;
@@ -12,25 +13,25 @@
         column-count: 3;
     }
 
-    .block { 
+    .block {
         margin-bottom: 2em;
     }
 
-    .logo { 
+    .logo {
         text-align: center;
     }
 
 }
 
-.country-list, 
-.category-list { 
-    list-style: none; 
+.country-list,
+.category-list {
+    list-style: none;
     padding: 0;
 }
 
 .footer {
 
-    .country-list, 
+    .country-list,
     .category-list {
         font-size: 13px;
 
@@ -50,7 +51,7 @@
         }
     }
 
-    .block-taxonomy a.active { 
+    .block-taxonomy a.active {
         text-decoration: underline;
     }
 
@@ -63,7 +64,7 @@
         margin-bottom: 10px;
     }
 
-    a { 
+    a {
         color: white;
     }
 
@@ -71,7 +72,7 @@
     a.active {
         color: $main-color;
     }
-    
+
 }
 
 // block follow
@@ -79,23 +80,23 @@
     float: right;
     text-align: right;
 
-    h2 { 
+    h2 {
         margin-top: 0;
         font-size: 18px;
         @extend .kanit-light;
     }
-    
+
     a {
         display: inline-block;
         text-align: center;
         vertical-align: middle;
         border-radius: 17px;
     }
-    
+
     a:hover {
         text-decoration: none;
     }
-    
+
     .icon-social {
         @include box-sizing(border-box);
         width: 34px;
@@ -106,13 +107,13 @@
         padding: 10px 0;
         cursor: pointer;
     }
-    
-    .icon-twitter { 
+
+    .icon-twitter {
         padding-top: 10px;
         margin-right: 0;
     }
-    
-    .icon-twitter:before { 
+
+    .icon-twitter:before {
         position: static;
     }
 
@@ -135,7 +136,7 @@
     margin: 20px 0 5px;
     overflow: hidden;
     font-size: 13px;
-    a { 
+    a {
         color: #fff;
         &:hover, &:focus, &:active {
             color: $main-color;
@@ -146,7 +147,7 @@
         }
     }
     li { float: left;}
-    .last { 
+    .last {
         border-left: 1px solid #fff;
         padding: 0 0 0 10px;
         margin-left: 5px;
@@ -177,7 +178,7 @@
         text-align: center;
 
         li {
-            float: none;    
+            float: none;
         }
     }
 }

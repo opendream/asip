@@ -1,0 +1,141 @@
+/*----------------------------------
+Header
+----------------------------------*/
+.header {
+  padding: 14px 15px;
+  color: #fff;
+  background-color: #000;
+
+  @media (min-width: $lg) {
+    padding: 14px 25px;
+  }
+
+  &__body {
+    // display: flex;
+    // display: flexbox;
+    // align-items: center;
+  }
+}
+
+
+/*----------------------------------
+Site Name
+----------------------------------*/
+.site-name {
+  @media (min-width: $lg) {
+    float: left;
+    margin-right: 15px;
+  }
+
+  &__title {
+    position: absolute;
+    left: -999em;
+  }
+
+  &__link {
+
+  }
+}
+
+
+.search {
+  display: inline-block;
+}
+.join {
+  display: inline-block;
+}
+
+
+.hamburger {
+  float: right;
+  display: inline-block;
+  padding: 0 10px;
+  margin-top: 10px;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  @media (min-width: $lg) { display: none; }
+}
+
+
+
+/*----------------------------------
+Cretea Profile
+----------------------------------*/
+.create-profile-block {
+  max-width: 600px;
+  margin: 0 auto;
+
+  @media (max-width: $lg) {
+    max-width: auto;
+    padding: 10px 15px;
+    background-color: #fff;
+  }
+}
+.create-profile {
+  border-radius: 8px 5px 5px 8px;
+  background-color: rgba(40, 41, 50, 0.9);
+
+  @media (min-width: $lg) {
+    position: absolute;
+    right: 0;
+    top: 50px;
+    margin: 0;
+    border-radius: 8px 0 0 8px;
+  }
+
+  &__header {
+    text-align: right;
+    padding-right: 10px;
+    border-radius: 5px 5px 0 0;
+    background-color: #D1D8E0;
+
+    @media (min-width: $lg) {
+      position: relative;
+      float: left;
+      width: 20px;
+      height: 190px;
+      border-radius: 5px 0 0 5px;
+    }
+  }
+  &__content {
+    padding: 10px 15px;
+
+    @media (min-width: $lg) {
+      float: left;
+      padding: 10px 30px;
+    }
+  }
+  &__close {
+
+    @media (min-width: $lg) {
+      position: absolute;
+      bottom: 5px;
+      left: 5px;
+      font-size: 14px;
+      font-weight: bold;
+      line-height: 1em;
+    }
+  }
+
+  .title {
+    font: 36px/1em $EN-font-heading !important;
+    text-transform: uppercase;
+    color: #fff;
+  }
+  .form-control {
+    color: #000;
+    border: none;
+    background-color: #727272;
+  }
+  .btn-primary {
+    margin: 15px 0 0;
+    padding: 10px 20px;
+    float: left;
+    color: #fff;
+    background-color: #414042;
+    font: bold 2rem/1em $EN-font-body !important;
+  }
+}

@@ -1,11 +1,11 @@
 <div class="row">
     <ul class=" col-md-12 nav nav-pills main-menu footer-menu">
         <li><a href="{% url 'home' %}" class="">Home</a></li>
-        <li><a href="{% url 'presentation_role_list_redirect' 'social-enterprise' %}" class="">Social Enterprise</a></li>
-        <li><a href="{% url 'presentation_role_list_redirect' 'supporter' %}" class="">Supporter</a></li>
-        <li><a href="{% url 'presentation_role_list_redirect' 'investor' %}" class="">Investor</a></li>
+        {% for role in organization_role_list %}
+        <li><a href="{% url 'presentation_role_list_redirect' role.permalink %}" class="">{{ role.title }}</a></li>
+        {% endfor %}
         <li><a href="{% url 'people_list' %}" class="">People</a></li>
-        <li><a href="{% url 'job_list' %}" class="">Job</a></li>
+        <li><a href="{% url 'job_landing' %}" class="">Job</a></li>
         <li><a href="{% url 'news_list' %}" class="">News</a></li>
         <li><a href="{% url 'event_list' %}" class="">Event</a></li>
         <li><a href="{% url 'article_list' 'knowledge-tools' %}" class="">Knowledge & Tool</a></li>

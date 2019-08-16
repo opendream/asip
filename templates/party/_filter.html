@@ -36,7 +36,7 @@
 
     <h2>{% blocktrans with title=params.RESULT_TITLE %}{[{ result.meta.total_count }]} {{ title }} found{% endblocktrans %}</h2>
 
-    <div class="filter-selected">
+    <div class="filter-selected" ng-show="filters.length > 0">
 
         <div class="filter-label pull-left">
             {% trans "Selected Filters" %}:

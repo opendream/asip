@@ -1,10 +1,11 @@
 import datetime
 from decimal import Decimal
+import pickle
 from django import forms
 from django.conf import settings
 from django.core import validators
 from django.db import models
-from django.forms import Widget, Select, ChoiceField
+from django.forms import Widget, Select, ChoiceField, MultiValueField, TextInput, MultiWidget, CharField, BaseFormSet
 from django.forms.extras import SelectDateWidget
 from django.forms.extras.widgets import RE_DATE
 from django.utils import datetime_safe
@@ -20,7 +21,7 @@ from django.utils import timezone
 
 import re
 from mptt.forms import TreeNodeMultipleChoiceField
-from common.functions import generate_year_range
+from common.functions import generate_year_range, english_validator
 from common.validators import validate_reserved_url
 from multiselectfield import MultiSelectFormField
 
@@ -446,7 +447,12 @@ class BetterSelectDateWidget(Widget):
         output = []
         for field in _parse_date_fmt():
             if self.ignore_day and field == 'day':
-                output.append('<span class="select-date-wrapper hidden">%s</span>' % html[field])
+                html_field = html[field]
+                if year_val and month_val:
+                    html_field = html_field.replace('value="0" selected="selected"', 'value="0"').replace('value="1"', 'value="1" selected="selected"')
+
+                output.append('<span class="select-date-wrapper hidden">%s</span>' % html_field)
+
             else:
                 output.append('<span class="select-date-wrapper">%s</span>' % html[field])
         return mark_safe('\n'.join(output))
@@ -463,7 +469,10 @@ class BetterSelectDateWidget(Widget):
         d = data.get(self.day_field % name)
         if y == m == d == "0":
             return None
-        if y and m and d:
+        if (y and m and d) or (self.ignore_day and y and m):
+            if self.ignore_day:
+                d = 1
+
             if settings.USE_L10N:
                 input_format = get_format('DATE_INPUT_FORMATS')[0]
                 try:
@@ -482,8 +491,8 @@ class BetterSelectDateWidget(Widget):
             id_ = self.attrs['id']
         else:
             id_ = 'id_%s' % name
-        if not self.is_required:
-            choices.insert(0, none_value)
+        #if not self.is_required:
+        choices.insert(0, none_value)
         local_attrs = self.build_attrs(id=field % id_)
         s = Select(choices=choices)
         select_html = s.render(field % name, val, local_attrs)
@@ -503,3 +512,69 @@ class BetterPositiveIntegerField(models.PositiveIntegerField):
 
         self.suffix = suffix
         super(models.PositiveIntegerField, self).__init__(**kwargs)
+
+
+
+
+
+class MultiCharWidget(forms.widgets.MultiWidget):
+    def __init__(self, num_fields=5, attrs=None):
+        self.num_fields = num_fields
+        widgets = [forms.TextInput(attrs={'class': 'multi-char-widget', 'placeholder': '%d' % (i+1)}) for i in range(num_fields)]
+        super(MultiCharWidget, self).__init__(widgets, attrs)
+
+    def decompress(self, value):
+        if value:
+            try:
+                return pickle.loads(value)
+            except KeyError:
+                return [''] * self.num_fields
+
+        else:
+            return [''] * self.num_fields
+
+
+class MultiCharField(MultiValueField):
+
+    def __init__(self, num_fields=5, *args, **kwargs):
+        list_fields = [forms.fields.CharField(max_length=1024, required=False, validators=kwargs.get('validators') or [])] * num_fields
+        self.widget = MultiCharWidget(num_fields=num_fields)
+        super(MultiCharField, self).__init__(list_fields, *args, **kwargs)
+
+    def compress(self, values):
+        ## compress list to single object
+        ## eg. date() >> u'31/12/2012'
+        return pickle.dumps(values)
+
+
+
+class RequiredNullBooleanField(forms.NullBooleanField):
+    def clean(self, value):
+        if value is None and self.required:
+            raise forms.ValidationError('This field is required.')
+        return super(RequiredNullBooleanField, self).clean(value)
+
+class RequiredFormSet(BaseFormSet):
+    def __init__(self, *args, **kwargs):
+        super(RequiredFormSet, self).__init__(*args, **kwargs)
+        try:
+            self.forms[0].empty_permitted = False
+        except IndexError:
+            pass
+
+
+class RequiredFirstFormSet(BaseFormSet):
+    def __init__(self, *args, **kwargs):
+        super(RequiredFirstFormSet, self).__init__(*args, **kwargs)
+        try:
+            self.forms[0].empty_permitted = False
+            for field_name, field in self.forms[0].fields.iteritems():
+                if hasattr(field, 'required') and field_name != 'DELETE':
+                    field.required = True
+
+        except IndexError:
+            pass
+
+
+class EnglishCharField(forms.CharField):
+    default_validators = [english_validator]

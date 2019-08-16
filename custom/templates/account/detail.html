@@ -23,10 +23,10 @@
 
 {% block content_class %} detail organize bg-white bg-white-wrapper{% endblock %}
 
-{% block link_back %} <a class="back-link" ng-href="/organization/startup/"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> Supporting Organizations</a>{% endblock %}
+{% block link_back %} <a class="back-link" ng-href="/organization/startup/"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> {% trans 'Supporter' %}</a>{% endblock %}
 
 {% block breadcrumb %}
-    <a href="{% url 'people_list' %}" class="link-breadcrumb">People</a>
+    <a href="{% url 'people_list' %}" class="link-breadcrumb">{% trans 'People' %}</a>
 {% endblock %}
 
 {% block js %}
@@ -41,11 +41,12 @@
 {% block primary %}
 
 <!-- Block Primary -->
+
 <alert id="alert_contact" ng-show="alert['message'].show" type="{[{alert['message'].type}]}" close="alert['message'].show = !alert['message'].show" ng-clock>{[{alert['message'].msg}]}</alert>
 <div class="row block-primary">
     {% if user.is_authenticated %}
     <a ng-if="people.can_edit" ng-href="/people/{[{ people_id }]}/edit/" class="btn btn-default btn-xs pull-right ico-edit">
-        <span class="glyphicon glyphicon-edit"></span> Edit
+        <span class="glyphicon glyphicon-edit"></span> {% trans 'Edit' %}
     </a>
     {% endif %}
     <div class="col-md-12 primary-party ">
@@ -84,16 +85,18 @@
                     <div class="take-action-wrapper" ng-class="hide_self_class()">
                         <a class="btn-activity" message-popup>
                             <span class="icostartup icon-contact"></span>
-                            <span class="text-action">Message</span>
+                            <span class="text-action">{% trans 'Message' %}</span>
                         </a>
                     </div>
                 </div>
+                {% comment %}
                 <div class="like-count text-right" ng-cloak>
-                    <a href="" title="Who love this" ng-click="modal_love_list()" ng-cloak>{[{ people.total_love | number:0 }]}</a> Love{[{people.total_love > 1 ? 's' : ''}]}
+                    <a href="" title="{%  trans 'Who love this' %}" ng-click="modal_love_list()" ng-cloak>{[{ people.total_love | number:0 }]}</a> Love{[{people.total_love > 1 ? 's' : ''}]}
                 </div>
+                {% endcomment %}
                 <div class="block-social">
                     <div class="outlink pull-right">
-                        <ul class="social pull-right">
+                        <ul class="social">
                             <li ng-if="people.facebook_url"><a ng-href="{[{ people.facebook_url }]}" class="icon-social icon-facebook" target="_blank"></a></li>
                             <li ng-if="!people.facebook_url"><span class="icon-social icon-facebook no-link"></span></li>
 
@@ -118,29 +121,29 @@
 
 
 <!-- Nav tabs Party -->
-<ul class="nav nav-tabs nav-party primary-tab hidden-xs clearfix" ng-controller="FollowerParamController">
-  <li><a href="##overview" id="overview" ng-click="selected_tab(1)" ng-class="tab_list_active_class(1)">Overview</a></li>
-  <li><a href="##happening" id="happening" ng-click="selected_tab(2)" ng-class="tab_list_active_class(2)">Happening</a></li>
-  <li><a href="##followers" id="followers" ng-click="selected_tab(3)" ng-class="tab_list_active_class(3)">Followers&nbsp;<span class="label label-grey" ng-cloak>{[{FollowerService.total_followers}]}</span></a></li>
+<ul class="nav nav-tabs nav-party primary-tab hidden-xs clearfix" ng-controller="FollowerParamController" style="overflow:hidden;">
+  <li><a href="##overview" id="overview" ng-click="selected_tab(1)" ng-class="tab_list_active_class(1)">{%  trans 'Overview' %}</a></li>
+  <li class="hide"><a href="##happening" id="happening" ng-click="selected_tab(2)" ng-class="tab_list_active_class(2)">{%  trans 'Happening' %}</a></li>
+  <li><a href="##followers" id="followers" ng-click="selected_tab(3)" ng-class="tab_list_active_class(3)">{%  trans 'Followers' %}&nbsp;<span class="label label-grey" ng-cloak>{[{FollowerService.total_followers}]}</span></a></li>
   {% if not HIDE_FOLLOWING %}
-  <li><a href="##followings" id="followings" ng-click="selected_tab(4)" ng-class="tab_list_active_class(4)">Following&nbsp;<span class="label label-grey" ng-cloak>{[{FollowerService.total_following}]}</span></a></li>
+  <li><a href="##followings" id="followings" ng-click="selected_tab(4)" ng-class="tab_list_active_class(4)">{%  trans 'Following' %}&nbsp;<span class="label label-grey" ng-cloak>{[{FollowerService.total_following}]}</span></a></li>
   {% endif %}
   {% if not HIDE_TESTIMONIAL %}
-  <li><a href="##testimonials" id="testimonials" ng-click="selected_tab(5)" ng-class="tab_list_active_class(5)">Testimonials&nbsp;<span class="label label-grey" ng-cloak>{[{people.total_testify}]}</span></a></li>
+  <li><a href="##testimonials" id="testimonials" ng-click="selected_tab(5)" ng-class="tab_list_active_class(5)">{%  trans 'Testimonials' %}&nbsp;<span class="label label-grey" ng-cloak>{[{people.total_testify}]}</span></a></li>
   {% endif %}
 </ul>
 
 <div class="dropdown primary-tab visible-xs dropdown-tab-square " ng-controller="FollowerParamController">
-    <a href="" id="party-tab-drop" class="dropdown-toggle btn btn-default"><span class="text">Overview</span> <span class="caret pull-right"></span></a>
+    <a href="" id="party-tab-drop" class="dropdown-toggle btn btn-default"><span class="text">{%  trans 'Overview' %}</span> <span class="caret pull-right"></span></a>
     <ul class="dropdown-menu" role="menu" aria-labelledby="party-tab-drop">
-        <li><a href="" ng-click="selected_tab(1)" ng-class="tab_list_active_class(1)">Overview</a></li>
-        <li><a href="" ng-click="selected_tab(2)" ng-class="tab_list_active_class(2)">Happening</a></li>
-        <li><a href="" ng-click="selected_tab(3)" ng-class="tab_list_active_class(3)">Followers&nbsp;<span class="label label-grey">{[{FollowerService.total_followers}]}</span></a></li>
+        <li><a href="" ng-click="selected_tab(1)" ng-class="tab_list_active_class(1)">{%  trans 'Overview' %}</a></li>
+        <li><a href="" ng-click="selected_tab(2)" ng-class="tab_list_active_class(2)">{%  trans 'Happening' %}</a></li>
+        <li><a href="" ng-click="selected_tab(3)" ng-class="tab_list_active_class(3)">{%  trans 'Followers' %}&nbsp;<span class="label label-grey">{[{FollowerService.total_followers}]}</span></a></li>
         {% if not HIDE_FOLLOWING %}
-        <li><a href="" ng-click="selected_tab(4)" ng-class="tab_list_active_class(4)">Following&nbsp;<span class="label label-grey">{[{FollowerService.total_following}]}</span></a></li>
+        <li><a href="" ng-click="selected_tab(4)" ng-class="tab_list_active_class(4)">{%  trans 'Following' %}&nbsp;<span class="label label-grey">{[{FollowerService.total_following}]}</span></a></li>
         {% endif %}
         {% if not HIDE_TESTIMONIAL %}
-        <li><a href="" ng-click="selected_tab(5)" ng-class="tab_list_active_class(5)">Testimonials&nbsp;<span class="label label-grey" ng-clock>{[{people.total_testify}]}</span></a></li>
+        <li><a href="" ng-click="selected_tab(5)" ng-class="tab_list_active_class(5)">{%  trans 'Testimonials' %}&nbsp;<span class="label label-grey" ng-clock>{[{people.total_testify}]}</span></a></li>
         {% endif %}
     </ul>
 </div>
@@ -152,36 +155,38 @@
 <div class="overview" ng-class="tab_active_class(1)">
     <!-- Block-Experience -->
     <div ng-if="people.description" class="block block-experience">
-        <h2 class="block-title">About</h2>
+        <h2 class="block-title">{%  trans 'About' %}</h2>
         <div class="about" ng-bind-html="people.description | sanitize">
         </div>
         <hr />
     </div><!-- End Block About -->
 
     <div ng-if="people.skills" class="block block-experience">
-        <h2 class="block-title">Skills</h2>
+        <h2 class="block-title">{%  trans 'Skills' %}</h2>
         {[{ people.skills }]}
         <hr />
     </div><!-- End Block About -->
 
     <!-- Block has people-->
+    {% comment %}
     <div class="block block-people" ng-controller="BasicPartyListController" ng-init="init('/api/v1/organization_has_people/', {dst: people_id, limit: 1000}, '-id', 'src', ['REQUIRED_APPROVAL', 'status', 'start_date', 'end_date', 'title', 'get_summary'])" ng-class="should_show_list_class()">
-        <h2 class="block-title">Work at organizations</h2>
+        <h2 class="block-title">{%  trans 'Work at organizations' %}</h2>
         <ul class="item-list experience-list">
             <li ng-repeat="party in party_list" class="experience-item listview-item item">
                 <div ng-include="'experience_item.html'"></div>
             </li>
         </ul>
         <a class="loadmore-wrapper" ng-click="load_more()" ng-class="load_more_class()">
-            <span ng-hide="is_loading" class="loadmore">Load more</span>
+            <span ng-hide="is_loading" class="btn-startup btn-startup--third">{% trans 'Load more' %}</span>
             <img  ng-show="is_loading" ng-src="/static/images/loading.gif" class="loading-icon" >
         </a>
         <hr />
     </div>
+    {% endcomment %}
     <!-- End block has people -->
 
     <div class="block block-experience" ng-controller="BasicPartyListController" ng-init="init('/api/v1/user_experience_organization/', {src: people_id, limit: 4, offset: 0}, '', 'dst', ['REQUIRED_APPROVAL', 'status', 'start_date', 'end_date', 'title', 'get_summary'])" ng-class="should_show_list_class()">
-        <h2 class="block-title">Experience</h2>
+        <h2 class="block-title">{% trans 'Experience' %}</h2>
         <ul class="item-list experience-list">
             <li ng-repeat="party in party_list" class="experience-item listview-item item">
                 <div ng-include="'experience_item.html'"></div>
@@ -189,7 +194,7 @@
             </li>
         </ul>
         <a class="loadmore-wrapper" ng-click="load_more()" ng-class="load_more_class()">
-            <span ng-hide="is_loading" class="loadmore">Load more</span>
+            <span ng-hide="is_loading" class="btn-startup btn-startup--third">{%  trans 'Load more' %}</span>
             <img  ng-show="is_loading" ng-src="/static/images/loading.gif" class="loading-icon" >
         </a>
         <hr />
@@ -199,23 +204,24 @@
     <!-- Block Portfolio -->
     <div ng-controller="BasicPartyListController" ng-init="init('/api/v1/portfolio', { party_portfolios: people_id, limit: 6}, '-ordering')" class="block block-portfolio block-col-3" ng-class="should_show_list_class()">
 
-        <h2 class="block-title">Portfolio</h2>
+        <h2 class="block-title">{% trans 'Portfolio' %}</h2>
         <ul class="row item-list portfolio-list">
             <li ng-repeat="party in party_list"  class="col-md-4 col-xs-6 porfolio-item item" ng-class="party.item_class_row_three()">
                 <div ng-include="'template_party_item_style_default_2.html'"></div>
             </li>
         </ul>
         <a class="loadmore-wrapper" ng-click="load_more()" ng-class="load_more_class()">
-            <span ng-hide="is_loading" class="loadmore">Load more</span>
+            <span ng-hide="is_loading" class="btn-startup btn-startup--third">{% trans 'Load more' %}</span>
             <img ng-show="is_loading" ng-src="/static/images/loading.gif" class="loading-icon" >
         </a>
         <hr />
     </div><!-- End Block Portfolio -->
 
     <!-- Block give support -->
+    {% comment %}
     <div ng-controller="BasicPartyListController" ng-init="init('/api/v1/party_support_party/', {src: people_id, limit: 6}, '-id', 'dst', ['REQUIRED_APPROVAL', 'status'])" class="block block-support list-view" ng-class="should_show_list_class()">
 
-        <h2 class="block-title">Give Support to</h2>
+        <h2 class="block-title">{% trans 'Give Support to' %}</h2>
         <ul class="item-list support-list">
             <li class="support-item item" ng-repeat="party in party_list">
                 <div ng-include="'template_party_item_style_default_small.html'"></div>
@@ -223,18 +229,20 @@
         </ul>
 
         <a class="loadmore-wrapper" ng-click="load_more()" ng-class="load_more_class()">
-            <span ng-hide="is_loading" class="loadmore">Load more</span>
+            <span ng-hide="is_loading" class="btn-startup btn-startup--third">{% trans 'Load more' %}</span>
             <img ng-show="is_loading" ng-src="/static/images/loading.gif" class="loading-icon" >
         </a>
         <hr />
     </div>
+    {% endcomment %}
     <!-- End block give support to -->
 
 
     <!-- Block Invest to -->
+    {% comment %}
     <div ng-controller="BasicPartyListController" ng-init="init('/api/v1/party_invest_party/', {src: people_id, limit: 6}, 'id', 'dst', ['REQUIRED_APPROVAL', 'status'])" class="block block-support list-view" ng-class="should_show_list_class()">
 
-        <h2 class="block-title">Invest to</h2>
+        <h2 class="block-title">{% trans 'Invest to' %}</h2>
         <ul class="item-list support-list">
             <li class="support-item item" ng-repeat="party in party_list">
                 <div ng-include="'template_party_item_style_default_small.html'"></div>
@@ -242,38 +250,41 @@
         </ul>
 
         <a class="loadmore-wrapper" ng-click="load_more()" ng-class="load_more_class()">
-            <span ng-hide="is_loading" class="loadmore">Load more</span>
+            <span ng-hide="is_loading" class="btn-startup btn-startup--third">{% trans 'Load more' %}</span>
             <img ng-show="is_loading" ng-src="/static/images/loading.gif" class="loading-icon" >
         </a>
         <hr />
     </div>
+    {% endcomment %}
     <!-- End block Invest to -->
 
 </div>
 
+{% comment %}
 <div class="happening block-happening-detail" ng-class="tab_active_class(2)">
     <!-- Block Happening -->
     <div ng-controller="BasicPartyListController" ng-init="init('/api/v1/happening/', { limit: 5, offset: 0, unpublished: true, receiver_or_actor: people_id })" class="">
-        <h2 class="block-title">Happening</h2>
-        <div ng-show="!is_loading && party_list.length == 0">Nothing happen.</div>
+        <h2 class="block-title">{% trans 'Happening' %}</h2>
+        <div ng-show="!is_loading && party_list.length == 0">{% trans 'Nothing happen.' %}</div>
         <ul class="item-list happen-list">
             <li class="row item" ng-repeat="party in party_list" ng-include="'happening_list_full.html'">
             </li>
         </ul>
         <a class="loadmore-wrapper" ng-click="load_more()" ng-class="load_more_class()">
-            <span ng-hide="is_loading" class="loadmore">Load more</span>
+            <span ng-hide="is_loading" class="btn-startup btn-startup--third">{% trans 'Load more' %}</span>
             <img  ng-show="is_loading" ng-src="/static/images/loading.gif" class="loading-icon" >
         </a>
     </div>
-    <hr />
+    <br />
     <!-- End block Happening -->
 </div>
+{% endcomment %}
 
 <div class="followers" ng-class="tab_active_class(3)">
     <!-- Block Followers -->
     <div ng-controller="BasicPartyListController" ng-init="init('/api/v1/party_follow_party/', {dst: people_id, limit: 10, status: 1, is_followers: true, status: 1}, '-id', 'src')" class="block block-followers-list-view" ng-class="should_show_list_class()">
 
-        <h2 class="block-title" >Followers</h2>
+        <h2 class="block-title" >{% trans 'Followers' %}</h2>
         <ul class="item-list followers-list">
             <li ng-repeat="relation in party_list" class="followers-item listview-item item {[{ relation.inst_type }]}-image">
                 <div class="list-view">
@@ -283,13 +294,8 @@
                         </span>
                     </div>
                     <div class="group-info" >
-                        <h3><a ng-href="{[{ relation.absolute_url }]}" ng-cloak>{[{ relation.get_display_name }]}</a></h3>
+                        <h3 class="title"><a ng-href="{[{ relation.absolute_url }]}" ng-cloak>{[{ relation.get_display_name }]}</a></h3>
                         <div class="description" ng-cloak>{[{ relation.get_summary }]}</div>
-                        <ul ng-if="relation.country" class="country-list item-list item-list-inline">
-                            <li class="country-item item" ng-cloak>
-                                <span class="country">{[{ relation.country.title }]}</span>
-                            </li>
-                        </ul>
                     </div>
                     <div follow-button party="relation" template="follow_text_button.html"></div>
                 </div>
@@ -297,12 +303,12 @@
 
         </ul>
         <a class="loadmore-wrapper" ng-click="load_more()" ng-class="load_more_class()">
-            <span ng-hide="is_loading" class="loadmore">Load more</span>
+            <span ng-hide="is_loading" class="btn-startup btn-startup--third">{% trans 'Load more' %}</span>
             <img  ng-show="is_loading" ng-src="/static/images/loading.gif" class="loading-icon" >
         </a>
         <!-- End block give support to -->
     </div>
-    <hr />
+  <br/>
 </div>
 
 {% if not HIDE_FOLLOWING %}
@@ -310,7 +316,7 @@
     <!-- Block Following -->
     <div ng-controller="BasicPartyListController" ng-init="init('/api/v1/party_follow_party/', {src: people_id, limit: 10, is_following: true, status: 1}, '-id', 'dst')" class="block block-followers-list-view" ng-class="should_show_list_class()">
 
-        <h2 class="block-title" >Following</h2>
+        <h2 class="block-title" >{% trans 'Following' %}</h2>
         <ul class="item-list followers-list">
             <li ng-repeat="relation in party_list" class="followers-item listview-item item {[{ relation.inst_type }]}-image">
                 <div class="list-view">
@@ -320,7 +326,7 @@
                         </span>
                     </div>
                     <div class="group-info" >
-                         <h3><a ng-href="{[{ relation.absolute_url }]}" ng-cloak>{[{ relation.get_display_name }]}</a></h3>
+                         <h3 class="title"><a ng-href="{[{ relation.absolute_url }]}" ng-cloak>{[{ relation.get_display_name }]}</a></h3>
                         <div class="description" ng-cloak>{[{ relation.get_summary }]}</div>
                         <ul ng-if="relation.country" class="country-list item-list item-list-inline">
                             <li class="country-item item" ng-cloak>
@@ -334,7 +340,7 @@
 
         </ul>
         <a class="loadmore-wrapper" ng-click="load_more()" ng-class="load_more_class()">
-            <span ng-hide="is_loading" class="loadmore">Load more</span>
+            <span ng-hide="is_loading" class="btn-startup btn-startup--third">{% trans 'Load more' %}</span>
             <img  ng-show="is_loading" ng-src="/static/images/loading.gif" class="loading-icon" >
         </a>
         <!-- End block give support to -->
@@ -350,41 +356,41 @@
 
     <alert id="alert_testimonials" ng-show="alert['testimonials'].show" type="{[{alert['testimonials'].type}]}" close="alert['testimonials'].show = !alert['testimonials'].show" ng-cloak>{[{alert['testimonials'].msg}]}</alert>
 
-    <form 
-        role="form" 
+    <form
+        role="form"
         ng-submit=
         "http_to_api_with_party({
-            api: '/api/v1/party_testify_party/', 
-            party: people, 
+            api: '/api/v1/party_testify_party/',
+            party: people,
             params: {dst: people.party_resource_uri, data: testimonials},
             update_total: 'total_testify',
             model_name: 'testimonials',
             reload_when_done: true,
             type: 'POST',
-        })" 
-        novalidate 
+        })"
+        novalidate
         class="form-testimonial"
         ng-class="hide_self_class()"
         ng-show="people.get_display_name">
         <div>
-            <label ng-clock>Give {[{ people.get_display_name }]} a testimonial</label>
+            <label ng-clock>{% trans 'Give' %} {[{ people.get_display_name }]} {% trans 'a testimonial' %}</label>
             <img ng-show="is_posting" ng-src="/static/images/loading.gif" class="loading-icon">
         </div>
         <textarea class="form-control" rows="5" name="testimonials" ng-model="testimonials" required></textarea>
-        <button type="submit" class="btn btn-primary btn-post btn-pink">Send</button>
-        <a class="invite-link" data-target="#modal-invite" data-toggle="modal">Invite a friend to write  testimonial <span class="icon-bubble"></span></a>
+        <button type="submit" class="btn btn-primary btn-post btn-pink">{% trans 'Send' %}</button>
+        <a class="invite-link" data-target="#modal-invite" data-toggle="modal">{% trans 'Invite a friend to write  testimonial' %} <span class="icon-bubble"></span></a>
 
     </form>
     {% else %}
 
-    <a class="btn btn-primary btn-pink btn-post btn-no-bg" data-target="#modal-login" data-toggle="modal" ng-clock ng-if="people.get_display_name">Write a testimonial <span class="icon-bubble"></span></a>
+    <a class="btn btn-primary btn-pink btn-post btn-no-bg" data-target="#modal-login" data-toggle="modal" ng-clock ng-if="people.get_display_name">{% trans 'Write a testimonial' %} <span class="icon-bubble"></span></a>
 
     <a href="" class="btn btn-primary btn-pink btn-invite btn-no-bg" data-target="#modal-invite" data-toggle="modal">Invite a friend <span class="icon-mail2"></span></a>
     {% endif %}
 
     <div ng-controller="BasicPartyListController" ng-init="init('/api/v1/party_testify_party/', { dst: people_id, limit: 6, status: 1, offset: 0 }, '', 'src', ['data', 'can_edit', 'id'])" class="block block-testimonial">
-        <h2 class="block-title">Testimonials</h2>
-        <div ng-show="!is_loading && party_list.length == 0">Become the first to write a testimonial for {[{ people.get_display_name }]}.</div>
+        <h2 class="block-title">{% trans 'Testimonials' %}</h2>
+        <div ng-show="!is_loading && party_list.length == 0">{% trans 'Become the first to write a testimonial for' %} {[{ people.get_display_name }]}.</div>
         <ul class="item-list event-list">
             <li ng-repeat="party in party_list" class="item testimonial-item" ng-clock>
                 <div ng-include="'testimonials_list.html'"></div>
@@ -392,7 +398,7 @@
         </ul>
 
         <a class="loadmore-wrapper" ng-click="load_more()" ng-class="load_more_class()" ng-class="should_show_list_class()">
-            <span ng-hide="is_loading" class="loadmore">Load more</span>
+            <span ng-hide="is_loading" class="btn-startup btn-startup--third">{% trans 'Load more' %}</span>
             <img ng-show="is_loading" ng-src="/static/images/loading.gif" class="loading-icon" >
         </a>
 
@@ -405,7 +411,7 @@
 
         <!-- Sidebar right-->
 {% block sidebar %}
-<div ng-class="tab_list_active_class(1) || tab_list_active_class(2) || tab_list_active_class(3) || tab_active_class(4)">
+<div class="hide" ng-class="tab_list_active_class(1) || tab_list_active_class(2) || tab_list_active_class(3) || tab_active_class(4)">
 
     <div class="block block-sidebar block-topic" ng-if="people.interests.length" id="block-topic-list">
         <h2 class="block-title">{% trans "Interests" %}</h2>
@@ -427,7 +433,7 @@
     <div ng-controller="BasicPartyListController"  ng-init="init('/api/v1/job/search/', { limit: 3, q: params_query })">
         <div class="block block-sidebar block-job -sidebar -suggestion" ng-if="party_list.length">
             <div class="suggestion-wrapper">
-                <h2 class="block-title">Jobs Suggestion</h2>
+                <h2 class="block-title">{% trans 'Jobs Suggestion' %}</h2>
                 <div class="block-content">
                     <ul class="item-list">
                         <li class="item item-job" ng-repeat="job in party_list">
@@ -444,18 +450,18 @@
 
     <!-- Block Testiminial -->
     <div ng-controller="BasicPartyListController" ng-init="init('/api/v1/party_testify_party/', { dst: people_id, limit: 1, status: 1, offset: 0, status: 1 }, '', 'src', ['data'])" class="block block-sidebar block-testimonial" ng-class="should_show_list_class()">
-        <h2 class="block-title">Testimonials</h2>
+        <h2 class="block-title">{% trans 'Testimonials' %}</h2>
         <img ng-show="is_loading && party_list.length == 0" ng-src="/static/images/loading.gif" class="loading-icon">
-        
-        <div ng-show="!is_loading && party_list.length == 0">No testimonials</div>
+
+        <div ng-show="!is_loading && party_list.length == 0">{% trans 'No testimonials' %}</div>
 
         <div ng-repeat="party in party_list" class="" ng-clock ng-include="'testimonials_list.html'"></div>
-        <a class="viewall" ng-click="selected_tab(5)" href="##testimonials" ng-show="party_list.length != 0">View all</a>
+        <a class="viewall" ng-click="selected_tab(5)" href="##testimonials" ng-show="party_list.length != 0">{% trans 'View all' %}</a>
         <hr />
     </div><!-- End Block Testiminial -->
 
 </div>
-<!-- 
+<!--
 <div ng-class="tab_active_class(2)">
     <div ng-if="people.interests.length" class="block block-sidebar block-interesting">
         <h2 class="block-title">Interest</h2>
@@ -489,7 +495,7 @@
  -->
 <div ng-class="tab_active_class(5)">
     <div ng-if="people.interests.length" class="block block-sidebar block-interesting">
-        <h2 class="block-title">Interest</h2>
+        <h2 class="block-title">{% trans 'Interest' %}</h2>
         <ul class="interesting-list item-list bullet">
             <li class="interesting-item item" ng-repeat="interest in people.interests">
                 <h3 class="title" ng-cloak>{[{ interest.title }]}</h3>
@@ -509,7 +515,7 @@
     <div class="modal-dialog contact-popup base-action-modal">
         <div class="modal-content">
             <div class="modal-header">
-                <button class="close" data-dismiss="modal" type="button"><span>&times;</span><span class="sr-only">Close</span></button>
+                <button class="close" data-dismiss="modal" type="button"><span>&times;</span><span class="sr-only">{% trans 'Close' %}</span></button>
                 <h2 class="modal-title" id="model-contact-label" >{% trans 'Message' %}</h2>
             </div>
             <div class="modal-body">
@@ -531,7 +537,7 @@
                         novalidate
                         class="form-contact">
                     <div>
-                        <label ng-cloak>Leave a message for {[{ people.get_display_name }]}</label>
+                        <label ng-cloak>{% trans 'Leave a message for' %} {[{ people.get_display_name }]}</label>
                         <img ng-show="is_post_contact" ng-src="/static/images/loading.gif" class="loading-icon">
                     </div>
                     <textarea class="form-control" rows="5" name="message" ng-model="message" required ></textarea>
@@ -540,7 +546,7 @@
                 </form>
                 {% else %}
 
-                <a data-target="#modal-login" data-toggle="modal" ng-cloak> Please login before leave a message for {[{ people.get_display_name }]}</a>
+                <a data-target="#modal-login" data-toggle="modal" ng-cloak> {% trans 'Please login before leave a message for' %} {[{ people.get_display_name }]}</a>
 
                 {% endif %}
             </div>
@@ -554,8 +560,8 @@
     <div class="modal-dialog contact-popup base-action-modal">
         <div class="modal-content">
             <div class="modal-header">
-                <button class="close" data-dismiss="modal" type="button"><span>&times;</span><span class="sr-only">Close</span></button>
-                <h2 class="modal-title" id="model-contact-label" >Invite</h2>
+                <button class="close" data-dismiss="modal" type="button"><span>&times;</span><span class="sr-only">{% trans 'Close' %}</span></button>
+                <h2 class="modal-title" id="model-contact-label" >{% trans 'Invite' %}</h2>
             </div>
             <div class="modal-body">
 
@@ -575,15 +581,15 @@
                         class="form-contact">
 
                     <div>
-                        <label ng-cloak>Send to email</label>
+                        <label ng-cloak>{% trans 'Send to email' %}</label>
                     </div>
                     <input type="text"/>
                     <div>
-                        <label ng-cloak>Message</label>
+                        <label ng-cloak>{% trans 'Message' %}</label>
                         <img ng-show="is_post_contact" ng-src="/static/images/loading.gif" class="loading-icon">
                     </div>
                     <textarea class="form-control" rows="5" name="contact" ng-model="contact" required ></textarea>
-                    <button type="submit" class="btn btn-primary -big">Send</button>
+                    <button type="submit" class="btn btn-primary -big">{% trans 'Send' %}</button>
 
                 </form>
             </div>

@@ -77,6 +77,10 @@ def filter_status(queryset, status):
     return queryset.filter(status=status)
 
 @register.filter()
+def order_status(queryset):
+    return queryset.order_by('-status', '-changed')
+
+@register.filter()
 def keyvalue(dict, key):
     return dict[key]
 
@@ -146,3 +150,35 @@ def html_decode(s):
     for code in htmlCodes:
         s = s.replace(code[1], code[0])
     return s
+
+@register.simple_tag(takes_context=True)
+def vary_print(context, field):
+    if context.get('vary_print', False):
+        return '<div class="virtual-textarea">%s</div>' % field.value()
+    return field
+
+@register.filter(name='any')
+def do_any(value):
+    return any(value)
+
+@register.filter(name='all')
+def do_all(value):
+    return all(value)
+
+@register.filter(name='do_and')
+def do_and(value1, value2):
+    return bool(value1 and value2)
+
+@register.filter(name='do_or')
+def do_or(value1, value2):
+    if type(value2) == list and len(value2) == 2 and value2[0] == '' and value2[1] == 'THB':
+        value2 = False
+    return bool(value1 or value2)
+
+@register.filter(name='do_or_false')
+def do_or_false(value1, value2):
+    return bool(value1 or (value2 is not None and value2 != ''))
+
+@register.filter(name='split')
+def do_split(value1, value2):
+    return value1.split(value2)

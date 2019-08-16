@@ -14,6 +14,9 @@ $(document).ready(function() {
 
             href += '&winName=' + name;
 
+            var $frame = $('<iframe class="autocomplete-add-another-frame" name='+name+'></iframe>');
+            $('body').append($frame);
+
             var height = 'auto';
             var width = 'auto';
             var height = 600;
@@ -23,17 +26,21 @@ $(document).ready(function() {
             var win = window.open(href, name, 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, copyhistory=no, width='+width+', height='+height+', top='+top+', left='+left)
 
             function removeOverlay() {
-                if (win.closed) {
+                if (win.closed || $('.autocomplete-add-another-frame').length == 0) {
                     $('#yourlabs_overlay').remove();
                 } else {
                     setTimeout(removeOverlay, 500);
                 }
             }
 
-            $('body').append('<div id="yourlabs_overlay"></div');
+            $('body').append('<div id="yourlabs_overlay"></div').addClass('overlay-enable');
             $('#yourlabs_overlay').click(function() {
+
+                return false;
                 win.close();
+                $frame.remove();
                 $(this).remove();
+                $('body').removeClass('overlay-enable');
             });
 
             setTimeout(removeOverlay, 1500);
@@ -46,27 +53,44 @@ $(document).ready(function() {
         var dismissAddAnotherPopup = function(win, newId, newRepr) {
 
             // newId and newRepr are expected to have previously been escaped by
-            newId = html_unescape(newId);
 
-            // crosalot override
-            //newRepr = html_unescape(newRepr);
+            if (newId) {
+                newId = html_unescape(newId);
 
-            var name = windowname_to_id(win.name);
-            var elem = document.getElementById(name);
+                // crosalot override
+                //newRepr = html_unescape(newRepr);
 
-            if (elem) {
-                if ($(elem).is('select')) {
-                    var o = new Option(newRepr, newId + '.0');
-                    elem.options[elem.options.length] = o;
+                var name = windowname_to_id(win.name);
+                var elem = document.getElementById(name);
 
-                    o.selected = true;
+                if (elem) {
+                    if ($(elem).is('select')) {
+                        var o = new Option(newRepr, newId);
+
+                        var replaced = false;
+                        $.each(elem.options, function(i, item) {
+                            if (item.value == newId) {
+                                o.className = 'replaced';
+                                elem.options[i] = o;
+                                replaced = true;
+                                return false;
+                            }
+                        });
+                        if (!replaced) {
+                            elem.options[elem.options.length] = o;
+                        }
+
+                        o.selected = true;
+                    }
+                } else {
+                    alert("Could not get input id for win " + name);
                 }
-            } else {
-                alert("Could not get input id for win " + name);
-            }
 
-            win.close();
-        }
+                win.close();
+            }
+            $('iframe[name='+win.name+']').remove();
+            $('body').removeClass('overlay-enable');
+        };
 
         window.dismissAddAnotherPopup = dismissAddAnotherPopup
 

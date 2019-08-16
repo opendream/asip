@@ -14,8 +14,8 @@ p { word-break: initial;}
 }
 
 .brand,
-.logo { 
-    font-size: 28px; 
+.logo {
+    font-size: 28px;
     text-transform: uppercase;
     letter-spacing: 3px;
     font-family: $kanit-light;
@@ -48,9 +48,9 @@ p { word-break: initial;}
     .logo { margin-bottom: 1em;}
 }
 
-@media 
-(-webkit-min-device-pixel-ratio: 2), 
-(min-resolution: 192dpi) { 
+@media
+(-webkit-min-device-pixel-ratio: 2),
+(min-resolution: 192dpi) {
     .brand a {
         background-image: url(/static/images/impactconnect-logo@2x.png);
         background-size: contain;
@@ -80,7 +80,7 @@ p { word-break: initial;}
 }
 
 
-.site-name h1 { 
+.site-name h1 {
     @include font-size(35);
     font-family: $kanit-light;
     font-weight: 100;
@@ -126,7 +126,7 @@ hr._medium {
     width: 260px;
 }
 .horizon-line{
-    margin-top: 30px;
+    margin-top: 20px;
     margin-bottom: 30px;
 }
 
@@ -183,8 +183,8 @@ hr._medium {
     left: 0;
 }
 
-.text-empty { 
-    color: #999; 
+.text-empty {
+    color: #999;
     margin: 10px 0;
 }
 
@@ -223,9 +223,9 @@ hr._medium {
     .icon-twitter:before {
         position: static;
     }
-    .icon { 
+    .icon {
         background-color: transparent;
-        margin-right: 5px; 
+        margin-right: 5px;
         font-size: 19px;
         top: 2px;
         position: relative;
@@ -235,8 +235,9 @@ hr._medium {
     }
 }
 
-.date { 
-    color: $font-date-color; 
+.date {
+    // color: $font-date-color;
+    color: #666;
     font-size: 13px;
 }
 
@@ -247,8 +248,8 @@ hr._medium {
     margin-right: 10px;
     font-size: 15px;
     color: #999;
-    
-    &.active, &:hover, &:focus, &:active { 
+
+    &.active, &:hover, &:focus, &:active {
         background-color: #EEEEEE;
         text-decoration: underline;
         color: #999;
@@ -258,18 +259,18 @@ hr._medium {
     &:hover a, &:focus a, &:active a, &.active a {
         background-color: #EEEEEE;
         color: #999;
-        
-        &.active, &:hover, &:focus, &:active { 
+
+        &.active, &:hover, &:focus, &:active {
             background-color: #EEEEEE;
             color: #999;
         }
     }
 }
 
-.pagination > .disabled > a, 
+.pagination > .disabled > a,
 .pagination > li.active a {
     color: #333 !important;;
-    &.active, &:hover, &:focus, &:active { 
+    &.active, &:hover, &:focus, &:active {
         text-decoration: none;
         color: #333;
     }
@@ -340,19 +341,26 @@ hr._medium {
     }
 }
 
+.icon-instagram {
+    color: #E95950;
+    &:hover {
+        color: darken(#E95950, 15%);
+    }
+}
+
 /* Overwrite icon-social for group-social */
 .outlink .icon-social {
     background-color: transparent;
     &:hover {
         background-color: transparent;
     }
-    &.icon-facebook { 
+    &.icon-facebook {
         color: $facebook-color;
         &:hover {
             color: darken($facebook-color, 15%);
         }
     }
-    &.icon-twitter { 
+    &.icon-twitter {
         color: #2AA9E0;
         &:hover {
             color: darken(#2AA9E0, 15%);
@@ -411,10 +419,16 @@ hr._medium {
     }
 }
 
-.overview .block, .about-job {
+.overview .block, 
+.about-job {
     img {
         max-width: 450px;
         height: auto !important;
+    }
+}
+.overview .block .content.-description {
+    img {
+        max-width: 100%;
     }
 }
 
@@ -422,7 +436,7 @@ hr._medium {
     color: #9E9E9E;
 }
 
-.btn-delete { 
+.btn-delete {
     color: #999;
     font-size: 14px !important;
 }
@@ -444,7 +458,7 @@ hr._medium {
 
 .popover { min-width: 190px;}
 
-.no-bullet { 
+.no-bullet {
     list-style: none;
     padding: 0;
 }
@@ -501,7 +515,7 @@ hr._medium {
     background-color: #F4F4F4;
 
     &.-white{
-        background-color: #fff;        
+        background-color: #fff;
     }
 }
 
@@ -523,11 +537,17 @@ hr._medium {
     margin: 0 5px 5px 0;
     a {
         margin-left: 0;
-        border: 1px solid #D4D4D4;
-        border-radius: 4px;
+        // border: 1px solid #D4D4D4;
+        // border-radius: 4px;
         display: inline-block;
-        padding: 1px 5px;
-        background-color: #fff;
+        padding: 5px 10px;
+        color: #fff;
+        background-color: #414042;
+        font-family: $EN-font-body;
+        font-weight: bold;
+        font-size: 14px;
+        line-height: 1;
+
         &:hover, &:active, &:focus, &.active {
             border-color: #000;
             background-color: #000;
@@ -544,13 +564,14 @@ hr._medium {
 
 
 /* -------------------------------------- *\
-        Update action / Pending 
+        Update action / Pending
 \* -------------------------------------- */
 
 strong.pending {
     @extend .kanit-light;
     font-weight: 100;
 }
+
 
 
 
@@ -562,6 +583,9 @@ strong.pending {
 ul.errorlist {
     list-style: none;
     padding-left: 0;
+    > li {
+        float: none;
+    }
 }
 
 .form-group {
@@ -576,6 +600,7 @@ ul.errorlist {
 
 
 
+
 /* -------------------------------------- *\
                 Media Style
 \* -------------------------------------- */
@@ -583,6 +608,7 @@ ul.errorlist {
 .media-body > .title {
     margin-top: 0;
 }
+
 
 
 
@@ -619,4 +645,6 @@ ul.errorlist {
 }
 
 
-
+.dropdown-menu li a {
+  font-weight: 400 !important;
+}

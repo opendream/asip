@@ -1,0 +1,55 @@
+{% load i18n %}
+
+<div class="col-sm-12 mentor_form">
+    <div class="panel panel-default ">
+        <div class="panel-body">
+            <div class="controls form-group">
+                <label for="id_{{ prefix }}-{{ i }}-user" class="col-sm-2 control-label">{% trans "Search user" %}</label>
+                <div class="col-sm-5 user-selection">
+                    {{ form.user }}
+                </div>
+                <div class="col-sm-5">
+                    <div class="inline-create-link-wrapper {% if form.user.value %}hidden{% endif %}">
+                        {% trans "or" %}
+                        <span id="id_{{ prefix }}-{{ i }}-icon_plus" class="glyphicon glyphicon-plus icostartup icon-plus"></span>
+                        <a id="id_{{ prefix }}-{{ i }}-add" class="add-user">
+                            {% trans "Create new user" %}
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div id="id_{{ prefix }}-{{ i }}-user-information" class="user-information {% if not form.email.value %}hidden{% endif %}">
+                <div class="controls form-group {% if form.user.value %}hidden{% endif %}">
+                    <label for="id_{{ prefix }}-{{ i }}-email" class="col-sm-2 control-label">{% trans "Email" %}</label>
+                    <div class="col-sm-10">
+                        <input id="id_{{ prefix }}-{{ i }}-email" name="{{ prefix }}-{{ i }}-email" type="text" class="form-control" placeholder="" value="{{ form.email.value|default_if_none:"" }}">
+                    </div>
+                </div>
+                <div class="controls form-group">
+                    <label for="id_{{ prefix }}-{{ i }}-name" class="col-sm-2 control-label">{% trans "Name" %}</label>
+                    <div class="col-sm-10">
+                        <input id="id_{{ prefix }}-{{ i }}-name" name="{{ prefix }}-{{ i }}-name" type="text" class="form-control" placeholder="" value="{{ form.name.value|default_if_none:"" }}">
+                    </div>
+                </div>
+                <div class="controls form-group">
+                    <label for="id_{{ prefix }}-{{ i }}-job_title" class="col-sm-2 control-label">{% trans "Job Title" %}</label>
+                    <div class="col-sm-10">
+                        <input id="id_{{ prefix }}-{{ i }}-job_title" name="{{ prefix }}-{{ i }}-job_title" type="text" class="form-control" placeholder="" value="{{ form.job_title.value|default_if_none:"" }}">
+                    </div>
+                </div>
+                <div class="controls form-group">
+                    <label for="id_{{ prefix }}-{{ i }}-contact_number" class="col-sm-2 control-label">{% trans "Contact Number" %}</label>
+                    <div class="col-sm-10">
+                        <input id="id_{{ prefix }}-{{ i }}-contact_number" name="{{ prefix }}-{{ i }}-contact_number" type="text" class="form-control" placeholder="" value="{{ form.contact_number.value|default_if_none:"" }}">
+                    </div>
+                </div>
+                <div class="controls form-group">
+                    <label for="id_{{ prefix }}-{{ i }}-attachments" class="col-sm-12">{% trans "Upload files (resume or portfolio): " %}</label>
+                    <div class="col-sm-12">
+                        {{ form.attachments }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

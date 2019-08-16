@@ -23,6 +23,7 @@ $(function(){
                     '</a>'+
                 '</span>'+
             '</span>'+
+            '<span class="file-name"></span>' +
             '<div class="progress-holder">'+
                 '<div class="progress"></div>'+
             '</div>'+
@@ -35,7 +36,7 @@ $(function(){
             '</span>'+
             '<span class="name"></span>'+
             '<span class="undo">'+
-                '<a href="javascript:void(0);" class="undo-remove-button">'+
+                '<a href="javascript:void(0);" class="btn btn-default undo-remove-button">'+
                     undoText+
                 '</a>'+
             '</span>'+
@@ -175,6 +176,8 @@ $(function(){
         var acceptFileTypes = /(\.|\/)(gif|jpe?g|png)$/i;
         if (!acceptFileTypes.test(file.name)) {
             $('.thumbnail', preview).replaceWith($('<span class="thumbnail no-img">'+file.name.substr(0, 1).toUpperCase()+'</span>'))
+
+            $('.file-name', preview).replaceWith($('<span class="file-name">'+file.name+'</span>'))
             return;
         }
 
@@ -227,6 +230,8 @@ $(function(){
         
         preview.removeClass('new').attr('data-image-path', imagePath);
         preview.find('.progress-holder, .filename').remove();
+        var filename = imagePath.split('/');
+        $('.file-name', preview).replaceWith($('<span class="file-name">'+filename[filename.length-1]+'</span>'))
 
         if (thumbnailPath) {
             preview.find('.thumbnail')

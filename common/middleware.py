@@ -40,11 +40,17 @@ class CrawlerChecker:
 class ProtectApiScraper(object):
     def process_request(self, request):
 
+        auth_key = request.META.get('HTTP_AUTHORIZATION', False)
+        if auth_key and hasattr(settings, 'API_ALLOW_KEYS') and settings.API_ALLOW_KEYS.get(auth_key):
+            return None
+
 
         if not settings.DEBUG and request.path[1:].split('/')[0] == 'api':
             referer = request.META.get('HTTP_REFERER', '')
             referer_domain = urlparse(referer).hostname
             site_domain = request.META.get('HTTP_HOST', '').split(':')[0]
+
+
 
             if referer_domain != site_domain:
                 return HttpResponse('Not allow crawler api', status=500)

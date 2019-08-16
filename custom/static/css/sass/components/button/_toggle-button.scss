@@ -1,0 +1,15 @@
+.toggle-button {
+  color: #337ab7 !important;
+  outline: none;
+  &:hover {
+    text-decoration: underline;
+  }
+
+  .toggle-collapsed { display: inline-block; }
+  .toggle-expanded { display: none; }
+
+  &.active {
+    .toggle-collapsed { display: none; }
+    .toggle-expanded { display: inline-block; }
+  }
+}

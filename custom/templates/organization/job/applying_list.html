@@ -1,0 +1,30 @@
+{% extends 'base_single.html' %}
+{% load i18n %}
+{% load static %}
+{% load common_tags %}
+
+{% block title %}
+Applying Jobs
+{% endblock %}
+
+{% block title_class %} text-center{% endblock %}
+{% block search_toggle_class %}{% endblock %}
+{% block search_class %}{% endblock %}
+{% block content_class %}{% endblock %}
+{% block wrapper_class %} job--applying--list{% endblock %}
+
+{% block leader%}
+{% if not request_popup %}
+<div class="banner -fix-full-width" style="background: url('/static/images/bg-startup-ecosystem-job.jpg') transparent no-repeat center; height: 350px; position: absolute; width: 100%; top: 0; z-index: -1;"></div>
+{% endif %}
+{% endblock %}
+
+{% block breadcrumb %}
+
+{% endblock %}
+
+{% block content %}
+
+{% include 'party/_filter.html' with params=settings.FILTER|keyvalue:'job_applying' %}
+
+{% endblock %}

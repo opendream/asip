@@ -135,7 +135,7 @@ class CommonTrashModel(CommonModel):
 
 class CachedModel(models.Model):
 
-    cached_vars = ['status', 'src', 'dst', 'is_active']
+    cached_vars = ['status', 'src', 'dst', 'is_active', 'published']
 
     def __init__(self, *args, **kwargs):
         super(CachedModel, self).__init__(*args, **kwargs)

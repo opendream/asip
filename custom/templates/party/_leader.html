@@ -7,58 +7,54 @@
 {% captureas header_banner %}{{ settings.FILTER|keyvalue:role_permalink|keyvalue:'HEADER_BANNER' }}{% endcaptureas %}
 
 {% block leader %}
-{% if role_create_url_content %}
-<div class="party-role-header-wrapper">
-  <div class="party-role-header -join">
-    <div class="container">
-      <div class="party-role-header-text">
-        <div class="row">
-          <div class="col-md-6">
-              <div class="text">
-                  <h3 class="title">{% blocktrans %}Join the {{ role_title_content }} community{% endblocktrans %}</h3>
-              </div>
-          </div>
-          <div class="col-md-6">
-              <div class="text form-banner">
-                  <form action="{{ role_create_url_content }}" class="form-join text-center">
-                      <div class="form-group text-left row">
-                          <div class="form-control-wrapper -text col-xs-9">
-                              <input type="text" name="name" class="form-control" placeholder="{% blocktrans %}Enter your {{ role_title_content }}'s name{% endblocktrans %}">
-                          </div>
-                          {% for name, value in settings.FILTER|keyvalue:role_permalink|keyvalue:'CREATE_URL_PARAMS' %}
-                          <input type="hidden" name="{{ name }}" value="{{ value }}"/>
-                          {% endfor %}
 
-                          <div class="form-control-wrapper -btn col-xs-3">
-                              <button class="btn btn-primary">{% blocktrans %}Create profile{% endblocktrans %} &raquo;</button>
-                          </div>
-                      </div>
-                  </form>
-              </div>
+{% if header_banner %}
+<div class="banner -fix-full-width" style="background-image: url('{{ header_banner }}')">
+  <div class="banner__container banner__container-sm">
+    <p class="banner__text">WELCOME TO</p>
+    <h2 class="banner__title">
+      <span class="banner__title banner__title--uppercase">{{ role_title_content }}</span>
+    </h2>
+    <p class="banner__text">COMMUNITY</p>
+  </div>
+</div>
+{% endif %}
+
+{% if role_create_url_content %}
+<div class="create-profile-block">
+  <div class="create-profile clearfix">
+    <div class="create-profile__header">
+      {% comment %}
+      <div class="create-profile__close">x</div>
+      {% endcomment %}
+    </div>
+    <div class="create-profile__content clearfix">
+      {% comment %}
+      <h3 class="title">{% blocktrans %}Join the {{ role_title_content }} community{% endblocktrans %}</h3>
+      {% endcomment %}
+      <h3 class="title">{% blocktrans %}Join the community{% endblocktrans %}</h3>
+      <form action="{{ role_create_url_content }}" class="">
+          <div class="form-group">
+            <input type="text" name="name" class="form-control" placeholder="{% blocktrans %}Enter your {{ role_title_content }}'s name{% endblocktrans %}">
+
+            {% for name, value in settings.FILTER|keyvalue:role_permalink|keyvalue:'CREATE_URL_PARAMS' %}
+            <input type="hidden" name="{{ name }}" value="{{ value }}"/>
+            {% endfor %}
+
+            <button class="btn btn-primary">{% blocktrans %}Create profile{% endblocktrans %} &raquo;</button>
           </div>
-        </div>
-      </div>
+      </form>
     </div>
   </div>
 </div>
 {% endif %}
 {%  endblock %}
 
-{% if header_banner %}
-<div class="party-role-header-wrapper">
-    <div class="party-role-header -white" style="background-image: url('{{ header_banner }}')">
-        <div class="party-role-header-text -white">
-        {% blocktrans with title=party_list_title %}Welcome to <br/>the <span class="party-role-header-title">{{ role_title_content }}</span> community{% endblocktrans %}
-        </div>
-    </div>
-</div>
-
-
 <div class="tab-container">
     <ul class="menu-tab list-inline">
         <li><a href="{% url 'presentation_role_list_browse' role_permalink %}">{% trans "Browse All" %}</a></li>
+        {% comment %}
         <li><a href="{% url 'presentation_role_list_happening' role_permalink %}">{% trans "Happening" %}</a></li>
+        {% endcomment %}
     </ul>
 </div>
-{% endif %}
-

@@ -1,0 +1,21 @@
+{% extends 'base_single.html' %}
+{% block content_class %} {% endblock %}
+
+{% block title %}Get a Job at a Startup{% endblock %}
+{% block title_class %} text-center{% endblock %}
+
+{% block wrapper_class %} job-landing-page{% endblock %}
+
+{% block content %}
+
+<div class="text-center">
+    <div class="job-wellcome">
+        <p class="text-center mb-0">Apply privately to {{ total_job }} startup jobs with one application<br/> No middlemen. See salary and equity upfront</p>
+    </div>
+    <div class="register-banner__action group-action">
+        <a class="btn btn-default btn-startup--primary" href="{% url 'job_list' %}">Find a Job</a>
+        <a class="btn btn-default btn-startup--secondary" href="{% url 'job_create_standalone' %}">Post a Job</a>
+    </div>
+</div>
+
+{% endblock %}

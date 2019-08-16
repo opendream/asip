@@ -190,8 +190,6 @@ def account_reset_password_confirm(request, uidb64=None, token=None, email_setti
     else:
         token_generator = default_token_generator
 
-    print user
-
     if user and token_generator.check_token(user, token):
 
         user.is_active = True
@@ -206,13 +204,11 @@ def account_reset_password_confirm(request, uidb64=None, token=None, email_setti
         if email_setting:
             return redirect(reverse('account_edit') + '?advance=1' + '##email-notification-settings')
 
-        goto = reverse('account_edit') + '?reset_password=1'
-        if request.GET.get('manage'):
-            goto += '&manage=1'
-        if request.GET.get('new_app_id'):
-            goto += '&new_app_id=%s' % request.GET.get('new_app_id')
-        if request.GET.get('next'):
-            goto += '&next=%s' % urllib.quote_plus(request.GET.get('next'))
+        qs = request.GET.urlencode()
+        if qs:
+            qs = '&%s' % qs
+
+        goto = reverse('account_edit') + '?reset_password=1' + qs
 
         return redirect(goto)
     else:
@@ -227,6 +223,7 @@ def account_settings_confirm(request, uidb64=None, token=None):
 @login_required
 def account_edit(request, people_id=None):
     required_password = request.GET.get('reset_password')
+    required_job = request.GET.get('required_job')
 
     manage = request.GET.get('manage') and not required_password
 
@@ -236,7 +233,6 @@ def account_edit(request, people_id=None):
         user_id = request.user.id
     else:
         user_id = people_id
-        #return staff_required(request)
 
 
     UserModel = get_user_model()
@@ -249,7 +245,7 @@ def account_edit(request, people_id=None):
     user_can_edit_check(request.user, user)
 
     if request.method == 'POST':
-        form = AccountEditForm(user, UserModel, request.user, required_password, request.POST, request.FILES)
+        form = AccountEditForm(user, UserModel, request.user, required_password, required_job, request.POST, request.FILES)
         if form.is_valid():
             user.username = form.cleaned_data['username']
             user.email = form.cleaned_data['email']
@@ -277,6 +273,7 @@ def account_edit(request, people_id=None):
             user.notification_allow_email_send_organization_partyfollowparty = form.cleaned_data['notification_allow_email_send_organization_partyfollowparty']
             user.notification_allow_email_send_organization_partycontactparty = form.cleaned_data['notification_allow_email_send_organization_partycontactparty']
             user.notification_allow_email_send_organization_partytestifyparty = form.cleaned_data['notification_allow_email_send_organization_partytestifyparty']
+            user.notification_allow_email_send_organization_organizationparticipate = form.cleaned_data['notification_allow_email_send_organization_organizationparticipate']
             user.notification_allow_email_send_organization_partyinvitetestifyparty = form.cleaned_data['notification_allow_email_send_organization_partyinvitetestifyparty']
             user.notification_allow_email_send_organization_partylove = form.cleaned_data['notification_allow_email_send_organization_partylove']
 
@@ -287,6 +284,15 @@ def account_edit(request, people_id=None):
             user.twitter_url = form.cleaned_data['twitter_url']
             user.linkedin_url = form.cleaned_data['linkedin_url']
             user.homepage_url = form.cleaned_data['homepage_url']
+
+            # user.attachments = form.cleaned_data['attachments']
+
+            user.job_email = form.cleaned_data['job_email']
+            user.job_telephone = form.cleaned_data['job_telephone']
+
+            instance_attachments = user._meta.get_field('attachments')
+            if instance_attachments:
+                instance_attachments.save_form_data(user, form.cleaned_data.get('attachments'))
 
             user.interests.clear()
             for interest in form.cleaned_data['interests']:
@@ -309,6 +315,21 @@ def account_edit(request, people_id=None):
             if password:
                 user.set_password(password)
                 update_session_auth_hash(request, user)
+
+
+            user.job_status = form.cleaned_data['job_status']
+            user.job_public_status = {'True': True, 'False': False, '': None}[form.cleaned_data['job_public_status']]
+            user.job_position = form.cleaned_data['job_position']
+            user.money_salary = form.cleaned_data['money_salary']
+            user.job_criteria = form.cleaned_data['job_criteria']
+
+            user.job_roles.clear()
+            for job_role in form.cleaned_data['job_roles']:
+                user.job_roles.add(job_role)
+
+            user.job_locations.clear()
+            for job_location in form.cleaned_data['job_locations']:
+                user.job_locations.add(job_location)
 
             user.save()
 
@@ -377,6 +398,7 @@ def account_edit(request, people_id=None):
                     if app_id:
                         token = get_connect_token(app_id, request.user.id)
                         next = '%s?new_app_id=%s&new_token=%s' % (next, app_id, token)
+
                     return redirect(next)
 
                 goto = reverse('account_edit')
@@ -416,6 +438,14 @@ def account_edit(request, people_id=None):
             'image': user.image,
             'country': user.country,
             'skills': user.skills,
+            'job_status': user.job_status,
+            'job_public_status': user.job_public_status,
+            'job_position': user.job_position,
+            'money_salary': user.money_salary,
+            'job_criteria': user.job_criteria,
+            'job_email': user.job_email or user.email,
+            'job_telephone': user.job_telephone,
+            'attachments': user.attachments,
             'notification_allow_email_send_organizationhaspeople': user.notification_allow_email_send_organizationhaspeople,
             'notification_allow_email_send_partysupportparty': user.notification_allow_email_send_partysupportparty,
             'notification_allow_email_send_partyfollowparty': user.notification_allow_email_send_partyfollowparty,
@@ -429,6 +459,7 @@ def account_edit(request, people_id=None):
             'notification_allow_email_send_organization_partyfollowparty': user.notification_allow_email_send_organization_partyfollowparty,
             'notification_allow_email_send_organization_partycontactparty': user.notification_allow_email_send_organization_partycontactparty,
             'notification_allow_email_send_organization_partytestifyparty': user.notification_allow_email_send_organization_partytestifyparty,
+            'notification_allow_email_send_organization_organizationparticipate': user.notification_allow_email_send_organization_organizationparticipate,
             'notification_allow_email_send_organization_partyinvitetestifyparty': user.notification_allow_email_send_organization_partyinvitetestifyparty,
             'notification_allow_email_send_organization_partylove': user.notification_allow_email_send_organization_partylove,
             'notification_allow_email_send_from_follow': user.notification_allow_email_send_from_follow
@@ -447,6 +478,10 @@ def account_edit(request, people_id=None):
 
             initial['invest_recipients'] = Party.objects.filter(invest_dst__src=user).distinct()
             initial['gived_investings'] = PartyReceivedInvestingParty.objects.filter(dst__id=user.id).distinct()
+
+            initial['job_roles'] = user.job_roles.all()
+            initial['job_locations'] = user.job_locations.all()
+
 
 
 
@@ -467,14 +502,25 @@ def account_edit(request, people_id=None):
             except Special.DoesNotExist:
                 pass
 
+        msg_list = []
+
         if required_password:
-            messages.error(request, _('Please, change your password'))
+            msg_list.append(_('Please, change your password'))
 
         if required_complete_profile:
-            messages.error(request, 'Please, complete your profile "Roles" and "Organizations"')
+            msg_list.append(_('Please, complete your profile "First name, Last name, Roles"'))
+
+        if required_job and not (user.job_status and user.job_public_status is not None and user.job_position and user.money_salary and user.job_locations and user.job_criteria):
+            msg_list.append(_('Please, complete your opportunities'))
 
 
-        form = AccountEditForm(user, UserModel, request.user, required_password, initial=initial)
+        if len(msg_list) == 1:
+            messages.error(request, '%s (check in red zone)' % msg_list[0])
+        elif len(msg_list) > 1:
+            msg_list.append('Check in red zone')
+            messages.error(request, '<ul>%s</ul>' % ''.join(['<li>%s</li>' % m for m in msg_list]))
+
+        form = AccountEditForm(user, UserModel, request.user, required_password, required_job, initial=initial)
 
         if manage:
             messages.success(request,
@@ -486,7 +532,8 @@ def account_edit(request, people_id=None):
     return render(request, 'account/edit.html', {
         'form': form,
         'reset_password': required_password,
-        'required_complete_profile': required_complete_profile
+        'required_complete_profile': required_complete_profile,
+        'required_job': required_job,
     })
 
 
@@ -606,7 +653,7 @@ def account_register(request):
         post_reset_redirect = '%s&next=%s' % (post_reset_redirect, next)
 
     if request.GET.get('success'):
-        messages.success(request, _('The email register has been send please check your email.'))
+        messages.success(request, _('Please check your email account to verify your email and continue the registration process.'))
         goto = '%s?next=%s' % (reverse('account_register'), next)
         if new_app_id:
             token = get_connect_token(new_app_id, request.user.id)
@@ -637,7 +684,7 @@ def account_register_confirm_invalid(request, user, uidb64, token, email_setting
         post_reset_redirect = '%s&next=%s' % (post_reset_redirect, next)
 
     if request.GET.get('success'):
-        messages.success(request, _('The email register has been send please check your email.'))
+        messages.success(request, _('Please check your email account to verify your email and continue the registration process.'))
 
         goto = '%s?next=%s' % (reverse('account_register_confirm', args=[uidb64, token]), urllib.quote_plus(next))
         if new_app_id:
@@ -675,12 +722,16 @@ def account_register_confirm(request, uidb64=None, token=None, email_setting=Fal
         user_authen = authenticate(username=user.username, ignore_password=True)
         auth_login(request, user_authen)
 
-        redirect_to = reverse('account_edit') + '?reset_password=1'
+        qs = request.GET.urlencode()
+        if qs:
+            qs = '&%s' % qs
 
-        if request.GET.get('new_app_id'):
-            redirect_to = '%s&new_app_id=%s' % (redirect_to, urllib.quote_plus(request.GET.get('new_app_id')))
-        if request.GET.get('next'):
-            redirect_to = '%s&next=%s' % (redirect_to, urllib.quote_plus(request.GET.get('next')))
+        redirect_to = reverse('account_edit') + '?reset_password=1' + qs
+
+        # if request.GET.get('new_app_id'):
+        #     redirect_to = '%s&new_app_id=%s' % (redirect_to, urllib.quote_plus(request.GET.get('new_app_id')))
+        # if request.GET.get('next'):
+        #     redirect_to = '%s&next=%s' % (redirect_to, urllib.quote_plus(request.GET.get('next')))
 
         return redirect(redirect_to)
     else:

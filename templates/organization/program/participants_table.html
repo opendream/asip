@@ -1,0 +1,108 @@
+{% load i18n %}
+
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <th>{% trans 'No.' %}</th>
+            <th>{% trans 'Topic' %}</th>
+            <th class="participant-stick-width">Batch 1</th>
+            <th class="participant-stick-width">Batch 2</th>
+            <th class="participant-stick-width">Batch 3</th>
+            <th class="participant-stick-width">Batch 4</th>
+            <th class="participant-stick-width">Batch 5</th>
+        </thead>
+        <tbody>
+            <tr class="hidden">
+                <td>1</td>
+                <td>{% trans 'Total number of teams applying for the program' %}</td>
+                <td><input id="id_batch_section2_formset-0-title" name="batch_section2_formset-0-title" type="hidden" class="form-control" placeholder="" value="batch-1"></td>
+                <td><input id="id_batch_section2_formset-1-title" name="batch_section2_formset-1-title" type="hidden" class="form-control" placeholder="" value="batch-2"></td>
+                <td><input id="id_batch_section2_formset-2-title" name="batch_section2_formset-2-title" type="hidden" class="form-control" placeholder="" value="batch-3"></td>
+                <td><input id="id_batch_section2_formset-3-title" name="batch_section2_formset-3-title" type="hidden" class="form-control" placeholder="" value="batch-4"></td>
+                <td><input id="id_batch_section2_formset-4-title" name="batch_section2_formset-4-title" type="hidden" class="form-control" placeholder="" value="batch-5"></td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>{% trans 'Total number of teams applying for the program' %}</td>
+
+                <td><input id="id_batch_section2_formset-0-total_teams_applying" name="batch_section2_formset-0-total_teams_applying" type="number" class="form-control" placeholder="" value="{{ form.0.total_teams_applying.value|default_if_none:"" }}"></td>
+                <td><input id="id_batch_section2_formset-1-total_teams_applying" name="batch_section2_formset-1-total_teams_applying" type="number" class="form-control" placeholder="" value="{{ form.1.total_teams_applying.value|default_if_none:"" }}"></td>
+                <td><input id="id_batch_section2_formset-2-total_teams_applying" name="batch_section2_formset-2-total_teams_applying" type="number" class="form-control" placeholder="" value="{{ form.2.total_teams_applying.value|default_if_none:"" }}"></td>
+                <td><input id="id_batch_section2_formset-3-total_teams_applying" name="batch_section2_formset-3-total_teams_applying" type="number" class="form-control" placeholder="" value="{{ form.3.total_teams_applying.value|default_if_none:"" }}"></td>
+                <td><input id="id_batch_section2_formset-4-total_teams_applying" name="batch_section2_formset-4-total_teams_applying" type="number" class="form-control" placeholder="" value="{{ form.4.total_teams_applying.value|default_if_none:"" }}"></td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>{% trans 'Total number of teams accepted for the program' %}</td>
+                <td><input id="id_batch_section2_formset-0-total_teams_accepted" name="batch_section2_formset-0-total_teams_accepted" type="number" class="form-control" placeholder="" value="{{ form.0.total_teams_accepted.value|default_if_none:"" }}"></td>
+                <td><input id="id_batch_section2_formset-1-total_teams_accepted" name="batch_section2_formset-1-total_teams_accepted" type="number" class="form-control" placeholder="" value="{{ form.1.total_teams_accepted.value|default_if_none:"" }}"></td>
+                <td><input id="id_batch_section2_formset-2-total_teams_accepted" name="batch_section2_formset-2-total_teams_accepted" type="number" class="form-control" placeholder="" value="{{ form.2.total_teams_accepted.value|default_if_none:"" }}"></td>
+                <td><input id="id_batch_section2_formset-3-total_teams_accepted" name="batch_section2_formset-3-total_teams_accepted" type="number" class="form-control" placeholder="" value="{{ form.3.total_teams_accepted.value|default_if_none:"" }}"></td>
+                <td><input id="id_batch_section2_formset-4-total_teams_accepted" name="batch_section2_formset-4-total_teams_accepted" type="number" class="form-control" placeholder="" value="{{ form.4.total_teams_accepted.value|default_if_none:"" }}"></td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>{% trans 'Total number of participants accepted for the program' %}</td>
+                <td><input id="id_batch_section2_formset-0-total_participants_accepted" name="batch_section2_formset-0-total_participants_accepted" type="number" class="form-control" placeholder="" value="{{ form.0.total_participants_accepted.value|default_if_none:"" }}"></td>
+                <td><input id="id_batch_section2_formset-1-total_participants_accepted" name="batch_section2_formset-1-total_participants_accepted" type="number" class="form-control" placeholder="" value="{{ form.1.total_participants_accepted.value|default_if_none:"" }}"></td>
+                <td><input id="id_batch_section2_formset-2-total_participants_accepted" name="batch_section2_formset-2-total_participants_accepted" type="number" class="form-control" placeholder="" value="{{ form.2.total_participants_accepted.value|default_if_none:"" }}"></td>
+                <td><input id="id_batch_section2_formset-3-total_participants_accepted" name="batch_section2_formset-3-total_participants_accepted" type="number" class="form-control" placeholder="" value="{{ form.3.total_participants_accepted.value|default_if_none:"" }}"></td>
+                <td><input id="id_batch_section2_formset-4-total_participants_accepted" name="batch_section2_formset-4-total_participants_accepted" type="number" class="form-control" placeholder="" value="{{ form.4.total_participants_accepted.value|default_if_none:"" }}"></td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>{% trans 'Total number of team graduted teams for the program' %}</td>
+                <td><input id="id_batch_section2_formset-0-total_graduated_teams_accepted" name="batch_section2_formset-0-total_graduated_teams_accepted" type="number" class="form-control" placeholder="" value="{{ form.0.total_graduated_teams_accepted.value|default_if_none:"" }}"></td>
+                <td><input id="id_batch_section2_formset-1-total_graduated_teams_accepted" name="batch_section2_formset-1-total_graduated_teams_accepted" type="number" class="form-control" placeholder="" value="{{ form.1.total_graduated_teams_accepted.value|default_if_none:"" }}"></td>
+                <td><input id="id_batch_section2_formset-2-total_graduated_teams_accepted" name="batch_section2_formset-2-total_graduated_teams_accepted" type="number" class="form-control" placeholder="" value="{{ form.2.total_graduated_teams_accepted.value|default_if_none:"" }}"></td>
+                <td><input id="id_batch_section2_formset-3-total_graduated_teams_accepted" name="batch_section2_formset-3-total_graduated_teams_accepted" type="number" class="form-control" placeholder="" value="{{ form.3.total_graduated_teams_accepted.value|default_if_none:"" }}"></td>
+                <td><input id="id_batch_section2_formset-4-total_graduated_teams_accepted" name="batch_section2_formset-4-total_graduated_teams_accepted" type="number" class="form-control" placeholder="" value="{{ form.4.total_graduated_teams_accepted.value|default_if_none:"" }}"></td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td>{% trans 'Number of training programs conducted and to be conducted' %}</td>
+                <td><input id="id_batch_section2_formset-0-total_training_program" name="batch_section2_formset-0-total_training_program" type="number" class="form-control" placeholder="" value="{{ form.0.total_training_program.value|default_if_none:"" }}"></td>
+                <td><input id="id_batch_section2_formset-1-total_training_program" name="batch_section2_formset-1-total_training_program" type="number" class="form-control" placeholder="" value="{{ form.1.total_training_program.value|default_if_none:"" }}"></td>
+                <td><input id="id_batch_section2_formset-2-total_training_program" name="batch_section2_formset-2-total_training_program" type="number" class="form-control" placeholder="" value="{{ form.2.total_training_program.value|default_if_none:"" }}"></td>
+                <td><input id="id_batch_section2_formset-3-total_training_program" name="batch_section2_formset-3-total_training_program" type="number" class="form-control" placeholder="" value="{{ form.3.total_training_program.value|default_if_none:"" }}"></td>
+                <td><input id="id_batch_section2_formset-4-total_training_program" name="batch_section2_formset-4-total_training_program" type="number" class="form-control" placeholder="" value="{{ form.4.total_training_program.value|default_if_none:"" }}"></td>
+            </tr>
+            <tr>
+                <td>6</td>
+                <td>{% trans 'Number of events, conferences seminars workshops organized or to be organized' %}</td>
+                <td><input id="id_batch_section2_formset-0-total_organized_event" name="batch_section2_formset-0-total_organized_event" type="number" class="form-control" placeholder="" value="{{ form.0.total_organized_event.value|default_if_none:"" }}"></td>
+                <td><input id="id_batch_section2_formset-1-total_organized_event" name="batch_section2_formset-1-total_organized_event" type="number" class="form-control" placeholder="" value="{{ form.1.total_organized_event.value|default_if_none:"" }}"></td>
+                <td><input id="id_batch_section2_formset-2-total_organized_event" name="batch_section2_formset-2-total_organized_event" type="number" class="form-control" placeholder="" value="{{ form.2.total_organized_event.value|default_if_none:"" }}"></td>
+                <td><input id="id_batch_section2_formset-3-total_organized_event" name="batch_section2_formset-3-total_organized_event" type="number" class="form-control" placeholder="" value="{{ form.3.total_organized_event.value|default_if_none:"" }}"></td>
+                <td><input id="id_batch_section2_formset-4-total_organized_event" name="batch_section2_formset-4-total_organized_event" type="number" class="form-control" placeholder="" value="{{ form.4.total_organized_event.value|default_if_none:"" }}"></td>
+            </tr>
+            <tr>
+                <td>7</td>
+                <td>{% trans 'Number of coaches, mentors and speakers in the program' %}</td>
+                <td><input id="id_batch_section2_formset-0-total_coached_staff" name="batch_section2_formset-0-total_coached_staff" type="number" class="form-control" placeholder="" value="{{ form.0.total_coached_staff.value|default_if_none:"" }}"></td>
+                <td><input id="id_batch_section2_formset-1-total_coached_staff" name="batch_section2_formset-1-total_coached_staff" type="number" class="form-control" placeholder="" value="{{ form.1.total_coached_staff.value|default_if_none:"" }}"></td>
+                <td><input id="id_batch_section2_formset-2-total_coached_staff" name="batch_section2_formset-2-total_coached_staff" type="number" class="form-control" placeholder="" value="{{ form.2.total_coached_staff.value|default_if_none:"" }}"></td>
+                <td><input id="id_batch_section2_formset-3-total_coached_staff" name="batch_section2_formset-3-total_coached_staff" type="number" class="form-control" placeholder="" value="{{ form.3.total_coached_staff.value|default_if_none:"" }}"></td>
+                <td><input id="id_batch_section2_formset-4-total_coached_staff" name="batch_section2_formset-4-total_coached_staff" type="number" class="form-control" placeholder="" value="{{ form.4.total_coached_staff.value|default_if_none:"" }}"></td>
+            </tr>
+            <tr>
+                <td>8</td>
+                <td>{% trans 'Number of assisting staffs in the program' %}</td>
+                <td><input id="id_batch_section2_formset-0-total_assisting_staff" name="batch_section2_formset-0-total_assisting_staff" type="number" class="form-control" placeholder="" value="{{ form.0.total_assisting_staff.value|default_if_none:"" }}"></td>
+                <td><input id="id_batch_section2_formset-1-total_assisting_staff" name="batch_section2_formset-1-total_assisting_staff" type="number" class="form-control" placeholder="" value="{{ form.1.total_assisting_staff.value|default_if_none:"" }}"></td>
+                <td><input id="id_batch_section2_formset-2-total_assisting_staff" name="batch_section2_formset-2-total_assisting_staff" type="number" class="form-control" placeholder="" value="{{ form.2.total_assisting_staff.value|default_if_none:"" }}"></td>
+                <td><input id="id_batch_section2_formset-3-total_assisting_staff" name="batch_section2_formset-3-total_assisting_staff" type="number" class="form-control" placeholder="" value="{{ form.3.total_assisting_staff.value|default_if_none:"" }}"></td>
+                <td><input id="id_batch_section2_formset-4-total_assisting_staff" name="batch_section2_formset-4-total_assisting_staff" type="number" class="form-control" placeholder="" value="{{ form.4.total_assisting_staff.value|default_if_none:"" }}"></td>
+            </tr>
+            <tr>
+                <td>9</td>
+                <td>{% trans 'Approximated number of new products, innovations or technologies to be developed and commercialized' %}</td>
+                <td><input id="id_batch_section2_formset-0-total_approximated_products" name="batch_section2_formset-0-total_approximated_products" type="number" class="form-control" placeholder="" value="{{ form.0.total_approximated_products.value|default_if_none:"" }}"></td>
+                <td><input id="id_batch_section2_formset-1-total_approximated_products" name="batch_section2_formset-1-total_approximated_products" type="number" class="form-control" placeholder="" value="{{ form.1.total_approximated_products.value|default_if_none:"" }}"></td>
+                <td><input id="id_batch_section2_formset-2-total_approximated_products" name="batch_section2_formset-2-total_approximated_products" type="number" class="form-control" placeholder="" value="{{ form.2.total_approximated_products.value|default_if_none:"" }}"></td>
+                <td><input id="id_batch_section2_formset-3-total_approximated_products" name="batch_section2_formset-3-total_approximated_products" type="number" class="form-control" placeholder="" value="{{ form.3.total_approximated_products.value|default_if_none:"" }}"></td>
+                <td><input id="id_batch_section2_formset-4-total_approximated_products" name="batch_section2_formset-4-total_approximated_products" type="number" class="form-control" placeholder="" value="{{ form.4.total_approximated_products.value|default_if_none:"" }}"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

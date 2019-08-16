@@ -25,6 +25,11 @@
         </div>
         {% endif %}
 
+        <div class="row">
+            <div class="col-md-12">
+                {% block alert %}{% endblock %}
+            </div>
+        </div>
         <div class="content-class{% block content_class %}{% endblock %}">
             <div class="row{% block title_class %}{% endblock %}">
                 <h1 class="col-md-12 page-title">{% block title %}{% endblock %}</h1>

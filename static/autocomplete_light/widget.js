@@ -189,14 +189,23 @@ yourlabs.Widget.prototype.addToDeck = function(choice, value) {
     var existing_choice = this.deck.find('[data-value="'+value+'"]');
 
     // Avoid duplicating choices in the deck.
+    var deckChoice = this.deckChoiceHtml(choice);
     if (!existing_choice.length) {
-        var deckChoice = this.deckChoiceHtml(choice);
-
         // In case getValue() actually **created** the value, for example
         // with a post request.
         deckChoice.attr('data-value', value);
 
         this.deck.append(deckChoice);
+    }
+}
+
+yourlabs.Widget.prototype.replaceToDeck = function(choice, value) {
+    var existing_choice = this.deck.find('[data-value="'+value+'"]');
+
+    // Avoid duplicating choices in the deck.
+    var deckChoice = this.deckChoiceHtml(choice);
+    if (existing_choice.length) {
+        existing_choice.replaceWith(deckChoice);
     }
 }
 
@@ -381,25 +390,31 @@ $(document).ready(function() {
         */
 
         if ($(e.target).is('option')) { // added an option ?
-            var widget = $(e.target).parents('.autocomplete-light-widget');
+            var pwidget = $(e.target).parents('.autocomplete-light-widget');
 
-            if (!widget.length) {
+            if (!pwidget.length) {
                 return;
             }
 
-            widget = widget.yourlabsWidget();
+            widget = pwidget.yourlabsWidget();
             var option = $(e.target);
             var value = option.attr('value');
+            value = parseInt(value);
+
             var choice = widget.deck.find('[data-value="'+value+'"]');
 
             if (!choice.length) {
-                value = parseInt(value)
                 option.attr('value', value)
                 var deckChoice = widget.optionChoice(option);
 
                 deckChoice.attr('data-value', value);
 
                 widget.selectChoice(deckChoice);
+            } else if ($(option).hasClass('replaced')){
+                var deckChoice = widget.optionChoice(option);
+                deckChoice.attr('data-value', value);
+                widget.replaceToDeck(deckChoice, value);
+                //widget.selectChoice(deckChoice);
             }
         } else { // added a widget ?
 

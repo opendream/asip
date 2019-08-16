@@ -1,0 +1,167 @@
+/* -----------------------------------------------
+Font
+------------------------------------------------- */
+._fw200 { font-weight: 200; }
+._fw300 { font-weight: 300; }
+._fw400 { font-weight: 400; }
+._fw500 { font-weight: 500; }
+._fw600 { font-weight: 600; }
+._fw-bold { font-weight: bold; }
+
+._fs-xs { font-size: .8rem !important; }
+._fs-sm { font-size: .9rem !important; }
+._fs-md { font-size: 1rem  !important; }
+._fs-lg { font-size: 1.1rem !important; }
+._fs-xl { font-size: 1.2rem !important; }
+._fs-15 { font-size: 15px !important; }
+
+._lh-xs { line-height: 1.1rem !important;}
+._lh-sm { line-height: 1.2rem !important;}
+._lh-md { line-height: 1.3rem !important;}
+._lh-lg { line-height: 1.4rem !important;}
+._lh-xl { line-height: 1.5rem !important;}
+
+
+/* -----------------------------------------------
+Color
+------------------------------------------------- */
+._black { color: #000; }
+._white { color: #FFF; }
+
+/* -----------------------------------------------
+Margin, Padding Classes
+------------------------------------------------- */
+
+/*--- How to use ---*/
+/**
+ * Increment 5px -> 0, 5, 15, 20..... 100
+ * <div class="_pl-20"></div> = padding-left: 20px;
+ * <div class="_mb-15"></div> = margin-botom: 15px;
+ */
+
+/*--- Remark ---*/
+/**
+ *
+ * ma = margin
+ * mt = margin-top
+ * mb = margin-bottom
+ * ml = margin-left
+ * mr = margin-right
+ *
+ * pa = padding
+ * pt = padding-top
+ * pb = padding-bottom
+ * pl = padding-left
+ * pr = padding-right
+ *
+ */
+
+._ma-0 { margin:      0 !important; }
+._mt-0 { margin-top:  0 !important; }
+._mb-0 { margin-bottom:  0 !important; }
+._mr-0 { margin-right:   0 !important; }
+._ml-0 { margin-left:    0 !important; }
+
+._pa-0 { padding: 0 !important; }
+._pt-0 { padding-top: 0 !important; }
+._pb-0 { padding-bottom: 0 !important; }
+._pr-0 { padding-right: 0 !important; }
+._pl-0 { padding-left: 0 !important; }
+
+ @for $i from 1 through 20 {
+ 	$i: $i * 5;
+ 	._ma-#{$i} { margin: #{$i}px !important; }
+ 	._mt-#{$i} { margin-top: #{$i}px !important; }
+ 	._mr-#{$i} { margin-right: #{$i}px !important; }
+ 	._mb-#{$i} { margin-bottom: #{$i}px !important; }
+ 	._ml-#{$i} { margin-left: #{$i}px !important; }
+
+ 	._pa-#{$i} { padding: #{$i}px !important; }
+ 	._pt-#{$i} { padding-top: #{$i}px !important; }
+ 	._pr-#{$i} { padding-right: #{$i}px !important; }
+ 	._pb-#{$i} { padding-bottom: #{$i}px !important; }
+ 	._pl-#{$i} { padding-left: #{$i}px !important; }
+ }
+
+
+/* -----------------------------------------------
+Border Radius  Classes
+------------------------------------------------- */
+// ._br-100 { @include border-radius(100%); }
+// ._br-2   { @include border-radius(2px); }
+// ._br-3   { @include border-radius(3px); }
+// ._br-4   { @include border-radius(4px); }
+
+
+/* -----------------------------------------------
+Width Classes
+------------------------------------------------- */
+// ._w-100 { width: 100px; }
+// ._w-120 { width: 120px; }
+// ._w-140 { width: 140px; }
+// ._w-160 { width: 160px; }
+
+
+/* -----------------------------------------------
+Display Classes
+------------------------------------------------- */
+// ._clearfix {
+//   &:before,
+//   &:after {
+//     content: " ";
+//     display: table;
+//   }
+//   &:after {
+//     clear: both;
+//   }
+// }
+
+
+._lh-40 {
+	line-height: 40px;
+}
+
+.asterisk {
+	@extend ._fw500;
+	line-height: 0.6667em;
+	font-size: 21px;
+	display: inline-block;
+}
+.errors a > .asterisk {
+	color: #FFFFFF;
+}
+
+.d-inline {
+	display: inline;
+}
+
+.d-flex {
+	display: flex;
+}
+
+.flex-row {
+	flex-direction: row;
+}
+
+.flex-row-sm {
+	flex-direction: column;
+	@media (min-width: 768px) {
+		flex-direction: row;
+	}
+}
+
+.justify-around {
+	justify-content: space-around;
+}
+
+.flex-wrap {
+	flex-wrap: wrap;
+}
+
+.flex-nowrap {
+	flex-wrap: nowrap;
+}
+
+._border-no {
+	border: none;
+}

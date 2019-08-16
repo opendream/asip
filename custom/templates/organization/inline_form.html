@@ -1,0 +1,230 @@
+{% load i18n %}
+{% load organization_tags %}
+{% load common_tags %}
+
+{% csrf_token %}
+
+<input type="hidden" name="_win_name" value="{{ win_name }}"/>
+<input type="hidden" name="no_script" value="{{ no_script }}"/>
+<input type="hidden" name="return_display_name" value="{{ return_display_name }}"/>
+<input type="hidden" name="force_type_of_organization" value="{{ force_type_of_organization }}"/>
+<input type="hidden" name="required_address" value="{{ required_address }}"/>
+<input type="hidden" name="required_contact" value="{{ required_contact }}"/>
+<input type="hidden" name="is_mockup" value="{{ is_mockup }}"/>
+{{ form.organization_type__permalink }}
+
+<div class="controls form-group{% if force_type_of_organization %} hidden{% endif %}">
+    <label for="id_type_of_organization" class="field-container control-label">{% trans "Type of Organization" %}</label>
+    <div class="field-container">
+        {% for type_of_organization in form.type_of_organization %}
+            <div>
+                <span class="choice-item">
+                    {{ type_of_organization.tag }}
+                    <label for="id_type_of_organization_{{ type_of_organization.index }}">{{ type_of_organization.choice_label }}</label>
+                </span>
+            </div>
+        {% endfor %}
+
+        {% if form.type_of_organization.errors %}
+        <div class="errors alert alert-danger">{{ form.type_of_organization.errors }}</div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="controls form-group">
+    <label for="id_name" class="field-container control-label">{% trans "Name" %} <span class="asterisk text-danger">*</span></label>
+    <span class="help-block">
+    {% trans "Organization/Product/Service name." %}
+    </span>
+    <div class="field-container">
+        {{ form.name }}
+        {% if form.name.errors %}
+        <div class="errors alert alert-danger">{{ form.name.errors }}</div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="controls form-group">
+    <label for="id_image" class="field-container control-label">{% trans "Image" %}</label>
+    <span class="help-block">
+    {% trans "Insert organization logo." %}
+    </span>
+    <div class="field-container">
+        {{ form.image }}
+        {% if form.image.errors %}
+        <div class="errors alert alert-danger">{{ form.image.errors }}</div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="controls form-group{% if not required_address %} hide{% endif %}">
+    <label for="id_location_of_organizations_headquarters" class="field-container control-label">{% trans "Office Address" %}</label>
+    <div class="field-container">
+        {{ form.location_of_organizations_headquarters }}
+        {% if form.location_of_organizations_headquarters.errors %}
+        <div class="errors alert alert-danger">{{ form.location_of_organizations_headquarters.errors }}</div>
+        {% endif %}
+    </div>
+</div>
+
+
+<div class="controls form-group{% if not required_contact %} hide{% endif %}">
+    <label for="id_store_email_of_organizations_headquarters" class="field-container control-label">{% trans "Organization Email" %}</label>
+    <div class="field-container">
+        {% if is_mockup %}
+        <div class="help-block">
+            This email will be sent to invite this organization
+        </div>
+        {% endif %}
+        {{ form.store_email_of_organizations_headquarters }}
+        {% if form.store_email_of_organizations_headquarters.errors %}
+        <div class="errors alert alert-danger">{{ form.store_email_of_organizations_headquarters.errors }}</div>
+        {% endif %}
+    </div>
+</div>
+<div class="controls form-group{% if not required_contact %} hide{% endif %}" id="inline-contact-tel-{{ win_name }}">
+    {% render_formset phone_number_of_organizations_headquarters_formset 'phone_number_of_organizations_headquarters' 'Tel/Mobile' %}
+</div>
+
+<div class="controls form-group">
+    <div class="form-action">
+        <button class="btn btn-primary btn-orange" type="submit">{% if form.is_new %}{% trans "Save new" %}{% else %}{% trans "Save changes" %}{% endif %}</button>
+        <a href="." class="btn btn-cancel flat-btn">{% trans "Cancel" %}</a>
+
+    </div>
+</div>
+
+
+
+{% if not form.is_valid %}
+{% if not no_script %}
+<link type="text/css" href="/static/files_widget/css/widgets.css" media="all" rel="stylesheet" />
+<script type="text/javascript" src="/static/libs/jquery-ui/js/jquery-ui-1.10.4.min.js"></script>
+{% endif %}
+<script type="text/javascript" src="/static/files_widget/js/jquery.iframe-transport.js"></script>
+<script type="text/javascript" src="/static/files_widget/js/jquery.fileupload.js"></script>
+<script type="text/javascript" src="/static/files_widget/js/widgets.js"></script>
+{% endif %}
+
+<script type="text/javascript">
+
+    (function ($) {
+
+        var win = {
+            'name': '{{ win_name }}',
+            'close': function () {
+                //delete(CKEDITOR.instances.id_description);
+                $('.field-inline-{{ win_name }} .add-another-inline-input-list').html('');
+
+            }
+        };
+
+        {% if form.is_valid %}
+
+        {% if return_display_name %}
+        dismissAddAnotherPopup(win, '{{ form.inst.id }}', '{{ form.inst.get_display_name }}');
+        {% else %}
+        dismissAddAnotherPopup(win, '{{ form.inst.id }}', '{{ form.inst.id|organization_render_reference:1|safe }}');
+        {% endif %}
+
+        {% else %}
+
+
+        $('.field-inline-{{ win_name }} .add-another-inline-input-list .btn-cancel').click(function (e) {
+            e.preventDefault();
+            $('.field-inline-{{ win_name }} .add-another-inline-input-list').html('');
+            $('.field-inline-{{ win_name }} .inline_overlay').remove();
+        });
+
+        $('.field-inline-{{ win_name }} .add-another-inline-input-list .btn-primary').click(function (e) {
+            e.preventDefault();
+
+            var input_list_container = $(this).parents('.add-another-inline-input-list');
+            var input_list = input_list_container.find('[name]');
+
+            var params = {'_inline': '1'};
+            input_list.each(function () {
+                if ($(this).attr('type') == 'checkbox') {
+                    params[$(this).attr('name')] = 0+$(this).prop('checked');
+                }
+                else if ($(this).attr('type') == 'radio') {
+                    if ($(this).prop('checked')) {
+                        params[$(this).attr('name')] = $(this).val();
+                    }
+                }
+                else {
+                    params[$(this).attr('name')] = $(this).val();
+                }
+
+
+
+            });
+
+            var post_url = '{% if form.is_new %}{% url 'organization_inline_create' %}{% else %}{% url 'organization_inline_edit' form.inst.id %}{% endif %}';
+
+
+            input_list_container.load(post_url, params);
+
+            $('.field-inline-{{ win_name }} .inline_overlay').remove();
+
+
+        });
+
+        $('.field-inline-{{ win_name }} .inline-reference-wrapper').append('<div class="inline_overlay"></div>');
+
+        {% endif %}
+
+
+        // confirm delete
+        /*
+        $('.btn-delete').popConfirm({
+            title: "{% trans "Delete Item" %}",
+            content: "{% trans "Are you sure you want to delete this item?" %}",
+            placement: "top"
+        });
+        */
+
+        {% if request_inline %}
+
+        var type_of_organization = $('.field-inline-{{ win_name }} input[name=type_of_organization]');
+
+        /*
+        if (type_of_organization.length) {
+            type_of_organization.each(function () {
+                $(this).prettyCheckable();
+            });
+
+        }
+        */
+        {% endif %}
+
+        {% if required_contact %}
+        $('#inline-contact-tel-{{ win_name }} .add_more').click(function() {
+
+            var selector = '#' + $(this).attr('id').replace('_add_more', '');
+            var type = selector.replace('#id_', '')
+
+            selector = '#inline-contact-tel-{{ win_name }} ' + selector + '>:last'
+
+            var newElement = $(selector).clone(true);
+            var total = $('#id_' + type + '-TOTAL_FORMS').val();
+            newElement.find(':input').each(function() {
+                var name = $(this).attr('name').replace('-' + (total-1) + '-','-' + total + '-');
+                var id = 'id_' + name;
+                $(this).attr({'name': name, 'id': id}).val('').removeAttr('checked');
+            });
+            newElement.find('label').each(function() {
+                var newFor = $(this).attr('for').replace('-' + (total-1) + '-','-' + total + '-');
+                $(this).attr('for', newFor);
+            });
+            total++;
+            $('#inline-contact-tel-{{ win_name }} #id_' + type + '-TOTAL_FORMS').val(total);
+            $(selector).after(newElement);
+
+        });
+        {% endif %}
+
+
+    }) (jQuery);
+
+</script>

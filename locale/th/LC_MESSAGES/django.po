@@ -287,7 +287,7 @@ msgid "Investor"
 msgstr "นักลงทุน"
 
 #: custom/settings.py:153
-msgid "Supporting Organizations"
+msgid "Supporter"
 msgstr "องค์กรสนับสนุน"
 
 #: custom/settings.py:154
@@ -764,8 +764,8 @@ msgid "Social Enterprise"
 msgstr "กิจการเพื่อสังคม"
 
 #: organization/models.py:790 organization/models.py:795
-msgid "Startup"
-msgstr "สตาร์ทอัพ"
+#msgid "Startup"
+#msgstr "สตาร์ทอัพ"
 
 #: organization/models.py:791
 msgid "Supporters/Investors"

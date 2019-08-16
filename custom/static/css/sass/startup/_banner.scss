@@ -1,0 +1,283 @@
+/* -----------------------------------------------
+Banner
+------------------------------------------------- */
+.banner-ecosystem {
+  background: url('/static/images/bg-ecosystem.png') center center no-repeat;
+  background-size: cover;
+}
+
+.banner {
+  color: #fff;
+  text-align: center;
+  background-size: cover;
+  @media (min-width: $lg) { font-size: 10rem; }
+
+  &__container {
+    padding: 3em 0;
+
+    @media (min-width: $lg) { padding: 1em 0; }
+
+    &-sm {
+      padding: 2em 0;
+
+      @media (min-width: $lg) { padding: 0.7em 0; }
+    }
+  }
+
+  &__title {
+    font-family: $EN-font-heading;
+    font-size: 6rem;
+    font-weight: normal;
+    line-height: 1em;
+    margin: 0;
+
+    @media (min-width: $lg) { line-height: 1.7em }
+
+    &--large {
+      font-size: 6rem;
+
+      @media (min-width: $lg) { font-size: 13rem; }
+    }
+    &--small { font-size: 8rem; }
+    &--light { font-weight: 300; }
+    &--bold  { font-weight: 600; }
+    &--uppercase { text-transform: uppercase; }
+    &--block { display: block; }
+
+    &--startup {
+      font-size: 6rem;
+
+      @media (min-width: $lg) { font-size: 13rem; }
+    }
+    &--ecosystem {
+      font-size: 4rem;
+
+      @media (min-width: $lg) { font-size: 10rem; }
+    }
+  }
+
+  &__content {
+    font-size: 14px;
+    margin: 1.5em auto 0;
+    padding: 0 15px;
+    max-width: 420px;
+    line-height: 1.5em;
+
+    @media (min-width: $lg) {
+      margin: 2em auto 0;
+      font-size: 16px;
+    }
+  }
+  &__text {
+    font-size: 14px;
+    margin: 0 auto;
+    padding: 0 15px;
+    max-width: 420px;
+    line-height: 1.5em;
+
+    @media (min-width: $lg) {
+      font-size: 16px;
+    }
+  }
+}
+
+
+.icon-search:before {
+  position: relative;
+  top: 2px;
+  display: block;
+  width: 17px;
+  height: 20px;
+  content: '';
+  background: url(/static/images/search.svg) no-repeat center center;
+}
+
+
+::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  color: #737373;
+}
+::-moz-placeholder { /* Firefox 19+ */
+  color: #737373;
+}
+:-ms-input-placeholder { /* IE 10+ */
+  color: #737373;
+}
+:-moz-placeholder { /* Firefox 18- */
+  color: #737373;
+}
+
+
+// Register Landing Page
+.register-landing-page {
+  min-height: 600px;
+  background: url('/static/images/bg-startup-ecosystem.png') center center no-repeat;
+  background-size: cover;
+}
+.job-landing-page {
+  min-height: 600px;
+  padding: 80px 0;
+  background: url('/static/images/bg-startup-ecosystem-job.jpg') center center no-repeat;
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.register-banner {
+  margin: 50px 0;
+  text-align: center;
+  @media (min-width: $md) {
+    margin: 0 0 50px;
+  }
+
+  &__text{
+    font-size: 16px;
+    color: #fff;
+    font-family: "Source Sans Pro", sans-serif;
+    font-weight: 300;
+
+    @media (min-width: $md) {
+      font-size: 22px;
+    }
+  }
+  &__media {
+
+  }
+  &__image {
+    max-width: 100%;
+  }
+  &__lead {
+    font-size: 20px;
+    font-weight: 300;
+    font-family: 'kanitregular', 'Kanit';
+    color: #fff;
+    margin-bottom: 0;
+    line-height: 1.2em;
+
+    @media (min-width: $md) {
+      font-size: 24px;
+      max-width: 470px;
+      margin: 0 auto 50px;
+    }
+  }
+  &__action {
+
+  }
+  &__link {
+    display: inline-block;
+    min-width: 170px;
+    padding: 10px;
+    font-family: "Source Sans Pro", sans-serif;
+    color: #fff;
+    text-align: center;
+    font-weight: bold;
+    background-color: #F23686;
+
+    &:hover,
+    &:focus {
+      color: #fff;
+      background-color: darken(#F23686, 5%);
+    }
+  }
+
+  .d-flex {
+    @media (min-width: 768px) {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+    }
+
+    > div {
+      margin: 10px;
+    }
+  }
+
+  .register-banner__action {
+    margin: 60px auto;
+    @media (min-width: $md) {
+      margin: 60px auto;
+    }
+
+    .banner__title {
+      position: relative;
+      line-height: 1em;
+      width: 280px;
+      margin: 10px auto;
+      font-size: 34px;
+
+      &:before,
+      &:after {
+        content: "";
+        display: block;
+        position: absolute;
+        top: 50%;
+        margin-top: -1px;
+        width: 100px;
+        border-bottom: 1px solid white;
+      }
+      &:before {
+        left: 100%;
+      }
+      &:after {
+        right: 100%;
+      }
+    }
+  }
+
+  .register-banner__benefit {
+    .d-flex {
+      flex-wrap: wrap;
+      justify-content: center;
+      > .item {
+        margin: 0;
+        padding: 5px;
+        width: 100%;
+        @media (min-width: 768px) {
+          width: 50%;
+        }
+      }
+      > .item > .inner {
+        background-color: rgba(0, 0, 0, 0.3);
+        height: 100%;
+        align-items: center;
+        padding: 15px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        @media (min-width: 768px) {
+          padding: 50px;
+        }
+        @media (min-width: 526px) {
+          flex-direction: row;
+          justify-content: space-around;
+        }
+      }
+      > .item > .inner > div {
+        width: 100%;
+        text-align: center;
+        @media (min-width: 526px) {
+          width: 50%;
+        }
+      }
+      > .item > .inner > .icon {
+        padding: 15px;
+      }
+
+      > .item > .inner > .icon img {
+        max-width: 100%;
+        @media (max-width: 525px) {
+          max-width: 80px;
+        }
+      }
+
+      > .item > .inner > .info {
+        @media (min-width: 526px) {
+          text-align: left;
+        }
+      }
+    }
+  }
+}

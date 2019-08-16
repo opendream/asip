@@ -66,13 +66,14 @@
         <link href="{% static 'files_widget/css/widgets.css' %}" type="text/css" rel="stylesheet">
         <link href="{% static 'autocomplete_light/style.css' %}" type="text/css" rel="stylesheet" />
         <link href="{% static 'js/jquery-tag-it/css/ui-autocomplete-tag-it.css' %}" type="text/css" rel="stylesheet" />
+        <link href="{% static 'libs/angularjs-slider/rzslider.min.css' %}" type="text/css" rel="stylesheet" />
 
         {% endcompress %}
 
         {% block css %}{% endblock %}
 
         {% if settings.LANDING_PAGE_ENABLED %}
-        <link href="{% static 'css/stylesheets/hotfix.css' %}?d1ec6" type="text/css" rel="stylesheet">
+        <link href="{% static 'css/stylesheets/hotfix.css' %}" type="text/css" rel="stylesheet">
         {% endif %}
 
 
@@ -165,9 +166,11 @@
         <script type="text/javascript" src="{% static 'libs/ui-bootstrap/ui-bootstrap-tpls-0.11.2.js' %}"></script>
         <script type="text/javascript" src="{% static 'libs/moment/moment.js' %}"></script>
         <script type="text/javascript" src="{% static 'libs/jquery.are-you-sure.js' %}"></script>
-        <script type="text/javascript" src="{% static 'libs/jquery.sticky-kit.min.js' %}"></script>
+{#        <script type="text/javascript" src="{% static 'libs/jquery.sticky-kit.min.js' %}"></script>#}
+        <script type="text/javascript" src="{% static 'libs/jquery.stickem.js' %}"></script>
         <script type="text/javascript" src="{% static 'libs/angular-scroll/angular-scroll.min.js' %}"></script>
         <script type="text/javascript" src="{% static 'libs/angular-sanitize/angular-sanitize.js' %}"></script>
+        <script type="text/javascript" src="{% static 'libs/angularjs-slider/rzslider.js' %}"></script>
         <script type="text/javascript" src="{% static 'js/main.js' %}"></script>
         <script type="text/javascript" src="{% static 'js/feature.js' %}"></script>
         {% endcompress %}
@@ -189,7 +192,8 @@
         <![endif] -->
     </head>
 
-    <body class="{% if request_popup %} request-popup{% endif %}{% if user.is_staff %} user-staff{% endif %} {% block body_class %}{% endblock %}"{% block main_extra %}{% endblock %} active-menu>
+    <body class="{% if request_popup %} request-popup{% endif %}{% if user.is_staff %} user-staff{% endif %} {% block body_class %}{% endblock %}"{% block main_extra %}{% endblock %} active-menu
+            {% if request.LANGUAGE_CODE %}{{ request.LANGUAGE_CODE }}{% endif %}>
         <div class="body-container{% if not messages %} no-message{% else %} has-message{% endif %}">
                     <div class="magic-login" style="width: 70px; height: 70px; position: fixed; bottom: 0; right: 0; z-index: 20;">
                     </div>
@@ -221,7 +225,7 @@
                                             <span ng-if="party_contact_party_new_count" class="unread-noti">{[{ party_contact_party_new_count }]}</span>
                                         </a>
                                     </li>
-                                    <li class="hotfix-hidden" ng-cloak>
+                                    <li ng-cloak>
                                         <a href="{% url 'notification_list' %}" class="notification-topbar">
                                           <span class="icon glyphicon glyphicon-bell icostartup icon-bell"></span>
                                           <span ng-if="notification_new_count" class="unread-noti">{[{ notification_new_count }]}</span>
@@ -252,17 +256,17 @@
                                                                {{ logged_in_party.get_short_name }}
                                                                {% endif %}
                                                            </h4>
-                                                           <a href="{{ logged_in_party.get_absolute_url }}" class="user-active">{% trans "View profile" %}</a>
+                                                           <a href="{{ logged_in_party.get_absolute_url }}" class="user-active hotfix-hidden">{% trans "View profile" %}</a>
                                                        </div>
                                                    </div>
 
                                                    {%  if show_modal_organizations %}
                                                    <div class="section-switch section-panel">
-                                                       <div class="dropdown-header">{%  trans "Use Account as" %}</div>
+                                                       <div class="dropdown-header">{%  trans "Your Management" %}</div>
                                                        <ul class="no-bullet">
                                                            {% if user.id != logged_in_party.id %}
                                                            <li>
-                                                               <a href="{% url 'party_activate' user.id %}" >
+                                                               <a href="{% url 'account_edit' %}" >
                                                                    <div class="small-logo pull-left thumbnail">
                                                                        <span>
                                                                            <img class="nav-party-image" src="{{ user.get_thumbnail_in_primary }}" />
@@ -275,10 +279,11 @@
                                                            </li>
                                                            {% endif %}
 
-                                                           {%  for organization in user.admins.all|filter_status:STATUS_PUBLISHED|slice:":3" %}
+                                                           {%  for organization in admin_oroganization_list|slice:":3" %}
+
                                                            {% if organization.id != logged_in_party.id %}
                                                            <li>
-                                                               <a href="{% url 'party_activate' organization.id %}" >
+                                                               <a href="{% url 'organization_edit' organization.id %}" >
                                                                    <div class="small-logo pull-left thumbnail">
                                                                        <span>
                                                                            <img class="nav-party-image" src="{{ organization.get_thumbnail_in_primary }}" />
@@ -300,6 +305,18 @@
                                                        </ul>
                                                    </div>
                                                    {% endif %}
+                                                
+                                                    {% if user.is_superuser %}
+                                                    <div class="section-staff section-panel">
+                                                        <div class="dropdown-header">Export organization (all status)</div>
+                                                        <ul class="no-bullet">
+                                                            {% for value, label in EXPAND_TYPE_CHOICES %}
+                                                            <li><a href="/admin/organization/organization/export/?type_of_organization__exact={{ value }}"><span class="glyphicon glyphicon-export"></span> {{ label }}</a></li>
+                                                            {% endfor %}
+                                                            <li><a href="/admin/organization/organization/"><span class="glyphicon glyphicon-dashboard"></span> Admin's Dashboard</a></li>
+                                                        </ul>
+                                                    </div>
+                                                    {% endif %}
 
                                                    {% if user.is_staff %}
                                                    <div class="section-staff section-panel">
@@ -324,18 +341,34 @@
                                                        <ul class="no-bullet">
                                                            <li role="presentation" class="dropdown-header">{% trans "Organization / Product / Service" %}</li>
                                                            {% for value, label in TYPE_CHOICES %}
-                                                            <li><a href="{% url 'organization_create' value %}"><span class="glyphicon glyphicon-plus"></span> {{ label }}</a></li>
+                                                               <li class="create-link-{{ value }}"><a href="{% url 'organization_create' value %}"><span class="glyphicon glyphicon-plus"></span> {{ label }}</a></li>
                                                            {% endfor %}
 
                                                            {% if logged_in_party.id and logged_in_party.id != user.id %}
-                                                           <li><a href="{% url 'job_create' logged_in_party.id %}"><span class="glyphicon glyphicon-plus"></span> {{ logged_in_party.get_display_name }} Job</a></li>
+                                                           <li class="create-link-program"><a href="{% url 'program_create' logged_in_party.id %}"><span class="glyphicon glyphicon-plus"></span> {{ logged_in_party.get_display_name }} Program</a></li>
                                                            {% else %}
-                                                           <li><a href="{% url 'job_create_standalone' %}"><span class="glyphicon glyphicon-plus"></span> Job</a></li>
+                                                           <li class="create-link-program"><a href="{% url 'program_create_instance' %}"><span class="glyphicon glyphicon-plus"></span> Program</a></li>
                                                            {% endif %}
-                                                           {%  if show_modal_organizations %}
+
+                                                           {% if logged_in_party.id and logged_in_party.id != user.id %}
+                                                           <li class="create-link-job"><a href="{% url 'job_create' logged_in_party.id %}"><span class="glyphicon glyphicon-plus"></span> {{ logged_in_party.get_display_name }} Job</a></li>
+                                                           {% else %}
+                                                           <li class="create-link-job"><a href="{% url 'job_create_standalone' %}"><span class="glyphicon glyphicon-plus"></span> Job</a></li>
                                                            {% endif %}
+
+
                                                        </ul>
                                                    </div>
+
+                                                   {% if admin_user_apply_job_exists %}
+                                                   <div class="section-org section-panel">
+                                                       <ul class="no-bullet">
+                                                           <li class="create-link-{{ value }}"><a href="{% url 'job_applying_list' %}"><span class="glyphicon glyphicon-list"></span> &nbsp;{% trans "Applying for Your Jobs" %}</a></li>
+                                                       </ul>
+                                                   </div>
+                                                   {% endif %}
+
+                                                   {% if settings.ENABLE_ARTICLE %}
                                                    <div class="section-content section-panel">
                                                        <ul class="no-bullet">
                                                            <li>
@@ -348,13 +381,15 @@
                                                            {% endfor %}
                                                        </ul>
                                                    </div>
+                                                   {% endif %}
+
                                                    <div class="section-log section-panel">
                                                        <ul class="no-bullet">
                                                          <li role="presentation" class="dropdown-header">{% trans "Request log" %}</li>
                                                            <li>
                                                                <a href="{% url 'request_list' %}" class="truncate">
                                                                    <span class="glyphicon glyphicon-eye-open"></span>
-                                                                   {% blocktrans with display_name=logged_in_party.get_display_name %}{{ display_name }}'s request{% endblocktrans %}
+                                                                   {% blocktrans with display_name=logged_in_party.get_display_name %}Your request{% endblocktrans %}
                                                                </a>
                                                            </li>
                                                        </ul>
@@ -525,7 +560,7 @@
                                     "button"><span>&times;</span><span class=
                                     "sr-only">Close</span></button>
 
-                                    <h2 class="modal-title" id="model-password-reset-label">{% trans 'Your Account and Organizations' %}</h2>
+                                    <h2 class="modal-title" id="model-password-reset-label">{% trans 'Your Accounts' %}</h2>
                                 </div>
 
                                 <div class="modal-body">
@@ -547,7 +582,10 @@
                                               <span>{% trans "Active" %}</span>
 
                                               {% else %}
+                                              {% comment %}
                                               <a href="{% url 'party_activate' user.id %}">{% trans "Active as this account" %}</a>
+                                              <span>{% trans "Published" %}</span>
+                                              {% endcomment %}
                                               {% endif %}
                                             </div>
                                            </div>
@@ -563,6 +601,10 @@
                                           </div>
                                            <div class="org-control">
                                             <a href="{% url 'organization_detail' organization.permalink %}" class="title">{{ organization.get_display_name }}</a>
+                                            {% comment %}
+                                            <a href="{% url 'organization_edit' organization.id %}" class="title">{{ organization.get_display_name }}</a>
+                                            {% endcomment %}
+                                            <small style="color:gray">({{ organization.type_of_organization }})</small>
                                             <div class="control-wrapper">
                                               <a href="{% url 'organization_edit' organization.id %}" >{% trans "Edit" %}&#32;</a>
                                               {% if organization.status == STATUS_PUBLISHED %}
@@ -573,7 +615,10 @@
                                               <span>{% trans "Active" %}</span>
 
                                               {% else %}
+                                              {% comment %}
                                               <a href="{% url 'party_activate' organization.id %}">{% trans "Active as this account" %}</a>
+                                              {% endcomment %}
+                                              <span>{% trans "Published" %}</span>
                                               {% endif %}
 
                                               {% else %}
@@ -591,6 +636,69 @@
                                         </li>
                                         {% endfor %}
                                     </ol>
+
+
+                                    {% if admin_oroganization_mockup_list.count > 0 %}
+                                    <div>
+                                        <small>
+                                            Your mockup organizations
+                                            <a data-toggle="collapse" href="#organization-mockups" aria-expanded="false" aria-controls="organization-mockups" class="underline">click here ››</a>
+                                        </small>
+                                    </div>
+
+                                    <div class="collapse" id="organization-mockups">
+
+
+                                        <ol class="manage-organization-popup">
+
+                                            {%  for organization in admin_oroganization_mockup_list %}
+
+                                            <li{% if organization.id == logged_in_party.id %} class="active"{% endif %}>
+                                              <div class="small-logo pull-left thumbnail">
+                                                <span>
+                                                  <a href="{% url 'organization_detail' organization.permalink %}" >
+                                                      <img class="" src="{{ organization.get_thumbnail_in_primary }}" /></a>
+                                                </span>
+                                              </div>
+                                               <div class="org-control">
+    {#                                            <a href="{% url 'organization_deta' organization.permalink %}" class="title">{{ organization.get_display_name }}</a>#}
+                                                <a href="{% url 'organization_edit' organization.id %}" class="title">{{ organization.get_display_name }}</a>
+                                                <small style="color:gray">({{ organization.type_of_organization }})</small>
+                                                <div class="control-wrapper">
+                                                  <a href="{% url 'organization_edit' organization.id %}" >{% trans "Edit" %}&#32;</a>
+                                                  {% if organization.status == STATUS_PUBLISHED %}
+
+                                                  &#124;
+                                                  {% if organization.id == logged_in_party.id %}
+
+                                                  <span>{% trans "Active" %}</span>
+
+                                                  {% else %}
+                                                  {% comment %}
+                                                  <a href="{% url 'party_activate' organization.id %}">{% trans "Active as this account" %}</a>
+                                                  {% endcomment %}
+                                                  <span>{% trans "Published" %}</span>
+                                                  {% endif %}
+
+                                                  {% else %}
+
+                                                  &#124;
+                                                  {% if organization.status == -1 %}
+                                                  <span>{% trans "Pending for Approval" %}</span>
+                                                  {% else %}
+                                                  <span>{{ organization.get_status_display }}</span>
+                                                  {% endif %}
+
+                                                  {% endif %}
+                                                </div>
+                                               </div>
+                                            </li>
+                                            {% endfor %}
+                                        </ol>
+
+                                    </div>
+                                    {% endif %}
+
                                 </div>
 
                             </div>
@@ -598,25 +706,6 @@
                     </div>
                     {%  endif %}
 
-                    <div class="modal fade" id="modal-apply" tabindex="-1">
-                        <div class="modal-dialog base-action-modal">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button class="close" data-dismiss="modal" type=
-                                    "button"><span>&times;</span><span class=
-                                    "sr-only">Close</span></button>
-
-                                    <h2 class="modal-title" id="model-title"> How to Apply </h2>
-                                </div>
-
-                                <div class="modal-body">
-                                  <div class="content-editor" ng-bind-html="job.contact_information | sanitize">
-                                  </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
 
                     <div class="modal fade" id="modal-comming-soon" tabindex="-1">
                         <div class="modal-dialog signin-popup signin-form-wrapper">
@@ -692,6 +781,8 @@
 
         <script type="text/javascript">document.getElementById('id-loading-first').style.display = 'none'</script>
         {% include 'ng_snippet.html' %}
+
+        {% block js_body %}{% endblock %}
 
     </body>
 
