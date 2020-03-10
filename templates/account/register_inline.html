@@ -1,11 +1,11 @@
 {% load i18n %}
 
 {% if request.GET.next %}
-<a href="{% url 'login_social' 'facebook' %}?{{ request.GET.urlencode }}" class="btn btn-primary btn-lg btn-block btn-facebook" type="button"><span class="icon-facebook"></span>{% trans "Connect with" %} Facebook</a>
+<a href="{% url 'login_social' 'facebook' %}" class="btn btn-primary btn-lg btn-block btn-facebook" type="button"><span class="icon-facebook"></span>{% trans "Connect with" %} Facebook</a>
 <a href="{% url 'login_social' 'linkedin' %}?{{ request.GET.urlencode }}" class="btn btn-primary btn-lg btn-block btn-linkedin" type="button"><span class="icon-linkedin"></span>{% trans "Connect with" %} LinkedIn</a>
 <form class="form-signin" role="form" method="post" action="{% url 'account_register' %}?{{ request.GET.urlencode }}" ng-non-bindable>
 {% else %}
-<a href="{% url 'login_social' 'facebook' %}?next={{ request.path }}" class="btn btn-primary btn-lg btn-block btn-facebook" type="button"><span class="icon-facebook"></span>{% trans "Connect with" %} Facebook</a>
+<a href="{% url 'login_social' 'facebook' %}" class="btn btn-primary btn-lg btn-block btn-facebook" type="button"><span class="icon-facebook"></span>{% trans "Connect with" %} Facebook</a>
 <a href="{% url 'login_social' 'linkedin' %}?next={{ request.path }}" class="btn btn-primary btn-lg btn-block btn-linkedin" type="button"><span class="icon-linkedin"></span>{% trans "Connect with" %} LinkedIn</a>
 <form class="form-signin" role="form" method="post" action="{% url 'account_register' %}?next={{ request.path }}" ng-non-bindable>
 {% endif %}
