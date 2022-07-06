@@ -26,7 +26,7 @@ django-tables2==0.15.0
 django-tagging==0.3.4
 django-tastypie==0.13.3
 elasticsearch==1.4.0
-html5lib==0.999
+html5lib==0.999999999
 ipython==4.1.1
 httplib2==0.9
 libsass==0.5.1
